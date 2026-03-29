@@ -13,6 +13,7 @@ import { Campaigns } from './collections/Campaigns'
 import { Testimonials } from './collections/Testimonials'
 import { PracticeAreas } from './collections/PracticeAreas'
 import { NewsArticles } from './collections/NewsArticles'
+import { Clients } from './collections/Clients'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -36,6 +37,7 @@ export default buildConfig({
     Testimonials,
     PracticeAreas,
     NewsArticles,
+    Clients,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

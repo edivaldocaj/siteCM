@@ -8,7 +8,8 @@ export async function getPayloadClient(): Promise<any> {
   try {
     cached = await getPayload({ config })
     return cached
-  } catch {
+  } catch (e) {
+    console.error('[Payload] Init error:', e)
     return null
   }
 }
