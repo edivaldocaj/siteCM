@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Phone, Mail, Clock, Instagram, Linkedin } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, Star, Globe } from 'lucide-react'
 
 const practiceAreas = [
   { href: '/areas-de-atuacao/direito-digital-lgpd', label: 'Direito Digital e LGPD' },
@@ -32,10 +32,10 @@ export function Footer() {
             </p>
             <div className="flex gap-3">
               <a href="#" className="w-10 h-10 rounded-full border border-brand-silver/20 flex items-center justify-center hover:border-brand-gold hover:text-brand-gold transition-all">
-                <Instagram className="w-4 h-4" />
+                <Star className="w-4 h-4" />
               </a>
               <a href="#" className="w-10 h-10 rounded-full border border-brand-silver/20 flex items-center justify-center hover:border-brand-gold hover:text-brand-gold transition-all">
-                <Linkedin className="w-4 h-4" />
+                <Globe className="w-4 h-4" />
               </a>
             </div>
           </div>

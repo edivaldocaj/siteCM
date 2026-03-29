@@ -23,6 +23,7 @@
     "@payloadcms/next": "3.80.0",
     "@payloadcms/richtext-lexical": "3.80.0",
     "@payloadcms/ui": "3.80.0",
+    "@tailwindcss/postcss": "^4.2.2",
     "autoprefixer": "^10.4.27",
     "cross-env": "^7.0.3",
     "dotenv": "16.4.7",
