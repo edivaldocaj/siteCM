@@ -46,6 +46,6 @@ export const NewsArticles: CollectionConfig = {
     },
     { name: 'autoImported', type: 'checkbox', label: 'Importada Automaticamente', defaultValue: true, admin: { position: 'sidebar' } },
     { name: 'publishedAt', type: 'date', label: 'Data de Publicação', admin: { position: 'sidebar' } },
-    { name: 'linkedCampaign', type: 'relationship', relationTo: 'campaigns', label: 'Campanha Vinculada', admin: { position: 'sidebar' } },
+    { name: 'linkedCampaign', type: 'text', label: 'Slug da Campanha Vinculada', admin: { position: 'sidebar' } },
   ],
 }
