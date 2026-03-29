@@ -13,13 +13,9 @@ export const metadata = {
     template: '%s | Cavalcante & Melo Advogados',
   },
   description:
-    'Escritório de advocacia em Natal/RN especializado em Direito Digital, LGPD, Civil, Consumidor, Imobiliário, Tributário, Licitações e Direito Penal. Atendimento humanizado.',
-  keywords: ['advogado natal', 'escritório advocacia natal rn', 'advogado criminalista natal', 'lgpd advogado', 'direito digital natal'],
-  openGraph: {
-    type: 'website',
-    locale: 'pt_BR',
-    siteName: 'Cavalcante & Melo Sociedade de Advogados',
-  },
+    'Escritório de advocacia em Natal/RN especializado em Direito Digital, LGPD, Civil, Consumidor, Imobiliário, Tributário, Licitações e Direito Penal.',
+  keywords: ['advogado natal', 'escritório advocacia natal rn', 'advogado criminalista natal', 'lgpd advogado'],
+  openGraph: { type: 'website' as const, locale: 'pt_BR', siteName: 'Cavalcante & Melo Sociedade de Advogados' },
   robots: { index: true, follow: true },
 }
 
@@ -39,22 +35,15 @@ export default async function FrontendLayout({ children }: { children: React.Rea
               name: 'Cavalcante & Melo Sociedade de Advogados',
               url: process.env.NEXT_PUBLIC_SITE_URL,
               description: 'Escritório de advocacia em Natal/RN.',
-              address: {
-                '@type': 'PostalAddress',
-                streetAddress: 'Rua Francisco Maia Sobrinho, 1950',
-                addressLocality: 'Natal',
-                addressRegion: 'RN',
-                postalCode: '59062-250',
-                addressCountry: 'BR',
-              },
+              address: { '@type': 'PostalAddress', streetAddress: 'Rua Francisco Maia Sobrinho, 1950', addressLocality: 'Natal', addressRegion: 'RN', postalCode: '59062-250', addressCountry: 'BR' },
               areaServed: { '@type': 'State', name: 'Rio Grande do Norte' },
             }),
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col font-body text-brand-navy bg-brand-cream">
+      <body style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', fontFamily: "'Source Sans 3', system-ui, sans-serif", color: '#152138', backgroundColor: '#faf8f5' }}>
         <Header />
-        <main className="flex-1">{children}</main>
+        <main style={{ flex: 1 }}>{children}</main>
         <Footer />
         <WhatsAppButton />
         <CookieConsent />
