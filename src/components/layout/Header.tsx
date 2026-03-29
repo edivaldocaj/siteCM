@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { Menu, X, Phone } from 'lucide-react'
 
 const navLinks = [
@@ -26,37 +25,51 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? 'bg-brand-navy/95 backdrop-blur-md shadow-lg py-3'
-          : 'bg-transparent py-5'
-      }`}
+      style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
+        transition: 'all 0.5s',
+        background: scrolled ? 'rgba(21,33,56,0.95)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(12px)' : 'none',
+        boxShadow: scrolled ? '0 4px 20px rgba(0,0,0,0.3)' : 'none',
+        padding: scrolled ? '12px 0' : '20px 0',
+      }}
     >
-      <div className="container-wide mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '0 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative w-10 h-10 sm:w-12 sm:h-12">
-            <div className="w-full h-full flex items-center justify-center text-brand-silver font-display text-xl font-bold">
-              CM
-            </div>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+          <div style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#b8bfc8', fontFamily: "'Playfair Display', serif", fontSize: '20px', fontWeight: 'bold' }}>
+            CM
           </div>
-          <div className="hidden sm:block">
-            <div className="text-brand-silver-light font-display text-lg font-semibold tracking-wide leading-tight group-hover:text-brand-gold transition-colors">
+          <div>
+            <div style={{ color: '#d4d8de', fontFamily: "'Playfair Display', serif", fontSize: '18px', fontWeight: 600, letterSpacing: '0.025em', lineHeight: 1.2 }}>
               Cavalcante & Melo
             </div>
-            <div className="text-brand-silver/60 text-[10px] uppercase tracking-[0.2em] font-body">
+            <div style={{ color: 'rgba(184,191,200,0.6)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', fontFamily: "'Source Sans 3', sans-serif" }}>
               Sociedade de Advogados
             </div>
           </div>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-8">
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '32px' }} className="desktop-nav">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-brand-silver/80 hover:text-brand-gold text-sm font-body font-medium uppercase tracking-wider transition-colors duration-300 relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-brand-gold-dark after:transition-all after:duration-300 hover:after:w-full"
+              style={{
+                color: 'rgba(184,191,200,0.85)',
+                fontSize: '13px',
+                fontFamily: "'Source Sans 3', sans-serif",
+                fontWeight: 500,
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                textDecoration: 'none',
+                transition: 'color 0.3s',
+                position: 'relative',
+                paddingBottom: '4px',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#c4a96a')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(184,191,200,0.85)')}
             >
               {link.label}
             </Link>
@@ -64,14 +77,15 @@ export function Header() {
         </nav>
 
         {/* CTA Desktop */}
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="desktop-nav">
           <a
             href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584999999999'}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary !py-3 !px-6 !text-xs"
+            className="btn-primary"
+            style={{ padding: '10px 20px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
           >
-            <Phone className="w-4 h-4" />
+            <Phone style={{ width: '16px', height: '16px' }} />
             Fale com um Advogado
           </a>
         </div>
@@ -79,45 +93,80 @@ export function Header() {
         {/* Mobile Toggle */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden text-brand-silver hover:text-brand-gold transition-colors p-2"
+          className="mobile-toggle"
+          style={{
+            color: '#b8bfc8', background: 'none', border: 'none', padding: '8px', cursor: 'pointer',
+            transition: 'color 0.3s',
+          }}
           aria-label="Menu"
         >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {isOpen ? <X style={{ width: '24px', height: '24px' }} /> : <Menu style={{ width: '24px', height: '24px' }} />}
         </button>
       </div>
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden overflow-hidden transition-all duration-500 ${
-          isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-        }`}
+        style={{
+          overflow: 'hidden',
+          transition: 'max-height 0.5s, opacity 0.5s',
+          maxHeight: isOpen ? '500px' : '0',
+          opacity: isOpen ? 1 : 0,
+        }}
+        className="mobile-menu"
       >
-        <div className="bg-brand-navy/98 backdrop-blur-md border-t border-brand-silver/10 px-4 py-6">
-          <nav className="flex flex-col gap-1">
+        <div style={{
+          background: 'rgba(21,33,56,0.98)',
+          backdropFilter: 'blur(12px)',
+          borderTop: '1px solid rgba(255,255,255,0.1)',
+          padding: '24px 16px',
+        }}>
+          <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="text-brand-silver/80 hover:text-brand-gold hover:bg-white/5 text-base font-body py-3 px-4 rounded transition-all"
+                style={{
+                  color: 'rgba(184,191,200,0.8)',
+                  fontSize: '16px',
+                  fontFamily: "'Source Sans 3', sans-serif",
+                  padding: '12px 16px',
+                  borderRadius: '4px',
+                  textDecoration: 'none',
+                  transition: 'all 0.3s',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = '#c4a96a'; e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(184,191,200,0.8)'; e.currentTarget.style.background = 'transparent' }}
               >
                 {link.label}
               </Link>
             ))}
           </nav>
-          <div className="mt-6 px-4">
+          <div style={{ marginTop: '24px', padding: '0 16px' }}>
             <a
               href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584999999999'}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-whatsapp w-full"
+              className="btn-whatsapp"
+              style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
             >
-              <Phone className="w-4 h-4" />
+              <Phone style={{ width: '16px', height: '16px' }} />
               Fale com um Advogado
             </a>
           </div>
         </div>
       </div>
+
+      <style>{`
+        .desktop-nav { display: none; }
+        .mobile-toggle { display: block; }
+        .mobile-menu { display: block; }
+        @media (min-width: 1024px) {
+          .desktop-nav { display: flex; }
+          .mobile-toggle { display: none; }
+          .mobile-menu { display: none; }
+        }
+      `}</style>
     </header>
   )
 }
