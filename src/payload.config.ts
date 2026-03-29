@@ -7,6 +7,12 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Pages } from './collections/Pages'
+import { Posts } from './collections/Posts'
+import { Campaigns } from './collections/Campaigns'
+import { Testimonials } from './collections/Testimonials'
+import { PracticeAreas } from './collections/PracticeAreas'
+import { NewsArticles } from './collections/NewsArticles'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -17,8 +23,20 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: ' | Cavalcante & Melo Admin',
+    },
   },
-  collections: [Users, Media],
+  collections: [
+    Users,
+    Media,
+    Pages,
+    Posts,
+    Campaigns,
+    Testimonials,
+    PracticeAreas,
+    NewsArticles,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

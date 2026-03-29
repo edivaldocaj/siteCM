@@ -1,59 +1,55 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
-import { getPayload } from 'payload'
-import React from 'react'
-import { fileURLToPath } from 'url'
+import { HeroSection } from '@/components/sections/HeroSection'
+import { TrustBar } from '@/components/sections/TrustBar'
+import { PracticeAreasGrid } from '@/components/sections/PracticeAreasGrid'
+import { CriminalUrgency } from '@/components/sections/CriminalUrgency'
+import { AboutPartners } from '@/components/sections/AboutPartners'
+import { FeaturedCampaigns } from '@/components/sections/FeaturedCampaigns'
+import { TestimonialsCarousel } from '@/components/sections/TestimonialsCarousel'
+import { NewsSection } from '@/components/sections/NewsSection'
+import { RecentPosts } from '@/components/sections/RecentPosts'
+import { ContactCTA } from '@/components/sections/ContactCTA'
+import { getPayloadClient } from '@/lib/payload'
 
-import config from '@/payload.config'
-import './styles.css'
+export const revalidate = 3600
+
+async function getHomeData() {
+  try {
+    const payload = await getPayloadClient()
+    if (!payload) return { campaigns: [], testimonials: [], posts: [], news: [] }
+
+    const [campaigns, testimonials, posts, news] = await Promise.all([
+      payload.find({ collection: 'campaigns', where: { status: { equals: 'active' }, featuredOnHomepage: { equals: true } }, limit: 3, sort: '-createdAt' }).catch(() => ({ docs: [] })),
+      payload.find({ collection: 'testimonials', where: { featured: { equals: true } }, limit: 6, sort: '-createdAt' }).catch(() => ({ docs: [] })),
+      payload.find({ collection: 'posts', where: { status: { equals: 'published' } }, limit: 3, sort: '-publishedAt' }).catch(() => ({ docs: [] })),
+      payload.find({ collection: 'news-articles', where: { status: { equals: 'published' } }, limit: 4, sort: '-publishedAt' }).catch(() => ({ docs: [] })),
+    ])
+
+    return {
+      campaigns: campaigns.docs || [],
+      testimonials: testimonials.docs || [],
+      posts: posts.docs || [],
+      news: news.docs || [],
+    }
+  } catch {
+    return { campaigns: [], testimonials: [], posts: [], news: [] }
+  }
+}
 
 export default async function HomePage() {
-  const headers = await getHeaders()
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
-
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  const data = await getHomeData()
 
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
-        </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
-    </div>
+    <>
+      <HeroSection />
+      <TrustBar />
+      <PracticeAreasGrid />
+      <CriminalUrgency />
+      <AboutPartners />
+      <FeaturedCampaigns cmsCampaigns={data.campaigns} />
+      <TestimonialsCarousel cmsTestimonials={data.testimonials} />
+      <NewsSection cmsNews={data.news} />
+      <RecentPosts cmsPosts={data.posts} />
+      <ContactCTA />
+    </>
   )
 }
