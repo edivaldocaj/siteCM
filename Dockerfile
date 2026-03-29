@@ -28,4 +28,4 @@ COPY --from=builder /app ./
 RUN chown -R nextjs:nodejs /app/.next /app/src/migrations
 USER nextjs
 EXPOSE 3000
-CMD ["bash", "-c", "npx payload migrate 2>/dev/null; npm run start"]
+CMD ["bash", "-c", "npx payload migrate:fresh --force-accept-warning 2>&1 || true; npm run start"]
