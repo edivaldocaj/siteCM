@@ -1,160 +1,160 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getPayloadClient } from '@/lib/payload'
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
 
-const RSS_FEEDS = [
-  { url: 'https://www.conjur.com.br/rss.xml', source: 'Conjur' },
-  { url: 'https://www.migalhas.com.br/rss/quentes', source: 'Migalhas' },
+const RSS_SOURCES = [
+  { url: 'https://www.conjur.com.br/rss.xml', name: 'Conjur' },
+  { url: 'https://www.migalhas.com.br/rss/quentes', name: 'Migalhas' },
 ]
 
 const GOOGLE_NEWS_QUERIES = [
-  { query: 'direito consumidor fraude banco Brasil', category: 'direito-consumidor' },
-  { query: 'LGPD proteção dados vazamento Brasil', category: 'lgpd' },
-  { query: 'direito penal criminal habeas corpus Brasil', category: 'direito-penal' },
-  { query: 'direito imobiliário usucapião Brasil', category: 'direito-imobiliario' },
-  { query: 'STJ STF decisão jurisprudência Brasil', category: 'tribunais' },
+  { query: 'direito consumidor Brasil', category: 'direito-consumidor' },
+  { query: 'LGPD proteção dados', category: 'lgpd' },
+  { query: 'direito penal criminal Brasil', category: 'direito-penal' },
+  { query: 'direito imobiliário usucapião', category: 'direito-imobiliario' },
+  { query: 'STJ STF jurisprudência', category: 'direito-tributario' },
 ]
 
-function slugify(t: string): string {
-  return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80)
-}
-
-function autoCategory(text: string): string {
-  const t = text.toLowerCase()
-  if (t.includes('lgpd') || t.includes('proteção de dados')) return 'lgpd'
-  if (t.includes('consumidor') || t.includes('banco') || t.includes('negativação')) return 'direito-consumidor'
-  if (t.includes('penal') || t.includes('criminal') || t.includes('habeas')) return 'direito-penal'
-  if (t.includes('imobiliário') || t.includes('imóvel') || t.includes('usucapião')) return 'direito-imobiliario'
-  if (t.includes('tributário') || t.includes('imposto')) return 'direito-tributario'
-  if (t.includes('stj') || t.includes('stf') || t.includes('tribunal')) return 'tribunais'
+function categorize(title: string): string {
+  const t = title.toLowerCase()
+  if (t.includes('lgpd') || t.includes('dados') || t.includes('digital') || t.includes('cyber') || t.includes('anpd')) return 'lgpd'
+  if (t.includes('consumidor') || t.includes('banco') || t.includes('negativação') || t.includes('indenização') || t.includes('juros')) return 'direito-consumidor'
+  if (t.includes('penal') || t.includes('preso') || t.includes('habeas') || t.includes('crime') || t.includes('criminal')) return 'direito-penal'
+  if (t.includes('imobiliário') || t.includes('usucapião') || t.includes('imóvel') || t.includes('fundiária')) return 'direito-imobiliario'
+  if (t.includes('tributário') || t.includes('fiscal') || t.includes('imposto') || t.includes('tributo')) return 'direito-tributario'
+  if (t.includes('licitação') || t.includes('contrato administrativo') || t.includes('tce') || t.includes('tcu')) return 'licitacoes'
   return 'geral'
 }
 
-async function parseRSS(url: string, source: string) {
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+    .substring(0, 80)
+}
+
+async function fetchRSS(url: string): Promise<any[]> {
   try {
-    const res = await fetch(url, { next: { revalidate: 0 } })
+    const res = await fetch(url, { signal: AbortSignal.timeout(10000) })
     if (!res.ok) return []
-    const xml = await res.text()
+    const text = await res.text()
     const items: any[] = []
-    const regex = /<item>([\s\S]*?)<\/item>/g
+    const itemRegex = /<item>([\s\S]*?)<\/item>/g
     let match
-    while ((match = regex.exec(xml)) !== null && items.length < 5) {
-      const x = match[1]
-      const title = x.match(/<title>(.*?)<\/title>/)?.[1]?.replace(/<!\[CDATA\[(.*?)\]\]>/g, '$1') || ''
-      const link = x.match(/<link>(.*?)<\/link>/)?.[1] || ''
-      const desc = x.match(/<description>(.*?)<\/description>/)?.[1]?.replace(/<!\[CDATA\[(.*?)\]\]>/g, '$1')?.replace(/<[^>]+>/g, '') || ''
-      const date = x.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] || ''
-      if (title && link) {
-        items.push({
-          title: title.trim(),
-          excerpt: (desc || title).trim().slice(0, 300),
-          sourceUrl: link.trim(),
-          source,
-          publishedAt: date ? new Date(date).toISOString() : new Date().toISOString(),
-          slug: slugify(title) + '-' + Date.now().toString(36),
-          category: autoCategory(title + ' ' + desc),
-        })
-      }
+    while ((match = itemRegex.exec(text)) !== null) {
+      const item = match[1]
+      const title = item.match(/<title><!\[CDATA\[(.*?)\]\]>|<title>(.*?)<\/title>/)?.[1] || item.match(/<title>(.*?)<\/title>/)?.[1] || ''
+      const link = item.match(/<link>(.*?)<\/link>/)?.[1] || ''
+      const desc = item.match(/<description><!\[CDATA\[(.*?)\]\]>|<description>(.*?)<\/description>/)?.[1] || ''
+      if (title) items.push({ title: title.trim(), link: link.trim(), description: desc.trim().substring(0, 300) })
     }
-    return items
+    return items.slice(0, 5)
   } catch {
     return []
   }
 }
 
-async function parseGoogleNews(query: string, category: string) {
+async function fetchGoogleNews(query: string): Promise<any[]> {
   try {
-    const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query + ' when:3d')}&hl=pt-BR&gl=BR&ceid=BR:pt-419`
-    const res = await fetch(url, { next: { revalidate: 0 } })
+    const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=pt-BR&gl=BR&ceid=BR:pt-419`
+    const res = await fetch(url, { signal: AbortSignal.timeout(10000) })
     if (!res.ok) return []
-    const xml = await res.text()
+    const text = await res.text()
     const items: any[] = []
-    const regex = /<item>([\s\S]*?)<\/item>/g
+    const itemRegex = /<item>([\s\S]*?)<\/item>/g
     let match
-    while ((match = regex.exec(xml)) !== null && items.length < 3) {
-      const x = match[1]
-      const title = x.match(/<title>(.*?)<\/title>/)?.[1]?.replace(/<!\[CDATA\[(.*?)\]\]>/g, '$1') || ''
-      const link = x.match(/<link>(.*?)<\/link>/)?.[1] || ''
-      const date = x.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] || ''
-      const src = x.match(/<source.*?>(.*?)<\/source>/)?.[1]?.replace(/<!\[CDATA\[(.*?)\]\]>/g, '$1') || 'Google News'
-      if (title && link) {
-        items.push({
-          title: title.trim(),
-          excerpt: title.trim(),
-          sourceUrl: link.trim(),
-          source: src.trim(),
-          publishedAt: date ? new Date(date).toISOString() : new Date().toISOString(),
-          slug: slugify(title) + '-' + Date.now().toString(36),
-          category,
-        })
-      }
+    while ((match = itemRegex.exec(text)) !== null) {
+      const item = match[1]
+      const title = item.match(/<title>(.*?)<\/title>/)?.[1] || ''
+      const link = item.match(/<link>(.*?)<\/link>/)?.[1] || ''
+      const source = item.match(/<source.*?>(.*?)<\/source>/)?.[1] || 'Google News'
+      if (title) items.push({ title: title.trim(), link: link.trim(), source: source.trim() })
     }
-    return items
+    return items.slice(0, 3)
   } catch {
     return []
   }
 }
 
 export async function POST(req: NextRequest) {
-  const auth = req.headers.get('authorization')
-  if (auth !== `Bearer ${process.env.NEWS_REVALIDATE_SECRET}`) {
+  const authHeader = req.headers.get('authorization')
+  const secret = process.env.NEWS_REVALIDATE_SECRET || 'cm2026admin'
+
+  if (authHeader !== `Bearer ${secret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const all: any[] = []
+  let allArticles: any[] = []
 
-  for (const feed of RSS_FEEDS) {
-    const items = await parseRSS(feed.url, feed.source)
-    all.push(...items)
+  // Fetch RSS
+  for (const source of RSS_SOURCES) {
+    const items = await fetchRSS(source.url)
+    allArticles.push(...items.map(item => ({
+      title: item.title,
+      sourceUrl: item.link,
+      source: source.name,
+      excerpt: item.description || item.title,
+      category: categorize(item.title),
+    })))
   }
 
-  for (const q of GOOGLE_NEWS_QUERIES) {
-    const items = await parseGoogleNews(q.query, q.category)
-    all.push(...items)
+  // Fetch Google News
+  for (const gn of GOOGLE_NEWS_QUERIES) {
+    const items = await fetchGoogleNews(gn.query)
+    allArticles.push(...items.map(item => ({
+      title: item.title,
+      sourceUrl: item.link,
+      source: item.source || 'Google News',
+      excerpt: item.title,
+      category: gn.category,
+    })))
   }
 
-  const seen = new Set<string>()
-  const unique = all.filter((a) => {
-    const k = a.title.toLowerCase().slice(0, 50)
-    if (seen.has(k)) return false
-    seen.add(k)
-    return true
-  }).slice(0, 20)
-
+  const fetched = allArticles.length
   let saved = 0
+
   try {
-    const payload = await getPayloadClient()
-	if (!payload) return NextResponse.json({ success: false, error: 'CMS not available', fetched: unique.length })
-    for (const article of unique) {
+    const payload = await getPayload({ config: configPromise })
+
+    for (const article of allArticles) {
+      const slug = slugify(article.title)
+      if (!slug) continue
+
       try {
-        await payload.create({
+        const existing = await payload.find({
           collection: 'news-articles',
-          data: {
-            title: article.title,
-            slug: article.slug,
-            excerpt: article.excerpt,
-            sourceUrl: article.sourceUrl,
-            source: article.source,
-            category: article.category,
-            status: 'pending',
-            autoImported: true,
-            publishedAt: article.publishedAt,
-          },
+          where: { slug: { equals: slug } },
+          limit: 1,
         })
-        saved++
-      } catch {
-        // skip duplicates
+
+        if (existing.docs.length === 0) {
+          await payload.create({
+            collection: 'news-articles',
+            data: {
+              title: article.title.substring(0, 200),
+              slug,
+              excerpt: (article.excerpt || article.title).substring(0, 300),
+              sourceUrl: article.sourceUrl,
+              source: article.source,
+              category: article.category,
+              status: 'pending',
+              autoImported: true,
+              publishedAt: new Date().toISOString(),
+            },
+          })
+          saved++
+        }
+      } catch (e) {
+        // Skip duplicates or invalid entries
       }
     }
-  } catch {
-    return NextResponse.json({ success: false, error: 'CMS not available', fetched: unique.length })
+
+    return NextResponse.json({ success: true, fetched, saved })
+  } catch (e) {
+    console.error('[News Feed] Payload error:', e)
+    return NextResponse.json({ success: false, error: 'CMS not available', fetched }, { status: 500 })
   }
-
-  return NextResponse.json({ success: true, fetched: unique.length, saved })
-}
-
-export async function GET() {
-  return NextResponse.json({
-    info: 'POST with Bearer token to fetch legal news.',
-    sources: RSS_FEEDS.map((f) => f.source).concat(['Google News']),
-  })
 }

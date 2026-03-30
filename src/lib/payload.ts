@@ -1,3 +1,10 @@
+// NOTA: Para server components (pages), use diretamente:
+//   import { getPayload } from 'payload'
+//   import configPromise from '@payload-config'
+//   const payload = await getPayload({ config: configPromise })
+//
+// Este helper existe para contextos onde @payload-config não resolve.
+
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
