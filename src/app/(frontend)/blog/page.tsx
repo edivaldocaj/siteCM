@@ -18,7 +18,7 @@ export default async function BlogPage() {
 
   try {
     const payload = await getPayload({ config: configPromise })
-    const result = await payload.find({
+    const result = await (payload as any).find({
       collection: 'posts',
       where: { status: { equals: 'published' } },
       sort: '-publishedAt',

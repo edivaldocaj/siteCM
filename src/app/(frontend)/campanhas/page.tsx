@@ -15,7 +15,7 @@ export default async function CampanhasPage() {
 
   try {
     const payload = await getPayload({ config: configPromise })
-    const result = await payload.find({
+    const result = await (payload as any).find({
       collection: 'campaigns',
       where: { status: { equals: 'active' } },
       sort: '-createdAt',
