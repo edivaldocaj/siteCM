@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 
     const payload = await getPayload({ config: configPromise })
 
-    const clients = await payload.find({
+    const clients = await (payload as any).find({
       collection: 'clients',
       where: { accessToken: { equals: token }, active: { equals: true } },
       limit: 1,
