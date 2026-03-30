@@ -124,14 +124,14 @@ export async function POST(req: NextRequest) {
       if (!slug) continue
 
       try {
-        const existing = await payload.find({
+        const existing = await (payload as any).find({
           collection: 'news-articles',
           where: { slug: { equals: slug } },
           limit: 1,
         })
 
         if (existing.docs.length === 0) {
-          await payload.create({
+          await (payload as any).create({
             collection: 'news-articles',
             data: {
               title: article.title.substring(0, 200),
