@@ -4,7 +4,7 @@ import { Clock, User, ArrowUpRight } from 'lucide-react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 
-export const revalidate = 60
+export const revalidate = 60 // Atualiza a cada 60 segundos
 
 export const metadata: Metadata = {
   title: 'Blog e Notícias',
@@ -33,7 +33,6 @@ export default async function BlogPage() {
       })
     ])
 
-    // Adiciona uma flag para sabermos de onde veio cada item
     const posts = postsRes.docs.map((p: any) => ({ ...p, _itemType: 'post' }))
     const news = newsRes.docs.map((n: any) => ({ ...n, _itemType: 'news' }))
 
@@ -68,10 +67,13 @@ export default async function BlogPage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
               {allItems.map((item: any) => {
                 const isNews = item._itemType === 'news'
-                // Se for notícia, aponta para o link original externo. Se for post, aponta para a página interna
-                const href = isNews ? (item.source_url || '#') : `/blog/${item.slug}`
-                const target = isNews ? '_blank' : '_self'
-                const rel = isNews ? 'noopener noreferrer' : undefined
+                
+                // CORREÇÃO: Tenta ler o link do site da fonte, independentemente do formato da variável
+                const newsLink = item.sourceUrl || item.source_url || '#'
+                const href = isNews ? newsLink : `/blog/${item.slug}`
+                
+                const target = (isNews && newsLink !== '#') ? '_blank' : '_self'
+                const rel = (isNews && newsLink !== '#') ? 'noopener noreferrer' : undefined
 
                 return (
                   <Link key={item.id || item.slug} href={href} target={target} rel={rel} style={{ display: 'block', background: 'white', borderRadius: '8px', overflow: 'hidden', border: '1px solid rgba(237,225,195,0.1)', transition: 'all 0.3s', textDecoration: 'none' }}>
@@ -98,7 +100,7 @@ export default async function BlogPage() {
                       <p style={{ color: 'rgba(21,33,56,0.5)', fontFamily: "'Source Sans 3', sans-serif", fontSize: '14px', lineHeight: 1.6, marginBottom: '16px' }}>{item.excerpt}</p>
                       <span style={{ color: 'rgba(21,33,56,0.3)', fontSize: '12px', fontFamily: "'Source Sans 3', sans-serif", display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <User style={{ width: '12px', height: '12px' }} />
-                        {isNews ? (item.source || 'Jusbrasil / STJ') : (authorNames[item.author] || 'Cavalcante & Melo')}
+                        {isNews ? (item.source || 'Judiciário') : (authorNames[item.author] || 'Cavalcante & Melo')}
                       </span>
                     </div>
                   </Link>

@@ -12,13 +12,18 @@ export function NewsSection({ cmsNews = [] }: { cmsNews?: any[] }) {
         </div>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
-          {cmsNews.map((news: any) => (
-            <a key={news.slug} href={news.source_url || '#'} target="_blank" rel="noopener noreferrer" style={{ display: 'block', border: '1px solid rgba(255,255,255,0.1)', padding: '24px', borderRadius: '8px', textDecoration: 'none', background: 'rgba(255,255,255,0.02)' }}>
-              <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#b8bfc8' }}>{news.source || 'Judiciário'}</span>
-              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: '#f1eae2', margin: '12px 0' }}>{news.title}</h3>
-              <p style={{ color: 'rgba(184,191,200,0.6)', fontSize: '14px', lineHeight: 1.6 }}>{news.excerpt}</p>
-            </a>
-          ))}
+          {cmsNews.map((news: any) => {
+            // CORREÇÃO DO LINK AQUI TAMBÉM
+            const newsLink = news.sourceUrl || news.source_url || '#'
+            
+            return (
+              <a key={news.slug} href={newsLink} target="_blank" rel="noopener noreferrer" style={{ display: 'block', border: '1px solid rgba(255,255,255,0.1)', padding: '24px', borderRadius: '8px', textDecoration: 'none', background: 'rgba(255,255,255,0.02)' }}>
+                <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#b8bfc8' }}>{news.source || 'Judiciário'}</span>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: '#f1eae2', margin: '12px 0' }}>{news.title}</h3>
+                <p style={{ color: 'rgba(184,191,200,0.6)', fontSize: '14px', lineHeight: 1.6 }}>{news.excerpt}</p>
+              </a>
+            )
+          })}
         </div>
         <div style={{ textAlign: 'center', marginTop: '40px' }}>
            <Link href="/blog" style={{ color: '#c4a96a', fontSize: '14px', textDecoration: 'none', border: '1px solid rgba(196,169,106,0.5)', padding: '12px 24px', borderRadius: '4px', transition: 'all 0.3s' }}>
