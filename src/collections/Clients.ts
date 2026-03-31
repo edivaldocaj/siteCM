@@ -1,4 +1,4 @@
-iimport type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload'
 
 export const Clients: CollectionConfig = {
   slug: 'clients',
