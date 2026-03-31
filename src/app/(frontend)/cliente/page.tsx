@@ -3,11 +3,13 @@
 import { useState } from 'react'
 import { Lock, Search, FileText, Clock, ChevronDown, ChevronUp, AlertCircle, CheckCircle, User, Scale } from 'lucide-react'
 
+// CORREÇÃO: lawyerSummary adicionado na interface
 interface ProcessResult {
   processNumber: string
   tribunal: string
   description: string
   attorney: string
+  lawyerSummary?: string 
   found: boolean
   datajud: {
     numeroProcesso: string
@@ -70,9 +72,8 @@ function ProcessCard({ proc }: { proc: ProcessResult }) {
           {!proc.found ? (
             <p style={{ color: '#b8bfc8', fontSize: '14px' }}>Processo não encontrado na base do Datajud. Pode estar em sigilo ou ainda não ter sido indexado.</p>
           ) : d ? (
-            <> , 
-			
-			{/* Resumo do Advogado */}
+            <>
+              {/* Resumo do Advogado (Exclusivo do CMS) */}
               {proc.lawyerSummary && (
                 <div style={{ background: 'rgba(196,169,106,0.05)', border: '1px solid rgba(196,169,106,0.2)', borderRadius: '8px', padding: '16px', marginBottom: '24px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
@@ -83,7 +84,8 @@ function ProcessCard({ proc }: { proc: ProcessResult }) {
                     {proc.lawyerSummary}
                   </p>
                 </div>
-              )},
+              )}
+
               {/* Info Grid */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' }}>
                 <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '6px', padding: '12px' }}>
@@ -188,31 +190,6 @@ export default function ClientePortalPage() {
       setProcesses(data.processes || [])
     } catch {
       setError('Erro de conexão. Tente novamente.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  async function refreshProcess(processNumber: string, tribunal: string) {
-    setLoading(true)
-    try {
-      const res = await fetch('/api/datajud', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, processNumber, tribunal }),
-      })
-      const data = await res.json()
-      if (data.success && data.process) {
-        setProcesses(prev =>
-          prev.map(p =>
-            p.processNumber.replace(/\D/g, '') === processNumber.replace(/\D/g, '')
-              ? { ...p, datajud: data.process, found: true }
-              : p
-          )
-        )
-      }
-    } catch {
-      // silently fail
     } finally {
       setLoading(false)
     }
