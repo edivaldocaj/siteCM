@@ -5,7 +5,7 @@ export const Posts: CollectionConfig = {
   admin: { useAsTitle: 'title', defaultColumns: ['title', 'category', 'status', 'publishedAt'] },
   fields: [
     { name: 'title', type: 'text', required: true, label: 'Título' },
-    { name: 'slug', type: 'text', required: true, unique: true, admin: { position: 'sidebar' } },
+    { name: 'slug', type: 'text', required: true, unique: true }, // Removido position: 'sidebar'
     { name: 'excerpt', type: 'textarea', required: true, label: 'Resumo', maxLength: 300 },
     { name: 'featuredImage', type: 'upload', relationTo: 'media', label: 'Imagem Destaque' },
     { name: 'content', type: 'richText', required: true, label: 'Conteúdo' },
@@ -37,9 +37,9 @@ export const Posts: CollectionConfig = {
       ],
     },
     { name: 'tags', type: 'text', hasMany: true, label: 'Tags' },
-    { name: 'readTime', type: 'number', label: 'Tempo de Leitura (min)', admin: { position: 'sidebar' } },
-    { name: 'publishedAt', type: 'date', label: 'Data de Publicação', admin: { position: 'sidebar' } },
-    { name: 'status', type: 'select', options: ['draft', 'published'], defaultValue: 'draft', admin: { position: 'sidebar' } },
+    { name: 'readTime', type: 'number', label: 'Tempo de Leitura (min)' }, // Removido position
+    { name: 'publishedAt', type: 'date', label: 'Data de Publicação' }, // Removido position
+    { name: 'status', type: 'select', options: ['draft', 'published'], defaultValue: 'draft' }, // Removido position
     {
       name: 'seo',
       type: 'group',

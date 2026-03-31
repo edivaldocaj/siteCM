@@ -9,7 +9,7 @@ export const Campaigns: CollectionConfig = {
   },
   fields: [
     { name: 'title', type: 'text', required: true, label: 'Título da Campanha' },
-    { name: 'slug', type: 'text', required: true, unique: true, admin: { position: 'sidebar' } },
+    { name: 'slug', type: 'text', required: true, unique: true },
     {
       name: 'category',
       type: 'select',

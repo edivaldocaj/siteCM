@@ -9,7 +9,6 @@ export const Clients: CollectionConfig = {
   },
   fields: [
     { name: 'name', type: 'text', required: true, label: 'Nome Completo' },
-    // CORREÇÃO: Descrição atualizada e validação flexível
     { name: 'cpf', type: 'text', required: true, label: 'CPF', admin: { description: 'Pode conter pontos e traços (ex: 123.456.789-00)' } },
     { name: 'email', type: 'email', label: 'E-mail' },
     { name: 'phone', type: 'text', label: 'Telefone / WhatsApp' },
@@ -34,8 +33,9 @@ export const Clients: CollectionConfig = {
         ]},
       ],
     },
-    { name: 'accessToken', type: 'text', required: true, unique: true, label: 'Token de Acesso', admin: { description: 'Token único para o cliente acessar o portal. Gere automaticamente ou defina manualmente.', position: 'sidebar' } },
-    { name: 'active', type: 'checkbox', label: 'Acesso Ativo', defaultValue: true, admin: { position: 'sidebar' } },
+    // CORREÇÃO: Removido o admin.position
+    { name: 'accessToken', type: 'text', required: true, unique: true, label: 'Token de Acesso', admin: { description: 'Token único para o cliente acessar o portal.' } },
+    { name: 'active', type: 'checkbox', label: 'Acesso Ativo', defaultValue: true },
     { name: 'notes', type: 'textarea', label: 'Observações Internas' },
   ],
 }
