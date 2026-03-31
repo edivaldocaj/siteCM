@@ -14,6 +14,7 @@ import { Testimonials } from './collections/Testimonials'
 import { PracticeAreas } from './collections/PracticeAreas'
 import { NewsArticles } from './collections/NewsArticles'
 import { Clients } from './collections/Clients'
+import { Homepage } from './globals/Homepage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -38,6 +39,9 @@ export default buildConfig({
     PracticeAreas,
     NewsArticles,
     Clients,
+  ],
+  globals: [
+    Homepage,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
