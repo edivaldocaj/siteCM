@@ -1,9 +1,15 @@
 import type { CollectionConfig } from 'payload'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
 
 export const Media: CollectionConfig = {
   slug: 'media',
   upload: {
-    staticDir: '../public/media',
+    // RESOLVE O CAMINHO ABSOLUTO PARA A PASTA PUBLIC DO NEXT.JS
+    staticDir: path.resolve(dirname, '../../public/media'),
     mimeTypes: ['image/*', 'application/pdf'],
     imageSizes: [
       { name: 'thumbnail', width: 400, height: 300, position: 'centre' },

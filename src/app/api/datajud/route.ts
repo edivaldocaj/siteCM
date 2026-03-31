@@ -76,9 +76,9 @@ export async function POST(req: NextRequest) {
     for (const proc of clientProcesses) {
       try {
         const processData = await searchProcess(proc.processNumber, proc.tribunal)
-        results.push({ processNumber: proc.processNumber, tribunal: proc.tribunal, description: proc.description, attorney: proc.attorney, datajud: processData, found: !!processData })
+        results.push({ processNumber: proc.processNumber, tribunal: proc.tribunal, description: proc.description, attorney: proc.attorney, lawyerSummary: proc.lawyerSummary, datajud: processData, found: !!processData })
       } catch {
-        results.push({ processNumber: proc.processNumber, tribunal: proc.tribunal, description: proc.description, attorney: proc.attorney, datajud: null, found: false })
+        results.push({ processNumber: proc.processNumber, tribunal: proc.tribunal, description: proc.description, attorney: proc.attorney, lawyerSummary: proc.lawyerSummary, datajud: null, found: false })
       }
     }
 

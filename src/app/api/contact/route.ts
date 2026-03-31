@@ -9,21 +9,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Campos obrigatórios não preenchidos.' }, { status: 400 })
     }
 
-    // 1. Save to Payload CMS (optional — create a "Leads" collection)
-    // const payload = await getPayload({ config })
-    // await payload.create({ collection: 'leads', data: { name, phone, subject, message } })
-
-    // 2. Send email via Resend (if configured)
     if (process.env.RESEND_API_KEY) {
-      await fetch('https://api.resend.com/emails', {
+      const res = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'Site Cavalcante & Melo <noreply@cavalcantemelo.adv.br>',
-          to: [process.env.CONTACT_EMAIL || 'contato@cavalcantemelo.adv.br'],
+          from: 'Site Cavalcante & Melo <onboarding@resend.dev>',
+          to: [process.env.CONTACT_EMAIL || 'seu-email-pessoal@gmail.com'], // O e-mail que VAI RECEBER as mensagens
           subject: `Novo Lead: ${subject} — ${name}`,
           html: `
             <h2>Novo contato pelo site</h2>
@@ -36,15 +31,14 @@ export async function POST(req: NextRequest) {
           `,
         }),
       })
-    }
 
-    // 3. Send WhatsApp notification via n8n webhook (optional)
-    if (process.env.N8N_WEBHOOK_URL) {
-      await fetch(process.env.N8N_WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, subject, message, source: 'site-form' }),
-      }).catch(() => {})
+      if (!res.ok) {
+        console.error('Erro no Resend:', await res.text())
+        return NextResponse.json({ error: 'Falha ao enviar o e-mail.' }, { status: 500 })
+      }
+    } else {
+      console.error('Falta a variável RESEND_API_KEY')
+      return NextResponse.json({ error: 'Serviço de e-mail não configurado no servidor.' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true })

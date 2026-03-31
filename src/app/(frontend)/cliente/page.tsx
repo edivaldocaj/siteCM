@@ -70,7 +70,20 @@ function ProcessCard({ proc }: { proc: ProcessResult }) {
           {!proc.found ? (
             <p style={{ color: '#b8bfc8', fontSize: '14px' }}>Processo não encontrado na base do Datajud. Pode estar em sigilo ou ainda não ter sido indexado.</p>
           ) : d ? (
-            <>
+            <> , 
+			
+			{/* Resumo do Advogado */}
+              {proc.lawyerSummary && (
+                <div style={{ background: 'rgba(196,169,106,0.05)', border: '1px solid rgba(196,169,106,0.2)', borderRadius: '8px', padding: '16px', marginBottom: '24px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                    <User style={{ width: '16px', height: '16px', color: '#c4a96a' }} />
+                    <h4 style={{ color: '#c4a96a', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Parecer do Advogado</h4>
+                  </div>
+                  <p style={{ color: '#f1eae2', fontSize: '15px', lineHeight: 1.6, margin: 0 }}>
+                    {proc.lawyerSummary}
+                  </p>
+                </div>
+              )},
               {/* Info Grid */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' }}>
                 <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '6px', padding: '12px' }}>

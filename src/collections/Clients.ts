@@ -31,9 +31,9 @@ export const Clients: CollectionConfig = {
           { label: 'Dr. Edivaldo Cavalcante', value: 'edivaldo' },
           { label: 'Dra. Gabrielly Melo', value: 'gabrielly' },
         ]},
+        { name: 'lawyerSummary', type: 'textarea', label: 'Resumo / Parecer do Advogado (Exibido ao Cliente)' },
       ],
     },
-    // CORREÇÃO: Removido o admin.position
     { name: 'accessToken', type: 'text', required: true, unique: true, label: 'Token de Acesso', admin: { description: 'Token único para o cliente acessar o portal.' } },
     { name: 'active', type: 'checkbox', label: 'Acesso Ativo', defaultValue: true },
     { name: 'notes', type: 'textarea', label: 'Observações Internas' },
