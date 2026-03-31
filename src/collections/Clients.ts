@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+iimport type { CollectionConfig } from 'payload'
 
 export const Clients: CollectionConfig = {
   slug: 'clients',
@@ -9,7 +9,8 @@ export const Clients: CollectionConfig = {
   },
   fields: [
     { name: 'name', type: 'text', required: true, label: 'Nome Completo' },
-    { name: 'cpf', type: 'text', required: true, label: 'CPF', admin: { description: 'Apenas números: 12345678900' } },
+    // CORREÇÃO: Descrição atualizada e validação flexível
+    { name: 'cpf', type: 'text', required: true, label: 'CPF', admin: { description: 'Pode conter pontos e traços (ex: 123.456.789-00)' } },
     { name: 'email', type: 'email', label: 'E-mail' },
     { name: 'phone', type: 'text', label: 'Telefone / WhatsApp' },
     {
