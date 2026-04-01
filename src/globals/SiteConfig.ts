@@ -19,8 +19,25 @@ export const SiteConfig: GlobalConfig = {
           ],
         },
         {
-          label: 'Dados de Contato (Rodapé e Página)',
+          label: 'Página: Sobre Nós',
           fields: [
+            { name: 'aboutTitle', type: 'text', label: 'Título Principal', defaultValue: 'Nossa História e Valores' },
+            { name: 'aboutSubtitle', type: 'textarea', label: 'Subtítulo', defaultValue: 'Comprometimento absoluto com a excelência jurídica e a defesa intransigente dos direitos dos nossos clientes.' },
+            { name: 'aboutContent', type: 'richText', label: 'Conteúdo da Página (Texto Completo)' },
+          ]
+        },
+        {
+          label: 'Página: Áreas de Atuação',
+          fields: [
+            { name: 'practiceTitle', type: 'text', label: 'Título Principal', defaultValue: 'Nossas Especialidades' },
+            { name: 'practiceSubtitle', type: 'textarea', label: 'Subtítulo', defaultValue: 'Especialistas nas áreas mais complexas do Direito, oferecendo soluções jurídicas inovadoras e seguras.' },
+          ]
+        },
+        {
+          label: 'Dados de Contato (Rodapé e Página de Contato)',
+          fields: [
+            { name: 'contactTitle', type: 'text', label: 'Título de Contato', defaultValue: 'Fale com nossa equipe' },
+            { name: 'contactSubtitle', type: 'textarea', label: 'Subtítulo de Contato', defaultValue: 'Estamos prontos para analisar o seu caso e propor a melhor estratégia jurídica.' },
             { name: 'contactEmail', type: 'text', label: 'E-mail Oficial', defaultValue: 'contato@cavalcantemelo.com.br' },
             { name: 'contactPhone', type: 'text', label: 'Telefone Principal', defaultValue: '(84) 99999-9999' },
             { name: 'contactAddress', type: 'textarea', label: 'Endereço Físico', defaultValue: 'Av. Prudente de Morais, 1234 - Natal/RN' },
