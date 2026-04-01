@@ -18,12 +18,13 @@ async function getHomeData() {
   try {
     const payload = await getPayload({ config: configPromise })
 
-    const [campaignsRes, testimonialsRes, postsRes, newsRes, homepageData] = await Promise.all([
+    const [campaignsRes, testimonialsRes, postsRes, newsRes, homepageData, siteConfigData] = await Promise.all([
       (payload as any).find({ collection: 'campaigns', where: { status: { equals: 'active' }, featuredOnHomepage: { equals: true } }, limit: 3, sort: '-createdAt' }).catch(() => ({ docs: [] })),
       (payload as any).find({ collection: 'testimonials', where: { featured: { equals: true } }, limit: 6, sort: '-createdAt' }).catch(() => ({ docs: [] })),
       (payload as any).find({ collection: 'posts', where: { status: { equals: 'published' } }, limit: 3, sort: '-publishedAt' }).catch(() => ({ docs: [] })),
       (payload as any).find({ collection: 'news-articles', where: { status: { equals: 'published' } }, limit: 4, sort: '-publishedAt' }).catch(() => ({ docs: [] })),
-      (payload as any).findGlobal({ slug: 'homepage' }).catch(() => null)
+      (payload as any).findGlobal({ slug: 'homepage' }).catch(() => null),
+      (payload as any).findGlobal({ slug: 'site-config' }).catch(() => null) // <-- BUSCA OS TEXTOS GERAIS
     ])
 
     return {
@@ -31,11 +32,12 @@ async function getHomeData() {
       testimonials: testimonialsRes?.docs || [],
       posts: postsRes?.docs || [],
       news: newsRes?.docs || [],
-      homepage: homepageData || null
+      homepage: homepageData || null,
+      siteConfig: siteConfigData || null // <-- REPASSA PARA O FRONTEND
     }
   } catch (e) {
     console.error('[HomePage] Falha ao buscar dados do Payload:', e)
-    return { campaigns: [], testimonials: [], posts: [], news: [], homepage: null }
+    return { campaigns: [], testimonials: [], posts: [], news: [], homepage: null, siteConfig: null }
   }
 }
 
@@ -44,7 +46,9 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection />
+      {/* INJETA OS TEXTOS DO CMS NO HERO */}
+      <HeroSection cmsData={data.siteConfig} />
+      
       <TrustBar />
       <PracticeAreasGrid />
       <CriminalUrgency />

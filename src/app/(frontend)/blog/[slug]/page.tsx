@@ -1,106 +1,100 @@
-import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, Clock, User, Phone, Calendar } from 'lucide-react'
-import { getPayloadClient } from '@/lib/payload'
+import Link from 'next/link'
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
+import { ArrowLeft, Clock, User, Calendar } from 'lucide-react'
 
-const authorNames: Record<string, string> = { edivaldo: 'Dr. Edivaldo Cavalcante', gabrielly: 'Dra. Gabrielly Melo', escritorio: 'Cavalcante & Melo' }
+// Renderizador oficial do texto formatado (RichText)
+import { RichText } from '@payloadcms/richtext-lexical/react'
 
-export const revalidate = 1800
+export const revalidate = 60 // Atualiza a cada 60 segundos
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params
-  try {
-    const payload = await getPayloadClient()
-	 if (!payload) return null as any
-    const result = await payload.find({ collection: 'posts', where: { slug: { equals: slug } }, limit: 1 })
-    const post = result.docs[0]
-    if (!post) return { title: 'Artigo não encontrado' }
-    return {
-      title: post.seo?.metaTitle || post.title,
-      description: post.seo?.metaDescription || post.excerpt,
-      openGraph: { type: 'article', title: post.title, description: post.excerpt },
-    }
-  } catch {
-    return { title: slug.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()) }
-  }
+const authorNames: Record<string, string> = { 
+  edivaldo: 'Dr. Edivaldo Cavalcante', 
+  gabrielly: 'Dra. Gabrielly Melo', 
+  escritorio: 'Cavalcante & Melo' 
 }
 
-export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  let post: any = null
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+  const payload = await getPayload({ config: configPromise })
+  
+  // Busca o post no banco de dados com base na URL
+  const { docs } = await (payload as any).find({
+    collection: 'posts',
+    where: { slug: { equals: params.slug } },
+  })
 
-  try {
-    const payload = await getPayloadClient()
-	if (!payload) return null as any
-    const result = await payload.find({ collection: 'posts', where: { slug: { equals: slug }, status: { equals: 'published' } }, limit: 1 })
-    post = result.docs[0]
-  } catch {}
+  const post = docs[0]
 
+  // A CORREÇÃO ESTÁ AQUI: Se o post não existir no banco, força o erro 404 (Página não encontrada)
   if (!post) {
-    return (
-      <>
-        <section className="gradient-navy pt-32 pb-16">
-          <div className="container-narrow mx-auto px-4 sm:px-6 lg:px-8">
-            <Link href="/blog" className="inline-flex items-center gap-2 text-brand-silver/50 hover:text-brand-gold-dark text-sm font-body mb-6 transition-colors"><ArrowLeft className="w-4 h-4" /> Blog</Link>
-            <h1 className="font-display text-3xl sm:text-4xl font-semibold text-brand-champagne leading-tight mb-4">
-              {slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
-            </h1>
-          </div>
-        </section>
-        <section className="section-padding bg-brand-cream">
-          <div className="container-narrow mx-auto">
-            <div className="bg-white rounded-lg p-12 border border-brand-gold/10 text-center">
-              <p className="text-brand-navy/60 font-body text-lg mb-4">Este artigo será publicado em breve.</p>
-              <p className="text-brand-navy/40 font-body text-sm">Gerencie artigos pelo painel em <code className="bg-brand-cream px-2 py-1 rounded">/admin</code></p>
-            </div>
-          </div>
-        </section>
-      </>
-    )
+    notFound()
   }
 
-  const authorName = authorNames[post.author] || 'Cavalcante & Melo'
+  // Formata a data de publicação
+  const publishDate = post.publishedAt || post.createdAt
+  const formattedDate = new Date(publishDate).toLocaleDateString('pt-BR', { 
+    day: '2-digit', month: 'long', year: 'numeric' 
+  })
 
   return (
-    <>
-      {/* Schema.org Article */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        '@context': 'https://schema.org', '@type': 'Article',
-        headline: post.title, description: post.excerpt,
-        author: { '@type': 'Person', name: authorName },
-        publisher: { '@type': 'Organization', name: 'Cavalcante & Melo Sociedade de Advogados' },
-        datePublished: post.publishedAt, dateModified: post.updatedAt,
-        mainEntityOfPage: { '@type': 'WebPage', '@id': `${process.env.NEXT_PUBLIC_SITE_URL}/blog/${slug}` },
-      })}} />
+    <div style={{ backgroundColor: '#faf8f5', minHeight: '100vh', paddingBottom: '80px' }}>
+      
+      {/* Cabeçalho do Artigo */}
+      <section style={{ background: 'linear-gradient(135deg, #152138 0%, #1c2d4a 50%, #0e1628 100%)', paddingTop: '120px', paddingBottom: '100px', paddingLeft: '16px', paddingRight: '16px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <Link href="/blog" style={{ color: '#c4a96a', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '32px', width: 'fit-content' }}>
+            <ArrowLeft style={{ width: '16px', height: '16px' }} />
+            Voltar para o Blog
+          </Link>
 
-      <section className="gradient-navy pt-32 pb-16">
-        <div className="container-narrow mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href="/blog" className="inline-flex items-center gap-2 text-brand-silver/50 hover:text-brand-gold-dark text-sm font-body mb-6 transition-colors"><ArrowLeft className="w-4 h-4" /> Blog</Link>
-          <span className="text-brand-gold-dark text-xs font-body uppercase tracking-[0.25em] mb-3 block">{post.category}</span>
-          <h1 className="font-display text-3xl sm:text-4xl font-semibold text-brand-champagne leading-tight mb-6">{post.title}</h1>
-          <div className="flex flex-wrap items-center gap-4 text-brand-silver/50 text-sm font-body">
-            <span className="flex items-center gap-1"><User className="w-4 h-4" />{authorName}</span>
-            {post.readTime && <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{post.readTime} min</span>}
-            {post.publishedAt && <span className="flex items-center gap-1"><Calendar className="w-4 h-4" />{new Date(post.publishedAt).toLocaleDateString('pt-BR')}</span>}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '24px' }}>
+            <span style={{ color: '#c4a96a', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(196,169,106,0.1)', padding: '4px 12px', borderRadius: '4px' }}>
+              {post.category}
+            </span>
+            {post.readTime && (
+              <span style={{ color: 'rgba(184,191,200,0.6)', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Clock style={{ width: '14px', height: '14px' }} /> {post.readTime} min de leitura
+              </span>
+            )}
+          </div>
+
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', color: '#f1eae2', lineHeight: 1.2, marginBottom: '24px' }}>
+            {post.title}
+          </h1>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#b8bfc8', fontSize: '14px' }}>
+              <User style={{ width: '16px', height: '16px', color: '#c4a96a' }} />
+              {authorNames[post.author] || 'Equipe Cavalcante & Melo'}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#b8bfc8', fontSize: '14px' }}>
+              <Calendar style={{ width: '16px', height: '16px', color: '#c4a96a' }} />
+              {formattedDate}
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="section-padding bg-brand-cream">
-        <div className="container-narrow mx-auto">
-          <article className="bg-white rounded-lg p-8 sm:p-12 border border-brand-gold/10 mb-12 prose prose-lg max-w-none">
-            <p className="text-brand-navy/70 font-body text-lg leading-relaxed">{post.excerpt}</p>
-            {/* Rich text content would render here via Payload's rich text renderer */}
-          </article>
-
-          <div className="gradient-navy rounded-lg p-8 text-center">
-            <h2 className="font-display text-2xl font-semibold text-brand-champagne mb-4">Precisa de orientação jurídica?</h2>
-            <p className="text-brand-silver/60 font-body mb-6">Fale com um advogado especialista.</p>
-            <a href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584999999999'}`} target="_blank" rel="noopener noreferrer" className="btn-whatsapp"><Phone className="w-5 h-5" /> Falar com Advogado</a>
+      {/* Conteúdo do Artigo */}
+      <section style={{ maxWidth: '800px', margin: '-40px auto 0', position: 'relative', zIndex: 10, padding: '0 16px' }}>
+        <div style={{ background: 'white', padding: '40px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', border: '1px solid rgba(21,33,56,0.05)' }}>
+          
+          <div style={{ color: 'rgba(21,33,56,0.8)', fontSize: '18px', lineHeight: 1.6, marginBottom: '32px', fontStyle: 'italic', borderLeft: '4px solid #c4a96a', paddingLeft: '16px' }}>
+            {post.excerpt}
           </div>
+
+          {/* O Renderizador que puxa os parágrafos diretos do CMS */}
+          <div style={{ color: 'rgba(21,33,56,0.7)', fontSize: '16px', lineHeight: 1.8 }} className="cms-rich-text">
+            {post.content ? (
+              <RichText data={post.content} />
+            ) : (
+              <p>Conteúdo não disponível.</p>
+            )}
+          </div>
+          
         </div>
       </section>
-    </>
+    </div>
   )
 }

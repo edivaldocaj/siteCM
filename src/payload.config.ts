@@ -4,7 +4,7 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
-
+import { SiteConfig } from './globals/SiteConfig'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -42,6 +42,7 @@ export default buildConfig({
   ],
   globals: [
     Homepage,
+	SiteConfig,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

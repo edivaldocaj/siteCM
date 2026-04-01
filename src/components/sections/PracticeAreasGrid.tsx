@@ -1,91 +1,112 @@
-'use client'
-
 import Link from 'next/link'
-import { motion } from 'framer-motion'
-import {
-  Shield, Scale, ShoppingBag, Home, Receipt,
-  FileText, Gavel, AlertTriangle
-} from 'lucide-react'
+import { Landmark, Scale, Laptop, Building, Briefcase, ShieldAlert } from 'lucide-react'
 
-const areas = [
-  { icon: Shield, title: 'Direito Digital e LGPD', slug: 'direito-digital-lgpd', description: 'Proteção de dados, crimes cibernéticos, compliance digital e adequação à LGPD.' },
-  { icon: Scale, title: 'Direito Civil', slug: 'direito-civil', description: 'Contratos, responsabilidade civil, família, sucessões e ações indenizatórias.' },
-  { icon: ShoppingBag, title: 'Direito do Consumidor', slug: 'direito-consumidor', description: 'Fraudes bancárias, negativação indevida, revisão de juros e planos de saúde.' },
-  { icon: Home, title: 'Direito Imobiliário', slug: 'direito-imobiliario', description: 'Compra e venda, contratos imobiliários, usucapião e regularização.' },
-  { icon: Receipt, title: 'Direito Tributário', slug: 'direito-tributario', description: 'Planejamento fiscal, defesa em execuções fiscais e recuperação de tributos.' },
-  { icon: FileText, title: 'Licitações e Contratos', slug: 'licitacoes-contratos', description: 'Assessoria em licitações, impugnações, contratos administrativos.' },
-  { icon: Gavel, title: 'Direito Penal', slug: 'direito-penal', description: 'Defesa criminal, habeas corpus, audiência de custódia. Atendimento 24h.', is24h: true },
-]
+// Mapeamento de ícones
+const iconMap: Record<string, any> = {
+  landmark: Landmark,
+  scale: Scale,
+  laptop: Laptop,
+  building: Building,
+  briefcase: Briefcase,
+  shield: ShieldAlert,
+}
 
-export function PracticeAreasGrid() {
+export function PracticeAreasGrid({ cmsAreas = [] }: { cmsAreas?: any[] }) {
+  // Fallback para dados estáticos caso não sejam passados pelo CMS
+  const areas = cmsAreas.length > 0 ? cmsAreas : [
+    { title: 'Direito Tributário', slug: 'direito-tributario', short_description: 'Recuperação fiscal e defesa em execuções fiscais.', icon: 'landmark' },
+    { title: 'Direito Civil', slug: 'direito-civil', short_description: 'Contratos, família, sucessões e responsabilidade civil.', icon: 'scale' },
+    { title: 'Direito Digital e LGPD', slug: 'direito-digital', short_description: 'Adequação de empresas, marco civil e crimes cibernéticos.', icon: 'laptop' },
+    { title: 'Direito Imobiliário', slug: 'direito-imobiliario', short_description: 'Regularização de imóveis, usucapião e distratos.', icon: 'building' },
+    { title: 'Licitações', slug: 'licitacoes', short_description: 'Mandados de segurança, recursos administrativos e defesa prévia.', icon: 'briefcase' },
+    { title: 'Direito Penal', slug: 'direito-penal', short_description: 'Defesa criminal estratégica e acompanhamento em delegacias.', icon: 'shield' },
+  ]
+
   return (
-    <section className="section-padding bg-brand-cream">
-      <div className="container-wide mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <span className="text-brand-gold-dark text-xs font-body uppercase tracking-[0.25em] mb-4 block">
-            Especialidades
+    <section style={{ padding: '80px 16px', backgroundColor: '#ffffff' }}>
+      <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
+        
+        {/* CABEÇALHO DA SESSÃO - Correção de Alinhamento (Centralizado) */}
+        <div style={{ textAlign: 'center', marginBottom: '56px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <span style={{ color: '#c4a96a', fontSize: '12px', fontFamily: "'Source Sans 3', sans-serif", textTransform: 'uppercase', letterSpacing: '0.25em', display: 'block', marginBottom: '16px' }}>
+            Nossas Especialidades
           </span>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold text-brand-navy mb-6">
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 2.5rem)', color: '#152138', margin: 0, lineHeight: 1.2, maxWidth: '600px' }}>
             Áreas de Atuação
           </h2>
-          <p className="text-brand-navy/60 font-body text-lg max-w-2xl mx-auto">
-            Atuação estratégica em diversas áreas do Direito, sempre com foco na defesa dos seus interesses.
-          </p>
         </div>
-
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {areas.map((area, i) => (
-            <motion.div
-              key={area.slug}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-            >
-              <Link
-                href={`/areas-de-atuacao/${area.slug}`}
-                className={`block p-8 rounded-lg card-hover group relative overflow-hidden ${
-                  area.is24h
-                    ? 'bg-brand-navy text-brand-silver-light border border-brand-gold-dark/20'
-                    : 'bg-white border border-brand-gold/10 hover:border-brand-gold-dark/30'
-                }`}
+        
+        {/* GRID DE CARDS */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
+          {areas.map((area, index) => {
+            const IconComponent = iconMap[area.icon] || Scale
+            
+            return (
+              <Link 
+                key={index} 
+                href={`/atuacao/${area.slug}`} 
+                style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  background: '#faf8f5', 
+                  padding: '32px', 
+                  borderRadius: '8px', 
+                  textDecoration: 'none', 
+                  border: '1px solid rgba(21,33,56,0.05)',
+                  transition: 'transform 0.2s, boxShadow 0.2s'
+                }}
               >
-                {area.is24h && (
-                  <span className="absolute top-4 right-4 bg-brand-urgency text-white text-[10px] font-body font-bold uppercase tracking-wider px-3 py-1 rounded-sm">
-                    24h
-                  </span>
-                )}
-
-                <area.icon className={`w-10 h-10 mb-6 transition-colors duration-300 ${
-                  area.is24h
-                    ? 'text-brand-gold-dark'
-                    : 'text-brand-navy/30 group-hover:text-brand-gold-dark'
-                }`} />
-
-                <h3 className={`font-display text-lg font-semibold mb-3 ${
-                  area.is24h ? 'text-brand-champagne' : 'text-brand-navy'
-                }`}>
-                  {area.title}
-                </h3>
-
-                <p className={`font-body text-sm leading-relaxed ${
-                  area.is24h ? 'text-brand-silver/70' : 'text-brand-navy/50'
-                }`}>
-                  {area.description}
-                </p>
-
-                <div className={`mt-6 text-xs font-body uppercase tracking-wider font-semibold transition-colors ${
-                  area.is24h
-                    ? 'text-brand-gold-dark'
-                    : 'text-brand-navy/30 group-hover:text-brand-gold-dark'
-                }`}>
-                  Saiba mais →
+                {/* CONTAINER DO ÍCONE E TÍTULO - Correção do Ícone Torto */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+                  
+                  {/* flexShrink: 0 impede que o ícone amasse quando o título é muito grande */}
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    width: '48px', 
+                    height: '48px', 
+                    backgroundColor: 'rgba(196,169,106,0.1)', 
+                    borderRadius: '8px',
+                    flexShrink: 0 
+                  }}>
+                    <IconComponent style={{ width: '24px', height: '24px', color: '#c4a96a' }} />
+                  </div>
+                  
+                  <h3 style={{ 
+                    fontFamily: "'Playfair Display', serif", 
+                    fontSize: '20px', 
+                    color: '#152138', 
+                    margin: 0, 
+                    lineHeight: 1.3 
+                  }}>
+                    {area.title}
+                  </h3>
                 </div>
+                
+                {/* DESCRIÇÃO E LINK */}
+                <p style={{ 
+                  color: 'rgba(21,33,56,0.6)', 
+                  fontFamily: "'Source Sans 3', sans-serif", 
+                  fontSize: '15px', 
+                  lineHeight: 1.6, 
+                  margin: '0 0 24px 0',
+                  flexGrow: 1
+                }}>
+                  {area.short_description || area.shortDescription}
+                </p>
+                <span style={{ 
+                  color: '#c4a96a', 
+                  fontSize: '13px', 
+                  fontFamily: "'Source Sans 3', sans-serif", 
+                  fontWeight: 600,
+                  display: 'inline-block'
+                }}>
+                  Saber mais &rarr;
+                </span>
               </Link>
-            </motion.div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>
