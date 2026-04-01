@@ -3,7 +3,7 @@ import configPromise from '@payload-config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { ContactCTA } from '@/components/sections/ContactCTA'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function SobrePage() {
   const payload = await getPayload({ config: configPromise })

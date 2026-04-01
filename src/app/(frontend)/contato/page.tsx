@@ -3,7 +3,7 @@ import configPromise from '@payload-config'
 import { Mail, Phone, MapPin } from 'lucide-react'
 import { ContactForm } from '@/components/ContactForm'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function ContatoPage() {
   const payload = await getPayload({ config: configPromise })

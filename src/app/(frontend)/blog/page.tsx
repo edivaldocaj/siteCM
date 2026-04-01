@@ -4,7 +4,7 @@ import { Clock, User, ArrowUpRight } from 'lucide-react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 
-export const revalidate = 60 // Atualiza a cada 60 segundos
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Blog e Notícias',

@@ -12,7 +12,7 @@ import { ContactCTA } from '@/components/sections/ContactCTA'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 
-export const revalidate = 60 // Atualiza a página a cada 60 segundos
+export const dynamic = 'force-dynamic'
 
 async function getHomeData() {
   try {

@@ -3,7 +3,7 @@ import configPromise from '@payload-config'
 import { PracticeAreasGrid } from '@/components/sections/PracticeAreasGrid'
 import { ContactCTA } from '@/components/sections/ContactCTA'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function AtuacaoPage() {
   const payload = await getPayload({ config: configPromise })
