@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { MapPin, Phone, Mail, Clock, Instagram, Linkedin } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock } from 'lucide-react'
 
 const practiceAreas = [
   { href: '/areas-de-atuacao/direito-digital-lgpd', label: 'Direito Digital e LGPD' },
@@ -19,6 +19,26 @@ const navLinks = [
   { href: '/contato', label: 'Contato' },
 ]
 
+function InstagramIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  )
+}
+
+function LinkedinIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect width="4" height="12" x="2" y="9" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  )
+}
+
 export function Footer() {
   return (
     <footer style={{ backgroundColor: 'var(--color-brand-navy)', color: 'rgba(184,191,200,0.7)', fontFamily: 'var(--font-body)' }}>
@@ -28,7 +48,7 @@ export function Footer() {
           <div>
             <div style={{ marginBottom: '24px' }}>
               <h3 style={{ fontFamily: 'var(--font-display)', color: '#d4d8de', fontSize: '20px', fontWeight: 600, margin: 0 }}>
-                Cavalcante & Melo
+                Cavalcante &amp; Melo
               </h3>
               <p style={{ color: 'rgba(184,191,200,0.4)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: '4px' }}>
                 Sociedade de Advogados
@@ -39,10 +59,10 @@ export function Footer() {
             </p>
             <div style={{ display: 'flex', gap: '12px' }}>
               <a href="#" style={{ width: '40px', height: '40px', borderRadius: '50%', border: '1px solid rgba(184,191,200,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(184,191,200,0.7)', transition: 'all 0.3s', textDecoration: 'none' }} className="social-icon">
-                <Instagram style={{ width: '16px', height: '16px' }} />
+                <InstagramIcon />
               </a>
               <a href="#" style={{ width: '40px', height: '40px', borderRadius: '50%', border: '1px solid rgba(184,191,200,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(184,191,200,0.7)', transition: 'all 0.3s', textDecoration: 'none' }} className="social-icon">
-                <Linkedin style={{ width: '16px', height: '16px' }} />
+                <LinkedinIcon />
               </a>
             </div>
           </div>
