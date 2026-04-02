@@ -1,44 +1,50 @@
 import Link from 'next/link'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowRight, ExternalLink } from 'lucide-react'
+
+const defaultNews = [
+  { title: 'STJ firma entendimento sobre revisão de juros', source: 'Conjur', category: 'direito-consumidor', slug: 'stj-revisao-juros' },
+  { title: 'ANPD aplica multa por vazamento de dados', source: 'Migalhas', category: 'lgpd', slug: 'anpd-multa-vazamento' },
+  { title: 'Nova lei amplia penas para estelionato digital', source: 'Conjur', category: 'direito-penal', slug: 'nova-lei-estelionato' },
+]
 
 export function NewsSection({ cmsNews = [] }: { cmsNews?: any[] }) {
-  if (!cmsNews || cmsNews.length === 0) return null;
+  const news = cmsNews.length > 0 ? cmsNews : defaultNews
 
   return (
-    <section style={{ padding: '80px 16px', backgroundColor: '#152138' }}>
+    <section style={{ padding: '80px 24px', backgroundColor: '#f1eae2' }}>
       <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '52px' }}>
           <span style={{ color: '#c4a96a', fontSize: '12px', fontFamily: "'Source Sans 3', sans-serif", textTransform: 'uppercase', letterSpacing: '0.25em', display: 'block', marginBottom: '16px' }}>Atualizações</span>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', color: '#f1eae2', margin: '0 0 16px 0', lineHeight: 1.2 }}>Notícias do Judiciário</h2>
-          <p style={{ color: 'rgba(184,191,200,0.55)', fontFamily: "'Source Sans 3', sans-serif", fontSize: '17px', maxWidth: '520px', margin: '0 auto', lineHeight: 1.6 }}>Fique por dentro das últimas decisões e mudanças no cenário jurídico.</p>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', color: '#152138', margin: '0 0 16px 0', lineHeight: 1.2 }}>Notícias do Direito</h2>
+          <p style={{ color: 'rgba(21,33,56,0.55)', fontFamily: "'Source Sans 3', sans-serif", fontSize: '17px', maxWidth: '520px', margin: '0 auto', lineHeight: 1.6 }}>Últimas decisões e notícias relevantes do mundo jurídico.</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
-          {cmsNews.map((news: any) => {
-            const newsLink = news.sourceUrl || news.source_url || '#'
+          {news.slice(0, 4).map((item: any, i: number) => {
+            const hasUrl = item.sourceUrl || item.source_url
+            const isExternal = !!hasUrl
+            const href = isExternal ? hasUrl : `/blog/${item.slug || '#'}`
+
             return (
-              <a key={news.slug} href={newsLink} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'block', border: '1px solid rgba(255,255,255,0.08)', borderTop: '2px solid rgba(196,169,106,0.2)', padding: '28px', borderRadius: '4px', textDecoration: 'none', background: 'rgba(255,255,255,0.03)', transition: 'all 0.3s ease', position: 'relative' }}
+              <a key={i} href={href} target={isExternal ? '_blank' : '_self'} rel={isExternal ? 'noopener noreferrer' : undefined}
+                style={{ display: 'block', background: 'white', padding: '28px', borderRadius: '4px', textDecoration: 'none', border: '1px solid rgba(21,33,56,0.06)', boxShadow: '0 2px 12px rgba(21,33,56,0.04)', transition: 'all 0.3s' }}
                 className="news-card-hover">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '10px', fontFamily: "'Source Sans 3', sans-serif", textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(184,191,200,0.5)' }}>{news.source || 'Judiciário'}</span>
-                  <ArrowUpRight style={{ width: '14px', height: '14px', color: 'rgba(196,169,106,0.5)', flexShrink: 0 }} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                  <span style={{ fontSize: '10px', textTransform: 'uppercase', color: '#c4a96a', background: 'rgba(196,169,106,0.1)', padding: '3px 8px', borderRadius: '2px', fontFamily: "'Source Sans 3', sans-serif", letterSpacing: '0.05em' }}>{item.category || 'Geral'}</span>
+                  {isExternal && <ExternalLink style={{ width: '14px', height: '14px', color: 'rgba(21,33,56,0.3)' }} />}
                 </div>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '17px', color: '#f1eae2', margin: '0 0 12px 0', lineHeight: 1.4 }}>{news.title}</h3>
-                <p style={{ color: 'rgba(184,191,200,0.5)', fontFamily: "'Source Sans 3', sans-serif", fontSize: '14px', lineHeight: 1.6, margin: 0 }}>{news.excerpt}</p>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '16px', color: '#152138', lineHeight: 1.4, marginBottom: '12px' }}>{item.title}</h3>
+                <p style={{ color: 'rgba(21,33,56,0.4)', fontSize: '12px', fontFamily: "'Source Sans 3', sans-serif" }}>Fonte: {item.source || 'Judiciário'}</p>
               </a>
             )
           })}
         </div>
-        <div style={{ textAlign: 'center', marginTop: '48px' }}>
-          <Link href="/blog" style={{ color: '#c4a96a', fontSize: '13px', fontFamily: "'Source Sans 3', sans-serif", fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em', border: '1px solid rgba(196,169,106,0.4)', padding: '12px 28px', borderRadius: '2px', transition: 'all 0.3s', display: 'inline-block' }} className="news-view-all">
-            Ver todas as atualizações
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <Link href="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#152138', fontSize: '13px', fontFamily: "'Source Sans 3', sans-serif", fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em', border: '1px solid rgba(21,33,56,0.2)', padding: '12px 28px', borderRadius: '2px', transition: 'all 0.3s' }}>
+            Ver todas as notícias <ArrowRight style={{ width: '14px', height: '14px' }} />
           </Link>
         </div>
       </div>
-      <style dangerouslySetInnerHTML={{__html: `
-        .news-card-hover:hover { background: rgba(255,255,255,0.06) !important; border-top-color: rgba(196,169,106,0.5) !important; transform: translateY(-2px); }
-        .news-view-all:hover { background: rgba(196,169,106,0.1) !important; border-color: rgba(196,169,106,0.7) !important; }
-      `}} />
+      <style dangerouslySetInnerHTML={{__html: `.news-card-hover:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(21,33,56,0.08) !important; }`}} />
     </section>
   )
 }

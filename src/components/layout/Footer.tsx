@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Phone, Mail, Clock, Star, Globe } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock } from 'lucide-react'
 
 const practiceAreas = [
   { href: '/areas-de-atuacao/direito-digital-lgpd', label: 'Direito Digital e LGPD' },
@@ -11,44 +11,56 @@ const practiceAreas = [
   { href: '/areas-de-atuacao/direito-penal', label: 'Direito Penal' },
 ]
 
+const navLinks = [
+  { href: '/sobre', label: 'Sobre o Escritório' },
+  { href: '/campanhas', label: 'Campanhas Jurídicas' },
+  { href: '/blog', label: 'Blog Jurídico' },
+  { href: '/contato', label: 'Contato' },
+  { href: '/cliente', label: 'Portal do Cliente' },
+]
+
+const linkStyle: React.CSSProperties = {
+  color: 'rgba(184,191,200,0.7)',
+  fontSize: '14px',
+  textDecoration: 'none',
+  transition: 'color 0.3s',
+  display: 'block',
+  lineHeight: 1.8,
+}
+
 export function Footer() {
   return (
-    <footer className="bg-brand-navy text-brand-silver/70">
+    <footer style={{ backgroundColor: '#152138', color: 'rgba(184,191,200,0.7)', fontFamily: "'Source Sans 3', sans-serif" }}>
       {/* Main Footer */}
-      <div className="container-wide mx-auto section-padding !py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '64px 24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '48px' }}>
+
           {/* Brand */}
           <div>
-            <div className="mb-6">
-              <h3 className="font-display text-brand-silver-light text-xl font-semibold">
+            <div style={{ marginBottom: '24px' }}>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", color: '#d4d8de', fontSize: '20px', fontWeight: 600, margin: 0 }}>
                 Cavalcante & Melo
               </h3>
-              <p className="text-brand-silver/40 text-xs uppercase tracking-[0.2em] mt-1">
+              <p style={{ color: 'rgba(184,191,200,0.4)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: '4px' }}>
                 Sociedade de Advogados
               </p>
             </div>
-            <p className="text-sm leading-relaxed mb-6">
+            <p style={{ fontSize: '14px', lineHeight: 1.7, marginBottom: '24px', color: 'rgba(184,191,200,0.6)' }}>
               Advocacia estratégica e humanizada em Natal/RN. Comprometidos com a defesa dos seus direitos e a busca por resultados concretos.
             </p>
-            <div className="flex gap-3">
-              <a href="#" className="w-10 h-10 rounded-full border border-brand-silver/20 flex items-center justify-center hover:border-brand-gold hover:text-brand-gold transition-all">
-                <Star className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-brand-silver/20 flex items-center justify-center hover:border-brand-gold hover:text-brand-gold transition-all">
-                <Globe className="w-4 h-4" />
-              </a>
-            </div>
           </div>
 
           {/* Áreas */}
           <div>
-            <h4 className="font-display text-brand-silver-light font-semibold mb-6 text-sm uppercase tracking-wider">
+            <h4 style={{ fontFamily: "'Playfair Display', serif", color: '#d4d8de', fontWeight: 600, marginBottom: '24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               Áreas de Atuação
             </h4>
-            <ul className="space-y-3">
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {practiceAreas.map((area) => (
-                <li key={area.href}>
-                  <Link href={area.href} className="text-sm hover:text-brand-gold transition-colors duration-300">
+                <li key={area.href} style={{ marginBottom: '4px' }}>
+                  <Link href={area.href} style={linkStyle}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#c4a96a'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(184,191,200,0.7)'}>
                     {area.label}
                   </Link>
                 </li>
@@ -58,37 +70,42 @@ export function Footer() {
 
           {/* Links */}
           <div>
-            <h4 className="font-display text-brand-silver-light font-semibold mb-6 text-sm uppercase tracking-wider">
+            <h4 style={{ fontFamily: "'Playfair Display', serif", color: '#d4d8de', fontWeight: 600, marginBottom: '24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               Navegação
             </h4>
-            <ul className="space-y-3">
-              <li><Link href="/sobre" className="text-sm hover:text-brand-gold transition-colors">Sobre o Escritório</Link></li>
-              <li><Link href="/campanhas" className="text-sm hover:text-brand-gold transition-colors">Campanhas Jurídicas</Link></li>
-              <li><Link href="/blog" className="text-sm hover:text-brand-gold transition-colors">Blog Jurídico</Link></li>
-              <li><Link href="/contato" className="text-sm hover:text-brand-gold transition-colors">Contato</Link></li>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {navLinks.map((link) => (
+                <li key={link.href} style={{ marginBottom: '4px' }}>
+                  <Link href={link.href} style={linkStyle}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#c4a96a'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(184,191,200,0.7)'}>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Contato */}
           <div>
-            <h4 className="font-display text-brand-silver-light font-semibold mb-6 text-sm uppercase tracking-wider">
+            <h4 style={{ fontFamily: "'Playfair Display', serif", color: '#d4d8de', fontWeight: 600, marginBottom: '24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               Contato
             </h4>
-            <ul className="space-y-4">
-              <li className="flex gap-3 text-sm">
-                <MapPin className="w-5 h-5 text-brand-gold-dark shrink-0 mt-0.5" />
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              <li style={{ display: 'flex', gap: '12px', fontSize: '14px', marginBottom: '16px' }}>
+                <MapPin style={{ width: '18px', height: '18px', color: '#c4a96a', flexShrink: 0, marginTop: '2px' }} />
                 <span>Rua Francisco Maia Sobrinho, 1950<br />Lagoa Nova — Natal/RN</span>
               </li>
-              <li className="flex gap-3 text-sm">
-                <Phone className="w-5 h-5 text-brand-gold-dark shrink-0" />
-                <a href="tel:+5584999999999" className="hover:text-brand-gold transition-colors">(84) 99999-9999</a>
+              <li style={{ display: 'flex', gap: '12px', fontSize: '14px', marginBottom: '16px' }}>
+                <Phone style={{ width: '18px', height: '18px', color: '#c4a96a', flexShrink: 0 }} />
+                <a href="tel:+5584991243985" style={{ color: 'rgba(184,191,200,0.7)', textDecoration: 'none' }}>(84) 99124-3985</a>
               </li>
-              <li className="flex gap-3 text-sm">
-                <Mail className="w-5 h-5 text-brand-gold-dark shrink-0" />
-                <a href="mailto:contato@cavalcantemelo.adv.br" className="hover:text-brand-gold transition-colors">contato@cavalcantemelo.adv.br</a>
+              <li style={{ display: 'flex', gap: '12px', fontSize: '14px', marginBottom: '16px' }}>
+                <Mail style={{ width: '18px', height: '18px', color: '#c4a96a', flexShrink: 0 }} />
+                <a href="mailto:contato@cavalcantemelo.adv.br" style={{ color: 'rgba(184,191,200,0.7)', textDecoration: 'none' }}>contato@cavalcantemelo.adv.br</a>
               </li>
-              <li className="flex gap-3 text-sm">
-                <Clock className="w-5 h-5 text-brand-gold-dark shrink-0" />
+              <li style={{ display: 'flex', gap: '12px', fontSize: '14px' }}>
+                <Clock style={{ width: '18px', height: '18px', color: '#c4a96a', flexShrink: 0 }} />
                 <span>Seg a Sex: 8h às 18h<br />Penal: Atendimento 24h</span>
               </li>
             </ul>
@@ -97,12 +114,12 @@ export function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-brand-silver/10">
-        <div className="container-wide mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-brand-silver/40">
+      <div style={{ borderTop: '1px solid rgba(184,191,200,0.1)' }}>
+        <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '20px 24px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}>
+          <p style={{ fontSize: '12px', color: 'rgba(184,191,200,0.4)', margin: 0 }}>
             &copy; {new Date().getFullYear()} Cavalcante & Melo Sociedade de Advogados. Todos os direitos reservados.
           </p>
-          <p className="text-xs text-brand-silver/30">
+          <p style={{ fontSize: '12px', color: 'rgba(184,191,200,0.3)', margin: 0 }}>
             OAB/RN — Advocacia responsável conforme Código de Ética da OAB
           </p>
         </div>
