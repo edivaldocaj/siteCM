@@ -19,6 +19,22 @@ export const SiteConfig: GlobalConfig = {
           ],
         },
         {
+          label: 'Números em Destaque (Barra de Confiança)',
+          fields: [
+            {
+              name: 'trustBarStats',
+              type: 'array',
+              label: 'Estatísticas',
+              maxRows: 4,
+              fields: [
+                { name: 'value', type: 'number', required: true, label: 'Valor Numérico' },
+                { name: 'suffix', type: 'text', label: 'Sufixo (+, %, etc)', defaultValue: '' },
+                { name: 'label', type: 'text', required: true, label: 'Rótulo' },
+              ],
+            },
+          ],
+        },
+        {
           label: 'Página: Sobre Nós',
           fields: [
             { name: 'aboutTitle', type: 'text', label: 'Título Principal', defaultValue: 'Nossa História e Valores' },

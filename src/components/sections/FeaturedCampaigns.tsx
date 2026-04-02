@@ -1,34 +1,185 @@
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+'use client'
 
-export function FeaturedCampaigns({ cmsCampaigns = [] }: { cmsCampaigns?: any[] }) {
-  if (!cmsCampaigns || cmsCampaigns.length === 0) return null;
+import Link from 'next/link'
+import { ArrowRight, AlertTriangle, Shield, Smartphone } from 'lucide-react'
+
+const iconMap: Record<string, any> = {
+  consumidor: AlertTriangle,
+  digital: Shield,
+  criminal: Smartphone,
+  imobiliario: AlertTriangle,
+  tributario: AlertTriangle,
+}
+
+const defaultCampaigns = [
+  {
+    slug: 'fraudes-bancarias',
+    title: 'Fraudes Bancárias',
+    category: 'consumidor',
+    subtitle: 'Cobranças abusivas? Você pode ter direito a restituição.',
+  },
+  {
+    slug: 'vazamento-de-dados',
+    title: 'Vazamento de Dados',
+    category: 'digital',
+    subtitle: 'Seus dados foram expostos? Você tem direito a indenização.',
+  },
+  {
+    slug: 'golpes-online',
+    title: 'Golpes Online',
+    category: 'digital',
+    subtitle: 'Caiu em um golpe digital? Saiba como recuperar seu dinheiro.',
+  },
+]
+
+const categoryLabels: Record<string, string> = {
+  consumidor: 'Consumidor',
+  digital: 'LGPD / Digital',
+  criminal: 'Criminal',
+  imobiliario: 'Imobiliário',
+  tributario: 'Tributário',
+}
+
+interface FeaturedCampaignsProps {
+  cmsCampaigns?: any[]
+}
+
+export function FeaturedCampaigns({ cmsCampaigns = [] }: FeaturedCampaignsProps) {
+  const campaigns = cmsCampaigns.length > 0 ? cmsCampaigns : defaultCampaigns
 
   return (
-    <section style={{ padding: '80px 16px', backgroundColor: '#f1eae2' }}>
-      <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '52px' }}>
-          <span style={{ color: '#c4a96a', fontSize: '12px', fontFamily: "'Source Sans 3', sans-serif", textTransform: 'uppercase', letterSpacing: '0.25em', display: 'block', marginBottom: '16px' }}>Atuação Imediata</span>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', color: '#152138', margin: '0 0 16px 0', lineHeight: 1.2 }}>Campanhas em Destaque</h2>
-          <p style={{ color: 'rgba(21,33,56,0.55)', fontFamily: "'Source Sans 3', sans-serif", fontSize: '17px', maxWidth: '520px', margin: '0 auto', lineHeight: 1.6 }}>Conheça nossas campanhas ativas e saiba como podemos defender os seus direitos.</p>
+    <section className="section-padding" style={{ backgroundColor: 'var(--color-brand-cream)' }}>
+      <div className="container-wide mx-auto">
+        <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+          <span style={{
+            color: 'var(--color-brand-gold-dark)',
+            fontSize: '12px',
+            fontFamily: 'var(--font-body)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.25em',
+            display: 'block',
+            marginBottom: '16px',
+          }}>
+            Ações em Andamento
+          </span>
+          <h2 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(1.75rem, 4vw, 3rem)',
+            fontWeight: 600,
+            color: 'var(--color-brand-navy)',
+            marginBottom: '24px',
+          }}>
+            Campanhas Jurídicas
+          </h2>
+          <p style={{
+            color: 'rgba(21,33,56,0.6)',
+            fontFamily: 'var(--font-body)',
+            fontSize: '18px',
+            maxWidth: '40rem',
+            margin: '0 auto',
+            lineHeight: 1.6,
+          }}>
+            Ações coletivas e individuais em andamento. Verifique se o seu caso se encaixa.
+          </p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
-          {cmsCampaigns.map((camp: any) => (
-            <Link key={camp.slug} href={`/campanhas/${camp.slug}`}
-              style={{ display: 'block', background: 'white', padding: '36px', borderRadius: '4px', textDecoration: 'none', border: '1px solid rgba(21,33,56,0.06)', borderTop: '3px solid transparent', boxShadow: '0 4px 20px rgba(21,33,56,0.05)', transition: 'all 0.3s ease' }}
-              className="campaign-card-hover">
-              <span style={{ fontSize: '10px', textTransform: 'uppercase', color: '#c4a96a', background: 'rgba(196,169,106,0.1)', padding: '4px 10px', borderRadius: '2px', fontFamily: "'Source Sans 3', sans-serif", letterSpacing: '0.05em' }}>{camp.category}</span>
-              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '21px', color: '#152138', margin: '16px 0 12px' }}>{camp.title}</h3>
-              <p style={{ color: 'rgba(21,33,56,0.6)', fontSize: '15px', fontFamily: "'Source Sans 3', sans-serif", lineHeight: 1.6, marginBottom: '24px' }}>{camp.subtitle}</p>
-              <span style={{ color: '#c4a96a', fontSize: '12px', fontFamily: "'Source Sans 3', sans-serif", fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                Ver detalhes <ArrowRight style={{ width: '13px', height: '13px' }} />
-              </span>
-            </Link>
-          ))}
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+          gap: '24px',
+        }}>
+          {campaigns.map((campaign: any) => {
+            const catKey = campaign.category || 'consumidor'
+            const IconComponent = iconMap[catKey] || AlertTriangle
+
+            return (
+              <Link
+                key={campaign.slug}
+                href={`/campanhas/${campaign.slug}`}
+                className="campaign-card"
+                style={{
+                  display: 'block',
+                  background: 'white',
+                  borderRadius: '8px',
+                  padding: '32px',
+                  border: '1px solid rgba(196,169,106,0.1)',
+                  textDecoration: 'none',
+                  transition: 'all 0.5s',
+                  height: '100%',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+                  <span style={{
+                    fontSize: '11px',
+                    fontFamily: 'var(--font-body)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    color: 'var(--color-brand-gold-dark)',
+                    background: 'rgba(196,169,106,0.1)',
+                    padding: '4px 12px',
+                    borderRadius: '2px',
+                  }}>
+                    {categoryLabels[catKey] || catKey}
+                  </span>
+                  <IconComponent style={{
+                    width: '32px',
+                    height: '32px',
+                    color: 'rgba(21,33,56,0.2)',
+                    transition: 'color 0.3s',
+                  }} />
+                </div>
+
+                <h3 style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '20px',
+                  fontWeight: 600,
+                  color: 'var(--color-brand-navy)',
+                  marginBottom: '12px',
+                  transition: 'color 0.3s',
+                }}>
+                  {campaign.title}
+                </h3>
+
+                <p style={{
+                  color: 'rgba(21,33,56,0.5)',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14px',
+                  lineHeight: 1.6,
+                  marginBottom: '24px',
+                }}>
+                  {campaign.subtitle}
+                </p>
+
+                <span style={{
+                  color: 'var(--color-brand-gold-dark)',
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 600,
+                  fontSize: '12px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  transition: 'gap 0.3s',
+                }}>
+                  Verificar meu caso <ArrowRight style={{ width: '14px', height: '14px' }} />
+                </span>
+              </Link>
+            )
+          })}
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '48px' }}>
+          <Link href="/campanhas" className="btn-primary">
+            Ver Todas as Campanhas
+          </Link>
         </div>
       </div>
-      <style dangerouslySetInnerHTML={{__html: `
-        .campaign-card-hover:hover { transform: translateY(-4px); border-top: 3px solid #152138 !important; box-shadow: 0 16px 40px rgba(21,33,56,0.1) !important; }
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .campaign-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .campaign-card:hover h3 { color: var(--color-brand-gold-dark) !important; }
+        .campaign-card:hover svg { color: var(--color-brand-gold-dark) !important; }
       `}} />
     </section>
   )

@@ -1,34 +1,159 @@
-import { Phone, Shield } from 'lucide-react'
+'use client'
+
+import { Phone, Shield, Clock, Heart } from 'lucide-react'
 
 export function CriminalUrgency() {
   return (
-    <section style={{ background: '#7a1b1b', padding: '64px 24px', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(90deg, #7a1b1b, #c4a96a, #7a1b1b)' }} />
-      <div style={{ maxWidth: '80rem', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '32px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: 1, minWidth: '280px' }}>
-          <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Shield style={{ width: '24px', height: '24px', color: '#f1eae2' }} />
-          </div>
+    <section className="relative overflow-hidden">
+      {/* Dark background */}
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #0e1628, #152138)' }} />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(122,27,27,0.1), transparent, rgba(122,27,27,0.05))' }} />
+      <div className="absolute top-0 left-0 right-0" style={{ height: '3px', background: 'linear-gradient(90deg, var(--color-brand-urgency), var(--color-brand-gold-dark), var(--color-brand-urgency))' }} />
+
+      <div className="container-wide mx-auto section-padding relative" style={{ zIndex: 10 }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr',
+          gap: '48px',
+          alignItems: 'center',
+        }} className="criminal-grid">
+          {/* Left — Message */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.25rem, 3vw, 1.75rem)', fontWeight: 600, color: '#f1eae2', margin: 0 }}>Defesa Criminal Urgente</h2>
-              <span style={{ background: 'rgba(255,255,255,0.15)', color: '#f1eae2', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', padding: '4px 10px', borderRadius: '2px' }}>24h</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+              <Shield style={{ width: '24px', height: '24px', color: 'var(--color-brand-gold-dark)' }} />
+              <span style={{
+                color: 'var(--color-brand-gold-dark)',
+                fontSize: '12px',
+                fontFamily: 'var(--font-body)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.25em',
+              }}>
+                Defesa Criminal — Atendimento Imediato
+              </span>
             </div>
-            <p style={{ color: 'rgba(241,234,226,0.7)', fontFamily: "'Source Sans 3', sans-serif", fontSize: '15px', lineHeight: 1.5, margin: 0 }}>
-              Sendo investigado ou preso? Não fale sem um advogado. Atendimento imediato.
+
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(1.75rem, 4vw, 3rem)',
+              fontWeight: 600,
+              color: 'var(--color-brand-champagne)',
+              lineHeight: 1.15,
+              marginBottom: '32px',
+            }}>
+              Você não está sozinho.
+              <br />
+              <span style={{ color: 'var(--color-brand-gold-dark)' }}>Nós sabemos o que fazer.</span>
+            </h2>
+
+            <p style={{
+              color: 'rgba(184,191,200,0.6)',
+              fontFamily: 'var(--font-body)',
+              fontSize: '18px',
+              lineHeight: 1.6,
+              marginBottom: '32px',
+            }}>
+              Se você ou alguém que você ama está sendo investigado,
+              foi preso ou precisa de defesa criminal urgente, nossa equipe
+              está pronta para agir imediatamente. Cada minuto conta.
             </p>
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+              <a
+                href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}?text=${encodeURIComponent('Preciso de ajuda urgente com um caso criminal.')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-whatsapp"
+                style={{ fontSize: '15px' }}
+              >
+                <Phone style={{ width: '20px', height: '20px' }} />
+                Ajuda Urgente — WhatsApp
+              </a>
+              <a
+                href="tel:+5584991243985"
+                className="btn-outline"
+                style={{
+                  borderColor: 'rgba(196,169,106,0.4)',
+                  color: 'var(--color-brand-gold-dark)',
+                  fontSize: '15px',
+                }}
+              >
+                <Phone style={{ width: '20px', height: '20px' }} />
+                Ligar Agora
+              </a>
+            </div>
+          </div>
+
+          {/* Right — Features */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            {[
+              {
+                icon: Clock,
+                title: 'Atendimento 24 horas',
+                text: 'Plantão permanente para situações de urgência. Noites, fins de semana e feriados.',
+              },
+              {
+                icon: Shield,
+                title: 'Habeas Corpus Imediato',
+                text: 'Atuação célere para garantir sua liberdade nos casos de prisão ilegal ou abusiva.',
+              },
+              {
+                icon: Heart,
+                title: 'Acolhimento e Sigilo',
+                text: 'Sabemos que este é um momento difícil. Tratamos cada caso com empatia, discrição e respeito absoluto.',
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="glass-card"
+                style={{
+                  padding: '24px',
+                  display: 'flex',
+                  gap: '20px',
+                  transition: 'all 0.3s',
+                }}
+              >
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '8px',
+                  background: 'rgba(196,169,106,0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  <item.icon style={{ width: '24px', height: '24px', color: 'var(--color-brand-gold-dark)' }} />
+                </div>
+                <div>
+                  <h3 style={{
+                    fontFamily: 'var(--font-display)',
+                    color: 'var(--color-brand-champagne)',
+                    fontWeight: 600,
+                    fontSize: '18px',
+                    marginBottom: '8px',
+                  }}>
+                    {item.title}
+                  </h3>
+                  <p style={{
+                    color: 'rgba(184,191,200,0.5)',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '14px',
+                    lineHeight: 1.6,
+                  }}>
+                    {item.text}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-        <a
-          href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}?text=${encodeURIComponent('Preciso de ajuda urgente com um caso criminal.')}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#f1eae2', color: '#7a1b1b', padding: '14px 28px', borderRadius: '4px', fontFamily: "'Source Sans 3', sans-serif", fontWeight: 700, fontSize: '14px', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'all 0.3s', flexShrink: 0 }}
-        >
-          <Phone style={{ width: '18px', height: '18px' }} />
-          Ligar Agora
-        </a>
       </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media (min-width: 1024px) {
+          .criminal-grid { grid-template-columns: 1fr 1fr !important; gap: 80px !important; }
+        }
+      `}} />
     </section>
   )
 }

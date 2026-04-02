@@ -1,67 +1,196 @@
-# Payload Blank Template
+# Cavalcante & Melo — Site Institucional
 
-This template comes configured with the bare minimum to get started on anything you need.
+Site institucional do escritório **Cavalcante & Melo Sociedade de Advogados** (Natal/RN), construído com **Next.js 16** + **Payload CMS 3.80** + **PostgreSQL 17**.
 
-## Quick start
+## Stack Técnica
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+| Camada | Tecnologia |
+|---|---|
+| Framework | Next.js 16.2.1 (App Router) |
+| CMS | Payload CMS 3.80 (headless, integrado) |
+| Banco de Dados | PostgreSQL 17 |
+| Estilo | Tailwind CSS v4 (inline `@theme`) |
+| Animações | CSS nativo |
+| Ícones | Lucide React |
+| Hospedagem | EasyPanel (Docker) |
+| Tipografia | Playfair Display + Source Sans 3 |
 
-## Quick Start - local setup
+## Paleta de Cores
 
-To spin up this template locally, follow these steps:
+| Token | Hex | Uso |
+|---|---|---|
+| `brand-navy` | `#152138` | Fundo principal, header, cards escuros |
+| `brand-navy-light` | `#1c2d4a` | Gradientes |
+| `brand-silver` | `#b8bfc8` | Texto secundário |
+| `brand-champagne` | `#f1eae2` | Texto claro sobre navy, TrustBar bg |
+| `brand-gold` | `#ede1c3` | Acentos suaves |
+| `brand-gold-dark` | `#c4a96a` | CTAs, destaques, ícones |
+| `brand-cream` | `#faf8f5` | Fundo seções claras |
+| `brand-urgency` | `#7a1b1b` | Badge criminal 24h |
 
-### Clone
+## Estrutura do Projeto
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+```
+src/
+├── app/
+│   ├── (frontend)/          # Rotas públicas do site
+│   │   ├── page.tsx          # Homepage (Server Component com dados CMS)
+│   │   ├── layout.tsx        # Layout frontend (Header, Footer, fonts)
+│   │   ├── sobre/            # Página institucional
+│   │   ├── areas-de-atuacao/ # Áreas de atuação (listagem + [slug])
+│   │   ├── campanhas/        # Campanhas jurídicas (listagem + [slug])
+│   │   ├── blog/             # Blog jurídico (listagem + [slug])
+│   │   ├── contato/          # Formulário de contato
+│   │   ├── cliente/          # Portal do cliente (Datajud)
+│   │   └── admin-tools/      # Ferramentas administrativas
+│   ├── (payload)/            # Admin Payload CMS (/admin)
+│   └── api/                  # API Routes (contato, datajud, revalidate)
+├── collections/              # Coleções Payload CMS
+│   ├── Users.ts
+│   ├── Media.ts
+│   ├── Pages.ts
+│   ├── Posts.ts
+│   ├── Campaigns.ts
+│   ├── Testimonials.ts
+│   ├── PracticeAreas.ts
+│   ├── NewsArticles.ts
+│   └── Clients.ts
+├── globals/                  # Globals Payload CMS
+│   ├── Homepage.ts           # Gestão dos sócios (foto, bio, OAB)
+│   └── SiteConfig.ts         # Textos do hero, TrustBar, contato, SEO
+├── components/
+│   ├── sections/             # Seções da homepage
+│   │   ├── HeroSection.tsx
+│   │   ├── TrustBar.tsx
+│   │   ├── PracticeAreasGrid.tsx
+│   │   ├── CriminalUrgency.tsx
+│   │   ├── AboutPartners.tsx
+│   │   ├── FeaturedCampaigns.tsx
+│   │   ├── TestimonialsCarousel.tsx
+│   │   ├── NewsSection.tsx
+│   │   ├── RecentPosts.tsx
+│   │   └── ContactCTA.tsx
+│   ├── layout/
+│   │   ├── Header.tsx
+│   │   └── Footer.tsx
+│   └── ui/
+│       ├── WhatsAppButton.tsx
+│       └── CookieConsent.tsx
+├── lib/
+│   ├── datajud.ts            # Integração CNJ Datajud API
+│   └── payload.ts
+├── styles/
+│   └── globals.css           # Tailwind v4 + classes utilitárias
+└── payload.config.ts         # Configuração central Payload CMS
+```
 
-### Development
+## Seções da Homepage
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+Todas as seções da homepage são dinâmicas — puxam dados do Payload CMS quando disponíveis e usam dados estáticos como fallback:
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+1. **HeroSection** — Título, subtítulo e CTA editáveis via `SiteConfig` global. Design com pattern geométrico SVG, gradiente navy e dois botões (WhatsApp + Agendar Consulta).
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+2. **TrustBar** — Contadores animados (Anos de Experiência, Clientes Atendidos, Áreas de Atuação, Satisfação). Editável via `SiteConfig > Números em Destaque`. Fundo champagne com animação de contagem ao scroll.
 
-#### Docker (Optional)
+3. **PracticeAreasGrid** — Grid de áreas de atuação da collection `PracticeAreas`. O card de Direito Penal aparece em fundo navy (destaque) com badge "24h".
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+4. **CriminalUrgency** — Seção de defesa criminal urgente em duas colunas (navy-dark). Glass-cards com features (Atendimento 24h, Habeas Corpus, Acolhimento). Barra superior com gradiente urgency/gold.
 
-To do so, follow these steps:
+5. **AboutPartners** — Sócios fundadores com círculo de iniciais (gradient-navy + text-silver-gradient), pills de áreas de atuação, biografia. Editável via `Homepage > Sobre os Sócios`. Suporta foto CMS se cadastrada.
 
-- Modify the `MONGODB_URL` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URL` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+6. **FeaturedCampaigns** — Campanhas jurídicas ativas da collection `Campaigns` (filtro `status: active` + `featuredOnHomepage: true`). Cards com ícone, categoria, subtítulo e CTA.
 
-## How it works
+7. **TestimonialsCarousel** — Carrossel de depoimentos da collection `Testimonials`. Glass-card com stars, ícone Quote decorativo, dots de navegação.
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+8. **NewsSection** — Notícias jurídicas da collection `NewsArticles`. Suporta links externos (com ícone ExternalLink).
 
-### Collections
+9. **RecentPosts** — Posts recentes do blog da collection `Posts`. Cards com imagem placeholder CM, categoria, tempo de leitura, autor.
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+10. **ContactCTA** — Formulário completo (nome, telefone, assunto, mensagem) + informações de contato + WhatsApp CTA. Duas colunas em desktop.
 
-- #### Users (Authentication)
+## Padrão de Acesso ao Payload CMS
 
-  Users are auth-enabled collections that have access to the admin panel.
+**Importante:** Todo acesso ao Payload DEVE ser feito diretamente em Server Components:
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+```tsx
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
 
-- #### Media
+const payload = await getPayload({ config: configPromise })
+const result = await payload.find({ collection: 'posts', limit: 10 })
+```
 
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+**NÃO** usar `src/lib/payload.ts` como helper — importar `getPayload` e `@payload-config` diretamente.
 
-### Docker
+## Variáveis de Ambiente
 
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
+```env
+# Banco de dados
+DATABASE_URL=postgresql://postgres:SENHA@HOST:5432/cavalcantemelo
 
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
+# Payload CMS
+PAYLOAD_SECRET=sua-chave-secreta-aqui
 
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
+# Site
+NEXT_PUBLIC_SITE_URL=https://cavalcantemelo.adv.br
+NEXT_PUBLIC_WHATSAPP_NUMBER=5584991243985
+NEXT_PUBLIC_WHATSAPP_MESSAGE=Olá! Gostaria de falar com um advogado.
 
-## Questions
+# Google Analytics (opcional)
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+# Datajud API (Portal do Cliente)
+DATAJUD_API_KEY=sua-chave-datajud
+```
+
+## Desenvolvimento Local
+
+```bash
+# Instalar dependências
+pnpm install
+
+# Rodar em modo dev
+pnpm dev
+
+# Build de produção
+pnpm build
+
+# Gerar tipos TypeScript do Payload
+pnpm generate:types
+```
+
+## Deploy (EasyPanel / Docker)
+
+O projeto roda em EasyPanel com Docker. O build inclui:
+
+```bash
+pnpm build   # Gera importMap + build Next.js
+pnpm start   # Inicia o servidor de produção
+```
+
+Migrations do Payload rodam manualmente via console Bash do EasyPanel.
+
+## Collections do CMS
+
+| Collection | Slug | Uso |
+|---|---|---|
+| Users | `users` | Administradores do CMS |
+| Media | `media` | Uploads (fotos, documentos) |
+| Pages | `pages` | Páginas genéricas |
+| Posts | `posts` | Blog jurídico |
+| Campaigns | `campaigns` | Campanhas jurídicas |
+| Testimonials | `testimonials` | Depoimentos de clientes |
+| PracticeAreas | `practice-areas` | Áreas de atuação |
+| NewsArticles | `news-articles` | Notícias jurídicas |
+| Clients | `clients` | Clientes (portal) |
+
+## Globals do CMS
+
+| Global | Slug | Uso |
+|---|---|---|
+| Homepage | `homepage` | Gestão dos sócios (foto, bio, áreas) |
+| SiteConfig | `site-config` | Textos do hero, TrustBar, contato, about, áreas |
+
+## Licença
+
+Projeto privado — © 2025 Cavalcante & Melo Sociedade de Advogados. Todos os direitos reservados.
