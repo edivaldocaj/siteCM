@@ -29,7 +29,11 @@ const defaultAreas = [
 export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfig: any }) {
   const practiceTitle = siteConfig?.practiceTitle || 'Áreas de Atuação'
   const practiceSubtitle = siteConfig?.practiceSubtitle || 'Atuação estratégica em diversas áreas do Direito, com foco na defesa dos seus interesses e na busca por resultados concretos.'
-  const list = areas.length > 0 ? areas : defaultAreas
+  // Se CMS retorna áreas mas falta Direito Penal, adiciona do fallback
+  let list = areas.length > 0 ? [...areas] : defaultAreas
+  if (areas.length > 0 && !areas.some((a: any) => a.slug === 'direito-penal' || a.is24h === true)) {
+    list.push(defaultAreas[defaultAreas.length - 1])
+  }
 
   return (
     <>
@@ -53,7 +57,7 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
         <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
             {list.map((area: any, i: number) => {
-              const is24h = area.is24h || false
+              const is24h = area.is24h === true || area.is24h === 'true' || area.slug === 'direito-penal'
               const IconComponent = iconMap[area.icon] || Scale
               const isLast = i === list.length - 1
 

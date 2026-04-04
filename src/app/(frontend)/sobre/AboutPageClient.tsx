@@ -39,10 +39,14 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
     ? homepage.aboutPartners.partnersList.map((p: any) => ({
         name: p.name,
         role: p.role,
-        initials: p.name.split(' ').filter((_: string, i: number, arr: string[]) => i === 0 || i === arr.length - 1).map((n: string) => n[0]).join(''),
+        initials: (() => {
+          const clean = p.name.replace(/^(Dr\.|Dra\.|Prof\.)\s*/i, '').trim()
+          const parts = clean.split(/\s+/)
+          return parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0]?.[0]?.toUpperCase() || '?'
+        })(),
         bio: p.bio,
         oab: p.oab,
-        areas: p.role.split(',').map((a: string) => a.trim()),
+        areas: p.role.split(/[,|]/).map((a: string) => a.trim()).filter(Boolean),
         photoUrl: p.photo?.url || null,
       }))
     : defaultPartners

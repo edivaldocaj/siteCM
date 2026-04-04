@@ -41,26 +41,21 @@ export function AboutPartners({ cmsData }: AboutPartnersProps) {
   const sectionDesc = cmsData?.sectionDescription || 'Profissionais comprometidos com a excelência, ética e resultados para nossos clientes.'
 
   const partners = cmsData?.partnersList?.length
-    ? cmsData.partnersList.map((p) => {
-        // Remover prefixos Dr./Dra./Prof. antes de extrair iniciais
-        const cleanName = p.name.replace(/^(Dr\.|Dra\.|Prof\.|Sr\.|Sra\.)\s*/i, '').trim()
-        const nameParts = cleanName.split(/\s+/).filter(Boolean)
-        const initials = nameParts.length >= 2
-          ? (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()
-          : nameParts.length === 1
-            ? nameParts[0][0].toUpperCase()
-            : '?'
-
-        return {
-          name: p.name,
-          role: p.role,
-          areas: p.role.split(/[,|]/).map((a: string) => a.trim()).filter(Boolean),
-          initials,
-          bio: p.bio,
-          oab: p.oab,
-          photoUrl: p.photo?.url || null,
-        }
-      })
+    ? cmsData.partnersList.map((p) => ({
+        name: p.name,
+        role: p.role,
+        areas: p.role.split(/[,|]/).map((a: string) => a.trim()).filter(Boolean),
+        initials: (() => {
+          const clean = p.name.replace(/^(Dr\.|Dra\.|Prof\.)\s*/i, '').trim()
+          const parts = clean.split(/\s+/)
+          return parts.length >= 2
+            ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+            : parts[0]?.[0]?.toUpperCase() || '?'
+        })(),
+        bio: p.bio,
+        oab: p.oab,
+        photoUrl: p.photo?.url || null,
+      }))
     : defaultPartners
 
   return (

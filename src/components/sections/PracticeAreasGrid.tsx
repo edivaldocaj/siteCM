@@ -30,14 +30,9 @@ interface PracticeAreasGridProps {
 }
 
 export function PracticeAreasGrid({ cmsAreas = [], showTitle = true }: PracticeAreasGridProps) {
-  let areas = cmsAreas.length > 0 ? cmsAreas : defaultAreas
-
-  // Garantir que Direito Penal está presente quando usando dados do CMS
-  if (cmsAreas.length > 0) {
-    const hasPenal = cmsAreas.some((a: any) => a.slug === 'direito-penal' || a.is24h === true)
-    if (!hasPenal) {
-      areas = [...cmsAreas, defaultAreas[defaultAreas.length - 1]] // Adiciona Penal do fallback
-    }
+  let areas = cmsAreas.length > 0 ? [...cmsAreas] : defaultAreas
+  if (cmsAreas.length > 0 && !cmsAreas.some((a: any) => a.slug === 'direito-penal' || a.is24h === true)) {
+    areas.push(defaultAreas[defaultAreas.length - 1])
   }
 
   return (
@@ -79,14 +74,14 @@ export function PracticeAreasGrid({ cmsAreas = [], showTitle = true }: PracticeA
           </div>
         )}
 
-        {/* Grid — 4 colunas em desktop */}
+        {/* Grid */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
           gap: '24px',
         }} className="practice-grid">
           {areas.map((area: any, i: number) => {
-            const is24h = area.is24h === true || area.is24h === 'true'
+            const is24h = area.is24h === true || area.is24h === 'true' || area.slug === 'direito-penal'
             const IconComponent = iconMap[area.icon] || Scale
 
             return (

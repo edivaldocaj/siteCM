@@ -78,42 +78,6 @@ export const SiteConfig: GlobalConfig = {
           ],
         },
         {
-          label: 'Seção: Defesa Criminal (Homepage)',
-          fields: [
-            { name: 'criminalTag', type: 'text', label: 'Tag Superior', defaultValue: 'Defesa Criminal — Atendimento Imediato' },
-            { name: 'criminalTitle', type: 'text', label: 'Título', defaultValue: 'Você não está sozinho.' },
-            { name: 'criminalHighlight', type: 'text', label: 'Destaque (dourado)', defaultValue: 'Nós sabemos o que fazer.' },
-            { name: 'criminalDescription', type: 'textarea', label: 'Descrição', defaultValue: 'Se você ou alguém que você ama está sendo investigado, foi preso ou precisa de defesa criminal urgente, nossa equipe está pronta para agir imediatamente. Cada minuto conta.' },
-          ],
-        },
-        {
-          label: 'Seção: Campanhas (Homepage)',
-          fields: [
-            { name: 'campaignsTitle', type: 'text', label: 'Título', defaultValue: 'Campanhas Jurídicas' },
-            { name: 'campaignsSubtitle', type: 'textarea', label: 'Subtítulo', defaultValue: 'Ações coletivas e individuais em andamento. Verifique se o seu caso se encaixa.' },
-          ],
-        },
-        {
-          label: 'Seção: Depoimentos (Homepage)',
-          fields: [
-            { name: 'testimonialsTitle', type: 'text', label: 'Título', defaultValue: 'O que nossos clientes dizem' },
-          ],
-        },
-        {
-          label: 'Seção: Notícias (Homepage)',
-          fields: [
-            { name: 'newsTitle', type: 'text', label: 'Título', defaultValue: 'Notícias do Direito' },
-            { name: 'newsSubtitle', type: 'textarea', label: 'Subtítulo', defaultValue: 'Notícias relevantes do mundo jurídico, selecionadas e comentadas pela nossa equipe.' },
-          ],
-        },
-        {
-          label: 'Seção: Blog (Homepage)',
-          fields: [
-            { name: 'blogTitle', type: 'text', label: 'Título', defaultValue: 'Artigos Recentes' },
-            { name: 'blogSubtitle', type: 'textarea', label: 'Subtítulo', defaultValue: 'Conteúdo jurídico atualizado para ajudar você a entender seus direitos.' },
-          ],
-        },
-        {
           label: 'Dados de Contato (Rodapé e Página de Contato)',
           fields: [
             { name: 'contactTitle', type: 'text', label: 'Título de Contato', defaultValue: 'Fale com nossa equipe' },
