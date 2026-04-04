@@ -30,7 +30,15 @@ interface PracticeAreasGridProps {
 }
 
 export function PracticeAreasGrid({ cmsAreas = [], showTitle = true }: PracticeAreasGridProps) {
-  const areas = cmsAreas.length > 0 ? cmsAreas : defaultAreas
+  let areas = cmsAreas.length > 0 ? cmsAreas : defaultAreas
+
+  // Garantir que Direito Penal está presente quando usando dados do CMS
+  if (cmsAreas.length > 0) {
+    const hasPenal = cmsAreas.some((a: any) => a.slug === 'direito-penal' || a.is24h === true)
+    if (!hasPenal) {
+      areas = [...cmsAreas, defaultAreas[defaultAreas.length - 1]] // Adiciona Penal do fallback
+    }
+  }
 
   return (
     <section className="section-padding" style={{ backgroundColor: 'var(--color-brand-cream)' }}>
@@ -71,14 +79,14 @@ export function PracticeAreasGrid({ cmsAreas = [], showTitle = true }: PracticeA
           </div>
         )}
 
-        {/* Grid */}
+        {/* Grid — 4 colunas em desktop */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gridTemplateColumns: 'repeat(4, 1fr)',
           gap: '24px',
-        }}>
+        }} className="practice-grid">
           {areas.map((area: any, i: number) => {
-            const is24h = area.is24h || false
+            const is24h = area.is24h === true || area.is24h === 'true'
             const IconComponent = iconMap[area.icon] || Scale
 
             return (
@@ -173,6 +181,9 @@ export function PracticeAreasGrid({ cmsAreas = [], showTitle = true }: PracticeA
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
+        .practice-grid { }
+        @media (max-width: 1024px) { .practice-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 640px) { .practice-grid { grid-template-columns: 1fr !important; } }
         .practice-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 20px 40px rgba(0,0,0,0.1);

@@ -6,8 +6,25 @@ export const PracticeAreas: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', required: true, label: 'Nome da Área' },
     { name: 'slug', type: 'text', required: true, unique: true },
-    { name: 'shortDescription', type: 'textarea', required: true, label: 'Descrição Curta', maxLength: 200 },
-    { name: 'icon', type: 'text', required: true, label: 'Ícone (Lucide icon name)' },
+    { name: 'shortDescription', type: 'textarea', label: 'Descrição Curta (homepage)', maxLength: 300 },
+    {
+      name: 'icon',
+      type: 'select',
+      label: 'Ícone',
+      defaultValue: 'scale',
+      options: [
+        { label: 'Escudo (Digital/LGPD)', value: 'shield' },
+        { label: 'Balança (Civil)', value: 'scale' },
+        { label: 'Sacola (Consumidor)', value: 'shopping-bag' },
+        { label: 'Casa (Imobiliário)', value: 'home' },
+        { label: 'Recibo (Tributário)', value: 'receipt' },
+        { label: 'Documento (Licitações)', value: 'file-text' },
+        { label: 'Martelo (Penal)', value: 'gavel' },
+        { label: 'Laptop (Digital)', value: 'laptop' },
+        { label: 'Prédio (Empresarial)', value: 'building' },
+        { label: 'Maleta (Trabalho)', value: 'briefcase' },
+      ],
+    },
     { name: 'heroHeadline', type: 'text', label: 'Headline da Página' },
     { name: 'content', type: 'richText', label: 'Conteúdo Completo' },
     {
