@@ -5,7 +5,6 @@ import configPromise from '@payload-config'
 import { ArrowLeft, AlertCircle, Scale, CheckCircle, MessageCircle } from 'lucide-react'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
-
 export const dynamic = 'force-dynamic'
 
 export default async function CampaignPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -135,6 +134,76 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
             
             <div style={{ color: '#4a5568', fontSize: '17px', lineHeight: 1.8, fontWeight: 300 }} className="cms-rich-text">
               <RichText data={campaign.benefits} />
+            </div>
+          </div>
+        )}
+
+        {/* Bloco: Prova Social / Depoimentos */}
+        {campaign.socialProof && campaign.socialProof.length > 0 && (
+          <div style={{ marginBottom: '32px' }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: '#152138', marginBottom: '24px' }}>
+              O que nossos clientes dizem
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {campaign.socialProof.map((proof: any, i: number) => (
+                <div key={i} style={{
+                  background: '#ffffff',
+                  padding: '32px',
+                  borderRadius: '4px',
+                  borderLeft: '3px solid #ede1c3',
+                  boxShadow: '0 4px 16px rgba(21,33,56,0.04)',
+                }}>
+                  <p style={{ color: '#4a5568', fontSize: '16px', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '16px', fontWeight: 300 }}>
+                    &ldquo;{proof.text}&rdquo;
+                  </p>
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    {proof.author && (
+                      <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '14px', color: '#152138', fontWeight: 600 }}>
+                        {proof.author}
+                      </span>
+                    )}
+                    {proof.caseType && (
+                      <span style={{ fontSize: '12px', color: '#c4a96a' }}>— {proof.caseType}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Bloco: Perguntas Frequentes (FAQ) */}
+        {campaign.faq && campaign.faq.length > 0 && (
+          <div style={{
+            background: '#ffffff',
+            padding: '48px',
+            borderRadius: '4px',
+            boxShadow: '0 10px 40px rgba(21,33,56,0.05)',
+            marginBottom: '48px',
+            borderLeft: '1px solid #ede1c3',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#152138" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: '#152138', margin: 0 }}>
+                Perguntas Frequentes
+              </h2>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              {campaign.faq.map((item: any, i: number) => (
+                <div key={i} style={{ borderBottom: i < campaign.faq.length - 1 ? '1px solid rgba(21,33,56,0.08)' : 'none', paddingBottom: '24px' }}>
+                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: '#152138', fontWeight: 600, marginBottom: '12px' }}>
+                    {item.question}
+                  </h3>
+                  <p style={{ color: '#4a5568', fontSize: '15px', lineHeight: 1.7, fontWeight: 300 }}>
+                    {item.answer}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         )}

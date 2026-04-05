@@ -26,139 +26,75 @@ export function NewsSection({ cmsNews = [] }: NewsSectionProps) {
   return (
     <section className="section-padding" style={{ backgroundColor: 'var(--color-brand-cream)' }}>
       <div className="container-wide mx-auto">
-        {/* Header - split layout */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '48px', flexWrap: 'wrap', gap: '24px' }}>
           <div>
-            <span style={{
-              color: 'var(--color-brand-gold-dark)',
-              fontSize: '12px',
-              fontFamily: 'var(--font-body)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.25em',
-              display: 'block',
-              marginBottom: '16px',
-            }}>
+            <span style={{ color: 'var(--color-brand-gold-dark)', fontSize: '12px', fontFamily: 'var(--font-body)', textTransform: 'uppercase', letterSpacing: '0.25em', display: 'block', marginBottom: '16px' }}>
               Atualidades Jurídicas
             </span>
-            <h2 style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.75rem, 4vw, 3rem)',
-              fontWeight: 600,
-              color: 'var(--color-brand-navy)',
-            }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 4vw, 3rem)', fontWeight: 600, color: 'var(--color-brand-navy)' }}>
               Notícias do Direito
             </h2>
           </div>
-          <p style={{
-            color: 'rgba(21,33,56,0.55)',
-            fontFamily: 'var(--font-body)',
-            fontSize: '15px',
-            maxWidth: '340px',
-            lineHeight: 1.6,
-            marginTop: '28px',
-          }}>
+          <p style={{ color: 'rgba(21,33,56,0.55)', fontFamily: 'var(--font-body)', fontSize: '15px', maxWidth: '340px', lineHeight: 1.6, marginTop: '28px' }}>
             Notícias relevantes do mundo jurídico, selecionadas e comentadas pela nossa equipe.
           </p>
         </div>
 
-        {/* Grid 2x2 */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '20px',
-        }} className="news-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }} className="news-grid">
           {news.slice(0, 4).map((item: any, i: number) => {
             const hasUrl = item.sourceUrl || item.source_url
             const isExternal = !!hasUrl
             const href = isExternal ? hasUrl : `/blog/${item.slug || '#'}`
+            const linkedCampaign = item.linkedCampaign || item.linked_campaign
 
             return (
-              <a
-                key={i}
-                href={href}
-                target={isExternal ? '_blank' : '_self'}
-                rel={isExternal ? 'noopener noreferrer' : undefined}
-                className="news-card"
-                style={{
-                  display: 'block',
-                  background: 'white',
-                  padding: '28px 32px',
-                  borderRadius: '4px',
-                  textDecoration: 'none',
-                  border: '1px solid rgba(21,33,56,0.06)',
-                  boxShadow: '0 2px 12px rgba(21,33,56,0.04)',
-                  transition: 'all 0.3s',
-                }}
-              >
+              <div key={i} style={{ background: 'white', padding: '28px 32px', borderRadius: '4px', border: '1px solid rgba(21,33,56,0.06)', boxShadow: '0 2px 12px rgba(21,33,56,0.04)', transition: 'all 0.3s' }} className="news-card">
                 {/* Top: category + date */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-                  <span style={{
-                    fontSize: '10px',
-                    textTransform: 'uppercase',
-                    color: 'var(--color-brand-gold-dark)',
-                    background: 'rgba(196,169,106,0.1)',
-                    padding: '4px 10px',
-                    borderRadius: '2px',
-                    fontFamily: 'var(--font-body)',
-                    letterSpacing: '0.05em',
-                    fontWeight: 600,
-                  }}>
+                  <span style={{ fontSize: '10px', textTransform: 'uppercase', color: 'var(--color-brand-gold-dark)', background: 'rgba(196,169,106,0.1)', padding: '4px 10px', borderRadius: '2px', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', fontWeight: 600 }}>
                     {item.category || 'Geral'}
                   </span>
-                  {item.publishedAt && (
+                  {(item.publishedAt || item.published_at) && (
                     <span style={{ color: 'rgba(21,33,56,0.35)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <Clock style={{ width: '12px', height: '12px' }} />
-                      {formatDate(item.publishedAt)}
+                      {formatDate(item.publishedAt || item.published_at)}
                     </span>
                   )}
                 </div>
 
                 {/* Title */}
-                <h3 style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '18px',
-                  color: 'var(--color-brand-navy)',
-                  lineHeight: 1.35,
-                  marginBottom: '8px',
-                  fontWeight: 600,
-                }}>
-                  {item.title}
-                </h3>
+                <a href={href} target={isExternal ? '_blank' : '_self'} rel={isExternal ? 'noopener noreferrer' : undefined} style={{ textDecoration: 'none' }}>
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--color-brand-navy)', lineHeight: 1.35, marginBottom: '8px', fontWeight: 600 }}>
+                    {item.title}
+                  </h3>
+                </a>
 
                 {/* Summary */}
-                {item.summary && (
-                  <p style={{
-                    color: 'rgba(21,33,56,0.5)',
-                    fontSize: '14px',
-                    fontFamily: 'var(--font-body)',
-                    lineHeight: 1.5,
-                    marginBottom: '16px',
-                  }}>
-                    {item.summary}
+                {(item.summary || item.excerpt) && (
+                  <p style={{ color: 'rgba(21,33,56,0.5)', fontSize: '14px', fontFamily: 'var(--font-body)', lineHeight: 1.5, marginBottom: '16px' }}>
+                    {item.summary || item.excerpt}
                   </p>
                 )}
 
-                {/* Bottom: source + link */}
+                {/* Bottom: source + campaign link */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ color: 'rgba(21,33,56,0.35)', fontSize: '12px', fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <Globe style={{ width: '12px', height: '12px' }} />
                     {item.source || 'Judiciário'}
                   </span>
-                  <span style={{
-                    color: 'var(--color-brand-gold-dark)',
-                    fontSize: '11px',
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: 600,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                  }}>
-                    Campanha <ArrowRight style={{ width: '12px', height: '12px' }} />
-                  </span>
+
+                  {linkedCampaign ? (
+                    <Link href={`/campanhas/${linkedCampaign}`} style={{ color: 'var(--color-brand-gold-dark)', fontSize: '11px', fontFamily: 'var(--font-body)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
+                      Ver Campanha <ArrowRight style={{ width: '12px', height: '12px' }} />
+                    </Link>
+                  ) : (
+                    <a href={href} target={isExternal ? '_blank' : '_self'} style={{ color: 'rgba(21,33,56,0.3)', fontSize: '11px', fontFamily: 'var(--font-body)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
+                      Ler mais {isExternal && <ExternalLink style={{ width: '10px', height: '10px' }} />}
+                      {!isExternal && <ArrowRight style={{ width: '12px', height: '12px' }} />}
+                    </a>
+                  )}
                 </div>
-              </a>
+              </div>
             )
           })}
         </div>

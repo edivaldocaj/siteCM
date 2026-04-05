@@ -40,6 +40,7 @@ export const Posts: CollectionConfig = {
     { name: 'readTime', type: 'number', label: 'Tempo de Leitura (min)' }, // Removido position
     { name: 'publishedAt', type: 'date', label: 'Data de Publicação' }, // Removido position
     { name: 'status', type: 'select', options: ['draft', 'published'], defaultValue: 'draft' }, // Removido position
+    { name: 'linkedCampaign', type: 'text', label: 'Slug da Campanha Vinculada', admin: { description: 'Ex: fraudes-bancarias. Se preenchido, mostra link para a campanha no card do post.' } },
     {
       name: 'seo',
       type: 'group',
