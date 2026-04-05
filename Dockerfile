@@ -28,5 +28,6 @@ COPY --from=builder /app ./
 RUN chown -R nextjs:nodejs /app
 USER nextjs
 EXPOSE 3000
-# CORREÇÃO: Cria e roda as migrations no banco conectado antes de subir o servidor
-CMD ["bash", "-c", "npx payload migrate:create auto 2>/dev/null; npx payload migrate 2>/dev/null; npm run start"]
+
+# Migrations: responde 'y' ao prompt interativo e limita a 60s para não travar o startup
+CMD ["bash", "-c", "echo 'y' | timeout 60 npx payload migrate:create auto 2>/dev/null || true; echo 'y' | timeout 60 npx payload migrate 2>/dev/null || true; npm run start"]
