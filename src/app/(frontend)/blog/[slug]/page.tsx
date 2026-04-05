@@ -7,7 +7,6 @@ import { ArrowLeft, Clock, User, Calendar } from 'lucide-react'
 // Renderizador oficial do texto formatado (RichText)
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
-export const revalidate = 60 // Atualiza a cada 60 segundos
 
 const authorNames: Record<string, string> = { 
   edivaldo: 'Dr. Edivaldo Cavalcante', 
@@ -15,13 +14,16 @@ const authorNames: Record<string, string> = {
   escritorio: 'Cavalcante & Melo' 
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+export const dynamic = 'force-dynamic'
+
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
   const payload = await getPayload({ config: configPromise })
   
   // Busca o post no banco de dados com base na URL
   const { docs } = await (payload as any).find({
     collection: 'posts',
-    where: { slug: { equals: params.slug } },
+    where: { slug: { equals: slug } },
   })
 
   const post = docs[0]

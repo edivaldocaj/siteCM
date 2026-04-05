@@ -5,14 +5,16 @@ import configPromise from '@payload-config'
 import { ArrowLeft, AlertCircle, Scale, CheckCircle, MessageCircle } from 'lucide-react'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
-export const revalidate = 60
 
-export default async function CampaignPage({ params }: { params: { slug: string } }) {
+export const dynamic = 'force-dynamic'
+
+export default async function CampaignPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
   const payload = await getPayload({ config: configPromise })
   
   const { docs } = await (payload as any).find({
     collection: 'campaigns',
-    where: { slug: { equals: params.slug } },
+    where: { slug: { equals: slug } },
   })
 
   const campaign = docs[0]
