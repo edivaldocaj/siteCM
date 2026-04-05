@@ -21,7 +21,7 @@ async function getHomeData() {
     const [campaignsRes, testimonialsRes, postsRes, newsRes, practiceAreasRes, homepageData, siteConfigData] = await Promise.all([
       (payload as any).find({ collection: 'campaigns', where: { status: { equals: 'active' }, featuredOnHomepage: { equals: true } }, limit: 4, sort: '-createdAt' }).catch(() => ({ docs: [] })),
       (payload as any).find({ collection: 'testimonials', where: { featured: { equals: true } }, limit: 6, sort: '-createdAt' }).catch(() => ({ docs: [] })),
-      (payload as any).find({ collection: 'posts', where: { status: { equals: 'published' } }, limit: 3, sort: '-publishedAt' }).catch(() => ({ docs: [] })),
+      (payload as any).find({ collection: 'posts', where: { status: { equals: 'published' } }, limit: 4, sort: '-publishedAt' }).catch(() => ({ docs: [] })),
       (payload as any).find({ collection: 'news-articles', where: { status: { equals: 'published' } }, limit: 4, sort: '-publishedAt' }).catch(() => ({ docs: [] })),
       (payload as any).find({ collection: 'practice-areas', limit: 10, sort: 'order' }).catch(() => ({ docs: [] })),
       (payload as any).findGlobal({ slug: 'homepage' }).catch(() => null),
