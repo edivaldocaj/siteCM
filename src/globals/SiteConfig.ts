@@ -2,44 +2,78 @@ import type { GlobalConfig } from 'payload'
 
 export const SiteConfig: GlobalConfig = {
   slug: 'site-config',
-  label: 'Configurações Gerais (Textos)',
-  access: {
-    read: () => true,
-  },
+  label: 'Configurações Gerais do Site',
+  access: { read: () => true },
   fields: [
     {
       type: 'tabs',
       tabs: [
         {
-          label: 'Início (Topo do Site)',
+          label: 'Hero (Topo)',
           fields: [
-            { name: 'heroTitle', type: 'text', label: 'Título Principal', defaultValue: 'Defesa Especializada e Estratégica' },
-            { name: 'heroSubtitle', type: 'textarea', label: 'Subtítulo', defaultValue: 'Atuação ágil e combativa na proteção do seu patrimônio, liberdade e direitos.' },
-            { name: 'heroButtonText', type: 'text', label: 'Texto do Botão', defaultValue: 'Falar com Especialista' },
+            { name: 'heroTitle', type: 'text', label: 'Título Principal', defaultValue: 'Seu direito, nossa missão.' },
+            { name: 'heroSubtitle', type: 'textarea', label: 'Subtítulo' },
+            { name: 'heroButtonText', type: 'text', label: 'Texto do Botão', defaultValue: 'Fale com um Advogado' },
           ],
         },
         {
-          label: 'Números em Destaque (Barra de Confiança)',
+          label: 'Números em Destaque',
           fields: [
             {
               name: 'trustBarStats',
               type: 'array',
-              label: 'Estatísticas',
+              label: 'Estatísticas (máx 4)',
               maxRows: 4,
               fields: [
-                { name: 'value', type: 'number', required: true, label: 'Valor Numérico' },
-                { name: 'suffix', type: 'text', label: 'Sufixo (+, %, etc)', defaultValue: '' },
+                { name: 'value', type: 'number', required: true, label: 'Valor' },
+                { name: 'suffix', type: 'text', label: 'Sufixo (+, %)' },
                 { name: 'label', type: 'text', required: true, label: 'Rótulo' },
               ],
             },
           ],
         },
         {
-          label: 'Página: Sobre Nós',
+          label: 'Seção Criminal',
           fields: [
-            { name: 'aboutTitle', type: 'text', label: 'Título Principal', defaultValue: 'Sobre o Escritório' },
-            { name: 'aboutSubtitle', type: 'textarea', label: 'Subtítulo', defaultValue: 'Advocacia estratégica e humanizada, construída sobre os pilares da ética, proximidade e busca por resultados concretos.' },
-            { name: 'aboutHistory', type: 'textarea', label: 'Texto "Nossa História"', defaultValue: 'A Cavalcante & Melo Sociedade de Advogados nasceu em 2025 com a missão de oferecer advocacia de excelência em Natal/RN.' },
+            { name: 'criminalTag', type: 'text', label: 'Tag', defaultValue: 'Defesa Criminal — Atendimento Imediato' },
+            { name: 'criminalTitle', type: 'text', label: 'Título', defaultValue: 'Você não está sozinho.' },
+            { name: 'criminalHighlight', type: 'text', label: 'Destaque (dourado)', defaultValue: 'Nós sabemos o que fazer.' },
+            { name: 'criminalDescription', type: 'textarea', label: 'Descrição' },
+          ],
+        },
+        {
+          label: 'Seção Campanhas',
+          fields: [
+            { name: 'campaignsTitle', type: 'text', label: 'Título', defaultValue: 'Campanhas Jurídicas' },
+            { name: 'campaignsSubtitle', type: 'textarea', label: 'Subtítulo' },
+          ],
+        },
+        {
+          label: 'Seção Depoimentos',
+          fields: [
+            { name: 'testimonialsTitle', type: 'text', label: 'Título', defaultValue: 'O que nossos clientes dizem' },
+          ],
+        },
+        {
+          label: 'Seção Notícias',
+          fields: [
+            { name: 'newsTitle', type: 'text', label: 'Título', defaultValue: 'Notícias do Direito' },
+            { name: 'newsSubtitle', type: 'textarea', label: 'Subtítulo' },
+          ],
+        },
+        {
+          label: 'Seção Blog',
+          fields: [
+            { name: 'blogTitle', type: 'text', label: 'Título', defaultValue: 'Artigos Recentes' },
+            { name: 'blogSubtitle', type: 'textarea', label: 'Subtítulo' },
+          ],
+        },
+        {
+          label: 'Página Sobre',
+          fields: [
+            { name: 'aboutTitle', type: 'text', label: 'Título', defaultValue: 'Sobre o Escritório' },
+            { name: 'aboutSubtitle', type: 'textarea', label: 'Subtítulo' },
+            { name: 'aboutHistory', type: 'textarea', label: 'Texto Nossa História' },
             {
               name: 'aboutTimeline',
               type: 'array',
@@ -53,38 +87,37 @@ export const SiteConfig: GlobalConfig = {
             {
               name: 'aboutValues',
               type: 'array',
-              label: 'Nossos Valores',
+              label: 'Valores',
               maxRows: 6,
               fields: [
-                { name: 'title', type: 'text', required: true, label: 'Valor' },
-                { name: 'description', type: 'textarea', required: true, label: 'Descrição' },
-                { name: 'icon', type: 'select', label: 'Ícone', options: [
-                  { label: 'Balança (Ética)', value: 'scale' },
-                  { label: 'Pessoas (Proximidade)', value: 'users' },
-                  { label: 'Troféu (Resultado)', value: 'award' },
-                  { label: 'Escudo (Proteção)', value: 'shield' },
-                  { label: 'Coração (Acolhimento)', value: 'heart' },
-                  { label: 'Estrela (Excelência)', value: 'star' },
+                { name: 'title', type: 'text', required: true },
+                { name: 'description', type: 'textarea', required: true },
+                { name: 'icon', type: 'select', options: [
+                  { label: 'Balança', value: 'scale' },
+                  { label: 'Pessoas', value: 'users' },
+                  { label: 'Troféu', value: 'award' },
+                  { label: 'Escudo', value: 'shield' },
+                  { label: 'Coração', value: 'heart' },
                 ]},
               ],
             },
           ],
         },
         {
-          label: 'Página: Áreas de Atuação',
+          label: 'Página Áreas',
           fields: [
-            { name: 'practiceTitle', type: 'text', label: 'Título Principal', defaultValue: 'Áreas de Atuação' },
-            { name: 'practiceSubtitle', type: 'textarea', label: 'Subtítulo', defaultValue: 'Atuação estratégica em diversas áreas do Direito, com foco na defesa dos seus interesses e na busca por resultados concretos.' },
+            { name: 'practiceTitle', type: 'text', label: 'Título', defaultValue: 'Áreas de Atuação' },
+            { name: 'practiceSubtitle', type: 'textarea', label: 'Subtítulo' },
           ],
         },
         {
-          label: 'Dados de Contato (Rodapé e Página de Contato)',
+          label: 'Contato',
           fields: [
-            { name: 'contactTitle', type: 'text', label: 'Título de Contato', defaultValue: 'Fale com nossa equipe' },
-            { name: 'contactSubtitle', type: 'textarea', label: 'Subtítulo de Contato', defaultValue: 'Estamos prontos para analisar o seu caso e propor a melhor estratégia jurídica.' },
-            { name: 'contactEmail', type: 'text', label: 'E-mail Oficial', defaultValue: 'contato@cavalcantemelo.adv.br' },
-            { name: 'contactPhone', type: 'text', label: 'Telefone Principal', defaultValue: '(84) 99999-9999' },
-            { name: 'contactAddress', type: 'textarea', label: 'Endereço Físico', defaultValue: 'Rua Francisco Maia Sobrinho, 1950\nLagoa Nova — Natal/RN' },
+            { name: 'contactTitle', type: 'text', label: 'Título', defaultValue: 'Fale com nossa equipe' },
+            { name: 'contactSubtitle', type: 'textarea', label: 'Subtítulo' },
+            { name: 'contactEmail', type: 'text', label: 'E-mail', defaultValue: 'contato@cavalcantemelo.adv.br' },
+            { name: 'contactPhone', type: 'text', label: 'Telefone', defaultValue: '(84) 99124-3985' },
+            { name: 'contactAddress', type: 'textarea', label: 'Endereço' },
           ],
         },
       ],
