@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const Homepage: GlobalConfig = {
   slug: 'homepage',
   label: 'Página Inicial (Gestão)',
-  access: { read: () => true },
+  access: { read: () => true, update: () => true },
   fields: [
     {
       name: 'aboutPartners',

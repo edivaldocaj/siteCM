@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const SiteConfig: GlobalConfig = {
   slug: 'site-config',
   label: 'Configurações Gerais do Site',
-  access: { read: () => true },
+  access: { read: () => true, update: () => true },
   fields: [
     {
       type: 'tabs',

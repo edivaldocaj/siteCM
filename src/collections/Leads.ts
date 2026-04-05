@@ -34,7 +34,7 @@ export const Leads: CollectionConfig = {
           type: 'select',
           required: true,
           label: 'Origem',
-          defaultValue: 'form',
+          defaultValue: 'contact-form',
           options: [
             { label: 'Formulário de Campanha', value: 'campaign-form' },
             { label: 'Formulário de Contato', value: 'contact-form' },
