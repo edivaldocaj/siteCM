@@ -1,196 +1,185 @@
 # Cavalcante & Melo — Site Institucional
 
-Site institucional do escritório **Cavalcante & Melo Sociedade de Advogados** (Natal/RN), construído com **Next.js 16** + **Payload CMS 3.80** + **PostgreSQL 17**.
+Site institucional da **Cavalcante & Melo Sociedade de Advogados** (Natal/RN).
 
-## Stack Técnica
+**Stack:** Next.js 16 + Payload CMS 3.x + PostgreSQL 17 + Tailwind v4
+**Deploy:** Docker via EasyPanel (repo: `github.com/edivaldocaj/siteCM.git`)
 
-| Camada | Tecnologia |
-|---|---|
-| Framework | Next.js 16.2.1 (App Router) |
-| CMS | Payload CMS 3.80 (headless, integrado) |
-| Banco de Dados | PostgreSQL 17 |
-| Estilo | Tailwind CSS v4 (inline `@theme`) |
-| Animações | CSS nativo |
-| Ícones | Lucide React |
-| Hospedagem | EasyPanel (Docker) |
-| Tipografia | Playfair Display + Source Sans 3 |
+---
 
-## Paleta de Cores
+## Arquitetura de Dados
 
-| Token | Hex | Uso |
-|---|---|---|
-| `brand-navy` | `#152138` | Fundo principal, header, cards escuros |
-| `brand-navy-light` | `#1c2d4a` | Gradientes |
-| `brand-silver` | `#b8bfc8` | Texto secundário |
-| `brand-champagne` | `#f1eae2` | Texto claro sobre navy, TrustBar bg |
-| `brand-gold` | `#ede1c3` | Acentos suaves |
-| `brand-gold-dark` | `#c4a96a` | CTAs, destaques, ícones |
-| `brand-cream` | `#faf8f5` | Fundo seções claras |
-| `brand-urgency` | `#7a1b1b` | Badge criminal 24h |
+### Globals (editáveis no admin `/admin`)
 
-## Estrutura do Projeto
+| Global       | Slug          | O que controla                                                                 |
+|--------------|---------------|--------------------------------------------------------------------------------|
+| SiteConfig   | `site-config` | Títulos/subtítulos de TODAS as seções (Hero, Criminal, Campanhas, Depoimentos, Notícias, Blog, Sobre, Contato), TrustBar stats, timeline, valores |
+| Homepage     | `homepage`    | Lista de sócios (nome, cargo, bio, foto, OAB)                                 |
+
+### Collections
+
+| Collection      | Slug              | Uso                                                           |
+|-----------------|-------------------|---------------------------------------------------------------|
+| Users           | `users`           | Usuários admin do Payload                                     |
+| Media           | `media`           | Upload de imagens e vídeos                                    |
+| Pages           | `pages`           | Páginas genéricas (uso futuro)                                |
+| Posts           | `posts`           | Blog — artigos jurídicos                                      |
+| Campaigns       | `campaigns`       | Campanhas jurídicas — landing pages + material para redes sociais |
+| Testimonials    | `testimonials`    | Depoimentos de clientes                                       |
+| PracticeAreas   | `practice-areas`  | Áreas de atuação                                              |
+| NewsArticles    | `news-articles`   | Notícias jurídicas (importadas ou manuais)                    |
+| Clients         | `clients`         | Portal do cliente (acesso via `/cliente`)                     |
+
+### Fluxo de dados: Homepage
 
 ```
-src/
-├── app/
-│   ├── (frontend)/          # Rotas públicas do site
-│   │   ├── page.tsx          # Homepage (Server Component com dados CMS)
-│   │   ├── layout.tsx        # Layout frontend (Header, Footer, fonts)
-│   │   ├── sobre/            # Página institucional
-│   │   ├── areas-de-atuacao/ # Áreas de atuação (listagem + [slug])
-│   │   ├── campanhas/        # Campanhas jurídicas (listagem + [slug])
-│   │   ├── blog/             # Blog jurídico (listagem + [slug])
-│   │   ├── contato/          # Formulário de contato
-│   │   ├── cliente/          # Portal do cliente (Datajud)
-│   │   └── admin-tools/      # Ferramentas administrativas
-│   ├── (payload)/            # Admin Payload CMS (/admin)
-│   └── api/                  # API Routes (contato, datajud, revalidate)
-├── collections/              # Coleções Payload CMS
-│   ├── Users.ts
-│   ├── Media.ts
-│   ├── Pages.ts
-│   ├── Posts.ts
-│   ├── Campaigns.ts
-│   ├── Testimonials.ts
-│   ├── PracticeAreas.ts
-│   ├── NewsArticles.ts
-│   └── Clients.ts
-├── globals/                  # Globals Payload CMS
-│   ├── Homepage.ts           # Gestão dos sócios (foto, bio, OAB)
-│   └── SiteConfig.ts         # Textos do hero, TrustBar, contato, SEO
-├── components/
-│   ├── sections/             # Seções da homepage
-│   │   ├── HeroSection.tsx
-│   │   ├── TrustBar.tsx
-│   │   ├── PracticeAreasGrid.tsx
-│   │   ├── CriminalUrgency.tsx
-│   │   ├── AboutPartners.tsx
-│   │   ├── FeaturedCampaigns.tsx
-│   │   ├── TestimonialsCarousel.tsx
-│   │   ├── NewsSection.tsx
-│   │   ├── RecentPosts.tsx
-│   │   └── ContactCTA.tsx
-│   ├── layout/
-│   │   ├── Header.tsx
-│   │   └── Footer.tsx
-│   └── ui/
-│       ├── WhatsAppButton.tsx
-│       └── CookieConsent.tsx
-├── lib/
-│   ├── datajud.ts            # Integração CNJ Datajud API
-│   └── payload.ts
-├── styles/
-│   └── globals.css           # Tailwind v4 + classes utilitárias
-└── payload.config.ts         # Configuração central Payload CMS
+page.tsx (Server Component)
+  │
+  ├─ getPayload() → busca todos os dados
+  │    ├─ findGlobal('site-config')  → títulos de todas as seções
+  │    ├─ findGlobal('homepage')     → dados dos sócios
+  │    ├─ find('campaigns')          → campanhas ativas
+  │    ├─ find('testimonials')       → depoimentos
+  │    ├─ find('posts')              → artigos recentes
+  │    ├─ find('news-articles')      → notícias
+  │    └─ find('practice-areas')     → áreas de atuação
+  │
+  └─ Renderiza componentes passando dados via props:
+       HeroSection       ← siteConfig (heroTitle, heroSubtitle, heroButtonText)
+       TrustBar           ← siteConfig.trustBarStats
+       PracticeAreasGrid  ← practiceAreas[]
+       CriminalUrgency    ← siteConfig (criminalTag, criminalTitle, etc.)
+       AboutPartners      ← homepage.aboutPartners
+       FeaturedCampaigns  ← campaigns[] + siteConfig (campaignsTitle, campaignsSubtitle)
+       TestimonialsCarousel ← testimonials[] + siteConfig (testimonialsTitle)
+       NewsSection        ← news[] + siteConfig (newsTitle, newsSubtitle)
+       RecentPosts        ← posts[] + siteConfig (blogTitle, blogSubtitle)
+       ContactCTA         ← siteConfig (contactTitle, contactSubtitle, contactEmail, etc.)
 ```
 
-## Seções da Homepage
+### Fluxo de dados: Página Sobre
 
-Todas as seções da homepage são dinâmicas — puxam dados do Payload CMS quando disponíveis e usam dados estáticos como fallback:
-
-1. **HeroSection** — Título, subtítulo e CTA editáveis via `SiteConfig` global. Design com pattern geométrico SVG, gradiente navy e dois botões (WhatsApp + Agendar Consulta).
-
-2. **TrustBar** — Contadores animados (Anos de Experiência, Clientes Atendidos, Áreas de Atuação, Satisfação). Editável via `SiteConfig > Números em Destaque`. Fundo champagne com animação de contagem ao scroll.
-
-3. **PracticeAreasGrid** — Grid de áreas de atuação da collection `PracticeAreas`. O card de Direito Penal aparece em fundo navy (destaque) com badge "24h".
-
-4. **CriminalUrgency** — Seção de defesa criminal urgente em duas colunas (navy-dark). Glass-cards com features (Atendimento 24h, Habeas Corpus, Acolhimento). Barra superior com gradiente urgency/gold.
-
-5. **AboutPartners** — Sócios fundadores com círculo de iniciais (gradient-navy + text-silver-gradient), pills de áreas de atuação, biografia. Editável via `Homepage > Sobre os Sócios`. Suporta foto CMS se cadastrada.
-
-6. **FeaturedCampaigns** — Campanhas jurídicas ativas da collection `Campaigns` (filtro `status: active` + `featuredOnHomepage: true`). Cards com ícone, categoria, subtítulo e CTA.
-
-7. **TestimonialsCarousel** — Carrossel de depoimentos da collection `Testimonials`. Glass-card com stars, ícone Quote decorativo, dots de navegação.
-
-8. **NewsSection** — Notícias jurídicas da collection `NewsArticles`. Suporta links externos (com ícone ExternalLink).
-
-9. **RecentPosts** — Posts recentes do blog da collection `Posts`. Cards com imagem placeholder CM, categoria, tempo de leitura, autor.
-
-10. **ContactCTA** — Formulário completo (nome, telefone, assunto, mensagem) + informações de contato + WhatsApp CTA. Duas colunas em desktop.
-
-## Padrão de Acesso ao Payload CMS
-
-**Importante:** Todo acesso ao Payload DEVE ser feito diretamente em Server Components:
-
-```tsx
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
-
-const payload = await getPayload({ config: configPromise })
-const result = await payload.find({ collection: 'posts', limit: 10 })
+```
+sobre/page.tsx (Server Component)
+  └─ AboutPageClient ← siteConfig + homepage
+       ├─ Hero         ← siteConfig.aboutTitle, aboutSubtitle
+       ├─ História     ← siteConfig.aboutHistory (texto livre)
+       ├─ Timeline     ← siteConfig.aboutTimeline[] (array: year, title, description)
+       ├─ Valores      ← siteConfig.aboutValues[] (array: icon, title, description)
+       ├─ Sócios       ← homepage.aboutPartners.partnersList[]
+       └─ Localização  ← siteConfig.contactAddress
 ```
 
-**NÃO** usar `src/lib/payload.ts` como helper — importar `getPayload` e `@payload-config` diretamente.
+### linkedCampaign (vinculação Notícia/Post → Campanha)
 
-## Variáveis de Ambiente
-
-```env
-# Banco de dados
-DATABASE_URL=postgresql://postgres:SENHA@HOST:5432/cavalcantemelo
-
-# Payload CMS
-PAYLOAD_SECRET=sua-chave-secreta-aqui
-
-# Site
-NEXT_PUBLIC_SITE_URL=https://cavalcantemelo.adv.br
-NEXT_PUBLIC_WHATSAPP_NUMBER=5584991243985
-NEXT_PUBLIC_WHATSAPP_MESSAGE=Olá! Gostaria de falar com um advogado.
-
-# Google Analytics (opcional)
-NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
-
-# Datajud API (Portal do Cliente)
-DATAJUD_API_KEY=sua-chave-datajud
+Os campos `linkedCampaign` em `Posts` e `NewsArticles` são **text** (slug da campanha).
+O componente resolve tanto slug string quanto objeto populado pelo Payload:
+```ts
+const linkedCampaignSlug = typeof rawLinked === 'object' && rawLinked?.slug
+  ? rawLinked.slug
+  : typeof rawLinked === 'string' && rawLinked.length > 0
+    ? rawLinked
+    : null
 ```
+Para funcionar, basta preencher o campo no admin com o slug exato da campanha (ex: `fraudes-bancarias`).
+
+---
+
+## Campanhas — Campos para Redes Sociais
+
+Cada campanha agora tem uma aba **Redes Sociais** no admin com:
+
+| Campo            | Tipo     | Descrição                                                |
+|------------------|----------|----------------------------------------------------------|
+| coverImage       | upload   | Imagem 1080×1080 para feed Instagram/Facebook            |
+| storyImage       | upload   | Imagem 1080×1920 para Stories/Reels/TikTok               |
+| videoUrl         | text     | URL de vídeo curto (YouTube/Vimeo embed)                 |
+| videoFile        | upload   | Upload direto de vídeo MP4 (até 60s)                     |
+| socialCaption    | textarea | Legenda pré-escrita para copiar nos posts                |
+| socialHashtags   | text[]   | Hashtags sugeridas                                       |
+| colorAccent      | select   | Cor de destaque dos cards (gold/red/blue/green)          |
+| targetAudience   | textarea | Descrição do público-alvo para segmentação               |
+| ogImage          | upload   | Imagem OpenGraph 1200×630 para previews de link          |
+
+---
+
+## Deploy (EasyPanel + Docker)
+
+1. Push para `main` no GitHub
+2. EasyPanel rebuilda automaticamente via Dockerfile
+3. **Após cada deploy com mudanças no schema**, rodar no terminal Bash do EasyPanel:
+   ```bash
+   npx payload migrate:create <nome> && npx payload migrate
+   ```
+4. Variáveis de ambiente necessárias:
+   - `DATABASE_URL` — connection string PostgreSQL
+   - `PAYLOAD_SECRET` — secret do Payload
+   - `NEXT_PUBLIC_WHATSAPP_NUMBER` — número WhatsApp (ex: `5584991243985`)
+
+---
 
 ## Desenvolvimento Local
 
 ```bash
-# Instalar dependências
-pnpm install
-
-# Rodar em modo dev
-pnpm dev
-
-# Build de produção
-pnpm build
-
-# Gerar tipos TypeScript do Payload
-pnpm generate:types
+git clone https://github.com/edivaldocaj/siteCM.git
+cd siteCM
+npm install
+cp test.env .env   # ajustar DATABASE_URL e PAYLOAD_SECRET
+npm run dev
 ```
 
-## Deploy (EasyPanel / Docker)
+Admin: `http://localhost:3000/admin`
+Site: `http://localhost:3000`
 
-O projeto roda em EasyPanel com Docker. O build inclui:
+---
 
-```bash
-pnpm build   # Gera importMap + build Next.js
-pnpm start   # Inicia o servidor de produção
+## Estrutura de Arquivos (principais)
+
+```
+src/
+├── app/(frontend)/
+│   ├── page.tsx                    # Homepage (Server Component)
+│   ├── layout.tsx                  # Layout frontend
+│   ├── sobre/
+│   │   ├── page.tsx                # Sobre (Server Component)
+│   │   └── AboutPageClient.tsx     # Sobre (Client Component)
+│   ├── campanhas/
+│   │   ├── page.tsx                # Lista de campanhas
+│   │   └── [slug]/page.tsx         # Landing page individual
+│   ├── blog/
+│   ├── areas-de-atuacao/
+│   ├── contato/
+│   ├── cliente/                    # Portal do cliente (Datajud)
+│   └── admin-tools/                # Ferramentas internas
+├── components/
+│   ├── sections/                   # Seções reutilizáveis
+│   │   ├── HeroSection.tsx
+│   │   ├── TrustBar.tsx
+│   │   ├── PracticeAreasGrid.tsx
+│   │   ├── CriminalUrgency.tsx     # ✅ Agora puxa do SiteConfig
+│   │   ├── AboutPartners.tsx
+│   │   ├── FeaturedCampaigns.tsx   # ✅ Agora puxa título do SiteConfig
+│   │   ├── TestimonialsCarousel.tsx # ✅ Agora puxa título do SiteConfig
+│   │   ├── NewsSection.tsx         # ✅ Agora puxa título do SiteConfig
+│   │   ├── RecentPosts.tsx         # ✅ Agora puxa título do SiteConfig
+│   │   └── ContactCTA.tsx          # ✅ Agora puxa dados de contato do SiteConfig
+│   ├── layout/
+│   └── ui/
+├── collections/                    # Schemas Payload CMS
+├── globals/                        # SiteConfig + Homepage
+├── lib/                            # Utilitários (datajud, payload)
+└── styles/
+    └── globals.css                 # Tailwind v4 + variáveis da marca
 ```
 
-Migrations do Payload rodam manualmente via console Bash do EasyPanel.
+---
 
-## Collections do CMS
+## Paleta da Marca
 
-| Collection | Slug | Uso |
-|---|---|---|
-| Users | `users` | Administradores do CMS |
-| Media | `media` | Uploads (fotos, documentos) |
-| Pages | `pages` | Páginas genéricas |
-| Posts | `posts` | Blog jurídico |
-| Campaigns | `campaigns` | Campanhas jurídicas |
-| Testimonials | `testimonials` | Depoimentos de clientes |
-| PracticeAreas | `practice-areas` | Áreas de atuação |
-| NewsArticles | `news-articles` | Notícias jurídicas |
-| Clients | `clients` | Clientes (portal) |
-
-## Globals do CMS
-
-| Global | Slug | Uso |
-|---|---|---|
-| Homepage | `homepage` | Gestão dos sócios (foto, bio, áreas) |
-| SiteConfig | `site-config` | Textos do hero, TrustBar, contato, about, áreas |
-
-## Licença
-
-Projeto privado — © 2025 Cavalcante & Melo Sociedade de Advogados. Todos os direitos reservados.
+| Token                    | Valor     | Uso                          |
+|--------------------------|-----------|------------------------------|
+| `--color-brand-navy`     | `#152138` | Fundo principal, textos      |
+| `--color-brand-silver`   | `#b8bfc8` | Textos secundários           |
+| `--color-brand-gold-dark`| `#c4a96a` | Destaques, CTAs, ícones      |
+| `--color-brand-champagne`| `#f1eae2` | Headings sobre fundo escuro  |
+| `--color-brand-cream`    | `#faf8f5` | Fundos claros de seção       |
