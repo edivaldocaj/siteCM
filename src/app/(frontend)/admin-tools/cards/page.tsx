@@ -80,24 +80,25 @@ export default function CardGeneratorPage() {
   }
 
   // Exportar PNG
+  // Carrega html2canvas via script tag (evita import dinâmico de URL que quebra o TypeScript)
+  function loadHtml2Canvas(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if ((window as any).html2canvas) return resolve((window as any).html2canvas)
+      const script = document.createElement('script')
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
+      script.onload = () => resolve((window as any).html2canvas)
+      script.onerror = () => reject(new Error('Falha ao carregar html2canvas'))
+      document.head.appendChild(script)
+    })
+  }
+
   async function exportPNG() {
     setExporting(true)
     try {
       const el = canvasRef.current
       if (!el) return
-      // Usar canvas API diretamente
-      const canvas = document.createElement('canvas')
-      canvas.width = fmt.w
-      canvas.height = fmt.h
-      const ctx = canvas.getContext('2d')
-      if (!ctx) return
 
-      // Desenhar fundo
-      ctx.fillStyle = '#152138'
-      ctx.fillRect(0, 0, fmt.w, fmt.h)
-
-      // Usar html2canvas como fallback via screenshot do DOM
-      const html2canvas = (await import('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.esm.js')).default
+      const html2canvas = await loadHtml2Canvas()
       const rendered = await html2canvas(el, { width: fmt.w, height: fmt.h, scale: 1, useCORS: true, backgroundColor: null })
       const link = document.createElement('a')
       link.download = `cm-${title.toLowerCase().replace(/\s+/g, '-')}-${format}.png`
