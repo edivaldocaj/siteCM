@@ -215,7 +215,7 @@ export const Leads: CollectionConfig = {
             {
               name: 'convertedToClient',
               type: 'relationship',
-              relationTo: 'clients',
+              relationTo: 'clients' as any,
               label: 'Cliente Vinculado',
               admin: {
                 description: 'Quando convertido, vincular ao registro de cliente.',
