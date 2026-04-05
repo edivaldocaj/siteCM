@@ -65,30 +65,39 @@ export async function GET(req: NextRequest) {
       const slug = campaign.slug
       if (campaignSlug && slug !== campaignSlug) continue
 
-      // Count events by type
-      const [views, whatsappClicks, formSubmits, shares] = await Promise.all([
-        (payload as any).find({ collection: 'campaign-events', where: { campaignSlug: { equals: slug }, eventType: { equals: 'page_view' } }, limit: 0 }),
-        (payload as any).find({ collection: 'campaign-events', where: { campaignSlug: { equals: slug }, eventType: { equals: 'whatsapp_click' } }, limit: 0 }),
-        (payload as any).find({ collection: 'campaign-events', where: { campaignSlug: { equals: slug }, eventType: { equals: 'form_submit' } }, limit: 0 }),
-        (payload as any).find({ collection: 'campaign-events', where: { campaignSlug: { equals: slug }, eventType: { equals: 'share' } }, limit: 0 }),
-      ])
+      // Count events by type — graceful if collections don't exist yet
+      let viewCount = 0, whatsappCount = 0, formCount = 0, shareCount = 0, leadCount = 0, convertedCount = 0
 
-      // Count leads from this campaign
-      const leads = await (payload as any).find({
-        collection: 'leads',
-        where: { campaignSlug: { equals: slug } },
-        limit: 0,
-      })
+      try {
+        const [views, whatsappClicks, formSubmits, shares] = await Promise.all([
+          (payload as any).find({ collection: 'campaign-events', where: { campaignSlug: { equals: slug }, eventType: { equals: 'page_view' } }, limit: 0 }),
+          (payload as any).find({ collection: 'campaign-events', where: { campaignSlug: { equals: slug }, eventType: { equals: 'whatsapp_click' } }, limit: 0 }),
+          (payload as any).find({ collection: 'campaign-events', where: { campaignSlug: { equals: slug }, eventType: { equals: 'form_submit' } }, limit: 0 }),
+          (payload as any).find({ collection: 'campaign-events', where: { campaignSlug: { equals: slug }, eventType: { equals: 'share' } }, limit: 0 }),
+        ])
+        viewCount = views.totalDocs || 0
+        whatsappCount = whatsappClicks.totalDocs || 0
+        formCount = formSubmits.totalDocs || 0
+        shareCount = shares.totalDocs || 0
+      } catch { /* collection may not exist yet */ }
 
-      const convertedLeads = await (payload as any).find({
-        collection: 'leads',
-        where: { campaignSlug: { equals: slug }, status: { equals: 'converted' } },
-        limit: 0,
-      })
+      try {
+        const leads = await (payload as any).find({
+          collection: 'leads',
+          where: { campaignSlug: { equals: slug } },
+          limit: 0,
+        })
+        leadCount = leads.totalDocs || 0
 
-      const totalViews = views.totalDocs || 0
-      const totalLeads = leads.totalDocs || 0
-      const conversionRate = totalViews > 0 ? ((totalLeads / totalViews) * 100).toFixed(1) : '0'
+        const convertedLeads = await (payload as any).find({
+          collection: 'leads',
+          where: { campaignSlug: { equals: slug }, status: { equals: 'converted' } },
+          limit: 0,
+        })
+        convertedCount = convertedLeads.totalDocs || 0
+      } catch { /* collection may not exist yet */ }
+
+      const conversionRate = viewCount > 0 ? ((leadCount / viewCount) * 100).toFixed(1) : '0'
 
       analytics.push({
         slug,
@@ -96,12 +105,12 @@ export async function GET(req: NextRequest) {
         category: campaign.category,
         status: campaign.status,
         metrics: {
-          views: totalViews,
-          whatsappClicks: whatsappClicks.totalDocs || 0,
-          formSubmits: formSubmits.totalDocs || 0,
-          shares: shares.totalDocs || 0,
-          totalLeads,
-          convertedLeads: convertedLeads.totalDocs || 0,
+          views: viewCount,
+          whatsappClicks: whatsappCount,
+          formSubmits: formCount,
+          shares: shareCount,
+          totalLeads: leadCount,
+          convertedLeads: convertedCount,
           conversionRate: `${conversionRate}%`,
         },
       })
