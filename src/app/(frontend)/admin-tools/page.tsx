@@ -81,6 +81,30 @@ export default function AdminToolsPage() {
           </div>
         </div>
 
+        {/* ── ANALYTICS DE CAMPANHAS ── */}
+        <Link href="/admin-tools/analytics" style={{ textDecoration: 'none', display: 'block', marginBottom: '24px' }}>
+          <div style={{ background: 'linear-gradient(135deg, rgba(96,165,250,0.1), rgba(96,165,250,0.05))', border: '1px solid rgba(96,165,250,0.3)', borderRadius: '8px', padding: '32px', transition: 'all 0.3s', cursor: 'pointer' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(96,165,250,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '20px', color: '#f1eae2', margin: 0, marginBottom: '4px' }}>
+                    Analytics de Campanhas
+                  </h2>
+                  <p style={{ color: '#b8bfc8', fontSize: '14px', margin: 0 }}>
+                    Views, leads, conversões e taxa de cada campanha em tempo real.
+                  </p>
+                </div>
+              </div>
+              <ArrowRight style={{ width: '20px', height: '20px', color: '#60a5fa', flexShrink: 0 }} />
+            </div>
+          </div>
+        </Link>
+
         {/* ── GERADOR DE CARDS ── */}
         <Link href="/admin-tools/cards" style={{ textDecoration: 'none', display: 'block', marginBottom: '24px' }}>
           <div style={{ background: 'linear-gradient(135deg, rgba(196,169,106,0.1), rgba(196,169,106,0.05))', border: '1px solid rgba(196,169,106,0.3)', borderRadius: '8px', padding: '32px', transition: 'all 0.3s', cursor: 'pointer' }}>

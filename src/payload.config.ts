@@ -14,6 +14,8 @@ import { Testimonials } from './collections/Testimonials'
 import { PracticeAreas } from './collections/PracticeAreas'
 import { NewsArticles } from './collections/NewsArticles'
 import { Clients } from './collections/Clients'
+import { Leads } from './collections/Leads'
+import { CampaignEvents } from './collections/CampaignEvents'
 import { Homepage } from './globals/Homepage'
 
 const filename = fileURLToPath(import.meta.url)
@@ -39,6 +41,8 @@ export default buildConfig({
     PracticeAreas,
     NewsArticles,
     Clients,
+    Leads,
+    CampaignEvents,
   ],
   globals: [
     Homepage,

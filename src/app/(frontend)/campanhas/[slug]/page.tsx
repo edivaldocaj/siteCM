@@ -8,6 +8,8 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import { CampaignShareBar } from '@/components/campaigns/CampaignShareBar'
 import { CampaignVideoHero } from '@/components/campaigns/CampaignVideoHero'
 import { CampaignUrgencyBar } from '@/components/campaigns/CampaignUrgencyBar'
+import { CampaignLeadForm } from '@/components/campaigns/CampaignLeadForm'
+import { CampaignTracker } from '@/components/campaigns/CampaignTracker'
 
 export const dynamic = 'force-dynamic'
 
@@ -91,6 +93,9 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
 
   return (
     <div style={{ backgroundColor: '#f1eae2', minHeight: '100vh', fontFamily: "'Source Sans 3', sans-serif" }}>
+
+      {/* ── Analytics Tracker ── */}
+      <CampaignTracker campaignSlug={slug} />
 
       {/* ── Barra de urgência animada ── */}
       {campaign.urgencyText && (
@@ -298,6 +303,19 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           whatsappMessage={message}
           accentColor={accent.border}
         />
+
+        {/* ── Formulário de Captação de Lead ── */}
+        {campaign.showForm !== false && (
+          <div style={{ marginTop: '32px' }}>
+            <CampaignLeadForm
+              campaignSlug={slug}
+              campaignTitle={campaign.title}
+              category={campaign.category || 'consumidor'}
+              accentColor={accent.border}
+              whatsappUrl={whatsappUrl}
+            />
+          </div>
+        )}
 
         {/* ── CTA Final ── */}
         <div style={{
