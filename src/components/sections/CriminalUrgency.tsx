@@ -2,7 +2,21 @@
 
 import { Phone, Shield, Clock, Heart } from 'lucide-react'
 
-export function CriminalUrgency() {
+interface CriminalUrgencyProps {
+  cmsData?: {
+    tag?: string
+    title?: string
+    highlight?: string
+    description?: string
+  } | null
+}
+
+export function CriminalUrgency({ cmsData }: CriminalUrgencyProps) {
+  const tag = cmsData?.tag || 'Defesa Criminal — Atendimento Imediato'
+  const title = cmsData?.title || 'Você não está sozinho.'
+  const highlight = cmsData?.highlight || 'Nós sabemos o que fazer.'
+  const description = cmsData?.description || 'Se você ou alguém que você ama está sendo investigado, foi preso ou precisa de defesa criminal urgente, nossa equipe está pronta para agir imediatamente. Cada minuto conta.'
+
   return (
     <section className="relative overflow-hidden">
       {/* Dark background */}
@@ -28,7 +42,7 @@ export function CriminalUrgency() {
                 textTransform: 'uppercase',
                 letterSpacing: '0.25em',
               }}>
-                Defesa Criminal — Atendimento Imediato
+                {tag}
               </span>
             </div>
 
@@ -40,9 +54,9 @@ export function CriminalUrgency() {
               lineHeight: 1.15,
               marginBottom: '32px',
             }}>
-              Você não está sozinho.
+              {title}
               <br />
-              <span style={{ color: 'var(--color-brand-gold-dark)' }}>Nós sabemos o que fazer.</span>
+              <span style={{ color: 'var(--color-brand-gold-dark)' }}>{highlight}</span>
             </h2>
 
             <p style={{
@@ -52,9 +66,7 @@ export function CriminalUrgency() {
               lineHeight: 1.6,
               marginBottom: '32px',
             }}>
-              Se você ou alguém que você ama está sendo investigado,
-              foi preso ou precisa de defesa criminal urgente, nossa equipe
-              está pronta para agir imediatamente. Cada minuto conta.
+              {description}
             </p>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>

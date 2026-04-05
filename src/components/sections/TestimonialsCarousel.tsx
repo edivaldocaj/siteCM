@@ -32,10 +32,14 @@ const defaultTestimonials = [
 
 interface TestimonialsCarouselProps {
   cmsTestimonials?: any[]
+  cmsData?: {
+    title?: string
+  } | null
 }
 
-export function TestimonialsCarousel({ cmsTestimonials = [] }: TestimonialsCarouselProps) {
+export function TestimonialsCarousel({ cmsTestimonials = [], cmsData }: TestimonialsCarouselProps) {
   const testimonials = cmsTestimonials.length > 0 ? cmsTestimonials : defaultTestimonials
+  const sectionTitle = cmsData?.title || 'O que nossos clientes dizem'
   const [current, setCurrent] = useState(0)
 
   const prev = () => setCurrent((c) => (c === 0 ? testimonials.length - 1 : c - 1))
@@ -70,7 +74,7 @@ export function TestimonialsCarousel({ cmsTestimonials = [] }: TestimonialsCarou
             fontWeight: 600,
             color: 'var(--color-brand-champagne)',
           }}>
-            O que nossos clientes dizem
+            {sectionTitle}
           </h2>
         </div>
 

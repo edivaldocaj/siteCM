@@ -18,10 +18,16 @@ function formatDate(dateStr?: string) {
 
 interface NewsSectionProps {
   cmsNews?: any[]
+  cmsData?: {
+    title?: string
+    subtitle?: string
+  } | null
 }
 
-export function NewsSection({ cmsNews = [] }: NewsSectionProps) {
+export function NewsSection({ cmsNews = [], cmsData }: NewsSectionProps) {
   const news = cmsNews.length > 0 ? cmsNews : defaultNews
+  const sectionTitle = cmsData?.title || 'Notícias do Direito'
+  const sectionSubtitle = cmsData?.subtitle || 'Notícias relevantes do mundo jurídico, selecionadas e comentadas pela nossa equipe.'
 
   return (
     <section className="section-padding" style={{ backgroundColor: 'var(--color-brand-cream)' }}>
@@ -32,11 +38,11 @@ export function NewsSection({ cmsNews = [] }: NewsSectionProps) {
               Atualidades Jurídicas
             </span>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 4vw, 3rem)', fontWeight: 600, color: 'var(--color-brand-navy)' }}>
-              Notícias do Direito
+              {sectionTitle}
             </h2>
           </div>
           <p style={{ color: 'rgba(21,33,56,0.55)', fontFamily: 'var(--font-body)', fontSize: '15px', maxWidth: '340px', lineHeight: 1.6, marginTop: '28px' }}>
-            Notícias relevantes do mundo jurídico, selecionadas e comentadas pela nossa equipe.
+            {sectionSubtitle}
           </p>
         </div>
 
@@ -45,7 +51,14 @@ export function NewsSection({ cmsNews = [] }: NewsSectionProps) {
             const hasUrl = item.sourceUrl || item.source_url
             const isExternal = !!hasUrl
             const href = isExternal ? hasUrl : `/blog/${item.slug || '#'}`
-            const linkedCampaign = item.linkedCampaign || item.linked_campaign
+
+            // Resolve linkedCampaign — pode ser string (slug) ou objeto populado pelo Payload
+            const rawLinked = item.linkedCampaign || item.linked_campaign
+            const linkedCampaignSlug = typeof rawLinked === 'object' && rawLinked?.slug
+              ? rawLinked.slug
+              : typeof rawLinked === 'string' && rawLinked.length > 0
+                ? rawLinked
+                : null
 
             return (
               <div key={i} style={{ background: 'white', padding: '28px 32px', borderRadius: '4px', border: '1px solid rgba(21,33,56,0.06)', boxShadow: '0 2px 12px rgba(21,33,56,0.04)', transition: 'all 0.3s' }} className="news-card">
@@ -83,8 +96,8 @@ export function NewsSection({ cmsNews = [] }: NewsSectionProps) {
                     {item.source || 'Judiciário'}
                   </span>
 
-                  {linkedCampaign ? (
-                    <Link href={`/campanhas/${linkedCampaign}`} style={{ color: 'var(--color-brand-gold-dark)', fontSize: '11px', fontFamily: 'var(--font-body)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
+                  {linkedCampaignSlug ? (
+                    <Link href={`/campanhas/${linkedCampaignSlug}`} style={{ color: 'var(--color-brand-gold-dark)', fontSize: '11px', fontFamily: 'var(--font-body)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
                       Ver Campanha <ArrowRight style={{ width: '12px', height: '12px' }} />
                     </Link>
                   ) : (

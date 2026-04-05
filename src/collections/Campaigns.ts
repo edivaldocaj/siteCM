@@ -38,7 +38,6 @@ export const Campaigns: CollectionConfig = {
     },
     { name: 'heroImage', type: 'upload', relationTo: 'media', label: 'Imagem Hero' },
     { name: 'subtitle', type: 'text', label: 'Subtítulo / Headline' },
-    // CORREÇÃO AQUI: required: false para permitir salvar sem preencher tudo
     { name: 'problemDescription', type: 'richText', required: false, label: 'Descrição do Problema' },
     { name: 'rightsExplanation', type: 'richText', required: false, label: 'Explicação dos Direitos' },
     { name: 'benefits', type: 'richText', required: false, label: 'Benefícios da Atuação Jurídica' },
@@ -67,13 +66,90 @@ export const Campaigns: CollectionConfig = {
     { name: 'featuredOnHomepage', type: 'checkbox', label: 'Destaque na Homepage' },
     { name: 'startDate', type: 'date', label: 'Início' },
     { name: 'endDate', type: 'date', label: 'Término (opcional)' },
+
+    /* ────────────────────────────────────────────
+     * REDES SOCIAIS / MARKETING VISUAL
+     * ──────────────────────────────────────────── */
     {
-      name: 'seo',
-      type: 'group',
-      label: 'SEO',
-      fields: [
-        { name: 'metaTitle', type: 'text', label: 'Meta Title' },
-        { name: 'metaDescription', type: 'textarea', label: 'Meta Description' },
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Redes Sociais',
+          fields: [
+            {
+              name: 'coverImage',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Imagem Feed (1080×1080)',
+              admin: { description: 'Imagem quadrada para posts de feed no Instagram/Facebook.' },
+            },
+            {
+              name: 'storyImage',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Imagem Story/Reels (1080×1920)',
+              admin: { description: 'Imagem vertical para Stories, Reels e TikTok.' },
+            },
+            {
+              name: 'videoUrl',
+              type: 'text',
+              label: 'URL do Vídeo (YouTube/Vimeo)',
+              admin: { description: 'Link para embed de vídeo curto na landing page.' },
+            },
+            {
+              name: 'videoFile',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Vídeo Curto (upload direto)',
+              admin: { description: 'Upload de vídeo curto (até 60s) — MP4 recomendado.' },
+            },
+            {
+              name: 'socialCaption',
+              type: 'textarea',
+              label: 'Legenda para Redes Sociais',
+              admin: { description: 'Texto pré-escrito para copiar e colar nos posts. Máx ~2200 caracteres (limite do Instagram).' },
+            },
+            {
+              name: 'socialHashtags',
+              type: 'text',
+              hasMany: true,
+              label: 'Hashtags',
+              admin: { description: 'Ex: #direitodoconsumidor, #lgpd, #advocaciadigital' },
+            },
+            {
+              name: 'colorAccent',
+              type: 'select',
+              label: 'Cor de Destaque (cards sociais)',
+              options: [
+                { label: 'Dourado (padrão CM)', value: 'gold' },
+                { label: 'Vermelho (urgência)', value: 'red' },
+                { label: 'Azul (institucional)', value: 'blue' },
+                { label: 'Verde (positivo)', value: 'green' },
+              ],
+              defaultValue: 'gold',
+            },
+            {
+              name: 'targetAudience',
+              type: 'textarea',
+              label: 'Público-Alvo',
+              admin: { description: 'Descrição do público-alvo para segmentação de anúncios.' },
+            },
+          ],
+        },
+        {
+          label: 'SEO',
+          fields: [
+            { name: 'metaTitle', type: 'text', label: 'Meta Title' },
+            { name: 'metaDescription', type: 'textarea', label: 'Meta Description' },
+            {
+              name: 'ogImage',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Imagem OpenGraph (1200×630)',
+              admin: { description: 'Imagem de preview quando o link for compartilhado no WhatsApp/Telegram/Facebook.' },
+            },
+          ],
+        },
       ],
     },
   ],

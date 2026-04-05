@@ -18,10 +18,16 @@ const defaultPosts = [
 
 interface RecentPostsProps {
   cmsPosts?: any[]
+  cmsData?: {
+    title?: string
+    subtitle?: string
+  } | null
 }
 
-export function RecentPosts({ cmsPosts = [] }: RecentPostsProps) {
+export function RecentPosts({ cmsPosts = [], cmsData }: RecentPostsProps) {
   const posts = cmsPosts.length > 0 ? cmsPosts : defaultPosts
+  const sectionTitle = cmsData?.title || 'Artigos Recentes'
+  const sectionSubtitle = cmsData?.subtitle || 'Conteúdo jurídico atualizado para ajudar você a entender seus direitos.'
 
   return (
     <section className="section-padding" style={{ backgroundColor: 'var(--color-brand-cream)' }}>
@@ -31,23 +37,37 @@ export function RecentPosts({ cmsPosts = [] }: RecentPostsProps) {
             Blog Jurídico
           </span>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 4vw, 3rem)', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '24px' }}>
-            Artigos Recentes
+            {sectionTitle}
           </h2>
           <p style={{ color: 'rgba(21,33,56,0.55)', fontFamily: 'var(--font-body)', fontSize: '17px', maxWidth: '520px', margin: '0 auto', lineHeight: 1.6 }}>
-            Conteúdo jurídico atualizado para ajudar você a entender seus direitos.
+            {sectionSubtitle}
           </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
           {posts.slice(0, 3).map((post: any, i: number) => {
-            const linkedCampaign = post.linkedCampaign || post.linked_campaign
+            // Resolve linkedCampaign — string (slug) ou objeto populado
+            const rawLinked = post.linkedCampaign || post.linked_campaign
+            const linkedCampaignSlug = typeof rawLinked === 'object' && rawLinked?.slug
+              ? rawLinked.slug
+              : typeof rawLinked === 'string' && rawLinked.length > 0
+                ? rawLinked
+                : null
+
             const readTime = post.readTime || post.read_time
+            const featuredImageUrl = typeof post.featuredImage === 'object' && post.featuredImage?.url
+              ? post.featuredImage.url
+              : null
 
             return (
               <div key={i} className="post-card" style={{ background: 'white', borderRadius: '4px', overflow: 'hidden', border: '1px solid rgba(237,225,195,0.3)', boxShadow: '0 4px 20px rgba(21,33,56,0.05)', transition: 'all 0.3s' }}>
                 <Link href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
-                  <div style={{ height: '180px', background: 'linear-gradient(135deg, #152138, #1c2d4a)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ color: 'rgba(184,191,200,0.15)', fontFamily: 'var(--font-display)', fontSize: '56px', fontWeight: 'bold' }}>CM</span>
+                  <div style={{ height: '180px', background: 'linear-gradient(135deg, #152138, #1c2d4a)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    {featuredImageUrl ? (
+                      <img src={featuredImageUrl} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <span style={{ color: 'rgba(184,191,200,0.15)', fontFamily: 'var(--font-display)', fontSize: '56px', fontWeight: 'bold' }}>CM</span>
+                    )}
                   </div>
                 </Link>
 
@@ -80,8 +100,8 @@ export function RecentPosts({ cmsPosts = [] }: RecentPostsProps) {
                       {authorNames[post.author] || 'Cavalcante & Melo'}
                     </span>
 
-                    {linkedCampaign && (
-                      <Link href={`/campanhas/${linkedCampaign}`} style={{ color: 'var(--color-brand-gold-dark)', fontSize: '10px', fontFamily: 'var(--font-body)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none', background: 'rgba(196,169,106,0.1)', padding: '3px 8px', borderRadius: '2px' }}>
+                    {linkedCampaignSlug && (
+                      <Link href={`/campanhas/${linkedCampaignSlug}`} style={{ color: 'var(--color-brand-gold-dark)', fontSize: '10px', fontFamily: 'var(--font-body)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none', background: 'rgba(196,169,106,0.1)', padding: '3px 8px', borderRadius: '2px' }}>
                         Campanha <ArrowRight style={{ width: '10px', height: '10px' }} />
                       </Link>
                     )}

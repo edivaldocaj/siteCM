@@ -45,19 +45,67 @@ async function getHomeData() {
 
 export default async function HomePage() {
   const data = await getHomeData()
+  const sc = data.siteConfig
 
   return (
     <>
-      <HeroSection cmsData={data.siteConfig} />
-      <TrustBar cmsData={data.siteConfig?.trustBarStats?.length ? { stats: data.siteConfig.trustBarStats } : undefined} />
+      <HeroSection cmsData={sc} />
+
+      <TrustBar cmsData={sc?.trustBarStats?.length ? { stats: sc.trustBarStats } : undefined} />
+
       <PracticeAreasGrid cmsAreas={data.practiceAreas} />
-      <CriminalUrgency />
+
+      <CriminalUrgency
+        cmsData={sc ? {
+          tag: sc.criminalTag,
+          title: sc.criminalTitle,
+          highlight: sc.criminalHighlight,
+          description: sc.criminalDescription,
+        } : undefined}
+      />
+
       <AboutPartners cmsData={data.homepage?.aboutPartners} />
-      <FeaturedCampaigns cmsCampaigns={data.campaigns} />
-      <TestimonialsCarousel cmsTestimonials={data.testimonials} />
-      <NewsSection cmsNews={data.news} />
-      <RecentPosts cmsPosts={data.posts} />
-      <ContactCTA />
+
+      <FeaturedCampaigns
+        cmsCampaigns={data.campaigns}
+        cmsData={sc ? {
+          title: sc.campaignsTitle,
+          subtitle: sc.campaignsSubtitle,
+        } : undefined}
+      />
+
+      <TestimonialsCarousel
+        cmsTestimonials={data.testimonials}
+        cmsData={sc ? {
+          title: sc.testimonialsTitle,
+        } : undefined}
+      />
+
+      <NewsSection
+        cmsNews={data.news}
+        cmsData={sc ? {
+          title: sc.newsTitle,
+          subtitle: sc.newsSubtitle,
+        } : undefined}
+      />
+
+      <RecentPosts
+        cmsPosts={data.posts}
+        cmsData={sc ? {
+          title: sc.blogTitle,
+          subtitle: sc.blogSubtitle,
+        } : undefined}
+      />
+
+      <ContactCTA
+        cmsData={sc ? {
+          title: sc.contactTitle,
+          subtitle: sc.contactSubtitle,
+          email: sc.contactEmail,
+          phone: sc.contactPhone,
+          address: sc.contactAddress,
+        } : undefined}
+      />
     </>
   )
 }

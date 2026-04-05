@@ -42,10 +42,16 @@ const categoryLabels: Record<string, string> = {
 
 interface FeaturedCampaignsProps {
   cmsCampaigns?: any[]
+  cmsData?: {
+    title?: string
+    subtitle?: string
+  } | null
 }
 
-export function FeaturedCampaigns({ cmsCampaigns = [] }: FeaturedCampaignsProps) {
+export function FeaturedCampaigns({ cmsCampaigns = [], cmsData }: FeaturedCampaignsProps) {
   const campaigns = cmsCampaigns.length > 0 ? cmsCampaigns : defaultCampaigns
+  const sectionTitle = cmsData?.title || 'Campanhas Jurídicas'
+  const sectionSubtitle = cmsData?.subtitle || 'Ações coletivas e individuais em andamento. Verifique se o seu caso se encaixa.'
 
   return (
     <section className="section-padding" style={{ backgroundColor: 'var(--color-brand-cream)' }}>
@@ -69,7 +75,7 @@ export function FeaturedCampaigns({ cmsCampaigns = [] }: FeaturedCampaignsProps)
             color: 'var(--color-brand-navy)',
             marginBottom: '24px',
           }}>
-            Campanhas Jurídicas
+            {sectionTitle}
           </h2>
           <p style={{
             color: 'rgba(21,33,56,0.6)',
@@ -79,7 +85,7 @@ export function FeaturedCampaigns({ cmsCampaigns = [] }: FeaturedCampaignsProps)
             margin: '0 auto',
             lineHeight: 1.6,
           }}>
-            Ações coletivas e individuais em andamento. Verifique se o seu caso se encaixa.
+            {sectionSubtitle}
           </p>
         </div>
 

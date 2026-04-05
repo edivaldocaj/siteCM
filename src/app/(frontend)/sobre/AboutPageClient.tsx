@@ -1,7 +1,18 @@
 'use client'
 
-import { Scale, Users, Award, MapPin, Phone } from 'lucide-react'
+import { Scale, Users, Award, MapPin, Phone, Shield, Heart } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
+/* ── Icon map para valores do CMS ── */
+const valueIconMap: Record<string, LucideIcon> = {
+  scale: Scale,
+  users: Users,
+  award: Award,
+  shield: Shield,
+  heart: Heart,
+}
+
+/* ── Defaults (usados se o CMS estiver vazio) ── */
 const defaultPartners = [
   {
     name: 'Dr. Edivaldo Cavalcante',
@@ -19,22 +30,45 @@ const defaultPartners = [
   },
 ]
 
-const timeline = [
-  { year: '2025', title: 'Fundação', desc: 'Cavalcante & Melo Sociedade de Advogados é fundada em Natal/RN.' },
-  { year: '2025', title: 'Especialização Digital', desc: 'Foco estratégico em Direito Digital, LGPD e tecnologia jurídica.' },
-  { year: '2026', title: 'Expansão', desc: 'Ampliação das áreas de atuação e consolidação no mercado potiguar.' },
+const defaultTimeline = [
+  { year: '2025', title: 'Fundação', description: 'Cavalcante & Melo Sociedade de Advogados é fundada em Natal/RN.' },
+  { year: '2025', title: 'Especialização Digital', description: 'Foco estratégico em Direito Digital, LGPD e tecnologia jurídica.' },
+  { year: '2026', title: 'Expansão', description: 'Ampliação das áreas de atuação e consolidação no mercado potiguar.' },
 ]
 
-const values = [
-  { icon: Scale, title: 'Ética', desc: 'Compromisso absoluto com a ética profissional e o Código da OAB.' },
-  { icon: Users, title: 'Proximidade', desc: 'Atendimento humanizado, tratando cada cliente com atenção individual.' },
-  { icon: Award, title: 'Resultado', desc: 'Foco em soluções concretas e eficazes para cada caso.' },
+const defaultValues = [
+  { icon: 'scale', title: 'Ética', description: 'Compromisso absoluto com a ética profissional e o Código da OAB.' },
+  { icon: 'users', title: 'Proximidade', description: 'Atendimento humanizado, tratando cada cliente com atenção individual.' },
+  { icon: 'award', title: 'Resultado', description: 'Foco em soluções concretas e eficazes para cada caso.' },
 ]
+
+const defaultHistory = 'A Cavalcante & Melo Sociedade de Advogados nasceu em 2025 com a missão de oferecer advocacia de excelência em Natal/RN. Fundada por profissionais com experiência complementar, o escritório se destaca pela combinação de expertise em áreas tradicionais do Direito com a inovação do Direito Digital e LGPD.'
 
 export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteConfig: any }) {
+  /* ── SiteConfig fields ── */
   const aboutTitle = siteConfig?.aboutTitle || 'Sobre o Escritório'
   const aboutSubtitle = siteConfig?.aboutSubtitle || 'Advocacia estratégica e humanizada, construída sobre os pilares da ética, proximidade e busca por resultados concretos.'
+  const aboutHistory = siteConfig?.aboutHistory || defaultHistory
 
+  // Timeline do CMS ou default
+  const timeline = siteConfig?.aboutTimeline?.length
+    ? siteConfig.aboutTimeline.map((t: any) => ({
+        year: t.year,
+        title: t.title,
+        description: t.description,
+      }))
+    : defaultTimeline
+
+  // Valores do CMS ou default
+  const values = siteConfig?.aboutValues?.length
+    ? siteConfig.aboutValues.map((v: any) => ({
+        icon: v.icon || 'scale',
+        title: v.title,
+        description: v.description,
+      }))
+    : defaultValues
+
+  // Partners do Homepage global
   const partners = homepage?.aboutPartners?.partnersList?.length
     ? homepage.aboutPartners.partnersList.map((p: any) => ({
         name: p.name,
@@ -46,7 +80,7 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
         })(),
         bio: p.bio,
         oab: p.oab,
-        areas: p.role.split(/[,|]/).map((a: string) => a.trim()).filter(Boolean),
+        areas: (p.areas || p.role).split(/[,|]/).map((a: string) => a.trim()).filter(Boolean),
         photoUrl: p.photo?.url || null,
       }))
     : defaultPartners
@@ -74,13 +108,13 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: 'var(--color-brand-navy)', marginBottom: '24px' }}>
             Nossa História
           </h2>
-          <p style={{ color: 'rgba(21,33,56,0.7)', fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.8, maxWidth: '900px', marginBottom: '48px' }}>
-            A Cavalcante &amp; Melo Sociedade de Advogados nasceu em 2025 com a missão de oferecer advocacia de excelência em Natal/RN. Fundada por profissionais com experiência complementar, o escritório se destaca pela combinação de expertise em áreas tradicionais do Direito com a inovação do Direito Digital e LGPD.
+          <p style={{ color: 'rgba(21,33,56,0.7)', fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.8, maxWidth: '900px', marginBottom: '48px', whiteSpace: 'pre-line' }}>
+            {aboutHistory}
           </p>
 
           {/* Timeline */}
           <div style={{ position: 'relative', paddingLeft: '32px', borderLeft: '2px solid rgba(196,169,106,0.2)' }}>
-            {timeline.map((item, i) => (
+            {timeline.map((item: any, i: number) => (
               <div key={i} style={{ marginBottom: i < timeline.length - 1 ? '40px' : '0', position: 'relative' }}>
                 <div style={{ position: 'absolute', left: '-41px', top: '4px', width: '18px', height: '18px', borderRadius: '50%', background: 'var(--color-brand-gold-dark)', border: '3px solid var(--color-brand-cream)' }} />
                 <span style={{ color: 'var(--color-brand-gold-dark)', fontSize: '14px', fontFamily: 'var(--font-body)', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
@@ -90,7 +124,7 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
                   {item.title}
                 </h3>
                 <p style={{ color: 'rgba(21,33,56,0.6)', fontFamily: 'var(--font-body)', fontSize: '15px', lineHeight: 1.6 }}>
-                  {item.desc}
+                  {item.description}
                 </p>
               </div>
             ))}
@@ -104,18 +138,21 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: 'var(--color-brand-navy)', textAlign: 'center', marginBottom: '48px' }}>
             Nossos Valores
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }} className="values-grid">
-            {values.map((v) => (
-              <div key={v.title} style={{ backgroundColor: 'var(--color-brand-cream)', borderRadius: '8px', padding: '40px 32px', textAlign: 'center' }}>
-                <v.icon style={{ width: '40px', height: '40px', color: 'var(--color-brand-gold-dark)', margin: '0 auto 20px' }} strokeWidth={1.5} />
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--color-brand-navy)', fontWeight: 600, marginBottom: '12px' }}>
-                  {v.title}
-                </h3>
-                <p style={{ color: 'rgba(21,33,56,0.6)', fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.6 }}>
-                  {v.desc}
-                </p>
-              </div>
-            ))}
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(values.length, 3)}, 1fr)`, gap: '24px' }} className="values-grid">
+            {values.map((v: any) => {
+              const IconComp = valueIconMap[v.icon] || Scale
+              return (
+                <div key={v.title} style={{ backgroundColor: 'var(--color-brand-cream)', borderRadius: '8px', padding: '40px 32px', textAlign: 'center' }}>
+                  <IconComp style={{ width: '40px', height: '40px', color: 'var(--color-brand-gold-dark)', margin: '0 auto 20px' }} strokeWidth={1.5} />
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--color-brand-navy)', fontWeight: 600, marginBottom: '12px' }}>
+                    {v.title}
+                  </h3>
+                  <p style={{ color: 'rgba(21,33,56,0.6)', fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.6 }}>
+                    {v.description}
+                  </p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -143,6 +180,11 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
                 <p style={{ color: 'var(--color-brand-gold-dark)', fontSize: '14px', fontFamily: 'var(--font-body)', fontWeight: 500, marginBottom: '16px' }}>
                   {p.role}
                 </p>
+                {p.oab && (
+                  <p style={{ color: 'rgba(21,33,56,0.4)', fontSize: '12px', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>
+                    {p.oab}
+                  </p>
+                )}
                 <p style={{ color: 'rgba(21,33,56,0.6)', fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.7, marginBottom: '20px' }}>
                   {p.bio}
                 </p>
@@ -165,7 +207,7 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
           <MapPin style={{ width: '32px', height: '32px', color: 'var(--color-brand-gold-dark)', margin: '0 auto 16px' }} />
           <p style={{ color: 'rgba(184,191,200,0.7)', fontFamily: 'var(--font-body)', fontSize: '16px', marginBottom: '24px' }}>
-            Rua Francisco Maia Sobrinho, 1950 — Lagoa Nova, Natal/RN
+            {siteConfig?.contactAddress || 'Rua Francisco Maia Sobrinho, 1950 — Lagoa Nova, Natal/RN'}
           </p>
           <a
             href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}`}

@@ -3,9 +3,22 @@
 import { useState } from 'react'
 import { Phone, Send, MapPin, CheckCircle } from 'lucide-react'
 
-export function ContactCTA() {
+interface ContactCTAProps {
+  cmsData?: {
+    title?: string
+    subtitle?: string
+    email?: string
+    phone?: string
+    address?: string
+  } | null
+}
+
+export function ContactCTA({ cmsData }: ContactCTAProps) {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  const contactAddress = cmsData?.address || 'Rua Francisco Maia Sobrinho, 1950 — Lagoa Nova, Natal/RN'
+  const contactPhone = cmsData?.phone || '(84) 99124-3985'
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -94,9 +107,11 @@ export function ContactCTA() {
               lineHeight: 1.15,
               marginBottom: '32px',
             }}>
-              Conte-nos o seu caso.
+              {cmsData?.title || 'Conte-nos o seu caso.'}
               <br />
-              <span style={{ color: 'var(--color-brand-gold-dark)' }}>Podemos ajudar.</span>
+              <span style={{ color: 'var(--color-brand-gold-dark)' }}>
+                {cmsData?.subtitle || 'Podemos ajudar.'}
+              </span>
             </h2>
 
             <p style={{
@@ -110,11 +125,25 @@ export function ContactCTA() {
               Respondemos em até 2 horas durante o horário comercial.
             </p>
 
-            <div style={{ marginBottom: '40px' }}>
+            <div style={{ marginBottom: '40px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'rgba(184,191,200,0.6)' }}>
                 <MapPin style={{ width: '20px', height: '20px', color: 'var(--color-brand-gold-dark)', flexShrink: 0 }} />
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px' }}>
-                  Rua Francisco Maia Sobrinho, 1950 — Lagoa Nova, Natal/RN
+                  {contactAddress}
+                </span>
+              </div>
+              {cmsData?.email && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'rgba(184,191,200,0.6)' }}>
+                  <Send style={{ width: '20px', height: '20px', color: 'var(--color-brand-gold-dark)', flexShrink: 0 }} />
+                  <a href={`mailto:${cmsData.email}`} style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(184,191,200,0.6)', textDecoration: 'none' }}>
+                    {cmsData.email}
+                  </a>
+                </div>
+              )}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'rgba(184,191,200,0.6)' }}>
+                <Phone style={{ width: '20px', height: '20px', color: 'var(--color-brand-gold-dark)', flexShrink: 0 }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px' }}>
+                  {contactPhone}
                 </span>
               </div>
             </div>
