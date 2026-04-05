@@ -29,5 +29,5 @@ RUN chown -R nextjs:nodejs /app
 USER nextjs
 EXPOSE 3000
 
-# Migrations: responde 'y' ao prompt interativo e limita a 60s para não travar o startup
-CMD ["bash", "-c", "echo 'y' | timeout 60 npx payload migrate:create auto 2>/dev/null || true; echo 'y' | timeout 60 npx payload migrate 2>/dev/null || true; npm run start"]
+# Apenas aplica migrations pendentes (NÃO cria novas automaticamente)
+CMD ["bash", "-c", "echo 'y' | timeout 60 npx payload migrate 2>/dev/null || true; npm run start"]
