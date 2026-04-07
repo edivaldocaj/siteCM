@@ -42,7 +42,7 @@ export const ClientDocuments: CollectionConfig = {
         {
           name: 'client',
           type: 'relationship',
-          relationTo: 'clients',
+          relationTo: 'clients' as any,
           label: 'Cliente',
           required: true,
         },
@@ -50,7 +50,7 @@ export const ClientDocuments: CollectionConfig = {
       ],
     },
     { name: 'processNumber', type: 'text', label: 'Número do Processo (CNJ)' },
-    { name: 'file', type: 'upload', relationTo: 'media', label: 'Arquivo', required: true },
+    { name: 'file', type: 'upload', relationTo: 'media' as any, label: 'Arquivo', required: true },
     {
       name: 'uploadedBy',
       type: 'select',

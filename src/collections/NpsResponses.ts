@@ -21,7 +21,7 @@ export const NpsResponses: CollectionConfig = {
         {
           name: 'client',
           type: 'relationship',
-          relationTo: 'clients',
+          relationTo: 'clients' as any,
           label: 'Cliente',
         },
         { name: 'clientName', type: 'text', required: true, label: 'Nome do Cliente' },

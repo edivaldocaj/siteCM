@@ -22,7 +22,7 @@ export const Deadlines: CollectionConfig = {
         {
           name: 'client',
           type: 'relationship',
-          relationTo: 'clients',
+          relationTo: 'clients' as any,
           label: 'Cliente',
         },
         { name: 'clientName', type: 'text', label: 'Nome do Cliente' },
