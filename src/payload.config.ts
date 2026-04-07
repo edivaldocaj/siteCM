@@ -16,6 +16,10 @@ import { NewsArticles } from './collections/NewsArticles'
 import { Clients } from './collections/Clients'
 import { Leads } from './collections/Leads'
 import { CampaignEvents } from './collections/CampaignEvents'
+import { ClientDocuments } from './collections/ClientDocuments'
+import { NpsResponses } from './collections/NpsResponses'
+import { Deadlines } from './collections/Deadlines'
+import { Jurisprudence } from './collections/Jurisprudence'
 import { Homepage } from './globals/Homepage'
 
 const filename = fileURLToPath(import.meta.url)
@@ -43,6 +47,10 @@ export default buildConfig({
     Clients,
     Leads,
     CampaignEvents,
+    ClientDocuments,
+    NpsResponses,
+    Deadlines,
+    Jurisprudence,
   ],
   globals: [
     Homepage,

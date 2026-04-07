@@ -162,8 +162,6 @@ async function drawCard(
 }
 
 export default function CardGeneratorPage() {
-  const [password, setPassword] = useState('')
-  const [authenticated, setAuthenticated] = useState(false)
   const [campaigns, setCampaigns] = useState<Campaign[]>([])
   const [selectedId, setSelectedId] = useState<number | null>(null)
   const [title, setTitle] = useState('Fraudes Bancárias')
@@ -189,13 +187,13 @@ export default function CardGeneratorPage() {
     } catch { }
   }
 
-  useEffect(() => { if (authenticated) loadCampaigns() }, [authenticated])
+  useEffect(() => { loadCampaigns() }, [])
 
   // Redraw preview whenever inputs change
   useEffect(() => {
-    if (!authenticated || !previewCanvasRef.current) return
+    if (!previewCanvasRef.current) return
     drawCard(previewCanvasRef.current, { w: fmt.w, h: fmt.h, title, subtitle, category, cta, template })
-  }, [authenticated, title, subtitle, category, cta, template, format])
+  }, [title, subtitle, category, cta, template, format])
 
   function selectCampaign(id: number) {
     const c = campaigns.find(x => x.id === id)
@@ -233,27 +231,6 @@ export default function CardGeneratorPage() {
     }
     setCaptionCopied(true)
     setTimeout(() => setCaptionCopied(false), 2500)
-  }
-
-  if (!authenticated) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#152138' }}>
-        <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '48px', maxWidth: '400px', width: '100%' }}>
-          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <Lock style={{ width: '48px', height: '48px', color: '#c4a96a', margin: '0 auto 16px' }} />
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '24px', color: '#f1eae2', marginBottom: '8px' }}>Gerador de Cards</h1>
-            <p style={{ color: '#b8bfc8', fontSize: '14px' }}>Acesso restrito</p>
-          </div>
-          <form onSubmit={(e) => { e.preventDefault(); setAuthenticated(true) }}>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Secret key" required
-              style={{ width: '100%', padding: '12px 16px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: '#f1eae2', fontSize: '14px', marginBottom: '16px', outline: 'none', boxSizing: 'border-box' }} />
-            <button type="submit" style={{ width: '100%', padding: '12px', background: '#c4a96a', color: '#152138', border: 'none', borderRadius: '4px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Acessar
-            </button>
-          </form>
-        </div>
-      </div>
-    )
   }
 
   const previewScale = format === 'story' ? 0.28 : 0.45

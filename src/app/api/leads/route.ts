@@ -221,3 +221,42 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Erro interno.' }, { status: 500 })
   }
 }
+
+/* ── PATCH: Update lead status (Kanban) ── */
+export async function PATCH(req: NextRequest) {
+  const secret = req.headers.get('Authorization')?.replace('Bearer ', '')
+  if (secret !== process.env.NEWS_REVALIDATE_SECRET) {
+    return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
+  }
+
+  try {
+    const body = await req.json()
+    const { id, status, assignedTo, notes } = body
+
+    if (!id) {
+      return NextResponse.json({ error: 'ID do lead obrigatório.' }, { status: 400 })
+    }
+
+    const payload = await getPayload({ config: configPromise })
+
+    const updateData: any = {}
+    if (status) updateData.status = status
+    if (assignedTo) updateData.assignedTo = assignedTo
+
+    // Se convertido, registrar data
+    if (status === 'converted') {
+      updateData.conversionDate = new Date().toISOString()
+    }
+
+    const updated = await (payload as any).update({
+      collection: 'leads',
+      id,
+      data: updateData,
+    })
+
+    return NextResponse.json({ success: true, lead: updated })
+  } catch (error) {
+    console.error('[Leads API] PATCH Error:', error)
+    return NextResponse.json({ error: 'Erro interno.' }, { status: 500 })
+  }
+}

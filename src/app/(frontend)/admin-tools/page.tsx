@@ -127,6 +127,78 @@ export default function AdminToolsPage() {
           </div>
         </Link>
 
+        {/* ── KANBAN DE LEADS ── */}
+        <Link href="/admin-tools/leads-kanban" style={{ textDecoration: 'none', display: 'block', marginBottom: '24px' }}>
+          <div style={{ background: 'linear-gradient(135deg, rgba(37,211,102,0.1), rgba(37,211,102,0.05))', border: '1px solid rgba(37,211,102,0.3)', borderRadius: '8px', padding: '32px', transition: 'all 0.3s', cursor: 'pointer' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(37,211,102,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2"><rect x="3" y="3" width="6" height="18" rx="1"/><rect x="11" y="3" width="6" height="12" rx="1"/><rect x="19" y="3" width="2" height="8" rx="1"/></svg>
+                </div>
+                <div>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '20px', color: '#f1eae2', margin: 0, marginBottom: '4px' }}>Kanban de Leads</h2>
+                  <p style={{ color: '#b8bfc8', fontSize: '14px', margin: 0 }}>Pipeline visual: Novo → Contatado → Qualificado → Convertido. Mude status com um clique.</p>
+                </div>
+              </div>
+              <ArrowRight style={{ width: '20px', height: '20px', color: '#25D366', flexShrink: 0 }} />
+            </div>
+          </div>
+        </Link>
+
+        {/* ── DASHBOARD GERENCIAL ── */}
+        <Link href="/admin-tools/dashboard" style={{ textDecoration: 'none', display: 'block', marginBottom: '24px' }}>
+          <div style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(139,92,246,0.05))', border: '1px solid rgba(139,92,246,0.3)', borderRadius: '8px', padding: '32px', transition: 'all 0.3s', cursor: 'pointer' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(139,92,246,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                </div>
+                <div>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '20px', color: '#f1eae2', margin: 0, marginBottom: '4px' }}>Dashboard Gerencial</h2>
+                  <p style={{ color: '#b8bfc8', fontSize: '14px', margin: 0 }}>KPIs: leads/mês, taxa de conversão, NPS, clientes ativos, campanhas e performance por advogado.</p>
+                </div>
+              </div>
+              <ArrowRight style={{ width: '20px', height: '20px', color: '#8b5cf6', flexShrink: 0 }} />
+            </div>
+          </div>
+        </Link>
+
+        {/* ── CALENDÁRIO DE PRAZOS ── */}
+        <Link href="/admin-tools/deadlines" style={{ textDecoration: 'none', display: 'block', marginBottom: '24px' }}>
+          <div style={{ background: 'linear-gradient(135deg, rgba(234,88,12,0.1), rgba(234,88,12,0.05))', border: '1px solid rgba(234,88,12,0.3)', borderRadius: '8px', padding: '32px', transition: 'all 0.3s', cursor: 'pointer' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(234,88,12,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ea580c" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+                </div>
+                <div>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '20px', color: '#f1eae2', margin: 0, marginBottom: '4px' }}>Calendário de Prazos</h2>
+                  <p style={{ color: '#b8bfc8', fontSize: '14px', margin: 0 }}>Prazos processuais com alertas escalonados (7d, 3d, 1d) e notificação por e-mail.</p>
+                </div>
+              </div>
+              <ArrowRight style={{ width: '20px', height: '20px', color: '#ea580c', flexShrink: 0 }} />
+            </div>
+          </div>
+        </Link>
+
+        {/* ── GERADOR DE PETIÇÕES IA ── */}
+        <Link href="/admin-tools/petition-generator" style={{ textDecoration: 'none', display: 'block', marginBottom: '24px' }}>
+          <div style={{ background: 'linear-gradient(135deg, rgba(196,169,106,0.1), rgba(196,169,106,0.05))', border: '1px solid rgba(196,169,106,0.3)', borderRadius: '8px', padding: '32px', transition: 'all 0.3s', cursor: 'pointer' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(196,169,106,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c4a96a" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <div>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '20px', color: '#f1eae2', margin: 0, marginBottom: '4px' }}>Gerador de Petições com IA</h2>
+                  <p style={{ color: '#b8bfc8', fontSize: '14px', margin: 0 }}>Minutas automatizadas via Claude API, baseadas nos dados do lead e banco de jurisprudência.</p>
+                </div>
+              </div>
+              <ArrowRight style={{ width: '20px', height: '20px', color: '#c4a96a', flexShrink: 0 }} />
+            </div>
+          </div>
+        </Link>
+
         {/* ── BUSCAR NOTÍCIAS ── */}
         <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '32px', marginBottom: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { BarChart3, Eye, MessageCircle, FileText, Share2, Users, TrendingUp, RefreshCw, ArrowLeft, Trophy, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
+import { useAdminAuth } from '@/components/admin/AdminAuthContext'
 
 interface CampaignMetrics {
   slug: string
@@ -39,8 +40,7 @@ const categoryLabels: Record<string, string> = {
 }
 
 export default function CampaignAnalyticsPage() {
-  const [password, setPassword] = useState('')
-  const [authenticated, setAuthenticated] = useState(false)
+  const { token } = useAdminAuth()
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<AnalyticsData | null>(null)
   const [error, setError] = useState('')
@@ -50,7 +50,7 @@ export default function CampaignAnalyticsPage() {
     setError('')
     try {
       const res = await fetch('/api/campaign-track', {
-        headers: { 'Authorization': `Bearer ${password}` },
+        headers: { 'Authorization': `Bearer ${token}` },
       })
       const json = await res.json()
       if (!res.ok) {
@@ -65,33 +65,7 @@ export default function CampaignAnalyticsPage() {
     }
   }
 
-  function handleLogin(e: React.FormEvent) {
-    e.preventDefault()
-    setAuthenticated(true)
-    fetchAnalytics()
-  }
-
-  // Login
-  if (!authenticated) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#152138' }}>
-        <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '48px', maxWidth: '400px', width: '100%' }}>
-          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <BarChart3 style={{ width: '48px', height: '48px', color: '#c4a96a', margin: '0 auto 16px' }} />
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '24px', color: '#f1eae2', marginBottom: '8px' }}>Analytics de Campanhas</h1>
-            <p style={{ color: '#b8bfc8', fontSize: '14px' }}>Digite o NEWS_REVALIDATE_SECRET</p>
-          </div>
-          <form onSubmit={handleLogin}>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Secret key" required
-              style={{ width: '100%', padding: '12px 16px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: '#f1eae2', fontSize: '14px', marginBottom: '16px', outline: 'none', boxSizing: 'border-box' }} />
-            <button type="submit" style={{ width: '100%', padding: '12px', background: '#c4a96a', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Acessar
-            </button>
-          </form>
-        </div>
-      </div>
-    )
-  }
+  useEffect(() => { fetchAnalytics() }, [])
 
   const s = data?.summary
 
