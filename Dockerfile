@@ -18,7 +18,6 @@ RUN npm run build
 
 FROM base AS runner
 WORKDIR /app
-ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
@@ -29,5 +28,4 @@ RUN chown -R nextjs:nodejs /app
 USER nextjs
 EXPOSE 3000
 
-# migrate cria tabelas que faltam; || true garante que o app sobe mesmo se migrate falhar
-CMD ["bash", "-c", "npx payload migrate 2>/dev/null || true; npm run start"]
+CMD ["npm", "run", "start"]

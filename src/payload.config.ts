@@ -25,6 +25,12 @@ import { Homepage } from './globals/Homepage'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// Forçar push do schema em qualquer ambiente (cria tabelas faltando)
+// O Payload 3.x só faz push em NODE_ENV=development por padrão
+if (process.env.PAYLOAD_FORCE_SCHEMA_PUSH === 'true') {
+  process.env.NODE_ENV = process.env.NODE_ENV // preserve
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -54,7 +60,7 @@ export default buildConfig({
   ],
   globals: [
     Homepage,
-	SiteConfig,
+    SiteConfig,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -65,6 +71,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    push: true,
   }),
   sharp,
   plugins: [],
