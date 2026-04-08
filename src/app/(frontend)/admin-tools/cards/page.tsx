@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Lock, Download, Copy, Check, ArrowLeft, Image, Smartphone, RefreshCw } from 'lucide-react'
+import { Download, Copy, Check, ArrowLeft, Image, Smartphone, RefreshCw } from 'lucide-react'
 
 const TEMPLATES: Record<string, { label: string; desc: string; bgStart: string; bgEnd: string; accent: string; text: string; subtext: string; tagBg: string; tagText: string; ctaBg: string; ctaText: string }> = {
   editorial: { label: 'Editorial', desc: 'Sóbrio institucional', bgStart: '#152138', bgEnd: '#1c2d4a', accent: '#c4a96a', text: '#f1eae2', subtext: '#8b919a', tagBg: 'rgba(196,169,106,0.2)', tagText: '#c4a96a', ctaBg: '#c4a96a', ctaText: '#152138' },

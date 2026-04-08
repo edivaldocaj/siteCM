@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ArrowLeft, RefreshCw, Phone, Mail, Calendar, Star, Scale, Loader2, ChevronDown, ChevronUp, User, MessageCircle, ExternalLink, Filter } from 'lucide-react'
+import { ArrowLeft, RefreshCw, Phone, Mail, Calendar, Star, Loader2, ChevronDown, ChevronUp, User, MessageCircle, ExternalLink, Filter } from 'lucide-react'
 import Link from 'next/link'
+import { useAdminAuth } from '@/components/admin/AdminAuthContext'
 
 interface Lead {
   id: string
@@ -144,8 +145,7 @@ function getTimeSince(dateStr: string): string {
 }
 
 export default function LeadsKanbanPage() {
-  const [password, setPassword] = useState('')
-  const [authenticated, setAuthenticated] = useState(false)
+  const { token } = useAdminAuth()
   const [loading, setLoading] = useState(false)
   const [leads, setLeads] = useState<Lead[]>([])
   const [error, setError] = useState('')
@@ -157,18 +157,19 @@ export default function LeadsKanbanPage() {
     setError('')
     try {
       const res = await fetch('/api/leads', {
-        headers: { Authorization: `Bearer ${password}` },
+        headers: { Authorization: `Bearer ${token}` },
       })
       const json = await res.json()
       if (!res.ok) { setError(json.error || 'Erro'); return }
       setLeads(json.leads || [])
-      setAuthenticated(true)
     } catch {
       setError('Erro de conexão')
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => { fetchLeads() }, [])
 
   async function changeStatus(leadId: string, newStatus: string) {
     try {
@@ -180,7 +181,7 @@ export default function LeadsKanbanPage() {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${password}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ id: leadId, status: newStatus }),
       })
@@ -198,30 +199,6 @@ export default function LeadsKanbanPage() {
 
   const campaigns = [...new Set(leads.map(l => l.campaignSlug).filter(Boolean))]
 
-  if (!authenticated) {
-    return (
-      <div style={{ minHeight: '100vh', background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-        <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-          <Scale style={{ width: '48px', height: '48px', color: '#c4a96a', margin: '0 auto 16px' }} />
-          <h1 style={{ color: '#f1eae2', fontFamily: "'Playfair Display', serif", fontSize: '24px', marginBottom: '8px' }}>Kanban de Leads</h1>
-          <p style={{ color: '#b8bfc8', fontSize: '14px', marginBottom: '24px' }}>Pipeline visual de acompanhamento</p>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && fetchLeads()}
-            placeholder="Senha de acesso"
-            style={{ width: '100%', padding: '14px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#f1eae2', fontSize: '15px', marginBottom: '12px', textAlign: 'center' }}
-          />
-          <button onClick={fetchLeads} disabled={loading} style={{ width: '100%', padding: '14px', background: '#c4a96a', color: '#152138', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>
-            {loading ? 'Carregando...' : 'Acessar Kanban'}
-          </button>
-          {error && <p style={{ color: '#dc2626', fontSize: '13px', marginTop: '12px' }}>{error}</p>}
-          <Link href="/admin-tools" style={{ color: '#b8bfc8', fontSize: '13px', display: 'block', marginTop: '16px', textDecoration: 'none' }}>← Voltar</Link>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div style={{ minHeight: '100vh', background: '#0f172a', color: '#f1eae2', fontFamily: "'Source Sans 3', sans-serif" }}>

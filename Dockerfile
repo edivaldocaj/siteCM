@@ -29,5 +29,5 @@ RUN chown -R nextjs:nodejs /app
 USER nextjs
 EXPOSE 3000
 
-# Apenas aplica migrations pendentes (NÃO cria novas automaticamente)
-CMD ["bash", "-c", "echo 'y' | timeout 60 npx payload migrate 2>/dev/null || true; npm run start"]
+# migrate cria tabelas que faltam; || true garante que o app sobe mesmo se migrate falhar
+CMD ["bash", "-c", "npx payload migrate 2>/dev/null || true; npm run start"]

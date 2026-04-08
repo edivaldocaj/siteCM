@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Calendar, AlertTriangle, Clock, CheckCircle, ArrowLeft, RefreshCw, Scale, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Calendar, AlertTriangle, Clock, CheckCircle, ArrowLeft, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
+import { useAdminAuth } from '@/components/admin/AdminAuthContext'
 
 interface Deadline {
   id: string
@@ -31,8 +32,7 @@ const alertColors: Record<string, { bg: string; border: string; text: string }> 
 }
 
 export default function DeadlinesPage() {
-  const [password, setPassword] = useState('')
-  const [authenticated, setAuthenticated] = useState(false)
+  const { token } = useAdminAuth()
   const [loading, setLoading] = useState(false)
   const [deadlines, setDeadlines] = useState<Deadline[]>([])
   const [summary, setSummary] = useState<any>(null)
@@ -44,13 +44,12 @@ export default function DeadlinesPage() {
     setError('')
     try {
       const res = await fetch(`/api/deadlines?days=${days}`, {
-        headers: { Authorization: `Bearer ${password}` },
+        headers: { Authorization: `Bearer ${token}` },
       })
       const json = await res.json()
       if (!res.ok) { setError(json.error || 'Erro'); return }
       setDeadlines(json.deadlines || [])
       setSummary(json.summary || null)
-      setAuthenticated(true)
     } catch {
       setError('Erro de conexão')
     } finally {
@@ -58,19 +57,8 @@ export default function DeadlinesPage() {
     }
   }
 
-  if (!authenticated) {
-    return (
-      <div style={{ minHeight: '100vh', background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-        <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-          <Calendar style={{ width: '48px', height: '48px', color: '#c4a96a', margin: '0 auto 16px' }} />
-          <h1 style={{ color: '#f1eae2', fontFamily: "'Playfair Display', serif", fontSize: '24px', marginBottom: '24px' }}>Calendário de Prazos</h1>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === 'Enter' && fetchDeadlines()} placeholder="Senha" style={{ width: '100%', padding: '14px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#f1eae2', fontSize: '15px', marginBottom: '12px', textAlign: 'center' }} />
-          <button onClick={fetchDeadlines} disabled={loading} style={{ width: '100%', padding: '14px', background: '#c4a96a', color: '#152138', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>{loading ? 'Carregando...' : 'Acessar'}</button>
-          {error && <p style={{ color: '#dc2626', fontSize: '13px', marginTop: '12px' }}>{error}</p>}
-        </div>
-      </div>
-    )
-  }
+  useEffect(() => { fetchDeadlines() }, [])
+
 
   // Agrupar por semana
   const byWeek: Record<string, Deadline[]> = {}

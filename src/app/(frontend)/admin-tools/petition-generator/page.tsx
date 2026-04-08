@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
-import { FileText, Scale, Send, Loader2, ArrowLeft, Copy, CheckCircle, AlertTriangle } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { FileText, Send, Loader2, ArrowLeft, Copy, CheckCircle, AlertTriangle } from 'lucide-react'
 import Link from 'next/link'
+import { useAdminAuth } from '@/components/admin/AdminAuthContext'
 
 const categories = [
   { value: 'consumidor', label: 'Consumidor / Cível' },
@@ -13,8 +14,7 @@ const categories = [
 ]
 
 export default function PetitionGeneratorPage() {
-  const [password, setPassword] = useState('')
-  const [authenticated, setAuthenticated] = useState(false)
+  const { token } = useAdminAuth()
   const [leadId, setLeadId] = useState('')
   const [category, setCategory] = useState('consumidor')
   const [additionalContext, setAdditionalContext] = useState('')
@@ -34,7 +34,7 @@ export default function PetitionGeneratorPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${password}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ leadId: leadId.trim(), category, additionalContext }),
       })
@@ -54,20 +54,6 @@ export default function PetitionGeneratorPage() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  if (!authenticated) {
-    return (
-      <div style={{ minHeight: '100vh', background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-        <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-          <Scale style={{ width: '48px', height: '48px', color: '#c4a96a', margin: '0 auto 16px' }} />
-          <h1 style={{ color: '#f1eae2', fontFamily: "'Playfair Display', serif", fontSize: '24px', marginBottom: '8px' }}>Gerador de Petições</h1>
-          <p style={{ color: '#b8bfc8', fontSize: '14px', marginBottom: '24px' }}>Minutas com IA — revisão obrigatória</p>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === 'Enter' && setAuthenticated(true)} placeholder="Senha" style={{ width: '100%', padding: '14px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#f1eae2', fontSize: '15px', marginBottom: '12px', textAlign: 'center' }} />
-          <button onClick={() => setAuthenticated(true)} style={{ width: '100%', padding: '14px', background: '#c4a96a', color: '#152138', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>Acessar</button>
-          <Link href="/admin-tools" style={{ color: '#b8bfc8', fontSize: '13px', display: 'block', marginTop: '16px', textDecoration: 'none' }}>← Voltar</Link>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div style={{ minHeight: '100vh', background: '#0f172a', color: '#f1eae2', fontFamily: "'Source Sans 3', sans-serif" }}>

@@ -2,6 +2,12 @@ import type { CollectionConfig } from 'payload'
 
 export const CampaignEvents: CollectionConfig = {
   slug: 'campaign-events',
+  access: {
+    read: () => true,
+    create: () => true,
+    update: () => true,
+    delete: () => true,
+  },
   admin: {
     useAsTitle: 'eventType',
     defaultColumns: ['campaignSlug', 'eventType', 'createdAt'],

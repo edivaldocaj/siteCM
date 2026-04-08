@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { BarChart3, Users, TrendingUp, Target, Calendar, AlertTriangle, Star, ArrowLeft, RefreshCw, Loader2, Scale, Briefcase } from 'lucide-react'
+import { BarChart3, Users, TrendingUp, Target, Calendar, AlertTriangle, Star, ArrowLeft, RefreshCw, Loader2, Briefcase } from 'lucide-react'
 import Link from 'next/link'
+import { useAdminAuth } from '@/components/admin/AdminAuthContext'
 
 interface DashboardData {
   kpis: {
@@ -47,8 +48,7 @@ const sourceLabels: Record<string, string> = {
 }
 
 export default function DashboardPage() {
-  const [password, setPassword] = useState('')
-  const [authenticated, setAuthenticated] = useState(false)
+  const { token } = useAdminAuth()
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<DashboardData | null>(null)
   const [error, setError] = useState('')
@@ -58,12 +58,11 @@ export default function DashboardPage() {
     setError('')
     try {
       const res = await fetch('/api/dashboard', {
-        headers: { Authorization: `Bearer ${password}` },
+        headers: { Authorization: `Bearer ${token}` },
       })
       const json = await res.json()
       if (!res.ok) { setError(json.error || 'Erro'); return }
       setData(json)
-      setAuthenticated(true)
     } catch {
       setError('Erro de conexão')
     } finally {
@@ -71,30 +70,8 @@ export default function DashboardPage() {
     }
   }
 
-  if (!authenticated) {
-    return (
-      <div style={{ minHeight: '100vh', background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-        <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-          <Scale style={{ width: '48px', height: '48px', color: '#c4a96a', margin: '0 auto 16px' }} />
-          <h1 style={{ color: '#f1eae2', fontFamily: "'Playfair Display', serif", fontSize: '24px', marginBottom: '8px' }}>Dashboard Gerencial</h1>
-          <p style={{ color: '#b8bfc8', fontSize: '14px', marginBottom: '24px' }}>Cavalcante & Melo — Painel de KPIs</p>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && fetchDashboard()}
-            placeholder="Senha de acesso"
-            style={{ width: '100%', padding: '14px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#f1eae2', fontSize: '15px', marginBottom: '12px', textAlign: 'center' }}
-          />
-          <button onClick={fetchDashboard} disabled={loading} style={{ width: '100%', padding: '14px', background: '#c4a96a', color: '#152138', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>
-            {loading ? 'Acessando...' : 'Acessar Dashboard'}
-          </button>
-          {error && <p style={{ color: '#dc2626', fontSize: '13px', marginTop: '12px' }}>{error}</p>}
-          <Link href="/admin-tools" style={{ color: '#b8bfc8', fontSize: '13px', display: 'block', marginTop: '16px', textDecoration: 'none' }}>← Voltar</Link>
-        </div>
-      </div>
-    )
-  }
+  useEffect(() => { fetchDashboard() }, [])
+
 
   if (!data) return null
 
