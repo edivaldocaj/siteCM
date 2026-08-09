@@ -1,6 +1,7 @@
-'use client'
+﻿'use client'
 
-import { Phone, Calendar } from 'lucide-react'
+import Image from 'next/image'
+import { Calendar, MessageCircle } from 'lucide-react'
 
 interface HeroSectionProps {
   cmsData?: {
@@ -11,99 +12,76 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ cmsData }: HeroSectionProps) {
-  const buttonText = cmsData?.heroButtonText || 'Fale com um Advogado'
-  const subtitle = cmsData?.heroSubtitle || 'Assessoria jurídica completa com atendimento humanizado. Direito Digital, Civil, Consumidor, Tributário, Imobiliário e Defesa Criminal 24h.'
-  const hasCustomTitle = cmsData?.heroTitle && cmsData.heroTitle !== 'Defesa Especializada e Estratégica'
+  const buttonText = cmsData?.heroButtonText || 'Fale com um advogado'
+  const title = cmsData?.heroTitle || 'Advocacia com estrategia e solidez.'
+  const subtitle = cmsData?.heroSubtitle || 'Atendimento juridico em Natal/RN com analise tecnica, comunicacao direta e acompanhamento cuidadoso em cada etapa do caso.'
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'
+  const whatsappMessage = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || 'Ola! Gostaria de falar com um advogado.'
 
   return (
-    <section className="relative min-h-screen flex items-center gradient-navy overflow-hidden">
-      {/* Subtle geometric pattern overlay */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30z' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3C/svg%3E")`,
-        backgroundSize: '60px 60px',
-      }} />
+    <section className="ca-hero" aria-labelledby="home-hero-title">
+      <div className="ca-hero__media" aria-hidden="true" />
+      <div className="ca-hero__shade" aria-hidden="true" />
+      <div className="ca-hero__mark" aria-hidden="true">
+        <Image src="/brand/symbol-mono-light.svg" alt="" width={420} height={420} priority />
+      </div>
 
-      {/* Gradient accent */}
-      <div className="absolute top-0 right-0 w-1/2 h-full" style={{ background: 'linear-gradient(to left, color-mix(in srgb, var(--color-ca-steel-500) 5%, transparent), transparent)' }} />
+      <div className="ca-hero__inner">
+        <div className="ca-hero__content">
+          <Image
+            src="/brand/lockup-light.svg"
+            alt="Cavalcante Albuquerque"
+            width={330}
+            height={86}
+            className="ca-hero__lockup"
+            priority
+          />
 
-      <div className="container-wide mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-28 pb-20">
-        <div style={{ maxWidth: '48rem' }}>
-          {/* Tag */}
-          <div className="mb-8">
-            <span style={{
-              display: 'inline-block',
-              padding: '8px 16px',
-              border: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 30%, transparent)',
-              color: 'var(--color-brand-gold-dark)',
-              fontSize: '12px',
-              fontFamily: 'var(--font-body)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.25em',
-              borderRadius: '2px',
-            }}>
-              Advocacia Estratégica em Natal/RN
-            </span>
+          <div className="ca-hero__rule" aria-hidden="true">
+            <span />
+            <span />
+            <span />
           </div>
 
-          {/* Headline */}
-          <h1 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
-            fontWeight: 600,
-            lineHeight: 1.1,
-            marginBottom: '32px',
-          }}>
-            {hasCustomTitle ? (
-              <span style={{ color: 'var(--color-brand-champagne)' }}>{cmsData!.heroTitle}</span>
-            ) : (
-              <>
-                <span className="text-silver-gradient">Seu direito,</span>
-                <br />
-                <span style={{ color: 'var(--color-brand-champagne)' }}>nossa missão.</span>
-              </>
-            )}
+          <p className="ca-hero__eyebrow">Advocacia e Consultoria - Natal/RN</p>
+
+          <h1 id="home-hero-title" className="ca-hero__title">
+            {title}
           </h1>
 
-          {/* Subheadline */}
-          <p style={{
-            color: 'color-mix(in srgb, var(--color-ca-steel-400) 70%, transparent)',
-            fontFamily: 'var(--font-body)',
-            fontSize: 'clamp(16px, 2vw, 20px)',
-            lineHeight: 1.6,
-            marginBottom: '48px',
-            maxWidth: '36rem',
-          }}>
-            {subtitle}
-          </p>
+          <p className="ca-hero__subtitle">{subtitle}</p>
 
-          {/* CTAs */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+          <div className="ca-hero__actions">
             <a
-              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}?text=${encodeURIComponent(process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || 'Olá! Gostaria de falar com um advogado.')}`}
+              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-whatsapp"
-              style={{ fontSize: '15px' }}
+              className="ca-btn ca-btn--whatsapp"
             >
-              <Phone style={{ width: '20px', height: '20px' }} />
+              <MessageCircle aria-hidden="true" />
               {buttonText}
             </a>
-            <a href="/contato" className="btn-outline" style={{ fontSize: '15px' }}>
-              <Calendar style={{ width: '20px', height: '20px' }} />
-              Agendar Consulta
+            <a href="/contato" className="ca-btn ca-btn--invert">
+              <Calendar aria-hidden="true" />
+              Agendar consulta
             </a>
           </div>
-        </div>
 
-        {/* Decorative line */}
-        <div style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '1px',
-          background: 'linear-gradient(to right, transparent, color-mix(in srgb, var(--color-ca-steel-500) 30%, transparent), transparent)',
-        }} />
+          <dl className="ca-hero__signals" aria-label="Diferenciais do atendimento">
+            <div>
+              <dt>Atendimento</dt>
+              <dd>Direto com advogado</dd>
+            </div>
+            <div>
+              <dt>Metodo</dt>
+              <dd>Analise tecnica do caso</dd>
+            </div>
+            <div>
+              <dt>Urgencia</dt>
+              <dd>Plantao criminal 24h</dd>
+            </div>
+          </dl>
+        </div>
       </div>
     </section>
   )

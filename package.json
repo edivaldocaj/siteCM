@@ -23,7 +23,8 @@
     "seed:from-dump:ps1": "powershell -ExecutionPolicy Bypass -File scripts/build-preserve-seed.ps1",
     "bootstrap:new-db": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/bootstrap-new-db.ts",
     "preflight:production": "node scripts/production-preflight.cjs",
-    "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate"
+    "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
+    "release:check": "node scripts/release-check.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

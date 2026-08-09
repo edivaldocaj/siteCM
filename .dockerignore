@@ -9,3 +9,10 @@ LICENSE
 setup-vps.sh
 nginx.conf
 ecosystem.config.cjs
+
+*.zip
+db-exports
+.codex-specs
+test-results
+playwright-report
+blob-report

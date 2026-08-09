@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useRef, useState } from 'react'
 
@@ -9,10 +9,10 @@ interface TrustBarProps {
 }
 
 const defaultStats = [
-  { value: 15, suffix: '+', label: 'Anos de Experiência Combinada' },
-  { value: 500, suffix: '+', label: 'Clientes Atendidos' },
-  { value: 7, suffix: '', label: 'Áreas de Atuação' },
-  { value: 98, suffix: '%', label: 'Satisfação dos Clientes' },
+  { value: 7, suffix: '', label: 'Areas juridicas estruturadas' },
+  { value: 24, suffix: 'h', label: 'Resposta para urgencias penais' },
+  { value: 100, suffix: '%', label: 'Curadoria humana no atendimento' },
+  { value: 1, suffix: ':1', label: 'Acompanhamento direto do caso' },
 ]
 
 function AnimatedCounter({ target, suffix }: { target: number; suffix: string }) {
@@ -25,7 +25,7 @@ function AnimatedCounter({ target, suffix }: { target: number; suffix: string })
       ([entry]) => {
         if (entry.isIntersecting && !counted.current) {
           counted.current = true
-          const duration = 2000
+          const duration = 1200
           const start = performance.now()
           const step = (now: number) => {
             const progress = Math.min((now - start) / duration, 1)
@@ -36,61 +36,31 @@ function AnimatedCounter({ target, suffix }: { target: number; suffix: string })
           requestAnimationFrame(step)
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.35 },
     )
     if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()
   }, [target])
 
-  return (
-    <div ref={ref} style={{
-      fontSize: 'clamp(2rem, 4vw, 3rem)',
-      fontFamily: 'var(--font-display)',
-      fontWeight: 700,
-      color: 'var(--color-brand-navy)',
-    }}>
-      {count}{suffix}
-    </div>
-  )
+  return <strong ref={ref}>{count}{suffix}</strong>
 }
 
 export function TrustBar({ cmsData }: TrustBarProps) {
   const stats = cmsData?.stats?.length ? cmsData.stats : defaultStats
 
   return (
-    <section style={{
-      backgroundColor: 'var(--color-brand-champagne)',
-      borderTop: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 20%, transparent)',
-      borderBottom: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 20%, transparent)',
-    }}>
-      <div className="container-wide mx-auto" style={{ padding: '56px 16px' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '32px',
-        }}>
+    <section className="ca-trust" aria-label="Indicadores do escritorio">
+      <div className="ca-trust__inner">
+        <p className="ca-trust__label">Escritorio orientado por criterio, discricao e clareza.</p>
+        <div className="ca-trust__grid">
           {stats.map((stat) => (
-            <div key={stat.label} style={{ textAlign: 'center' }}>
-              <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-              <p style={{
-                color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)',
-                fontFamily: 'var(--font-body)',
-                fontSize: '13px',
-                marginTop: '8px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-              }}>
-                {stat.label}
-              </p>
+            <div className="ca-trust__item" key={stat.label}>
+              <AnimatedCounter target={Number(stat.value) || 0} suffix={stat.suffix || ''} />
+              <span>{stat.label}</span>
             </div>
           ))}
         </div>
       </div>
-      <style dangerouslySetInnerHTML={{ __html: `
-        @media (max-width: 768px) {
-          section > div > div { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-      `}} />
     </section>
   )
 }

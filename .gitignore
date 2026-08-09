@@ -48,3 +48,9 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# local payload/spec/export artifacts
+*.zip
+/db-exports/
+/.codex-specs/
+/tmp-seed-test/

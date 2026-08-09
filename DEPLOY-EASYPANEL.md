@@ -1,4 +1,4 @@
-﻿# Deploy no Easypanel via Git
+# Deploy no Easypanel via Git
 
 Este guia assume um projeto novo no Easypanel usando este repositorio Git e um Postgres novo.
 
@@ -45,6 +45,30 @@ ADMIN_EMAIL="seu-email@dominio.com" ADMIN_PASSWORD="senha-forte" npm run bootstr
 ```
 
 O bootstrap pode ser repetido. Ele atualiza dados iniciais por slug/e-mail e nao duplica registros.
+
+## Opcao automatica no primeiro start Docker
+
+Se quiser que o container rode as etapas iniciais sozinho na primeira subida, configure temporariamente:
+
+```bash
+RUN_PREFLIGHT_ON_START=true
+RUN_MIGRATIONS_ON_START=true
+BOOTSTRAP_NEW_DB_ON_START=true
+DB_WAIT_SECONDS=60
+ADMIN_EMAIL=seu-email@dominio.com
+ADMIN_PASSWORD=senha-forte
+```
+
+Depois que o bootstrap concluir e voce conseguir acessar o /admin, volte pelo menos estas variaveis para false:
+
+```bash
+BOOTSTRAP_NEW_DB_ON_START=false
+RUN_MIGRATIONS_ON_START=false
+```
+
+O container aguarda o Postgres por ate `DB_WAIT_SECONDS` quando migrations ou bootstrap estiverem ativos.
+
+Manter migrations automaticas em todo start pode ser aceitavel no come?o, mas para producao estavel prefira rodar npm run migrate de forma controlada antes do reload.
 
 ## Smoke test
 

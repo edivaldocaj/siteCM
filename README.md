@@ -66,6 +66,8 @@ npm run start
 
 Dados juridicos/institucionais nao confirmados ficam como `__PENDENTE__` para revisao no painel.
 
+Em Docker/Easypanel, tambem e possivel usar temporariamente `RUN_PREFLIGHT_ON_START=true`, `RUN_MIGRATIONS_ON_START=true` e `BOOTSTRAP_NEW_DB_ON_START=true` na primeira subida. Depois do primeiro acesso ao `/admin`, volte `BOOTSTRAP_NEW_DB_ON_START` e `RUN_MIGRATIONS_ON_START` para `false`.
+
 ## Exportar banco atual sem perder dados
 
 Se o Postgres so fica acessivel dentro do Easypanel, rode o dump no terminal do app/container ou no servidor onde o site esta rodando.
