@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
@@ -103,6 +103,7 @@ export function Header({
             priority
             className="ca-header__lockup"
           />
+          <span className="ca-header__brand-text" aria-hidden="true">Cavalcante Albuquerque</span>
         </Link>
 
         <nav className="ca-header__nav" aria-label="Navegacao principal">

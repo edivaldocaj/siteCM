@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import Image from 'next/image'
 import { Calendar, MessageCircle } from 'lucide-react'
@@ -28,14 +28,20 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
 
       <div className="ca-hero__inner">
         <div className="ca-hero__content">
-          <Image
-            src="/brand/lockup-light.svg"
-            alt="Cavalcante Albuquerque"
-            width={330}
-            height={86}
-            className="ca-hero__lockup"
-            priority
-          />
+          <div className="ca-hero__brand-lockup">
+            <Image
+              src="/brand/lockup-light.svg"
+              alt="Cavalcante Albuquerque"
+              width={330}
+              height={86}
+              className="ca-hero__lockup"
+              priority
+            />
+            <div className="ca-hero__brand-text" aria-hidden="true">
+              <strong>Cavalcante Albuquerque</strong>
+              <span>Sociedade de Advogados</span>
+            </div>
+          </div>
 
           <div className="ca-hero__rule" aria-hidden="true">
             <span />
