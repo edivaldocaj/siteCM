@@ -1,5 +1,6 @@
-﻿'use client'
+'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
@@ -10,7 +11,6 @@ function getInitials(name: string): string {
   return parts[0]?.[0]?.toUpperCase() || '?'
 }
 
-
 interface AboutPartnersProps {
   cmsData?: {
     sectionTitle?: string
@@ -20,85 +20,64 @@ interface AboutPartnersProps {
 }
 
 export function AboutPartners({ cmsData }: AboutPartnersProps) {
-  const sectionTitle = cmsData?.sectionTitle || 'Quem conduz o seu caso'
-  const sectionDesc = cmsData?.sectionDescription || ''
-
   const partners = cmsData?.partnersList?.length
-    ? cmsData.partnersList.map((p: any) => ({
-        name: p.name || '',
-        role: p.role || '',
-        areas: p.areas
-          ? p.areas.split(/[,|]/).map((a: string) => a.trim()).filter(Boolean)
-          : p.role.split(/[,|]/).map((a: string) => a.trim()).filter(Boolean),
-        initials: getInitials(p.name || ''),
-        bio: p.bio || '',
-        oab: p.oab || '',
-        photoUrl: p.photo?.url || null,
+    ? cmsData.partnersList.map((partner: any) => ({
+        name: partner.name || '',
+        role: partner.role || '',
+        areas: partner.areas
+          ? partner.areas.split(/[,|]/).map((area: string) => area.trim()).filter(Boolean)
+          : partner.role.split(/[,|]/).map((area: string) => area.trim()).filter(Boolean),
+        initials: getInitials(partner.name || ''),
+        bio: partner.bio || '',
+        oab: partner.oab || '',
+        photoUrl: partner.photo?.url || null,
       }))
     : []
 
   if (partners.length === 0) return null
 
   return (
-    <section style={{ padding: '80px 16px', backgroundColor: 'white' }}>
+    <section className="ca-about-team" aria-labelledby="about-partners-title">
       <div className="container-wide mx-auto">
-        <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-          <span style={{ color: 'var(--color-brand-gold-dark)', fontSize: '12px', fontFamily: 'var(--font-body)', textTransform: 'uppercase', letterSpacing: '0.25em', display: 'block', marginBottom: '16px' }}>
-            Quem Somos
-          </span>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 4vw, 3rem)', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '24px' }}>
-            {sectionTitle}
-          </h2>
-          <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontFamily: 'var(--font-body)', fontSize: '18px', maxWidth: '40rem', margin: '0 auto', lineHeight: 1.6 }}>
-            {sectionDesc}
-          </p>
+        <div className="ca-section-heading ca-section-heading--split">
+          <div>
+            <span className="ca-eyebrow">Quem Somos</span>
+            <h2 id="about-partners-title">{cmsData?.sectionTitle || 'Quem conduz o seu caso'}</h2>
+          </div>
+          {cmsData?.sectionDescription && <p>{cmsData.sectionDescription}</p>}
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '32px', maxWidth: '52rem', margin: '0 auto' }}>
+        <div className="ca-about-team__grid">
           {partners.map((partner) => (
-            <div key={partner.name} className="card-hover" style={{ background: 'var(--color-brand-cream)', borderRadius: '8px', padding: '32px', border: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)', textAlign: 'center' }}>
-              {partner.photoUrl ? (
-                <img src={partner.photoUrl} alt={partner.name} style={{ width: '96px', height: '96px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 24px', display: 'block' }} />
-              ) : (
-                <div style={{ width: '96px', height: '96px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--color-ca-navy-950), var(--color-ca-navy-800))', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
-                  <span className="text-silver-gradient" style={{ fontFamily: 'var(--font-display)', fontSize: '24px', fontWeight: 'bold' }}>
-                    {partner.initials}
-                  </span>
-                </div>
-              )}
-
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>
-                {partner.name}
-              </h3>
-              <p style={{ color: 'var(--color-brand-gold-dark)', fontSize: '14px', fontFamily: 'var(--font-body)', fontWeight: 500, marginBottom: partner.oab ? '4px' : '16px' }}>
-                {partner.role}
-              </p>
-              {partner.oab && (
-                <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 40%, transparent)', fontSize: '12px', marginBottom: '16px' }}>{partner.oab}</p>
-              )}
-
-              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', marginBottom: partner.bio ? '20px' : '0' }}>
-                {partner.areas.map((area: string) => (
-                  <span key={area} style={{ fontSize: '10px', fontFamily: 'var(--font-body)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)', background: 'white', padding: '4px 12px', borderRadius: '2px', border: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)' }}>
-                    {area}
-                  </span>
-                ))}
+            <article className="ca-about-team__card" key={partner.name}>
+              <div className="ca-about-team__portrait">
+                {partner.photoUrl ? (
+                  <Image src={partner.photoUrl} alt={partner.name} width={168} height={168} />
+                ) : (
+                  <span>{partner.initials}</span>
+                )}
               </div>
-
-              {partner.bio && (
-                <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.7 }}>
-                  {partner.bio}
-                </p>
-              )}
-            </div>
+              <div className="ca-about-team__body">
+                <h3>{partner.name}</h3>
+                <p className="ca-about-team__role">{partner.role}</p>
+                {partner.oab && <p className="ca-about-team__oab">{partner.oab}</p>}
+                {partner.areas.length > 0 && (
+                  <div className="ca-about-team__tags">
+                    {partner.areas.map((area: string) => (
+                      <span key={area}>{area}</span>
+                    ))}
+                  </div>
+                )}
+                {partner.bio && <p className="ca-about-team__bio">{partner.bio}</p>}
+              </div>
+            </article>
           ))}
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '48px' }}>
-          <Link href="/sobre" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--color-brand-gold-dark)', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.1em', textDecoration: 'none' }}>
-            ConheÃ§a nossa histÃ³ria <ArrowRight style={{ width: '16px', height: '16px' }} />
-          </Link>
-        </div>
+        <Link href="/sobre" className="ca-inline-link ca-about-team__link">
+          Conheca nossa historia
+          <ArrowRight size={16} />
+        </Link>
       </div>
     </section>
   )

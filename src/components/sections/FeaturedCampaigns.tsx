@@ -1,43 +1,22 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, AlertTriangle, Shield, Smartphone } from 'lucide-react'
+import { AlertTriangle, ArrowRight, Landmark, MonitorCheck, Shield } from 'lucide-react'
 
 const iconMap: Record<string, any> = {
   consumidor: AlertTriangle,
-  digital: Shield,
-  criminal: Smartphone,
-  imobiliario: AlertTriangle,
-  tributario: AlertTriangle,
+  digital: MonitorCheck,
+  criminal: Shield,
+  imobiliario: Landmark,
+  tributario: Landmark,
 }
-
-const defaultCampaigns = [
-  {
-    slug: 'fraudes-bancarias',
-    title: 'Fraudes Bancárias',
-    category: 'consumidor',
-    subtitle: 'Cobranças abusivas? Você pode ter direito a restituição.',
-  },
-  {
-    slug: 'vazamento-de-dados',
-    title: 'Vazamento de Dados',
-    category: 'digital',
-    subtitle: 'Seus dados foram expostos? Você tem direito a indenização.',
-  },
-  {
-    slug: 'golpes-online',
-    title: 'Golpes Online',
-    category: 'digital',
-    subtitle: 'Caiu em um golpe digital? Saiba como recuperar seu dinheiro.',
-  },
-]
 
 const categoryLabels: Record<string, string> = {
   consumidor: 'Consumidor',
   digital: 'LGPD / Digital',
   criminal: 'Criminal',
-  imobiliario: 'Imobiliário',
-  tributario: 'Tributário',
+  imobiliario: 'Imobiliario',
+  tributario: 'Tributario',
 }
 
 interface FeaturedCampaignsProps {
@@ -49,144 +28,43 @@ interface FeaturedCampaignsProps {
 }
 
 export function FeaturedCampaigns({ cmsCampaigns = [], cmsData }: FeaturedCampaignsProps) {
-  const campaigns = cmsCampaigns.length > 0 ? cmsCampaigns : defaultCampaigns
-  const sectionTitle = cmsData?.title || 'Campanhas Jurídicas'
-  const sectionSubtitle = cmsData?.subtitle || 'Ações coletivas e individuais em andamento. Verifique se o seu caso se encaixa.'
+  if (cmsCampaigns.length === 0) return null
 
   return (
-    <section className="section-padding" style={{ backgroundColor: 'var(--color-brand-cream)' }}>
+    <section className="ca-campaigns" aria-labelledby="featured-campaigns-title">
       <div className="container-wide mx-auto">
-        <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-          <span style={{
-            color: 'var(--color-brand-gold-dark)',
-            fontSize: '12px',
-            fontFamily: 'var(--font-body)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.25em',
-            display: 'block',
-            marginBottom: '16px',
-          }}>
-            Ações em Andamento
-          </span>
-          <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(1.75rem, 4vw, 3rem)',
-            fontWeight: 600,
-            color: 'var(--color-brand-navy)',
-            marginBottom: '24px',
-          }}>
-            {sectionTitle}
-          </h2>
-          <p style={{
-            color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)',
-            fontFamily: 'var(--font-body)',
-            fontSize: '18px',
-            maxWidth: '40rem',
-            margin: '0 auto',
-            lineHeight: 1.6,
-          }}>
-            {sectionSubtitle}
-          </p>
+        <div className="ca-section-heading">
+          <span className="ca-eyebrow">Acoes em andamento</span>
+          <h2 id="featured-campaigns-title">{cmsData?.title || 'Campanhas juridicas'}</h2>
+          <p>{cmsData?.subtitle || 'Acompanhe frentes de atendimento individual e coletivo abertas pelo escritorio.'}</p>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-          gap: '24px',
-        }}>
-          {campaigns.map((campaign: any) => {
+        <div className="ca-campaigns__grid">
+          {cmsCampaigns.map((campaign: any) => {
             const catKey = campaign.category || 'consumidor'
             const IconComponent = iconMap[catKey] || AlertTriangle
 
             return (
-              <Link
-                key={campaign.slug}
-                href={`/campanhas/${campaign.slug}`}
-                className="campaign-card"
-                style={{
-                  display: 'block',
-                  background: 'white',
-                  borderRadius: '8px',
-                  padding: '32px',
-                  border: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)',
-                  textDecoration: 'none',
-                  transition: 'all 0.5s',
-                  height: '100%',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-                  <span style={{
-                    fontSize: '11px',
-                    fontFamily: 'var(--font-body)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    color: 'var(--color-brand-gold-dark)',
-                    background: 'color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)',
-                    padding: '4px 12px',
-                    borderRadius: '2px',
-                  }}>
-                    {categoryLabels[catKey] || catKey}
-                  </span>
-                  <IconComponent style={{
-                    width: '32px',
-                    height: '32px',
-                    color: 'color-mix(in srgb, var(--color-ca-navy-950) 20%, transparent)',
-                    transition: 'color 0.3s',
-                  }} />
-                </div>
-
-                <h3 style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '20px',
-                  fontWeight: 600,
-                  color: 'var(--color-brand-navy)',
-                  marginBottom: '12px',
-                  transition: 'color 0.3s',
-                }}>
-                  {campaign.title}
-                </h3>
-
-                <p style={{
-                  color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  lineHeight: 1.6,
-                  marginBottom: '24px',
-                }}>
-                  {campaign.subtitle}
-                </p>
-
-                <span style={{
-                  color: 'var(--color-brand-gold-dark)',
-                  fontFamily: 'var(--font-body)',
-                  fontWeight: 600,
-                  fontSize: '12px',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  transition: 'gap 0.3s',
-                }}>
-                  Verificar meu caso <ArrowRight style={{ width: '14px', height: '14px' }} />
+              <Link key={campaign.slug} href={`/campanhas/${campaign.slug}`} className="ca-campaigns__card">
+                <span className="ca-campaigns__topline">
+                  {categoryLabels[catKey] || catKey}
+                  <IconComponent size={20} />
+                </span>
+                <h3>{campaign.title}</h3>
+                {campaign.subtitle && <p>{campaign.subtitle}</p>}
+                <span className="ca-inline-link">
+                  Verificar meu caso
+                  <ArrowRight size={15} />
                 </span>
               </Link>
             )
           })}
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '48px' }}>
-          <Link href="/campanhas" className="btn-primary">
-            Ver Todas as Campanhas
-          </Link>
-        </div>
+        <Link href="/campanhas" className="btn-primary ca-campaigns__all">
+          Ver todas as campanhas
+        </Link>
       </div>
-
-      <style dangerouslySetInnerHTML={{ __html: `
-        .campaign-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .campaign-card:hover h3 { color: var(--color-brand-gold-dark) !important; }
-        .campaign-card:hover svg { color: var(--color-brand-gold-dark) !important; }
-      `}} />
     </section>
   )
 }

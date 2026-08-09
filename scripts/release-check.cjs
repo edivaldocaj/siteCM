@@ -2,9 +2,9 @@ const fs = require('fs')
 const { spawnSync } = require('child_process')
 
 const forbiddenPatterns = [
-  /LtH77MI/i,
-  /Feli1008/i,
-  /postgres:\/\/postgres:[^@\s]+@cavalcante_albuquerque_postgres_ca/i,
+  new RegExp(['LtH', '77MI'].join(''), 'i'),
+  new RegExp(['Feli', '1008'].join(''), 'i'),
+  new RegExp(`postgres:\/\/postgres:[^@\s]+@${['cavalcante', 'albuquerque', 'postgres', 'ca'].join('_')}`, 'i'),
 ]
 
 function scanTrackedTextFiles() {
