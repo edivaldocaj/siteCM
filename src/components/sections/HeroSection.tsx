@@ -24,7 +24,7 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
       }} />
 
       {/* Gradient accent */}
-      <div className="absolute top-0 right-0 w-1/2 h-full" style={{ background: 'linear-gradient(to left, rgba(196,169,106,0.05), transparent)' }} />
+      <div className="absolute top-0 right-0 w-1/2 h-full" style={{ background: 'linear-gradient(to left, color-mix(in srgb, var(--color-ca-steel-500) 5%, transparent), transparent)' }} />
 
       <div className="container-wide mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-28 pb-20">
         <div style={{ maxWidth: '48rem' }}>
@@ -33,7 +33,7 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
             <span style={{
               display: 'inline-block',
               padding: '8px 16px',
-              border: '1px solid rgba(196,169,106,0.3)',
+              border: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 30%, transparent)',
               color: 'var(--color-brand-gold-dark)',
               fontSize: '12px',
               fontFamily: 'var(--font-body)',
@@ -66,7 +66,7 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
 
           {/* Subheadline */}
           <p style={{
-            color: 'rgba(184,191,200,0.7)',
+            color: 'color-mix(in srgb, var(--color-ca-steel-400) 70%, transparent)',
             fontFamily: 'var(--font-body)',
             fontSize: 'clamp(16px, 2vw, 20px)',
             lineHeight: 1.6,
@@ -102,7 +102,7 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
           left: 0,
           right: 0,
           height: '1px',
-          background: 'linear-gradient(to right, transparent, rgba(196,169,106,0.3), transparent)',
+          background: 'linear-gradient(to right, transparent, color-mix(in srgb, var(--color-ca-steel-500) 30%, transparent), transparent)',
         }} />
       </div>
     </section>

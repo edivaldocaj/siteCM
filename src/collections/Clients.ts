@@ -1,7 +1,14 @@
 import type { CollectionConfig } from 'payload'
+import { adminOnly, adminOrStaff, fieldAdminOnly } from '../access'
 
 export const Clients: CollectionConfig = {
   slug: 'clients',
+  access: {
+    read: adminOrStaff,
+    create: adminOrStaff,
+    update: adminOrStaff,
+    delete: adminOnly,
+  },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'cpf', 'accessToken', 'active'],
@@ -9,7 +16,7 @@ export const Clients: CollectionConfig = {
   },
   fields: [
     { name: 'name', type: 'text', required: true, label: 'Nome Completo' },
-    { name: 'cpf', type: 'text', required: true, label: 'CPF', admin: { description: 'Pode conter pontos e traços (ex: 123.456.789-00)' } },
+    { name: 'cpf', type: 'text', required: true, label: 'CPF', admin: { description: 'Pode conter pontos e traÃ§os (ex: 123.456.789-00)' } },
     { name: 'email', type: 'email', label: 'E-mail' },
     { name: 'phone', type: 'text', label: 'Telefone / WhatsApp' },
     {
@@ -17,25 +24,35 @@ export const Clients: CollectionConfig = {
       type: 'array',
       label: 'Processos',
       fields: [
-        { name: 'processNumber', type: 'text', required: true, label: 'Número do Processo (CNJ)', admin: { description: 'Formato: NNNNNNN-DD.AAAA.J.TR.OOOO' } },
+        { name: 'processNumber', type: 'text', required: true, label: 'NÃºmero do Processo (CNJ)', admin: { description: 'Formato: NNNNNNN-DD.AAAA.J.TR.OOOO' } },
         { name: 'tribunal', type: 'select', label: 'Tribunal', options: [
           { label: 'TJRN', value: 'tjrn' },
-          { label: 'TRT 21ª Região', value: 'trt21' },
-          { label: 'TRF 5ª Região', value: 'trf5' },
+          { label: 'TRT 21Âª RegiÃ£o', value: 'trt21' },
+          { label: 'TRF 5Âª RegiÃ£o', value: 'trf5' },
           { label: 'STJ', value: 'stj' },
           { label: 'STF', value: 'stf' },
           { label: 'Outro', value: 'outro' },
         ]},
-        { name: 'description', type: 'text', label: 'Descrição / Tipo de Ação' },
-        { name: 'attorney', type: 'select', label: 'Advogado Responsável', options: [
+        { name: 'description', type: 'text', label: 'DescriÃ§Ã£o / Tipo de AÃ§Ã£o' },
+        { name: 'attorney', type: 'select', label: 'Advogado ResponsÃ¡vel', options: [
           { label: 'Dr. Edivaldo Cavalcante', value: 'edivaldo' },
           { label: 'Dra. Gabrielly Melo', value: 'gabrielly' },
         ]},
-        { name: 'lawyerSummary', type: 'textarea', label: 'Resumo / Parecer do Advogado (Exibido ao Cliente)' },
+        {
+          name: 'attorneyRef',
+          type: 'relationship',
+          relationTo: 'team',
+          label: 'Advogado Responsável (Team)',
+          filterOptions: { active: { equals: true } },
+          admin: { description: 'Campo temporário para migração. Mantém attorney legado.' },
+        },        { name: 'lawyerSummary', type: 'textarea', label: 'Resumo / Parecer do Advogado (Exibido ao Cliente)' },
       ],
     },
-    { name: 'accessToken', type: 'text', required: true, unique: true, label: 'Token de Acesso', admin: { description: 'Token único para o cliente acessar o portal.' } },
+    { name: 'accessToken', type: 'text', required: true, unique: true, label: 'Token de Acesso', admin: { description: 'Token Ãºnico para o cliente acessar o portal.' }, access: { read: fieldAdminOnly, update: fieldAdminOnly } },
     { name: 'active', type: 'checkbox', label: 'Acesso Ativo', defaultValue: true },
-    { name: 'notes', type: 'textarea', label: 'Observações Internas' },
+    { name: 'notes', type: 'textarea', label: 'ObservaÃ§Ãµes Internas' },
   ],
 }
+
+
+

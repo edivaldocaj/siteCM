@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Star, Send, CheckCircle, MessageCircle, Loader2 } from 'lucide-react'
+import { NPS_CONSENT_TEXT } from '@/lib/public-form-security'
 
 interface NpsSurveyProps {
   clientToken: string
@@ -18,6 +19,8 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
   const [npsId, setNpsId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [consentAccepted, setConsentAccepted] = useState(false)
+  const [formStartedAt] = useState(() => Date.now())
 
   const scoreLabels: Record<number, string> = {
     0: 'Péssimo', 1: 'Muito ruim', 2: 'Ruim', 3: 'Razoável', 4: 'Abaixo da média',
@@ -26,6 +29,10 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
 
   async function submitNps() {
     if (score === null) return
+    if (!consentAccepted) {
+      setError('Confirme o consentimento para enviar.')
+      return
+    }
     setLoading(true)
     setError('')
 
@@ -33,7 +40,7 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
       const res = await fetch('/api/nps', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clientToken, score, feedback, processNumber }),
+        body: JSON.stringify({ clientToken, score, feedback, processNumber, website: '', formStartedAt, consentAccepted, consentText: NPS_CONSENT_TEXT }),
       })
       const data = await res.json()
 
@@ -78,7 +85,7 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
 
   const getScoreColor = (s: number) => {
     if (s <= 6) return '#dc2626'
-    if (s <= 8) return '#c4a96a'
+    if (s <= 8) return 'var(--color-ca-steel-500)'
     return '#25D366'
   }
 
@@ -92,10 +99,10 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
         textAlign: 'center',
       }}>
         <CheckCircle style={{ width: '48px', height: '48px', color: '#25D366', margin: '0 auto 16px' }} />
-        <h3 style={{ color: '#f1eae2', fontFamily: "'Playfair Display', serif", fontSize: '20px', marginBottom: '8px' }}>
+        <h3 style={{ color: 'var(--color-ca-platinum-100)', fontFamily: "'Playfair Display', serif", fontSize: '20px', marginBottom: '8px' }}>
           Obrigado pela sua avaliação!
         </h3>
-        <p style={{ color: '#b8bfc8', fontSize: '14px' }}>
+        <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px' }}>
           Sua opinião é fundamental para melhorarmos nossos serviços.
         </p>
       </div>
@@ -112,10 +119,10 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
       {/* Score Step */}
       {step === 'score' && (
         <>
-          <h3 style={{ color: '#f1eae2', fontFamily: "'Playfair Display', serif", fontSize: '20px', marginBottom: '8px', textAlign: 'center' }}>
+          <h3 style={{ color: 'var(--color-ca-platinum-100)', fontFamily: "'Playfair Display', serif", fontSize: '20px', marginBottom: '8px', textAlign: 'center' }}>
             Como você avalia nosso atendimento?
           </h3>
-          <p style={{ color: '#b8bfc8', fontSize: '13px', textAlign: 'center', marginBottom: '24px' }}>
+          <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '13px', textAlign: 'center', marginBottom: '24px' }}>
             De 0 a 10, qual a probabilidade de recomendar nosso escritório?
           </p>
 
@@ -132,7 +139,7 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
                   borderRadius: '8px',
                   border: score === n ? `2px solid ${getScoreColor(n)}` : '1px solid rgba(255,255,255,0.1)',
                   background: score === n ? `${getScoreColor(n)}20` : 'rgba(255,255,255,0.04)',
-                  color: score === n || hoveredScore === n ? getScoreColor(hoveredScore ?? n) : '#b8bfc8',
+                  color: score === n || hoveredScore === n ? getScoreColor(hoveredScore ?? n) : 'var(--color-ca-steel-400)',
                   fontSize: '16px',
                   fontWeight: score === n ? 700 : 400,
                   cursor: 'pointer',
@@ -167,8 +174,8 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
               style={{
                 width: '100%',
                 padding: '14px',
-                background: '#c4a96a',
-                color: '#152138',
+                background: 'var(--color-ca-steel-500)',
+                color: 'var(--color-ca-navy-950)',
                 border: 'none',
                 borderRadius: '8px',
                 fontSize: '15px',
@@ -185,10 +192,10 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
       {/* Feedback Step */}
       {step === 'feedback' && (
         <>
-          <h3 style={{ color: '#f1eae2', fontFamily: "'Playfair Display', serif", fontSize: '20px', marginBottom: '8px', textAlign: 'center' }}>
+          <h3 style={{ color: 'var(--color-ca-platinum-100)', fontFamily: "'Playfair Display', serif", fontSize: '20px', marginBottom: '8px', textAlign: 'center' }}>
             Quer nos contar mais?
           </h3>
-          <p style={{ color: '#b8bfc8', fontSize: '13px', textAlign: 'center', marginBottom: '24px' }}>
+          <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '13px', textAlign: 'center', marginBottom: '24px' }}>
             Seu comentário nos ajuda a melhorar (opcional).
           </p>
 
@@ -203,13 +210,18 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
               background: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.1)',
               borderRadius: '8px',
-              color: '#f1eae2',
+              color: 'var(--color-ca-platinum-100)',
               fontSize: '14px',
               resize: 'vertical',
               marginBottom: '16px',
               fontFamily: "'Source Sans 3', sans-serif",
             }}
           />
+
+          <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', color: 'var(--color-ca-steel-400)', fontSize: '12px', lineHeight: 1.5, marginBottom: '14px' }}>
+            <input type="checkbox" checked={consentAccepted} onChange={(e) => setConsentAccepted(e.target.checked)} required style={{ marginTop: '3px' }} />
+            <span>{NPS_CONSENT_TEXT}</span>
+          </label>
 
           {error && (
             <p style={{ color: '#dc2626', fontSize: '13px', marginBottom: '12px', textAlign: 'center' }}>{error}</p>
@@ -222,7 +234,7 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
                 flex: 1,
                 padding: '14px',
                 background: 'rgba(255,255,255,0.06)',
-                color: '#b8bfc8',
+                color: 'var(--color-ca-steel-400)',
                 border: '1px solid rgba(255,255,255,0.1)',
                 borderRadius: '8px',
                 fontSize: '14px',
@@ -237,8 +249,8 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
               style={{
                 flex: 2,
                 padding: '14px',
-                background: '#c4a96a',
-                color: '#152138',
+                background: 'var(--color-ca-steel-500)',
+                color: 'var(--color-ca-navy-950)',
                 border: 'none',
                 borderRadius: '8px',
                 fontSize: '15px',
@@ -262,11 +274,11 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
       {step === 'testimonial' && (
         <>
           <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-            <Star style={{ width: '48px', height: '48px', color: '#c4a96a', fill: '#c4a96a', margin: '0 auto 12px' }} />
-            <h3 style={{ color: '#f1eae2', fontFamily: "'Playfair Display', serif", fontSize: '20px', marginBottom: '8px' }}>
+            <Star style={{ width: '48px', height: '48px', color: 'var(--color-ca-steel-500)', fill: 'var(--color-ca-steel-500)', margin: '0 auto 12px' }} />
+            <h3 style={{ color: 'var(--color-ca-platinum-100)', fontFamily: "'Playfair Display', serif", fontSize: '20px', marginBottom: '8px' }}>
               Que bom que gostou!
             </h3>
-            <p style={{ color: '#b8bfc8', fontSize: '14px' }}>
+            <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px' }}>
               Gostaria de deixar um depoimento? Ele poderá ser exibido em nosso site para ajudar outras pessoas.
             </p>
           </div>
@@ -274,7 +286,7 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
           <textarea
             value={testimonial}
             onChange={(e) => setTestimonial(e.target.value)}
-            placeholder="Conte como foi sua experiência com o escritório Cavalcante & Melo..."
+            placeholder="Conte como foi sua experiência com o escritório Cavalcante Albuquerque..."
             rows={4}
             style={{
               width: '100%',
@@ -282,7 +294,7 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
               background: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.1)',
               borderRadius: '8px',
-              color: '#f1eae2',
+              color: 'var(--color-ca-platinum-100)',
               fontSize: '14px',
               resize: 'vertical',
               marginBottom: '16px',
@@ -297,7 +309,7 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
                 flex: 1,
                 padding: '14px',
                 background: 'rgba(255,255,255,0.06)',
-                color: '#b8bfc8',
+                color: 'var(--color-ca-steel-400)',
                 border: '1px solid rgba(255,255,255,0.1)',
                 borderRadius: '8px',
                 fontSize: '14px',
@@ -312,8 +324,8 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
               style={{
                 flex: 2,
                 padding: '14px',
-                background: '#c4a96a',
-                color: '#152138',
+                background: 'var(--color-ca-steel-500)',
+                color: 'var(--color-ca-navy-950)',
                 border: 'none',
                 borderRadius: '8px',
                 fontSize: '15px',
@@ -335,3 +347,4 @@ export function NpsSurvey({ clientToken, processNumber, onComplete }: NpsSurveyP
     </div>
   )
 }
+

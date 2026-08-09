@@ -11,8 +11,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV DATABASE_URL=postgres://postgres:CmAdmin2026@cavalcante_melo_cavalcante_melo-postgres:5432/cavalcantemelo
-ENV PAYLOAD_SECRET=temp_build_secret_32chars_long!!
+ARG DATABASE_URL=postgres://postgres:postgres@localhost:5432/payload_build
+ARG PAYLOAD_SECRET=build_time_secret_replace_at_runtime
+ENV DATABASE_URL=$DATABASE_URL
+ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
 RUN mkdir -p src/migrations
 RUN npm run build
 
@@ -30,3 +32,5 @@ USER nextjs
 EXPOSE 3000
 
 CMD ["npm", "run", "start"]
+
+

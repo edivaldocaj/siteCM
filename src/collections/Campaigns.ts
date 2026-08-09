@@ -1,7 +1,14 @@
 import type { CollectionConfig } from 'payload'
+import { activeCampaignOnly, adminOnly, adminOrEditor } from '../access'
 
 export const Campaigns: CollectionConfig = {
   slug: 'campaigns',
+  access: {
+    read: activeCampaignOnly,
+    create: adminOrEditor,
+    update: adminOrEditor,
+    delete: adminOnly,
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'status', 'featuredOnHomepage'],
@@ -154,3 +161,4 @@ export const Campaigns: CollectionConfig = {
     },
   ],
 }
+

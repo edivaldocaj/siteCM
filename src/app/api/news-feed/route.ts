@@ -1,6 +1,9 @@
+import { createHash } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { requireAdminRole } from '@/lib/admin-auth'
+import { getBearerToken, getRequiredSecret, safeCompare } from '@/lib/secrets'
 
 const RSS_SOURCES = [
   { url: 'https://www.conjur.com.br/rss.xml', name: 'Conjur' },
@@ -9,20 +12,20 @@ const RSS_SOURCES = [
 
 const GOOGLE_NEWS_QUERIES = [
   { query: 'direito consumidor Brasil', category: 'direito-consumidor' },
-  { query: 'LGPD proteção dados', category: 'lgpd' },
+  { query: 'LGPD proteÃ§Ã£o dados', category: 'lgpd' },
   { query: 'direito penal criminal Brasil', category: 'direito-penal' },
-  { query: 'direito imobiliário usucapião', category: 'direito-imobiliario' },
-  { query: 'STJ STF jurisprudência', category: 'direito-tributario' },
+  { query: 'direito imobiliÃ¡rio usucapiÃ£o', category: 'direito-imobiliario' },
+  { query: 'STJ STF jurisprudÃªncia', category: 'direito-tributario' },
 ]
 
 function categorize(title: string): string {
   const t = title.toLowerCase()
   if (t.includes('lgpd') || t.includes('dados') || t.includes('digital') || t.includes('cyber') || t.includes('anpd')) return 'lgpd'
-  if (t.includes('consumidor') || t.includes('banco') || t.includes('negativação') || t.includes('indenização') || t.includes('juros')) return 'direito-consumidor'
+  if (t.includes('consumidor') || t.includes('banco') || t.includes('negativaÃ§Ã£o') || t.includes('indenizaÃ§Ã£o') || t.includes('juros')) return 'direito-consumidor'
   if (t.includes('penal') || t.includes('preso') || t.includes('habeas') || t.includes('crime') || t.includes('criminal')) return 'direito-penal'
-  if (t.includes('imobiliário') || t.includes('usucapião') || t.includes('imóvel') || t.includes('fundiária')) return 'direito-imobiliario'
-  if (t.includes('tributário') || t.includes('fiscal') || t.includes('imposto') || t.includes('tributo')) return 'direito-tributario'
-  if (t.includes('licitação') || t.includes('contrato administrativo') || t.includes('tce') || t.includes('tcu')) return 'licitacoes'
+  if (t.includes('imobiliÃ¡rio') || t.includes('usucapiÃ£o') || t.includes('imÃ³vel') || t.includes('fundiÃ¡ria')) return 'direito-imobiliario'
+  if (t.includes('tributÃ¡rio') || t.includes('fiscal') || t.includes('imposto') || t.includes('tributo')) return 'direito-tributario'
+  if (t.includes('licitaÃ§Ã£o') || t.includes('contrato administrativo') || t.includes('tce') || t.includes('tcu')) return 'licitacoes'
   return 'geral'
 }
 
@@ -36,6 +39,67 @@ function slugify(text: string): string {
     .substring(0, 80)
 }
 
+function buildSourceHash(article: { sourceUrl?: string; title: string; source?: string }) {
+  const identity = [article.sourceUrl || '', article.source || '', article.title]
+    .join('|')
+    .trim()
+    .toLowerCase()
+  return createHash('sha256').update(identity).digest('hex')
+}
+
+function scoreArticle(article: { title: string; excerpt?: string; category?: string }) {
+  const text = `${article.title} ${article.excerpt || ''}`.toLowerCase()
+  let score = article.category && article.category !== 'geral' ? 50 : 30
+
+  const highIntentTerms = ['stj', 'stf', 'lgpd', 'anpd', 'habeas corpus', 'indenizacao', 'consumidor', 'tributario', 'imobiliario', 'licitacao']
+  for (const term of highIntentTerms) {
+    if (text.includes(term)) score += 5
+  }
+
+  return Math.min(score, 100)
+}
+
+function buildAiSummary(article: { title: string; excerpt?: string; source?: string }) {
+  const base = article.excerpt || article.title
+  return `Rascunho para curadoria: ${base}`.substring(0, 1000)
+}
+
+function addDays(date: Date, days: number) {
+  const next = new Date(date)
+  next.setDate(next.getDate() + days)
+  return next
+}
+
+
+
+async function createAutomationRun(payload: any, task: string) {
+  try {
+    return await payload.create({
+      collection: 'automation-runs',
+      data: {
+        task,
+        status: 'running',
+        startedAt: new Date().toISOString(),
+      },
+    })
+  } catch {
+    return null
+  }
+}
+
+async function finishAutomationRun(payload: any, runId: string | number | undefined, data: Record<string, unknown>) {
+  if (!runId) return
+  try {
+    await payload.update({
+      collection: 'automation-runs',
+      id: runId,
+      data: {
+        ...data,
+        finishedAt: new Date().toISOString(),
+      },
+    })
+  } catch {}
+}
 async function fetchRSS(url: string): Promise<any[]> {
   try {
     const res = await fetch(url, { signal: AbortSignal.timeout(10000) })
@@ -80,11 +144,19 @@ async function fetchGoogleNews(query: string): Promise<any[]> {
 }
 
 export async function POST(req: NextRequest) {
-  const authHeader = req.headers.get('authorization')
-  const secret = process.env.NEWS_REVALIDATE_SECRET || 'cm2026admin'
+  const bearerToken = getBearerToken(req.headers)
+  if (bearerToken) {
+    const secret = getRequiredSecret('CRON_SECRET')
+    if (!secret) {
+      return NextResponse.json({ error: 'CRON_SECRET não configurado.' }, { status: 503 })
+    }
 
-  if (authHeader !== `Bearer ${secret}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (!safeCompare(bearerToken, secret)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+  } else {
+    const denied = await requireAdminRole(req, ['admin', 'editor'])
+    if (denied) return denied
   }
 
   let allArticles: any[] = []
@@ -116,17 +188,33 @@ export async function POST(req: NextRequest) {
   const fetched = allArticles.length
   let saved = 0
 
+  let payload: any = null
+  let run: any = null
+
   try {
-    const payload = await getPayload({ config: configPromise })
+    payload = await getPayload({ config: configPromise })
+    run = await createAutomationRun(payload, 'news-feed')
+
+    const automationConfig = await (payload as any).findGlobal({ slug: 'automation-config' }).catch(() => null)
+    const retentionDays = Number(automationConfig?.newsRetentionDays || 90)
 
     for (const article of allArticles) {
       const slug = slugify(article.title)
       if (!slug) continue
 
+      const sourceHash = buildSourceHash(article)
+      const relevanceScore = scoreArticle(article)
+      const expiresAt = addDays(new Date(), retentionDays).toISOString()
+
       try {
         const existing = await (payload as any).find({
           collection: 'news-articles',
-          where: { slug: { equals: slug } },
+          where: {
+            or: [
+              { slug: { equals: slug } },
+              { sourceHash: { equals: sourceHash } },
+            ],
+          },
           limit: 1,
         })
 
@@ -139,6 +227,10 @@ export async function POST(req: NextRequest) {
               excerpt: (article.excerpt || article.title).substring(0, 300),
               sourceUrl: article.sourceUrl,
               source: article.source,
+              sourceHash,
+              relevanceScore,
+              aiSummary: buildAiSummary(article),
+              expiresAt,
               category: article.category,
               status: 'pending',
               autoImported: true,
@@ -152,9 +244,29 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    await finishAutomationRun(payload, run?.id, {
+      status: 'success',
+      itemsIn: fetched,
+      itemsOut: saved,
+      payload: { fetched, saved },
+    })
+
     return NextResponse.json({ success: true, fetched, saved })
   } catch (e) {
+    const message = e instanceof Error ? e.message : 'CMS not available'
+    if (payload) {
+      await finishAutomationRun(payload, run?.id, {
+        status: 'error',
+        itemsIn: fetched,
+        itemsOut: saved,
+        errorMessage: message,
+        payload: { fetched, saved },
+      })
+    }
     console.error('[News Feed] Payload error:', e)
     return NextResponse.json({ success: false, error: 'CMS not available', fetched }, { status: 500 })
   }
 }
+
+
+

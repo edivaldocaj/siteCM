@@ -1,34 +1,8 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react'
 
-const defaultTestimonials = [
-  {
-    text: 'Fui negativado indevidamente e não sabia o que fazer. A equipe do escritório resolveu tudo de forma rápida e ainda consegui uma indenização. Recomendo demais!',
-    authorName: 'M.S.',
-    caseType: 'Negativação Indevida',
-    rating: 5,
-  },
-  {
-    text: 'Minha empresa precisava de adequação à LGPD e o Dr. Edivaldo conduziu todo o processo com excelência. Profissional extremamente competente.',
-    authorName: 'R.A.',
-    caseType: 'LGPD Empresarial',
-    rating: 5,
-  },
-  {
-    text: 'Situação muito difícil envolvendo um familiar preso. O atendimento foi imediato, acolhedor e eficiente. Conseguiram o habeas corpus em tempo recorde.',
-    authorName: 'L.F.',
-    caseType: 'Habeas Corpus',
-    rating: 5,
-  },
-  {
-    text: 'A Dra. Gabrielly cuidou do meu processo imobiliário com toda atenção. Resolveu uma disputa que já durava anos. Muito grata pelo profissionalismo.',
-    authorName: 'C.P.',
-    caseType: 'Direito Imobiliário',
-    rating: 5,
-  },
-]
 
 interface TestimonialsCarouselProps {
   cmsTestimonials?: any[]
@@ -38,7 +12,7 @@ interface TestimonialsCarouselProps {
 }
 
 export function TestimonialsCarousel({ cmsTestimonials = [], cmsData }: TestimonialsCarouselProps) {
-  const testimonials = cmsTestimonials.length > 0 ? cmsTestimonials : defaultTestimonials
+  const testimonials = cmsTestimonials
   const sectionTitle = cmsData?.title || 'O que nossos clientes dizem'
   const [current, setCurrent] = useState(0)
 
@@ -85,7 +59,7 @@ export function TestimonialsCarousel({ cmsTestimonials = [], cmsData }: Testimon
             left: '-16px',
             width: '64px',
             height: '64px',
-            color: 'rgba(196,169,106,0.1)',
+            color: 'color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)',
           }} />
 
           <div style={{ textAlign: 'center', padding: '0 32px' }}>
@@ -124,7 +98,7 @@ export function TestimonialsCarousel({ cmsTestimonials = [], cmsData }: Testimon
               {t.authorName || t.author_name}
             </p>
             <p style={{
-              color: 'rgba(184,191,200,0.5)',
+              color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)',
               fontFamily: 'var(--font-body)',
               fontSize: '14px',
             }}>
@@ -141,9 +115,9 @@ export function TestimonialsCarousel({ cmsTestimonials = [], cmsData }: Testimon
                   width: '48px',
                   height: '48px',
                   borderRadius: '50%',
-                  border: '1px solid rgba(184,191,200,0.2)',
+                  border: '1px solid color-mix(in srgb, var(--color-ca-steel-400) 20%, transparent)',
                   background: 'none',
-                  color: 'rgba(184,191,200,0.6)',
+                  color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -165,7 +139,7 @@ export function TestimonialsCarousel({ cmsTestimonials = [], cmsData }: Testimon
                       width: i === current ? '32px' : '10px',
                       height: '10px',
                       borderRadius: '5px',
-                      background: i === current ? 'var(--color-brand-gold-dark)' : 'rgba(184,191,200,0.3)',
+                      background: i === current ? 'var(--color-brand-gold-dark)' : 'color-mix(in srgb, var(--color-ca-steel-400) 30%, transparent)',
                       border: 'none',
                       cursor: 'pointer',
                       transition: 'all 0.3s',
@@ -181,16 +155,16 @@ export function TestimonialsCarousel({ cmsTestimonials = [], cmsData }: Testimon
                   width: '48px',
                   height: '48px',
                   borderRadius: '50%',
-                  border: '1px solid rgba(184,191,200,0.2)',
+                  border: '1px solid color-mix(in srgb, var(--color-ca-steel-400) 20%, transparent)',
                   background: 'none',
-                  color: 'rgba(184,191,200,0.6)',
+                  color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   transition: 'all 0.3s',
                 }}
-                aria-label="Próximo"
+                aria-label="PrÃ³ximo"
               >
                 <ChevronRight style={{ width: '20px', height: '20px' }} />
               </button>

@@ -1,15 +1,30 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { getClientIp, checkRateLimit } from '@/lib/rate-limit'
+import { isLikelyBotSubmission, NPS_CONSENT_TEXT } from '@/lib/public-form-security'
 
 /* POST: Criar resposta NPS */
 export async function POST(req: NextRequest) {
   try {
+    const clientIp = getClientIp(req.headers)
+    if (!checkRateLimit(`nps:${clientIp}`)) {
+      return NextResponse.json({ error: 'Muitas tentativas. Tente novamente em alguns minutos.' }, { status: 429 })
+    }
+
     const body = await req.json()
-    const { clientToken, score, feedback, processNumber } = body
+    if (isLikelyBotSubmission(body)) {
+      return NextResponse.json({ error: 'Envio invÃ¡lido.' }, { status: 400 })
+    }
+
+    const { clientToken, score, feedback, processNumber, consentAccepted, consentText } = body
+
+    if (!consentAccepted) {
+      return NextResponse.json({ error: 'Consentimento obrigatÃ³rio.' }, { status: 400 })
+    }
 
     if (score === undefined || score === null || !clientToken) {
-      return NextResponse.json({ error: 'Token e score obrigatórios.' }, { status: 400 })
+      return NextResponse.json({ error: 'Token e score obrigatÃƒÂ³rios.' }, { status: 400 })
     }
 
     if (score < 0 || score > 10) {
@@ -26,7 +41,7 @@ export async function POST(req: NextRequest) {
     })
 
     if (!clientRes.docs.length) {
-      return NextResponse.json({ error: 'Token inválido.' }, { status: 401 })
+      return NextResponse.json({ error: 'Token invÃƒÂ¡lido.' }, { status: 401 })
     }
 
     const client = clientRes.docs[0]
@@ -48,13 +63,17 @@ export async function POST(req: NextRequest) {
         processNumber: processNumber || '',
         attorney,
         status: 'pending',
+        consentText: consentText || NPS_CONSENT_TEXT,
+        consentedAt: new Date().toISOString(),
+        ip: clientIp,
+        userAgent: req.headers.get('user-agent') || undefined,
       },
     })
 
     // Se score >= 9, sinalizar para depoimento
     const promptTestimonial = score >= 9
 
-    // Notificar escritório por email se score <= 6 (detrator)
+    // Notificar escritÃƒÂ³rio por email se score <= 6 (detrator)
     if (score <= 6 && process.env.RESEND_API_KEY) {
       try {
         await fetch('https://api.resend.com/emails', {
@@ -64,20 +83,20 @@ export async function POST(req: NextRequest) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'Site Cavalcante & Melo <onboarding@resend.dev>',
-            to: [process.env.CONTACT_EMAIL || 'contato@cavalcantemelo.adv.br'],
-            subject: `⚠️ NPS Detrator (${score}/10) — ${client.name}`,
+            from: 'Site Cavalcante Albuquerque <onboarding@resend.dev>',
+            to: [process.env.CONTACT_EMAIL || 'contato@cavalcantealbuquerque.com.br'],
+            subject: `Ã¢Å¡Â Ã¯Â¸Â NPS Detrator (${score}/10) Ã¢â‚¬â€ ${client.name}`,
             html: `
               <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-                <div style="background: #152138; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
-                  <h2 style="color: #f1eae2; margin: 0;">Alerta NPS — Detrator</h2>
+                <div style="background: var(--color-ca-navy-950); padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+                  <h2 style="color: var(--color-ca-platinum-100); margin: 0;">Alerta NPS Ã¢â‚¬â€ Detrator</h2>
                 </div>
                 <div style="background: #fff; padding: 24px; border: 1px solid #e5e5e5;">
                   <p><strong>Cliente:</strong> ${client.name}</p>
                   <p><strong>Score:</strong> <span style="color: #dc2626; font-size: 24px; font-weight: bold;">${score}/10</span></p>
                   ${processNumber ? `<p><strong>Processo:</strong> ${processNumber}</p>` : ''}
-                  ${feedback ? `<p><strong>Comentário:</strong> "${feedback}"</p>` : ''}
-                  <p style="color: #999; font-size: 13px; margin-top: 16px;">Ação recomendada: entrar em contato com o cliente para entender a insatisfação.</p>
+                  ${feedback ? `<p><strong>ComentÃƒÂ¡rio:</strong> "${feedback}"</p>` : ''}
+                  <p style="color: #999; font-size: 13px; margin-top: 16px;">AÃƒÂ§ÃƒÂ£o recomendada: entrar em contato com o cliente para entender a insatisfaÃƒÂ§ÃƒÂ£o.</p>
                 </div>
               </div>
             `,
@@ -116,7 +135,7 @@ export async function PUT(req: NextRequest) {
       limit: 1,
     })
     if (!clientRes.docs.length) {
-      return NextResponse.json({ error: 'Token inválido.' }, { status: 401 })
+      return NextResponse.json({ error: 'Token invÃƒÂ¡lido.' }, { status: 401 })
     }
 
     await (payload as any).update({
@@ -134,3 +153,5 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ error: 'Erro interno.' }, { status: 500 })
   }
 }
+
+

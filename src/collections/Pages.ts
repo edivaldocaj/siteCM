@@ -1,7 +1,14 @@
 import type { CollectionConfig } from 'payload'
+import { adminOnly, adminOrEditor, publishedOnly } from '../access'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
+  access: {
+    read: publishedOnly,
+    create: adminOrEditor,
+    update: adminOrEditor,
+    delete: adminOnly,
+  },
   admin: { useAsTitle: 'title' },
   fields: [
     { name: 'title', type: 'text', required: true, label: 'Título' },
@@ -20,3 +27,4 @@ export const Pages: CollectionConfig = {
     { name: 'status', type: 'select', options: ['draft', 'published'], defaultValue: 'draft', admin: { position: 'sidebar' } },
   ],
 }
+

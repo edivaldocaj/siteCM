@@ -1,21 +1,24 @@
 import type { CollectionConfig } from 'payload'
+import { adminOnly, adminOrStaff, anyone, fieldAdminOrStaff } from '../access'
 
 export const Leads: CollectionConfig = {
   slug: 'leads',
+  endpoints: false,
+  graphQL: false,
   access: {
-    read: () => true,
-    create: () => true,
-    update: () => true,
-    delete: () => true,
+    read: adminOrStaff,
+    create: anyone,
+    update: adminOrStaff,
+    delete: adminOnly,
   },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'phone', 'source', 'campaignSlug', 'status', 'score', 'assignedTo', 'createdAt'],
-    description: 'Pipeline de leads — todos os contatos captados pelo site, formulários e campanhas.',
+    description: 'Pipeline de leads â€” todos os contatos captados pelo site, formulÃ¡rios e campanhas.',
     listSearchableFields: ['name', 'phone', 'email', 'campaignSlug'],
   },
   fields: [
-    /* ── DADOS DO LEAD ── */
+    /* â”€â”€ DADOS DO LEAD â”€â”€ */
     {
       type: 'row',
       fields: [
@@ -27,11 +30,11 @@ export const Leads: CollectionConfig = {
       type: 'row',
       fields: [
         { name: 'email', type: 'email', label: 'E-mail' },
-        { name: 'cpf', type: 'text', label: 'CPF' },
+        { name: 'cpf', type: 'text', label: 'CPF', access: { read: fieldAdminOrStaff } },
       ],
     },
 
-    /* ── ORIGEM ── */
+    /* â”€â”€ ORIGEM â”€â”€ */
     {
       type: 'row',
       fields: [
@@ -42,10 +45,10 @@ export const Leads: CollectionConfig = {
           label: 'Origem',
           defaultValue: 'contact-form',
           options: [
-            { label: 'Formulário de Campanha', value: 'campaign-form' },
-            { label: 'Formulário de Contato', value: 'contact-form' },
+            { label: 'FormulÃ¡rio de Campanha', value: 'campaign-form' },
+            { label: 'FormulÃ¡rio de Contato', value: 'contact-form' },
             { label: 'WhatsApp (manual)', value: 'whatsapp' },
-            { label: 'Indicação', value: 'referral' },
+            { label: 'IndicaÃ§Ã£o', value: 'referral' },
             { label: 'Calculadora do Site', value: 'calculator' },
             { label: 'Outro', value: 'other' },
           ],
@@ -59,7 +62,7 @@ export const Leads: CollectionConfig = {
       ],
     },
 
-    /* ── UTM TRACKING ── */
+    /* â”€â”€ UTM TRACKING â”€â”€ */
     {
       type: 'collapsible',
       label: 'Rastreamento (UTM)',
@@ -79,43 +82,47 @@ export const Leads: CollectionConfig = {
             { name: 'utmContent', type: 'text', label: 'UTM Content' },
           ],
         },
-        { name: 'referrerUrl', type: 'text', label: 'URL de Referência' },
+        { name: 'referrerUrl', type: 'text', label: 'URL de ReferÃªncia' },
+        { name: 'consentText', type: 'textarea', label: 'Texto do Consentimento', admin: { readOnly: true } },
+        { name: 'consentedAt', type: 'date', label: 'Consentido em', admin: { readOnly: true } },
+        { name: 'ip', type: 'text', label: 'IP', admin: { readOnly: true } },
+        { name: 'userAgent', type: 'textarea', label: 'User Agent', admin: { readOnly: true } },
       ],
     },
 
-    /* ── QUALIFICAÇÃO ── */
+    /* â”€â”€ QUALIFICAÃ‡ÃƒO â”€â”€ */
     {
       type: 'tabs',
       tabs: [
         {
-          label: 'Qualificação',
+          label: 'QualificaÃ§Ã£o',
           fields: [
             {
               name: 'qualificationAnswers',
               type: 'array',
-              label: 'Respostas de Qualificação',
-              admin: { description: 'Preenchido automaticamente pelo formulário multi-step da campanha.' },
+              label: 'Respostas de QualificaÃ§Ã£o',
+              admin: { description: 'Preenchido automaticamente pelo formulÃ¡rio multi-step da campanha.' },
               fields: [
                 { name: 'question', type: 'text', required: true, label: 'Pergunta' },
                 { name: 'answer', type: 'text', required: true, label: 'Resposta' },
               ],
             },
-            { name: 'caseDescription', type: 'textarea', label: 'Descrição do Caso (pelo lead)' },
+            { name: 'caseDescription', type: 'textarea', label: 'DescriÃ§Ã£o do Caso (pelo lead)' },
             {
               name: 'estimatedValue',
               type: 'number',
               label: 'Valor Estimado da Causa (R$)',
-              admin: { description: 'Valor informado pelo lead ou estimado pelo formulário.' },
+              admin: { description: 'Valor informado pelo lead ou estimado pelo formulÃ¡rio.' },
             },
             {
               name: 'urgency',
               type: 'select',
-              label: 'Urgência',
+              label: 'UrgÃªncia',
               options: [
-                { label: 'Baixa — Informativo', value: 'low' },
-                { label: 'Média — Quer resolver', value: 'medium' },
-                { label: 'Alta — Prazo correndo', value: 'high' },
-                { label: 'Urgente — Emergência', value: 'urgent' },
+                { label: 'Baixa â€” Informativo', value: 'low' },
+                { label: 'MÃ©dia â€” Quer resolver', value: 'medium' },
+                { label: 'Alta â€” Prazo correndo', value: 'high' },
+                { label: 'Urgente â€” EmergÃªncia', value: 'urgent' },
               ],
               defaultValue: 'medium',
             },
@@ -131,12 +138,12 @@ export const Leads: CollectionConfig = {
               label: 'Status',
               defaultValue: 'new',
               options: [
-                { label: '🟡 Novo', value: 'new' },
-                { label: '📞 Contatado', value: 'contacted' },
-                { label: '✅ Qualificado', value: 'qualified' },
-                { label: '📋 Proposta Enviada', value: 'proposal' },
-                { label: '🎉 Convertido (Cliente)', value: 'converted' },
-                { label: '❌ Perdido', value: 'lost' },
+                { label: 'ðŸŸ¡ Novo', value: 'new' },
+                { label: 'ðŸ“ž Contatado', value: 'contacted' },
+                { label: 'âœ… Qualificado', value: 'qualified' },
+                { label: 'ðŸ“‹ Proposta Enviada', value: 'proposal' },
+                { label: 'ðŸŽ‰ Convertido (Cliente)', value: 'converted' },
+                { label: 'âŒ Perdido', value: 'lost' },
               ],
               admin: { position: 'sidebar' },
             },
@@ -155,7 +162,7 @@ export const Leads: CollectionConfig = {
             {
               name: 'assignedTo',
               type: 'select',
-              label: 'Advogado Responsável',
+              label: 'Advogado ResponsÃ¡vel',
               options: [
                 { label: 'Dr. Edivaldo Cavalcante', value: 'edivaldo' },
                 { label: 'Dra. Gabrielly Melo', value: 'gabrielly' },
@@ -163,15 +170,29 @@ export const Leads: CollectionConfig = {
               admin: { position: 'sidebar' },
             },
             {
+              name: 'assignedToRef',
+              type: 'relationship',
+              relationTo: 'team',
+              label: 'Advogado Responsável (Team)',
+              filterOptions: { active: { equals: true } },
+              admin: { position: 'sidebar', description: 'Campo temporário para migração. Mantém assignedTo legado.' },
+            },
+            {
+              name: 'byFirm',
+              type: 'checkbox',
+              defaultValue: false,
+              label: 'Responsabilidade do escritório',
+              admin: { position: 'sidebar' },
+            },            {
               name: 'lostReason',
               type: 'select',
               label: 'Motivo da Perda',
               options: [
                 { label: 'Sem resposta', value: 'no-response' },
-                { label: 'Escolheu outro escritório', value: 'competitor' },
-                { label: 'Desistiu da ação', value: 'gave-up' },
-                { label: 'Sem mérito jurídico', value: 'no-merit' },
-                { label: 'Valor inviável', value: 'price' },
+                { label: 'Escolheu outro escritÃ³rio', value: 'competitor' },
+                { label: 'Desistiu da aÃ§Ã£o', value: 'gave-up' },
+                { label: 'Sem mÃ©rito jurÃ­dico', value: 'no-merit' },
+                { label: 'Valor inviÃ¡vel', value: 'price' },
                 { label: 'Outro', value: 'other' },
               ],
               admin: {
@@ -186,9 +207,9 @@ export const Leads: CollectionConfig = {
             {
               name: 'notes',
               type: 'array',
-              label: 'Anotações / Follow-up',
+              label: 'AnotaÃ§Ãµes / Follow-up',
               fields: [
-                { name: 'text', type: 'textarea', required: true, label: 'Anotação' },
+                { name: 'text', type: 'textarea', required: true, label: 'AnotaÃ§Ã£o' },
                 {
                   name: 'author',
                   type: 'select',
@@ -206,7 +227,7 @@ export const Leads: CollectionConfig = {
             {
               name: 'nextFollowUp',
               type: 'date',
-              label: 'Próximo Follow-up',
+              label: 'PrÃ³ximo Follow-up',
               admin: {
                 position: 'sidebar',
                 description: 'Data para lembrete de acompanhamento.',
@@ -216,7 +237,7 @@ export const Leads: CollectionConfig = {
           ],
         },
         {
-          label: 'Conversão',
+          label: 'ConversÃ£o',
           fields: [
             {
               name: 'convertedToClient',
@@ -231,7 +252,7 @@ export const Leads: CollectionConfig = {
             {
               name: 'conversionDate',
               type: 'date',
-              label: 'Data de Conversão',
+              label: 'Data de ConversÃ£o',
               admin: {
                 condition: (data) => data?.status === 'converted',
               },
@@ -291,3 +312,9 @@ export const Leads: CollectionConfig = {
     ],
   },
 }
+
+
+
+
+
+

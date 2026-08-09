@@ -1,8 +1,15 @@
 import type { CollectionConfig } from 'payload'
 import path from 'path'
+import { adminOnly, adminOrEditor, anyone } from '../access'
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  access: {
+    read: anyone,
+    create: adminOrEditor,
+    update: adminOrEditor,
+    delete: adminOnly,
+  },
   upload: {
     staticDir: path.resolve(process.cwd(), 'public/media'),
     mimeTypes: ['image/*', 'application/pdf', 'video/mp4', 'video/webm'],
@@ -20,3 +27,4 @@ export const Media: CollectionConfig = {
     { name: 'alt', type: 'text', required: true, label: 'Texto Alternativo' },
   ],
 }
+

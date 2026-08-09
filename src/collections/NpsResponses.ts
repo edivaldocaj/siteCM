@@ -1,18 +1,21 @@
 import type { CollectionConfig } from 'payload'
+import { adminOnly, adminOrStaff, anyone } from '../access'
 
 export const NpsResponses: CollectionConfig = {
   slug: 'nps-responses',
+  endpoints: false,
+  graphQL: false,
   admin: {
     useAsTitle: 'clientName',
     defaultColumns: ['clientName', 'score', 'attorney', 'status', 'createdAt'],
-    description: 'Pesquisas de satisfação e NPS dos clientes.',
+    description: 'Pesquisas de satisfaÃ§Ã£o e NPS dos clientes.',
     group: 'Portal do Cliente',
   },
   access: {
-    read: () => true,
-    create: () => true,
-    update: () => true,
-    delete: () => true,
+    read: adminOrStaff,
+    create: anyone,
+    update: adminOrStaff,
+    delete: adminOnly,
   },
   fields: [
     {
@@ -48,19 +51,31 @@ export const NpsResponses: CollectionConfig = {
             { label: 'Dra. Gabrielly Melo', value: 'gabrielly' },
           ],
         },
+        {
+          name: 'attorneyRef',
+          type: 'relationship',
+          relationTo: 'team',
+          label: 'Advogado (Team)',
+          filterOptions: { active: { equals: true } },
+          admin: { description: 'Campo temporário para migração. Mantém attorney legado.' },
+        },
       ],
     },
-    { name: 'feedback', type: 'textarea', label: 'Comentário do Cliente' },
+    { name: 'feedback', type: 'textarea', label: 'ComentÃ¡rio do Cliente' },
+    { name: 'consentText', type: 'textarea', label: 'Texto do Consentimento', admin: { readOnly: true } },
+    { name: 'consentedAt', type: 'date', label: 'Consentido em', admin: { readOnly: true } },
+    { name: 'ip', type: 'text', label: 'IP', admin: { readOnly: true } },
+    { name: 'userAgent', type: 'textarea', label: 'User Agent', admin: { readOnly: true } },
     {
       name: 'status',
       type: 'select',
       label: 'Status',
       defaultValue: 'pending',
       options: [
-        { label: '⏳ Pendente', value: 'pending' },
-        { label: '✅ Revisado', value: 'reviewed' },
-        { label: '🎉 Depoimento Aprovado', value: 'testimonial-approved' },
-        { label: '❌ Descartado', value: 'discarded' },
+        { label: 'â³ Pendente', value: 'pending' },
+        { label: 'âœ… Revisado', value: 'reviewed' },
+        { label: 'ðŸŽ‰ Depoimento Aprovado', value: 'testimonial-approved' },
+        { label: 'âŒ Descartado', value: 'discarded' },
       ],
       admin: { position: 'sidebar' },
     },
@@ -70,7 +85,7 @@ export const NpsResponses: CollectionConfig = {
       admin: { initCollapsed: true },
       fields: [
         { name: 'testimonialText', type: 'textarea', label: 'Texto do Depoimento' },
-        { name: 'testimonialApproved', type: 'checkbox', label: 'Aprovado para publicação', defaultValue: false },
+        { name: 'testimonialApproved', type: 'checkbox', label: 'Aprovado para publicaÃ§Ã£o', defaultValue: false },
       ],
     },
   ],
@@ -88,3 +103,7 @@ export const NpsResponses: CollectionConfig = {
     ],
   },
 }
+
+
+
+

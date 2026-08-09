@@ -13,7 +13,9 @@ import { CampaignTracker } from '@/components/campaigns/CampaignTracker'
 
 export const dynamic = 'force-dynamic'
 
-/* ── SEO dinâmico por campanha ── */
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquerque.com.br').replace(/\/$/, '')
+
+/* â”€â”€ SEO dinÃ¢mico por campanha â”€â”€ */
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   try {
@@ -25,24 +27,27 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const c = docs[0]
     if (!c) return {}
 
-    const ogImageUrl = c.ogImage?.url || c.coverImage?.url || c.heroImage?.url || null
+    const ogImageUrl = c.ogImage?.url || c.coverImage?.url || c.heroImage?.url || `${siteUrl}/brand/og-default.jpg`
     const title = c.metaTitle || c.title
     const description = c.metaDescription || c.subtitle || ''
+        const canonical = `${siteUrl}/campanhas/${slug}`
 
     return {
-      title: `${title} | Cavalcante & Melo`,
+      title: `${title} | Cavalcante Albuquerque`,
       description,
+      alternates: { canonical },
       openGraph: {
         title,
         description,
-        ...(ogImageUrl ? { images: [{ url: ogImageUrl, width: 1200, height: 630 }] } : {}),
+        url: canonical,
+        images: [{ url: ogImageUrl, width: 1200, height: 630 }],
         type: 'website',
       },
       twitter: {
         card: 'summary_large_image',
         title,
         description,
-        ...(ogImageUrl ? { images: [ogImageUrl] } : {}),
+        images: [ogImageUrl],
       },
     }
   } catch {
@@ -50,20 +55,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-/* ── Cor de destaque ── */
+/* â”€â”€ Cor de destaque â”€â”€ */
 const accentColors: Record<string, { border: string; bg: string; text: string }> = {
-  gold: { border: '#c4a96a', bg: 'rgba(196,169,106,0.08)', text: '#c4a96a' },
+  gold: { border: 'var(--color-ca-steel-500)', bg: 'color-mix(in srgb, var(--color-ca-steel-500) 8%, transparent)', text: 'var(--color-ca-steel-500)' },
   red: { border: '#b91c1c', bg: 'rgba(185,28,28,0.06)', text: '#dc2626' },
   blue: { border: '#1e40af', bg: 'rgba(30,64,175,0.06)', text: '#2563eb' },
   green: { border: '#047857', bg: 'rgba(4,120,87,0.06)', text: '#059669' },
 }
 
 const categoryLabels: Record<string, string> = {
-  consumidor: 'Consumidor / Cível',
+  consumidor: 'Consumidor / CÃ­vel',
   digital: 'Digital / LGPD',
   criminal: 'Criminal',
-  imobiliario: 'Imobiliário',
-  tributario: 'Tributário',
+  imobiliario: 'ImobiliÃ¡rio',
+  tributario: 'TributÃ¡rio',
 }
 
 export default async function CampaignPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -79,7 +84,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
   if (!campaign) return notFound()
 
   const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'
-  const message = campaign.whatsappMessage || `Olá! Gostaria de falar sobre: ${campaign.title}`
+  const message = campaign.whatsappMessage || `OlÃ¡! Gostaria de falar sobre: ${campaign.title}`
   const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
 
   const accent = accentColors[campaign.colorAccent || 'gold'] || accentColors.gold
@@ -89,22 +94,22 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
   const videoUrl = campaign.videoUrl || null
   const videoFileUrl = campaign.videoFile?.url || null
   const hasVideo = !!(videoUrl || videoFileUrl)
-  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantemelo.adv.br'}/campanhas/${slug}`
+  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquerque.com.br'}/campanhas/${slug}`
 
   return (
-    <div style={{ backgroundColor: '#f1eae2', minHeight: '100vh', fontFamily: "'Source Sans 3', sans-serif" }}>
+    <div style={{ backgroundColor: 'var(--color-ca-platinum-100)', minHeight: '100vh', fontFamily: "'Source Sans 3', sans-serif" }}>
 
-      {/* ── Analytics Tracker ── */}
+      {/* â”€â”€ Analytics Tracker â”€â”€ */}
       <CampaignTracker campaignSlug={slug} />
 
-      {/* ── Barra de urgência animada ── */}
+      {/* â”€â”€ Barra de urgÃªncia animada â”€â”€ */}
       {campaign.urgencyText && (
         <CampaignUrgencyBar text={campaign.urgencyText} accentColor={accent.border} />
       )}
 
-      {/* ── Hero com vídeo ou imagem ── */}
+      {/* â”€â”€ Hero com vÃ­deo ou imagem â”€â”€ */}
       <section style={{
-        backgroundColor: '#152138',
+        backgroundColor: 'var(--color-ca-navy-950)',
         paddingTop: campaign.urgencyText ? '100px' : '140px',
         paddingBottom: hasVideo ? '60px' : '120px',
         paddingLeft: '24px',
@@ -124,18 +129,18 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
 
         {/* CM watermark */}
         <div style={{ position: 'absolute', top: '-20%', right: '-5%', opacity: 0.03, pointerEvents: 'none' }}>
-          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '600px', fontWeight: 'bold', color: '#ede1c3' }}>CM</span>
+          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '600px', fontWeight: 'bold', color: 'var(--color-ca-platinum-100)' }}>CM</span>
         </div>
 
         <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
-          <Link href="/campanhas" style={{ color: '#ede1c3', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '40px', width: 'fit-content' }}>
+          <Link href="/campanhas" style={{ color: 'var(--color-ca-platinum-100)', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '40px', width: 'fit-content' }}>
             <ArrowLeft style={{ width: '16px', height: '16px' }} />
             Voltar para Campanhas
           </Link>
 
           <span style={{
-            color: '#152138',
-            backgroundColor: '#ede1c3',
+            color: 'var(--color-ca-navy-950)',
+            backgroundColor: 'var(--color-ca-platinum-100)',
             fontSize: '11px',
             textTransform: 'uppercase',
             letterSpacing: '0.15em',
@@ -148,7 +153,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
             {categoryLabels[campaign.category] || campaign.category}
           </span>
 
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: '#f1eae2', lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: 'var(--color-ca-platinum-100)', lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-0.02em' }}>
             {campaign.title}
           </h1>
 
@@ -167,7 +172,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
         </div>
       </section>
 
-      {/* ── Conteúdo principal ── */}
+      {/* â”€â”€ ConteÃºdo principal â”€â”€ */}
       <section style={{ maxWidth: '800px', margin: '-60px auto 0', position: 'relative', zIndex: 20, padding: '0 24px', paddingBottom: '100px' }}>
 
         {/* Problema */}
@@ -176,13 +181,13 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
             background: '#ffffff',
             padding: '48px',
             borderRadius: '4px',
-            boxShadow: '0 10px 40px rgba(21,33,56,0.08)',
+            boxShadow: '0 10px 40px color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent)',
             marginBottom: '32px',
             borderTop: `4px solid ${accent.border}`,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
-              <AlertCircle style={{ color: '#152138', width: '28px', height: '28px' }} strokeWidth={1.5} />
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: '#152138', margin: 0 }}>O Desafio</h2>
+              <AlertCircle style={{ color: 'var(--color-ca-navy-950)', width: '28px', height: '28px' }} strokeWidth={1.5} />
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: 'var(--color-ca-navy-950)', margin: 0 }}>O Desafio</h2>
             </div>
             <div style={{ color: '#4a5568', fontSize: '17px', lineHeight: 1.8, fontWeight: 300 }} className="cms-rich-text">
               <RichText data={campaign.problemDescription} />
@@ -196,13 +201,13 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
             background: '#ffffff',
             padding: '48px',
             borderRadius: '4px',
-            boxShadow: '0 10px 40px rgba(21,33,56,0.05)',
+            boxShadow: '0 10px 40px color-mix(in srgb, var(--color-ca-navy-950) 5%, transparent)',
             marginBottom: '32px',
             borderLeft: `3px solid ${accent.border}`,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
-              <Scale style={{ color: '#152138', width: '28px', height: '28px' }} strokeWidth={1.5} />
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: '#152138', margin: 0 }}>Os Seus Direitos</h2>
+              <Scale style={{ color: 'var(--color-ca-navy-950)', width: '28px', height: '28px' }} strokeWidth={1.5} />
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: 'var(--color-ca-navy-950)', margin: 0 }}>Os Seus Direitos</h2>
             </div>
             <div style={{ color: '#4a5568', fontSize: '17px', lineHeight: 1.8, fontWeight: 300 }} className="cms-rich-text">
               <RichText data={campaign.rightsExplanation} />
@@ -210,19 +215,19 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           </div>
         )}
 
-        {/* Benefícios */}
+        {/* BenefÃ­cios */}
         {campaign.benefits && (
           <div style={{
             background: '#ffffff',
             padding: '48px',
             borderRadius: '4px',
-            boxShadow: '0 10px 40px rgba(21,33,56,0.05)',
+            boxShadow: '0 10px 40px color-mix(in srgb, var(--color-ca-navy-950) 5%, transparent)',
             marginBottom: '48px',
             borderLeft: `3px solid ${accent.border}`,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
-              <CheckCircle style={{ color: '#152138', width: '28px', height: '28px' }} strokeWidth={1.5} />
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: '#152138', margin: 0 }}>A Nossa Solução</h2>
+              <CheckCircle style={{ color: 'var(--color-ca-navy-950)', width: '28px', height: '28px' }} strokeWidth={1.5} />
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: 'var(--color-ca-navy-950)', margin: 0 }}>A Nossa SoluÃ§Ã£o</h2>
             </div>
             <div style={{ color: '#4a5568', fontSize: '17px', lineHeight: 1.8, fontWeight: 300 }} className="cms-rich-text">
               <RichText data={campaign.benefits} />
@@ -233,7 +238,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
         {/* Prova Social */}
         {campaign.socialProof && campaign.socialProof.length > 0 && (
           <div style={{ marginBottom: '32px' }}>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: '#152138', marginBottom: '24px' }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: 'var(--color-ca-navy-950)', marginBottom: '24px' }}>
               O que nossos clientes dizem
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -241,19 +246,19 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
                 <div key={i} style={{
                   background: '#ffffff', padding: '32px', borderRadius: '4px',
                   borderLeft: `3px solid ${accent.border}`,
-                  boxShadow: '0 4px 16px rgba(21,33,56,0.04)',
+                  boxShadow: '0 4px 16px color-mix(in srgb, var(--color-ca-navy-950) 4%, transparent)',
                 }}>
                   <p style={{ color: '#4a5568', fontSize: '16px', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '16px', fontWeight: 300 }}>
                     &ldquo;{proof.text}&rdquo;
                   </p>
                   <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                     {proof.author && (
-                      <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '14px', color: '#152138', fontWeight: 600 }}>
+                      <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '14px', color: 'var(--color-ca-navy-950)', fontWeight: 600 }}>
                         {proof.author}
                       </span>
                     )}
                     {proof.caseType && (
-                      <span style={{ fontSize: '12px', color: accent.text }}>— {proof.caseType}</span>
+                      <span style={{ fontSize: '12px', color: accent.text }}>â€” {proof.caseType}</span>
                     )}
                   </div>
                 </div>
@@ -266,24 +271,24 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
         {campaign.faq && campaign.faq.length > 0 && (
           <div style={{
             background: '#ffffff', padding: '48px', borderRadius: '4px',
-            boxShadow: '0 10px 40px rgba(21,33,56,0.05)',
+            boxShadow: '0 10px 40px color-mix(in srgb, var(--color-ca-navy-950) 5%, transparent)',
             marginBottom: '48px',
             borderLeft: `1px solid ${accent.border}`,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#152138" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-ca-navy-950)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
                 <line x1="12" y1="17" x2="12.01" y2="17" />
               </svg>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: '#152138', margin: 0 }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: 'var(--color-ca-navy-950)', margin: 0 }}>
                 Perguntas Frequentes
               </h2>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               {campaign.faq.map((item: any, i: number) => (
-                <div key={i} style={{ borderBottom: i < campaign.faq.length - 1 ? '1px solid rgba(21,33,56,0.08)' : 'none', paddingBottom: '24px' }}>
-                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: '#152138', fontWeight: 600, marginBottom: '12px' }}>
+                <div key={i} style={{ borderBottom: i < campaign.faq.length - 1 ? '1px solid color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent)' : 'none', paddingBottom: '24px' }}>
+                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: 'var(--color-ca-navy-950)', fontWeight: 600, marginBottom: '12px' }}>
                     {item.question}
                   </h3>
                   <p style={{ color: '#4a5568', fontSize: '15px', lineHeight: 1.7, fontWeight: 300 }}>
@@ -295,7 +300,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           </div>
         )}
 
-        {/* ── Barra de Compartilhamento ── */}
+        {/* â”€â”€ Barra de Compartilhamento â”€â”€ */}
         <CampaignShareBar
           title={campaign.title}
           subtitle={campaign.subtitle || ''}
@@ -304,7 +309,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           accentColor={accent.border}
         />
 
-        {/* ── Formulário de Captação de Lead ── */}
+        {/* â”€â”€ FormulÃ¡rio de CaptaÃ§Ã£o de Lead â”€â”€ */}
         {campaign.showForm !== false && (
           <div style={{ marginTop: '32px' }}>
             <CampaignLeadForm
@@ -317,20 +322,20 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           </div>
         )}
 
-        {/* ── CTA Final ── */}
+        {/* â”€â”€ CTA Final â”€â”€ */}
         <div style={{
-          background: 'linear-gradient(to right, #152138, #1c2d4a)',
+          background: 'linear-gradient(to right, var(--color-ca-navy-950), var(--color-ca-navy-800))',
           padding: '56px 40px',
           borderRadius: '4px',
           textAlign: 'center',
           borderBottom: `4px solid ${accent.border}`,
           marginTop: '32px',
         }}>
-          <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: '#f1eae2', marginBottom: '16px' }}>
+          <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: 'var(--color-ca-platinum-100)', marginBottom: '16px' }}>
             {campaign.urgencyText || 'Tome uma atitude pelo seu direito hoje.'}
           </h3>
           <p style={{ color: 'rgba(241,234,226,0.7)', fontSize: '16px', marginBottom: '40px', fontWeight: 300 }}>
-            Oferecemos uma análise profissional, confidencial e sem compromisso.
+            Oferecemos uma anÃ¡lise profissional, confidencial e sem compromisso.
           </p>
           <a
             href={whatsappUrl}
@@ -338,7 +343,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
             rel="noopener noreferrer"
             style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '12px',
-              backgroundColor: '#ede1c3', color: '#152138',
+              backgroundColor: 'var(--color-ca-platinum-100)', color: 'var(--color-ca-navy-950)',
               padding: '18px 40px', borderRadius: '2px',
               textDecoration: 'none', fontWeight: 600, fontSize: '15px',
               textTransform: 'uppercase', letterSpacing: '0.05em',
@@ -353,3 +358,5 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
     </div>
   )
 }
+
+

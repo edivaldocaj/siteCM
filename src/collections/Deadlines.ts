@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { adminOnly, adminOrStaff } from '../access'
 
 export const Deadlines: CollectionConfig = {
   slug: 'deadlines',
@@ -6,16 +7,16 @@ export const Deadlines: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'clientName', 'processNumber', 'deadlineDate', 'deadlineType', 'status', 'attorney'],
     description: 'Prazos processuais com alertas escalonados (7d, 3d, 1d).',
-    group: 'Escritório',
+    group: 'EscritÃ³rio',
   },
   access: {
-    read: () => true,
-    create: () => true,
-    update: () => true,
-    delete: () => true,
+    read: adminOrStaff,
+    create: adminOrStaff,
+    update: adminOrStaff,
+    delete: adminOnly,
   },
   fields: [
-    { name: 'title', type: 'text', required: true, label: 'Descrição do Prazo' },
+    { name: 'title', type: 'text', required: true, label: 'DescriÃ§Ã£o do Prazo' },
     {
       type: 'row',
       fields: [
@@ -31,7 +32,7 @@ export const Deadlines: CollectionConfig = {
     {
       type: 'row',
       fields: [
-        { name: 'processNumber', type: 'text', label: 'Número do Processo' },
+        { name: 'processNumber', type: 'text', label: 'NÃºmero do Processo' },
         {
           name: 'deadlineDate',
           type: 'date',
@@ -50,23 +51,31 @@ export const Deadlines: CollectionConfig = {
           label: 'Tipo de Prazo',
           defaultValue: 'other',
           options: [
-            { label: 'Contestação', value: 'contestation' },
+            { label: 'ContestaÃ§Ã£o', value: 'contestation' },
             { label: 'Recurso', value: 'appeal' },
-            { label: 'Manifestação', value: 'manifestation' },
-            { label: 'Audiência', value: 'hearing' },
-            { label: 'Perícia', value: 'expertise' },
-            { label: 'Cumprimento de sentença', value: 'sentence-compliance' },
+            { label: 'ManifestaÃ§Ã£o', value: 'manifestation' },
+            { label: 'AudiÃªncia', value: 'hearing' },
+            { label: 'PerÃ­cia', value: 'expertise' },
+            { label: 'Cumprimento de sentenÃ§a', value: 'sentence-compliance' },
             { label: 'Outro', value: 'other' },
           ],
         },
         {
           name: 'attorney',
           type: 'select',
-          label: 'Advogado Responsável',
+          label: 'Advogado ResponsÃ¡vel',
           options: [
             { label: 'Dr. Edivaldo Cavalcante', value: 'edivaldo' },
             { label: 'Dra. Gabrielly Melo', value: 'gabrielly' },
           ],
+        },
+        {
+          name: 'attorneyRef',
+          type: 'relationship',
+          relationTo: 'team',
+          label: 'Advogado Responsável (Team)',
+          filterOptions: { active: { equals: true } },
+          admin: { description: 'Campo temporário para migração. Mantém attorney legado.' },
         },
       ],
     },
@@ -76,10 +85,10 @@ export const Deadlines: CollectionConfig = {
       label: 'Status',
       defaultValue: 'pending',
       options: [
-        { label: '⏳ Pendente', value: 'pending' },
-        { label: '🔄 Em andamento', value: 'in-progress' },
-        { label: '✅ Cumprido', value: 'completed' },
-        { label: '❌ Perdido', value: 'missed' },
+        { label: 'â³ Pendente', value: 'pending' },
+        { label: 'ðŸ”„ Em andamento', value: 'in-progress' },
+        { label: 'âœ… Cumprido', value: 'completed' },
+        { label: 'âŒ Perdido', value: 'missed' },
       ],
       admin: { position: 'sidebar' },
     },
@@ -89,16 +98,16 @@ export const Deadlines: CollectionConfig = {
       label: 'Prioridade',
       defaultValue: 'normal',
       options: [
-        { label: '🟢 Normal', value: 'normal' },
-        { label: '🟡 Atenção', value: 'attention' },
-        { label: '🔴 Crítico', value: 'critical' },
+        { label: 'ðŸŸ¢ Normal', value: 'normal' },
+        { label: 'ðŸŸ¡ AtenÃ§Ã£o', value: 'attention' },
+        { label: 'ðŸ”´ CrÃ­tico', value: 'critical' },
       ],
       admin: { position: 'sidebar' },
     },
-    { name: 'notes', type: 'textarea', label: 'Observações' },
+    { name: 'notes', type: 'textarea', label: 'ObservaÃ§Ãµes' },
     {
       type: 'collapsible',
-      label: 'Controle de Alertas (automático)',
+      label: 'Controle de Alertas (automÃ¡tico)',
       admin: { initCollapsed: true },
       fields: [
         { name: 'alertSent7d', type: 'checkbox', label: 'Alerta 7 dias enviado', defaultValue: false },
@@ -108,3 +117,6 @@ export const Deadlines: CollectionConfig = {
     },
   ],
 }
+
+
+

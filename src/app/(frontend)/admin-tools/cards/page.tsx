@@ -1,25 +1,25 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { Download, Copy, Check, ArrowLeft, Image, Smartphone, RefreshCw } from 'lucide-react'
 
 const TEMPLATES: Record<string, { label: string; desc: string; bgStart: string; bgEnd: string; accent: string; text: string; subtext: string; tagBg: string; tagText: string; ctaBg: string; ctaText: string }> = {
-  editorial: { label: 'Editorial', desc: 'Sóbrio institucional', bgStart: '#152138', bgEnd: '#1c2d4a', accent: '#c4a96a', text: '#f1eae2', subtext: '#8b919a', tagBg: 'rgba(196,169,106,0.2)', tagText: '#c4a96a', ctaBg: '#c4a96a', ctaText: '#152138' },
-  urgency: { label: 'Urgência', desc: 'Vermelho impactante', bgStart: '#1a0505', bgEnd: '#3b0a0a', accent: '#ef4444', text: '#fef2f2', subtext: '#d4a0a0', tagBg: 'rgba(239,68,68,0.25)', tagText: '#fca5a5', ctaBg: '#ef4444', ctaText: '#ffffff' },
-  educativo: { label: 'Educativo', desc: 'Azul confiável', bgStart: '#0c1929', bgEnd: '#1e3a5f', accent: '#60a5fa', text: '#e0f2fe', subtext: '#7ba4c4', tagBg: 'rgba(96,165,250,0.2)', tagText: '#93c5fd', ctaBg: '#60a5fa', ctaText: '#0c1929' },
-  clean: { label: 'Clean', desc: 'Fundo claro elegante', bgStart: '#faf8f5', bgEnd: '#f1eae2', accent: '#152138', text: '#152138', subtext: '#6b7280', tagBg: 'rgba(21,33,56,0.1)', tagText: '#152138', ctaBg: '#152138', ctaText: '#f1eae2' },
+  editorial: { label: 'Editorial', desc: 'SÃ³brio institucional', bgStart: '#011536', bgEnd: '#0A2049', accent: '#8B98AC', text: '#EEF1F4', subtext: '#99A8BB', tagBg: 'rgba(139,152,172,0.2)', tagText: '#8B98AC', ctaBg: '#8B98AC', ctaText: '#011536' },
+  urgency: { label: 'UrgÃªncia', desc: 'Vermelho impactante', bgStart: '#1a0505', bgEnd: '#3b0a0a', accent: '#ef4444', text: '#fef2f2', subtext: '#d4a0a0', tagBg: 'rgba(239,68,68,0.25)', tagText: '#fca5a5', ctaBg: '#ef4444', ctaText: '#ffffff' },
+  educativo: { label: 'Educativo', desc: 'Azul confiÃ¡vel', bgStart: '#0c1929', bgEnd: '#1e3a5f', accent: '#60a5fa', text: '#e0f2fe', subtext: '#7ba4c4', tagBg: 'rgba(96,165,250,0.2)', tagText: '#93c5fd', ctaBg: '#60a5fa', ctaText: '#0c1929' },
+  clean: { label: 'Clean', desc: 'Fundo claro elegante', bgStart: '#F8F6F4', bgEnd: '#EEF1F4', accent: '#011536', text: '#011536', subtext: '#5C646E', tagBg: 'rgba(1,21,54,0.1)', tagText: '#011536', ctaBg: '#011536', ctaText: '#EEF1F4' },
 }
 
-const CATEGORIES: Record<string, string> = { consumidor: 'Consumidor / Cível', digital: 'Digital / LGPD', criminal: 'Criminal', imobiliario: 'Imobiliário', tributario: 'Tributário' }
+const CATEGORIES: Record<string, string> = { consumidor: 'Consumidor / CÃ­vel', digital: 'Digital / LGPD', criminal: 'Criminal', imobiliario: 'ImobiliÃ¡rio', tributario: 'TributÃ¡rio' }
 
 const FORMATS = {
-  feed: { w: 1080, h: 1080, label: 'Feed (1080×1080)', icon: Image },
-  story: { w: 1080, h: 1920, label: 'Story (1080×1920)', icon: Smartphone },
+  feed: { w: 1080, h: 1080, label: 'Feed (1080Ã—1080)', icon: Image },
+  story: { w: 1080, h: 1920, label: 'Story (1080Ã—1920)', icon: Smartphone },
 }
 
 type Campaign = { id: number; title: string; slug: string; category: string; subtitle: string; socialCaption: string; socialHashtags: string[]; colorAccent: string }
 
-/* ── Canvas text wrapping helper ── */
+/* â”€â”€ Canvas text wrapping helper â”€â”€ */
 function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
   const words = text.split(' ')
   const lines: string[] = []
@@ -37,7 +37,7 @@ function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number)
   return lines
 }
 
-/* ── Draw card on Canvas ── */
+/* â”€â”€ Draw card on Canvas â”€â”€ */
 async function drawCard(
   canvas: HTMLCanvasElement,
   opts: { w: number; h: number; title: string; subtitle: string; category: string; cta: string; template: string }
@@ -82,7 +82,7 @@ async function drawCard(
   ctx.fillStyle = t.accent
   ctx.font = `bold ${isStory ? 400 : 500}px Georgia`
   ctx.textAlign = 'right'
-  ctx.fillText('CM', w + 20, h - (isStory ? 40 : 80))
+  ctx.fillText('CA', w + 20, h - (isStory ? 40 : 80))
   ctx.globalAlpha = 1
 
   const px = isStory ? 56 : 72
@@ -109,7 +109,7 @@ async function drawCard(
   ctx.textBaseline = 'middle'
   ctx.fillText(catLabel, px + 20, catY + catH / 2)
 
-  // Title — large, wrapped
+  // Title â€” large, wrapped
   const titleSize = title.length > 30 ? (isStory ? 56 : 64) : (isStory ? 68 : 80)
   ctx.font = `bold ${titleSize}px Georgia`
   ctx.fillStyle = t.text
@@ -120,7 +120,7 @@ async function drawCard(
     ctx.fillText(line, px, titleY + i * (titleSize * 1.15))
   })
 
-  // Subtitle — below title
+  // Subtitle â€” below title
   const subY = titleY + titleLines.length * (titleSize * 1.15) + 28
   const subSize = isStory ? 24 : 28
   ctx.font = `300 ${subSize}px sans-serif`
@@ -152,11 +152,11 @@ async function drawCard(
   ctx.font = `bold 22px Georgia`
   ctx.fillStyle = t.accent
   ctx.textBaseline = 'bottom'
-  ctx.fillText('CAVALCANTE & MELO', isStory ? w / 2 : w - px, footY)
+  ctx.fillText('CAVALCANTE ALBUQUERQUE', isStory ? w / 2 : w - px, footY)
 
   ctx.font = `400 14px sans-serif`
   ctx.fillStyle = t.subtext
-  ctx.fillText('SOCIEDADE DE ADVOGADOS', isStory ? w / 2 : w - px, footY + 22)
+  ctx.fillText('ADVOCACIA E CONSULTORIA', isStory ? w / 2 : w - px, footY + 22)
 
   ctx.textAlign = 'left'
 }
@@ -164,8 +164,8 @@ async function drawCard(
 export default function CardGeneratorPage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([])
   const [selectedId, setSelectedId] = useState<number | null>(null)
-  const [title, setTitle] = useState('Fraudes Bancárias')
-  const [subtitle, setSubtitle] = useState('Cobranças abusivas? Você pode ter direito a restituição em dobro.')
+  const [title, setTitle] = useState('Fraudes BancÃ¡rias')
+  const [subtitle, setSubtitle] = useState('CobranÃ§as abusivas? VocÃª pode ter direito a restituiÃ§Ã£o em dobro.')
   const [category, setCategory] = useState('consumidor')
   const [cta, setCta] = useState('Verifique seu caso gratuitamente')
   const [template, setTemplate] = useState('editorial')
@@ -236,19 +236,19 @@ export default function CardGeneratorPage() {
   const previewScale = format === 'story' ? 0.28 : 0.45
 
   return (
-    <div style={{ minHeight: '100vh', background: '#152138', color: '#f1eae2', fontFamily: "'Source Sans 3', sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: 'var(--color-ca-navy-950)', color: 'var(--color-ca-platinum-100)', fontFamily: "'Source Sans 3', sans-serif" }}>
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '32px 24px' }}>
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <a href="/admin-tools" style={{ color: '#b8bfc8', fontSize: '13px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '8px' }}>
+            <a href="/admin-tools" style={{ color: 'var(--color-ca-steel-400)', fontSize: '13px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '8px' }}>
               <ArrowLeft style={{ width: '14px', height: '14px' }} /> Admin Tools
             </a>
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', margin: 0 }}>Gerador de Cards para Redes Sociais</h1>
-            <p style={{ color: '#b8bfc8', fontSize: '14px', marginTop: '4px' }}>Agora com Canvas nativo — texto renderizado pixel a pixel.</p>
+            <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px', marginTop: '4px' }}>Agora com Canvas nativo â€” texto renderizado pixel a pixel.</p>
           </div>
-          <button onClick={loadCampaigns} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: '#b8bfc8', fontSize: '12px', cursor: 'pointer' }}>
+          <button onClick={loadCampaigns} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: 'var(--color-ca-steel-400)', fontSize: '12px', cursor: 'pointer' }}>
             <RefreshCw style={{ width: '14px', height: '14px' }} /> Atualizar campanhas
           </button>
         </div>
@@ -256,15 +256,15 @@ export default function CardGeneratorPage() {
         {/* Campaign selector */}
         {campaigns.length > 0 && (
           <div style={{ marginBottom: '32px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '20px' }}>
-            <h3 style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#c4a96a', marginBottom: '12px', marginTop: 0 }}>Campanhas do CMS ({campaigns.length})</h3>
+            <h3 style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-ca-steel-500)', marginBottom: '12px', marginTop: 0 }}>Campanhas do CMS ({campaigns.length})</h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               {campaigns.map(c => (
                 <button key={c.id} onClick={() => selectCampaign(c.id)}
                   style={{
                     padding: '8px 16px', borderRadius: '4px', fontSize: '13px', cursor: 'pointer',
-                    background: selectedId === c.id ? 'rgba(196,169,106,0.2)' : 'rgba(255,255,255,0.05)',
-                    border: selectedId === c.id ? '1px solid #c4a96a' : '1px solid rgba(255,255,255,0.08)',
-                    color: selectedId === c.id ? '#c4a96a' : '#b8bfc8', transition: 'all 0.2s',
+                    background: selectedId === c.id ? 'color-mix(in srgb, var(--color-ca-steel-500) 20%, transparent)' : 'rgba(255,255,255,0.05)',
+                    border: selectedId === c.id ? '1px solid var(--color-ca-steel-500)' : '1px solid rgba(255,255,255,0.08)',
+                    color: selectedId === c.id ? 'var(--color-ca-steel-500)' : 'var(--color-ca-steel-400)', transition: 'all 0.2s',
                   }}>
                   {c.title}
                 </button>
@@ -280,15 +280,15 @@ export default function CardGeneratorPage() {
 
             {/* Format */}
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(184,191,200,0.5)', marginBottom: '8px', fontWeight: 600 }}>Formato</label>
+              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', marginBottom: '8px', fontWeight: 600 }}>Formato</label>
               <div style={{ display: 'flex', gap: '8px' }}>
                 {(Object.entries(FORMATS) as [string, typeof FORMATS.feed][]).map(([key, val]) => (
                   <button key={key} onClick={() => setFormat(key as 'feed' | 'story')}
                     style={{
                       flex: 1, padding: '12px', borderRadius: '6px', cursor: 'pointer', textAlign: 'center',
-                      border: format === key ? '2px solid #c4a96a' : '2px solid rgba(255,255,255,0.08)',
-                      background: format === key ? 'rgba(196,169,106,0.1)' : 'rgba(255,255,255,0.03)',
-                      color: format === key ? '#c4a96a' : '#b8bfc8',
+                      border: format === key ? '2px solid var(--color-ca-steel-500)' : '2px solid rgba(255,255,255,0.08)',
+                      background: format === key ? 'color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)' : 'rgba(255,255,255,0.03)',
+                      color: format === key ? 'var(--color-ca-steel-500)' : 'var(--color-ca-steel-400)',
                     }}>
                     <val.icon style={{ width: '20px', height: '20px', margin: '0 auto 4px', display: 'block' }} />
                     <div style={{ fontSize: '12px', fontWeight: 600 }}>{val.label}</div>
@@ -299,7 +299,7 @@ export default function CardGeneratorPage() {
 
             {/* Template */}
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(184,191,200,0.5)', marginBottom: '8px', fontWeight: 600 }}>Template</label>
+              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', marginBottom: '8px', fontWeight: 600 }}>Template</label>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
                 {Object.entries(TEMPLATES).map(([key, val]) => (
                   <button key={key} onClick={() => setTemplate(key)}
@@ -307,7 +307,7 @@ export default function CardGeneratorPage() {
                       padding: '12px', borderRadius: '6px', cursor: 'pointer', textAlign: 'center',
                       border: template === key ? `2px solid ${val.accent}` : '2px solid rgba(255,255,255,0.08)',
                       background: template === key ? val.tagBg : 'rgba(255,255,255,0.03)',
-                      color: template === key ? val.accent : '#b8bfc8',
+                      color: template === key ? val.accent : 'var(--color-ca-steel-400)',
                     }}>
                     <div style={{ fontSize: '13px', fontWeight: 700 }}>{val.label}</div>
                     <div style={{ fontSize: '10px', opacity: 0.6, marginTop: '2px' }}>{val.desc}</div>
@@ -318,40 +318,40 @@ export default function CardGeneratorPage() {
 
             {/* Category */}
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(184,191,200,0.5)', marginBottom: '8px', fontWeight: 600 }}>Categoria</label>
+              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', marginBottom: '8px', fontWeight: 600 }}>Categoria</label>
               <select value={category} onChange={(e) => setCategory(e.target.value)}
-                style={{ width: '100%', padding: '10px 14px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', fontSize: '14px', background: 'rgba(255,255,255,0.05)', color: '#f1eae2', boxSizing: 'border-box' }}>
+                style={{ width: '100%', padding: '10px 14px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', fontSize: '14px', background: 'rgba(255,255,255,0.05)', color: 'var(--color-ca-platinum-100)', boxSizing: 'border-box' }}>
                 {Object.entries(CATEGORIES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
               </select>
             </div>
 
             {/* Title */}
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(184,191,200,0.5)', marginBottom: '8px', fontWeight: 600 }}>Título</label>
+              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', marginBottom: '8px', fontWeight: 600 }}>TÃ­tulo</label>
               <input value={title} onChange={(e) => setTitle(e.target.value)}
-                style={{ width: '100%', padding: '10px 14px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', fontSize: '16px', fontWeight: 600, color: '#f1eae2', background: 'rgba(255,255,255,0.05)', boxSizing: 'border-box' }} />
+                style={{ width: '100%', padding: '10px 14px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', fontSize: '16px', fontWeight: 600, color: 'var(--color-ca-platinum-100)', background: 'rgba(255,255,255,0.05)', boxSizing: 'border-box' }} />
             </div>
 
             {/* Subtitle */}
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(184,191,200,0.5)', marginBottom: '8px', fontWeight: 600 }}>Subtítulo</label>
+              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', marginBottom: '8px', fontWeight: 600 }}>SubtÃ­tulo</label>
               <textarea value={subtitle} onChange={(e) => setSubtitle(e.target.value)} rows={3}
-                style={{ width: '100%', padding: '10px 14px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', fontSize: '14px', color: '#f1eae2', background: 'rgba(255,255,255,0.05)', resize: 'none', boxSizing: 'border-box', fontFamily: "'Source Sans 3', sans-serif" }} />
+                style={{ width: '100%', padding: '10px 14px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', fontSize: '14px', color: 'var(--color-ca-platinum-100)', background: 'rgba(255,255,255,0.05)', resize: 'none', boxSizing: 'border-box', fontFamily: "'Source Sans 3', sans-serif" }} />
             </div>
 
             {/* CTA */}
             <div style={{ marginBottom: '28px' }}>
-              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(184,191,200,0.5)', marginBottom: '8px', fontWeight: 600 }}>CTA</label>
+              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', marginBottom: '8px', fontWeight: 600 }}>CTA</label>
               <input value={cta} onChange={(e) => setCta(e.target.value)}
-                style={{ width: '100%', padding: '10px 14px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', fontSize: '14px', color: '#f1eae2', background: 'rgba(255,255,255,0.05)', boxSizing: 'border-box' }} />
+                style={{ width: '100%', padding: '10px 14px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', fontSize: '14px', color: 'var(--color-ca-platinum-100)', background: 'rgba(255,255,255,0.05)', boxSizing: 'border-box' }} />
             </div>
 
             {/* Export button */}
             <button onClick={exportPNG} disabled={exporting}
               style={{
                 width: '100%', padding: '16px', borderRadius: '4px', border: 'none',
-                background: exporting ? 'rgba(196,169,106,0.3)' : '#c4a96a',
-                color: '#152138', fontSize: '14px', fontWeight: 700, textTransform: 'uppercase',
+                background: exporting ? 'color-mix(in srgb, var(--color-ca-steel-500) 30%, transparent)' : 'var(--color-ca-steel-500)',
+                color: 'var(--color-ca-navy-950)', fontSize: '14px', fontWeight: 700, textTransform: 'uppercase',
                 letterSpacing: '0.08em', cursor: exporting ? 'wait' : 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
               }}>
@@ -363,24 +363,24 @@ export default function CardGeneratorPage() {
             {currentCaption && (
               <div style={{ marginTop: '24px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <h3 style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#c4a96a', margin: 0 }}>Legenda para Instagram</h3>
+                  <h3 style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--color-ca-steel-500)', margin: 0 }}>Legenda para Instagram</h3>
                   <button onClick={copyCaption}
                     style={{
                       display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 12px',
                       borderRadius: '4px', fontSize: '11px', fontWeight: 600, cursor: 'pointer',
                       background: captionCopied ? 'rgba(37,211,102,0.15)' : 'rgba(255,255,255,0.05)',
                       border: captionCopied ? '1px solid #25D366' : '1px solid rgba(255,255,255,0.1)',
-                      color: captionCopied ? '#25D366' : '#b8bfc8', textTransform: 'uppercase', letterSpacing: '0.05em',
+                      color: captionCopied ? '#25D366' : 'var(--color-ca-steel-400)', textTransform: 'uppercase', letterSpacing: '0.05em',
                     }}>
                     {captionCopied ? <Check style={{ width: '12px', height: '12px' }} /> : <Copy style={{ width: '12px', height: '12px' }} />}
                     {captionCopied ? 'Copiado!' : 'Copiar'}
                   </button>
                 </div>
-                <p style={{ color: '#b8bfc8', fontSize: '13px', lineHeight: 1.6, whiteSpace: 'pre-line', margin: 0 }}>
+                <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '13px', lineHeight: 1.6, whiteSpace: 'pre-line', margin: 0 }}>
                   {currentCaption}
                 </p>
                 {currentHashtags.length > 0 && (
-                  <p style={{ color: '#c4a96a', fontSize: '12px', marginTop: '12px' }}>{currentHashtags.join(' ')}</p>
+                  <p style={{ color: 'var(--color-ca-steel-500)', fontSize: '12px', marginTop: '12px' }}>{currentHashtags.join(' ')}</p>
                 )}
               </div>
             )}
@@ -389,8 +389,8 @@ export default function CardGeneratorPage() {
           {/* Preview */}
           <div style={{ flex: '1 1 400px', display: 'flex', justifyContent: 'center' }}>
             <div style={{ width: '100%', maxWidth: format === 'story' ? 360 : 540 }}>
-              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(184,191,200,0.5)', marginBottom: '10px', fontWeight: 600, textAlign: 'center' }}>
-                Preview (Canvas nativo — idêntico ao PNG exportado)
+              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', marginBottom: '10px', fontWeight: 600, textAlign: 'center' }}>
+                Preview (Canvas nativo â€” idÃªntico ao PNG exportado)
               </label>
               <div style={{
                 width: '100%',

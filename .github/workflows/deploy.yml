@@ -16,22 +16,28 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
           script: |
-            cd /var/www/cavalcantemelo
+            cd /var/www/cavalcantealbuquerque
             
-            echo "📥 Pulling latest code..."
+            echo "Pulling latest code..."
             git pull origin main
             
-            echo "📦 Installing dependencies..."
+            echo "Installing dependencies..."
             npm ci --production=false
             
-            echo "🔨 Building..."
+            echo "Running production preflight..."
+            npm run preflight:production
+            
+            echo "Applying Payload migrations..."
+            npm run migrate
+            
+            echo "Building..."
             npm run build
             
-            echo "🔄 Restarting with zero-downtime..."
-            pm2 reload cavalcantemelo --update-env
+            echo "Restarting with zero-downtime..."
+            pm2 reload cavalcantealbuquerque --update-env
             pm2 save
             
-            echo "✅ Deploy complete!"
+            echo "Deploy complete!"
 
   fetch-news:
     runs-on: ubuntu-latest
@@ -40,7 +46,7 @@ jobs:
       - name: Trigger news fetch
         run: |
           curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.NEWS_REVALIDATE_SECRET }}" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             -H "Content-Type: application/json" \
             "${{ secrets.SITE_URL }}/api/news-feed" \
             || echo "News fetch skipped (site may still be starting)"

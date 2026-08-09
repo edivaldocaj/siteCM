@@ -78,7 +78,7 @@ export function FeaturedCampaigns({ cmsCampaigns = [], cmsData }: FeaturedCampai
             {sectionTitle}
           </h2>
           <p style={{
-            color: 'rgba(21,33,56,0.6)',
+            color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)',
             fontFamily: 'var(--font-body)',
             fontSize: '18px',
             maxWidth: '40rem',
@@ -108,7 +108,7 @@ export function FeaturedCampaigns({ cmsCampaigns = [], cmsData }: FeaturedCampai
                   background: 'white',
                   borderRadius: '8px',
                   padding: '32px',
-                  border: '1px solid rgba(196,169,106,0.1)',
+                  border: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)',
                   textDecoration: 'none',
                   transition: 'all 0.5s',
                   height: '100%',
@@ -121,7 +121,7 @@ export function FeaturedCampaigns({ cmsCampaigns = [], cmsData }: FeaturedCampai
                     textTransform: 'uppercase',
                     letterSpacing: '0.05em',
                     color: 'var(--color-brand-gold-dark)',
-                    background: 'rgba(196,169,106,0.1)',
+                    background: 'color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)',
                     padding: '4px 12px',
                     borderRadius: '2px',
                   }}>
@@ -130,7 +130,7 @@ export function FeaturedCampaigns({ cmsCampaigns = [], cmsData }: FeaturedCampai
                   <IconComponent style={{
                     width: '32px',
                     height: '32px',
-                    color: 'rgba(21,33,56,0.2)',
+                    color: 'color-mix(in srgb, var(--color-ca-navy-950) 20%, transparent)',
                     transition: 'color 0.3s',
                   }} />
                 </div>
@@ -147,7 +147,7 @@ export function FeaturedCampaigns({ cmsCampaigns = [], cmsData }: FeaturedCampai
                 </h3>
 
                 <p style={{
-                  color: 'rgba(21,33,56,0.5)',
+                  color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)',
                   fontFamily: 'var(--font-body)',
                   fontSize: '14px',
                   lineHeight: 1.6,

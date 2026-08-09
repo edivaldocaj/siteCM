@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
+import { requireAdminRole } from '@/lib/admin-auth'
+import { getRequiredSecret, safeCompare } from '@/lib/secrets'
 
 /**
  * POST /api/revalidate
@@ -11,7 +13,12 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const { collection, slug, secret } = body
 
-  if (secret !== process.env.NEWS_REVALIDATE_SECRET) {
+  const configuredSecret = getRequiredSecret('REVALIDATE_SECRET')
+  if (!configuredSecret) {
+    return NextResponse.json({ error: 'REVALIDATE_SECRET não configurado.' }, { status: 503 })
+  }
+
+  if (!safeCompare(secret, configuredSecret)) {
     return NextResponse.json({ error: 'Invalid secret' }, { status: 401 })
   }
 
@@ -47,3 +54,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Revalidation failed' }, { status: 500 })
   }
 }
+
+

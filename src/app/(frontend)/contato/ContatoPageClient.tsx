@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react'
@@ -8,9 +8,9 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
 
-  const contactEmail = siteConfig?.contactEmail || 'contato@cavalcantemelo.adv.br'
+  const contactEmail = siteConfig?.contactEmail || 'contato@cavalcantealbuquerque.com.br'
   const contactPhone = siteConfig?.contactPhone || '(84) 99999-9999'
-  const contactAddress = siteConfig?.contactAddress || 'Rua Francisco Maia Sobrinho, 1950\nLagoa Nova — Natal/RN'
+  const contactAddress = siteConfig?.contactAddress || 'Rua Francisco Maia Sobrinho, 1950\nLagoa Nova â€” Natal/RN'
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -41,7 +41,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
     width: '100%',
     padding: '14px 16px',
     borderRadius: '4px',
-    border: '1px solid rgba(21,33,56,0.15)',
+    border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)',
     fontFamily: 'var(--font-body)',
     fontSize: '14px',
     color: 'var(--color-brand-navy)',
@@ -52,7 +52,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
 
   const labelStyle: React.CSSProperties = {
     display: 'block',
-    color: 'rgba(21,33,56,0.6)',
+    color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)',
     fontSize: '11px',
     fontFamily: 'var(--font-body)',
     textTransform: 'uppercase',
@@ -64,7 +64,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
   return (
     <>
       {/* Hero */}
-      <section style={{ background: 'linear-gradient(135deg, #152138 0%, #1c2d4a 50%, #0e1628 100%)', padding: '140px 24px 80px' }}>
+      <section style={{ background: 'linear-gradient(135deg, var(--color-ca-navy-950) 0%, var(--color-ca-navy-800) 50%, var(--color-ca-navy-900) 100%)', padding: '140px 24px 80px' }}>
         <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
           <span style={{ color: 'var(--color-brand-gold-dark)', fontSize: '12px', fontFamily: 'var(--font-body)', textTransform: 'uppercase', letterSpacing: '0.25em', display: 'block', marginBottom: '16px' }}>
             Fale Conosco
@@ -72,8 +72,8 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 600, color: 'var(--color-brand-champagne)', lineHeight: 1.1, marginBottom: '24px' }}>
             Contato
           </h1>
-          <p style={{ color: 'rgba(184,191,200,0.7)', fontFamily: 'var(--font-body)', fontSize: '18px', lineHeight: 1.6, maxWidth: '600px' }}>
-            Entre em contato pelo formulário, WhatsApp ou visite nosso escritório.
+          <p style={{ color: 'color-mix(in srgb, var(--color-ca-steel-400) 70%, transparent)', fontFamily: 'var(--font-body)', fontSize: '18px', lineHeight: 1.6, maxWidth: '600px' }}>
+            Entre em contato pelo formulÃ¡rio, WhatsApp ou visite nosso escritÃ³rio.
           </p>
         </div>
       </section>
@@ -82,39 +82,39 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
       <section style={{ padding: '80px 24px', backgroundColor: 'var(--color-brand-cream)' }}>
         <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px' }} className="contact-page-grid">
-            {/* Left - Informações */}
+            {/* Left - InformaÃ§Ãµes */}
             <div>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', color: 'var(--color-brand-navy)', fontWeight: 600, marginBottom: '32px' }}>
-                Informações
+                InformaÃ§Ãµes
               </h2>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', marginBottom: '40px' }}>
                 <div style={{ display: 'flex', gap: '16px' }}>
                   <MapPin style={{ width: '22px', height: '22px', color: 'var(--color-brand-gold-dark)', flexShrink: 0, marginTop: '2px' }} />
                   <div>
-                    <h4 style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>Endereço</h4>
-                    <p style={{ color: 'rgba(21,33,56,0.6)', fontSize: '14px', lineHeight: 1.6, whiteSpace: 'pre-line' }}>{contactAddress}</p>
+                    <h4 style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>EndereÃ§o</h4>
+                    <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontSize: '14px', lineHeight: 1.6, whiteSpace: 'pre-line' }}>{contactAddress}</p>
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: '16px' }}>
                   <Phone style={{ width: '22px', height: '22px', color: 'var(--color-brand-gold-dark)', flexShrink: 0 }} />
                   <div>
                     <h4 style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>Telefone / WhatsApp</h4>
-                    <p style={{ color: 'rgba(21,33,56,0.6)', fontSize: '14px' }}>{contactPhone}</p>
+                    <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontSize: '14px' }}>{contactPhone}</p>
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: '16px' }}>
                   <Mail style={{ width: '22px', height: '22px', color: 'var(--color-brand-gold-dark)', flexShrink: 0 }} />
                   <div>
                     <h4 style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>E-mail</h4>
-                    <p style={{ color: 'rgba(21,33,56,0.6)', fontSize: '14px' }}>{contactEmail}</p>
+                    <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontSize: '14px' }}>{contactEmail}</p>
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: '16px' }}>
                   <Clock style={{ width: '22px', height: '22px', color: 'var(--color-brand-gold-dark)', flexShrink: 0 }} />
                   <div>
-                    <h4 style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>Horário</h4>
-                    <p style={{ color: 'rgba(21,33,56,0.6)', fontSize: '14px', lineHeight: 1.6 }}>Seg a Sex: 8h às 18h<br />Penal: Atendimento 24h</p>
+                    <h4 style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>HorÃ¡rio</h4>
+                    <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontSize: '14px', lineHeight: 1.6 }}>Seg a Sex: 8h Ã s 18h<br />Penal: Atendimento 24h</p>
                   </div>
                 </div>
               </div>
@@ -131,7 +131,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
               </a>
             </div>
 
-            {/* Right - Formulário */}
+            {/* Right - FormulÃ¡rio */}
             <div>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', color: 'var(--color-brand-navy)', fontWeight: 600, marginBottom: '32px' }}>
                 Envie sua mensagem
@@ -140,7 +140,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
               {success ? (
                 <div style={{ background: 'rgba(37,211,102,0.08)', border: '1px solid rgba(37,211,102,0.3)', padding: '40px', borderRadius: '8px', textAlign: 'center' }}>
                   <h3 style={{ color: '#25D366', fontSize: '20px', fontWeight: 600, marginBottom: '8px' }}>Mensagem Enviada!</h3>
-                  <p style={{ color: 'rgba(21,33,56,0.6)', fontSize: '14px' }}>Nossa equipe entrará em contato em breve.</p>
+                  <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontSize: '14px' }}>Nossa equipe entrarÃ¡ em contato em breve.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -159,9 +159,9 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
                       <option value="consumidor">Direito do Consumidor</option>
                       <option value="digital">Direito Digital / LGPD</option>
                       <option value="civil">Direito Civil</option>
-                      <option value="imobiliario">Direito Imobiliário</option>
-                      <option value="tributario">Direito Tributário</option>
-                      <option value="licitacoes">Licitações</option>
+                      <option value="imobiliario">Direito ImobiliÃ¡rio</option>
+                      <option value="tributario">Direito TributÃ¡rio</option>
+                      <option value="licitacoes">LicitaÃ§Ãµes</option>
                       <option value="penal">Direito Penal (Urgente)</option>
                       <option value="outro">Outro</option>
                     </select>
@@ -175,7 +175,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
                     <Send style={{ width: '16px', height: '16px' }} />
                     {loading ? 'Enviando...' : 'Enviar Mensagem'}
                   </button>
-                  <p style={{ color: 'rgba(21,33,56,0.35)', fontSize: '12px', textAlign: 'center', margin: 0 }}>
+                  <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 35%, transparent)', fontSize: '12px', textAlign: 'center', margin: 0 }}>
                     Protegido conforme a LGPD.
                   </p>
                 </form>

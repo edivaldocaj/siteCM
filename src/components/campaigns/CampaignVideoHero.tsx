@@ -32,7 +32,7 @@ export function CampaignVideoHero({ videoUrl, videoFileUrl, heroImageUrl }: Camp
         overflow: 'hidden',
         position: 'relative',
         aspectRatio: '16/9',
-        background: '#0e1628',
+        background: 'var(--color-ca-navy-900)',
         boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
       }}>
         <video
@@ -70,7 +70,7 @@ export function CampaignVideoHero({ videoUrl, videoFileUrl, heroImageUrl }: Camp
             overflow: 'hidden',
             position: 'relative',
             aspectRatio: '16/9',
-            background: '#0e1628',
+            background: 'var(--color-ca-navy-900)',
             cursor: 'pointer',
             boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
           }}
@@ -85,10 +85,10 @@ export function CampaignVideoHero({ videoUrl, videoFileUrl, heroImageUrl }: Camp
           ) : (
             <div style={{
               width: '100%', height: '100%',
-              background: 'linear-gradient(135deg, #152138, #1c2d4a)',
+              background: 'linear-gradient(135deg, var(--color-ca-navy-950), var(--color-ca-navy-800))',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <span style={{ color: 'rgba(184,191,200,0.1)', fontFamily: "'Playfair Display', serif", fontSize: '120px', fontWeight: 'bold' }}>CM</span>
+              <span style={{ color: 'color-mix(in srgb, var(--color-ca-steel-400) 10%, transparent)', fontFamily: "'Playfair Display', serif", fontSize: '120px', fontWeight: 'bold' }}>CM</span>
             </div>
           )}
 
@@ -100,12 +100,12 @@ export function CampaignVideoHero({ videoUrl, videoFileUrl, heroImageUrl }: Camp
             <div style={{
               width: '80px', height: '80px',
               borderRadius: '50%',
-              background: 'rgba(196,169,106,0.9)',
+              background: 'color-mix(in srgb, var(--color-ca-steel-500) 90%, transparent)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'transform 0.3s',
               boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
             }} className="play-btn">
-              <Play style={{ width: '32px', height: '32px', color: '#152138', marginLeft: '4px' }} fill="#152138" />
+              <Play style={{ width: '32px', height: '32px', color: 'var(--color-ca-navy-950)', marginLeft: '4px' }} fill="var(--color-ca-navy-950)" />
             </div>
           </div>
 

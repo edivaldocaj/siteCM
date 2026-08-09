@@ -229,18 +229,18 @@ export default function CalculadoraPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f1eae2', fontFamily: "'Source Sans 3', sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: 'var(--color-ca-platinum-100)', fontFamily: "'Source Sans 3', sans-serif" }}>
       {/* Hero */}
-      <div style={{ background: 'linear-gradient(135deg, #152138 0%, #1c2d4a 100%)', padding: '100px 24px 80px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ background: 'linear-gradient(135deg, var(--color-ca-navy-950) 0%, var(--color-ca-navy-800) 100%)', padding: '100px 24px 80px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '-20%', right: '-5%', opacity: 0.03, pointerEvents: 'none' }}>
-          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '500px', fontWeight: 'bold', color: '#ede1c3' }}>CM</span>
+          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '500px', fontWeight: 'bold', color: 'var(--color-ca-platinum-100)' }}>CM</span>
         </div>
         <div style={{ position: 'relative', zIndex: 10, maxWidth: '640px', margin: '0 auto' }}>
-          <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: 'rgba(196,169,106,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
-            <Calculator style={{ width: '32px', height: '32px', color: '#c4a96a' }} />
+          <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: 'color-mix(in srgb, var(--color-ca-steel-500) 15%, transparent)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+            <Calculator style={{ width: '32px', height: '32px', color: 'var(--color-ca-steel-500)' }} />
           </div>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 5vw, 3rem)', color: '#f1eae2', marginBottom: '16px', lineHeight: 1.15 }}>
-            Calculadora de<br /><span style={{ color: '#c4a96a' }}>Indenização</span>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 5vw, 3rem)', color: 'var(--color-ca-platinum-100)', marginBottom: '16px', lineHeight: 1.15 }}>
+            Calculadora de<br /><span style={{ color: 'var(--color-ca-steel-500)' }}>Indenização</span>
           </h1>
           <p style={{ color: 'rgba(241,234,226,0.6)', fontSize: '17px', lineHeight: 1.7, fontWeight: 300 }}>
             Descubra uma estimativa do valor que você pode ter direito a receber. Gratuito, rápido e sem compromisso.
@@ -253,11 +253,11 @@ export default function CalculadoraPage() {
 
         {/* Step 0: Select case type */}
         {step === 0 && (
-          <div style={{ background: '#fff', borderRadius: '8px', padding: '40px 32px', boxShadow: '0 10px 40px rgba(21,33,56,0.08)', borderTop: '4px solid #c4a96a' }}>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', color: '#152138', marginBottom: '8px' }}>
+          <div style={{ background: '#fff', borderRadius: '8px', padding: '40px 32px', boxShadow: '0 10px 40px color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent)', borderTop: '4px solid var(--color-ca-steel-500)' }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', color: 'var(--color-ca-navy-950)', marginBottom: '8px' }}>
               Qual é a sua situação?
             </h2>
-            <p style={{ color: 'rgba(21,33,56,0.5)', fontSize: '14px', marginBottom: '24px' }}>
+            <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)', fontSize: '14px', marginBottom: '24px' }}>
               Selecione o tipo de problema para iniciar a estimativa.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -271,7 +271,7 @@ export default function CalculadoraPage() {
                     justifyContent: 'space-between',
                     padding: '18px 20px',
                     background: '#fff',
-                    border: '2px solid rgba(21,33,56,0.08)',
+                    border: '2px solid color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent)',
                     borderRadius: '8px',
                     cursor: 'pointer',
                     transition: 'all 0.2s',
@@ -279,21 +279,21 @@ export default function CalculadoraPage() {
                     textAlign: 'left',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#c4a96a'
+                    e.currentTarget.style.borderColor = 'var(--color-ca-steel-500)'
                     e.currentTarget.style.transform = 'translateY(-2px)'
-                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(21,33,56,0.08)'
+                    e.currentTarget.style.boxShadow = '0 8px 24px color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent)'
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(21,33,56,0.08)'
+                    e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent)'
                     e.currentTarget.style.transform = 'translateY(0)'
                     e.currentTarget.style.boxShadow = 'none'
                   }}
                 >
                   <div>
-                    <div style={{ fontSize: '16px', fontWeight: 600, color: '#152138', marginBottom: '2px' }}>{ct.label}</div>
-                    <div style={{ fontSize: '12px', color: 'rgba(21,33,56,0.4)' }}>Estimativa: {formatCurrency(ct.baseRange[0])} — {formatCurrency(ct.baseRange[1])}</div>
+                    <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-ca-navy-950)', marginBottom: '2px' }}>{ct.label}</div>
+                    <div style={{ fontSize: '12px', color: 'color-mix(in srgb, var(--color-ca-navy-950) 40%, transparent)' }}>Estimativa: {formatCurrency(ct.baseRange[0])} — {formatCurrency(ct.baseRange[1])}</div>
                   </div>
-                  <ChevronRight style={{ width: '20px', height: '20px', color: '#c4a96a', flexShrink: 0 }} />
+                  <ChevronRight style={{ width: '20px', height: '20px', color: 'var(--color-ca-steel-500)', flexShrink: 0 }} />
                 </button>
               ))}
             </div>
@@ -304,23 +304,23 @@ export default function CalculadoraPage() {
         {caseData && step >= 1 && step <= caseData.questions.length && (() => {
           const q = caseData.questions[step - 1]
           return (
-            <div key={step} style={{ background: '#fff', borderRadius: '8px', padding: '40px 32px', boxShadow: '0 10px 40px rgba(21,33,56,0.08)', borderTop: '4px solid #c4a96a', animation: 'fadeIn 0.3s ease' }}>
+            <div key={step} style={{ background: '#fff', borderRadius: '8px', padding: '40px 32px', boxShadow: '0 10px 40px color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent)', borderTop: '4px solid var(--color-ca-steel-500)', animation: 'fadeIn 0.3s ease' }}>
               {/* Progress */}
               <div style={{ marginBottom: '28px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '11px', color: 'rgba(21,33,56,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                  <span style={{ fontSize: '11px', color: 'color-mix(in srgb, var(--color-ca-navy-950) 40%, transparent)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                     Pergunta {step} de {caseData.questions.length}
                   </span>
-                  <span style={{ fontSize: '11px', color: '#c4a96a', fontWeight: 600 }}>
+                  <span style={{ fontSize: '11px', color: 'var(--color-ca-steel-500)', fontWeight: 600 }}>
                     {caseData.label}
                   </span>
                 </div>
-                <div style={{ width: '100%', height: '4px', background: 'rgba(21,33,56,0.06)', borderRadius: '2px' }}>
-                  <div style={{ width: `${(step / caseData.questions.length) * 100}%`, height: '100%', background: '#c4a96a', borderRadius: '2px', transition: 'width 0.4s' }} />
+                <div style={{ width: '100%', height: '4px', background: 'color-mix(in srgb, var(--color-ca-navy-950) 6%, transparent)', borderRadius: '2px' }}>
+                  <div style={{ width: `${(step / caseData.questions.length) * 100}%`, height: '100%', background: 'var(--color-ca-steel-500)', borderRadius: '2px', transition: 'width 0.4s' }} />
                 </div>
               </div>
 
-              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '20px', color: '#152138', marginBottom: '24px' }}>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '20px', color: 'var(--color-ca-navy-950)', marginBottom: '24px' }}>
                 {q.question}
               </h3>
 
@@ -331,18 +331,18 @@ export default function CalculadoraPage() {
                     onClick={() => answerQuestion(option.weight)}
                     style={{
                       padding: '16px 20px',
-                      border: '2px solid rgba(21,33,56,0.08)',
+                      border: '2px solid color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent)',
                       borderRadius: '6px',
                       background: '#fff',
-                      color: '#152138',
+                      color: 'var(--color-ca-navy-950)',
                       fontSize: '15px',
                       textAlign: 'left',
                       cursor: 'pointer',
                       transition: 'all 0.2s',
                       fontFamily: "'Source Sans 3', sans-serif",
                     }}
-                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#c4a96a'; e.currentTarget.style.background = 'rgba(196,169,106,0.04)' }}
-                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(21,33,56,0.08)'; e.currentTarget.style.background = '#fff' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-ca-steel-500)'; e.currentTarget.style.background = 'color-mix(in srgb, var(--color-ca-steel-500) 4%, transparent)' }}
+                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent)'; e.currentTarget.style.background = '#fff' }}
                   >
                     {option.label}
                   </button>
@@ -351,7 +351,7 @@ export default function CalculadoraPage() {
 
               {step > 1 && (
                 <button onClick={() => { setWeights(w => w.slice(0, -1)); setStep(s => s - 1) }}
-                  style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '20px', background: 'none', border: 'none', color: 'rgba(21,33,56,0.4)', fontSize: '13px', cursor: 'pointer', fontFamily: "'Source Sans 3', sans-serif" }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '20px', background: 'none', border: 'none', color: 'color-mix(in srgb, var(--color-ca-navy-950) 40%, transparent)', fontSize: '13px', cursor: 'pointer', fontFamily: "'Source Sans 3', sans-serif" }}>
                   <ChevronLeft style={{ width: '14px', height: '14px' }} /> Voltar
                 </button>
               )}
@@ -362,23 +362,23 @@ export default function CalculadoraPage() {
         {/* Result */}
         {result && step > (caseData?.questions.length || 0) && (
           <div style={{ animation: 'fadeIn 0.5s ease' }}>
-            <div style={{ background: '#fff', borderRadius: '8px', padding: '48px 32px', boxShadow: '0 10px 40px rgba(21,33,56,0.08)', borderTop: '4px solid #25D366', textAlign: 'center', marginBottom: '24px' }}>
-              <Scale style={{ width: '40px', height: '40px', color: '#c4a96a', margin: '0 auto 20px' }} />
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '24px', color: '#152138', marginBottom: '8px' }}>
+            <div style={{ background: '#fff', borderRadius: '8px', padding: '48px 32px', boxShadow: '0 10px 40px color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent)', borderTop: '4px solid #25D366', textAlign: 'center', marginBottom: '24px' }}>
+              <Scale style={{ width: '40px', height: '40px', color: 'var(--color-ca-steel-500)', margin: '0 auto 20px' }} />
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '24px', color: 'var(--color-ca-navy-950)', marginBottom: '8px' }}>
                 Estimativa de Indenização
               </h2>
-              <p style={{ color: 'rgba(21,33,56,0.5)', fontSize: '13px', marginBottom: '32px' }}>
+              <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)', fontSize: '13px', marginBottom: '32px' }}>
                 {caseData?.label} — baseado em jurisprudência do TJRN e STJ
               </p>
 
-              <div style={{ background: 'linear-gradient(135deg, #152138, #1c2d4a)', borderRadius: '12px', padding: '32px', marginBottom: '24px' }}>
+              <div style={{ background: 'linear-gradient(135deg, var(--color-ca-navy-950), var(--color-ca-navy-800))', borderRadius: '12px', padding: '32px', marginBottom: '24px' }}>
                 <div style={{ color: 'rgba(241,234,226,0.5)', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '12px' }}>Valor Estimado</div>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '36px', fontWeight: 700, color: '#c4a96a', lineHeight: 1.2 }}>
+                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '36px', fontWeight: 700, color: 'var(--color-ca-steel-500)', lineHeight: 1.2 }}>
                   {formatCurrency(result.min)} <span style={{ color: 'rgba(241,234,226,0.3)', fontSize: '24px' }}>a</span> {formatCurrency(result.max)}
                 </div>
               </div>
 
-              <p style={{ color: 'rgba(21,33,56,0.5)', fontSize: '12px', lineHeight: 1.6, marginBottom: '24px' }}>
+              <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)', fontSize: '12px', lineHeight: 1.6, marginBottom: '24px' }}>
                 * Valores estimados com base em decisões judiciais recentes. O valor real depende de análise detalhada do caso por um advogado.
               </p>
 
@@ -388,7 +388,7 @@ export default function CalculadoraPage() {
                     onClick={() => setShowLeadForm(true)}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                      padding: '16px 32px', background: '#152138', color: '#f1eae2',
+                      padding: '16px 32px', background: 'var(--color-ca-navy-950)', color: 'var(--color-ca-platinum-100)',
                       border: 'none', borderRadius: '4px', fontSize: '14px', fontWeight: 600,
                       cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.05em',
                       fontFamily: "'Source Sans 3', sans-serif",
@@ -418,14 +418,14 @@ export default function CalculadoraPage() {
               {showLeadForm && !leadSent && (
                 <div style={{ textAlign: 'left', marginTop: '8px' }}>
                   <div style={{ marginBottom: '16px' }}>
-                    <label style={{ fontSize: '13px', fontWeight: 600, color: '#152138', display: 'block', marginBottom: '6px' }}>Nome *</label>
+                    <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-ca-navy-950)', display: 'block', marginBottom: '6px' }}>Nome *</label>
                     <input type="text" value={leadName} onChange={(e) => setLeadName(e.target.value)} placeholder="Seu nome completo"
-                      style={{ width: '100%', padding: '12px 16px', border: '1px solid rgba(21,33,56,0.15)', borderRadius: '6px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }} />
+                      style={{ width: '100%', padding: '12px 16px', border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)', borderRadius: '6px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }} />
                   </div>
                   <div style={{ marginBottom: '16px' }}>
-                    <label style={{ fontSize: '13px', fontWeight: 600, color: '#152138', display: 'block', marginBottom: '6px' }}>WhatsApp *</label>
+                    <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-ca-navy-950)', display: 'block', marginBottom: '6px' }}>WhatsApp *</label>
                     <input type="tel" value={leadPhone} onChange={(e) => setLeadPhone(formatPhone(e.target.value))} placeholder="(84) 99999-9999" maxLength={15}
-                      style={{ width: '100%', padding: '12px 16px', border: '1px solid rgba(21,33,56,0.15)', borderRadius: '6px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }} />
+                      style={{ width: '100%', padding: '12px 16px', border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)', borderRadius: '6px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }} />
                   </div>
                   {leadError && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '12px', color: '#dc2626', fontSize: '13px' }}>
@@ -435,7 +435,7 @@ export default function CalculadoraPage() {
                   <button onClick={submitLead} disabled={leadLoading}
                     style={{
                       width: '100%', padding: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                      background: '#152138', color: '#f1eae2', border: 'none', borderRadius: '4px',
+                      background: 'var(--color-ca-navy-950)', color: 'var(--color-ca-platinum-100)', border: 'none', borderRadius: '4px',
                       fontSize: '14px', fontWeight: 600, cursor: leadLoading ? 'not-allowed' : 'pointer',
                       textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: "'Source Sans 3', sans-serif",
                     }}>
@@ -447,14 +447,14 @@ export default function CalculadoraPage() {
               {leadSent && (
                 <div style={{ background: 'rgba(37,211,102,0.06)', border: '1px solid rgba(37,211,102,0.2)', borderRadius: '8px', padding: '24px', marginTop: '8px' }}>
                   <CheckCircle style={{ width: '32px', height: '32px', color: '#25D366', margin: '0 auto 12px' }} />
-                  <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: '#152138', marginBottom: '8px' }}>Recebemos!</h4>
-                  <p style={{ color: 'rgba(21,33,56,0.6)', fontSize: '14px' }}>Um advogado especialista entrará em contato em até 24h úteis.</p>
+                  <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: 'var(--color-ca-navy-950)', marginBottom: '8px' }}>Recebemos!</h4>
+                  <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontSize: '14px' }}>Um advogado especialista entrará em contato em até 24h úteis.</p>
                 </div>
               )}
             </div>
 
             <button onClick={() => { setStep(0); setSelectedCase(null); setWeights([]); setResult(null); setShowLeadForm(false); setLeadSent(false) }}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px', margin: '0 auto', background: 'none', border: 'none', color: 'rgba(21,33,56,0.4)', fontSize: '13px', cursor: 'pointer', fontFamily: "'Source Sans 3', sans-serif" }}>
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', margin: '0 auto', background: 'none', border: 'none', color: 'color-mix(in srgb, var(--color-ca-navy-950) 40%, transparent)', fontSize: '13px', cursor: 'pointer', fontFamily: "'Source Sans 3', sans-serif" }}>
               <ChevronLeft style={{ width: '14px', height: '14px' }} /> Calcular outro tipo de caso
             </button>
           </div>
@@ -462,12 +462,12 @@ export default function CalculadoraPage() {
 
         {/* Disclaimer */}
         <div style={{ marginTop: '48px', textAlign: 'center' }}>
-          <p style={{ color: 'rgba(21,33,56,0.3)', fontSize: '11px', lineHeight: 1.6 }}>
+          <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 30%, transparent)', fontSize: '11px', lineHeight: 1.6 }}>
             Esta calculadora oferece estimativas com base em decisões judiciais recentes e não constitui aconselhamento jurídico.
             Os valores reais podem variar conforme as circunstâncias específicas de cada caso.
-            <br />Cavalcante & Melo Sociedade de Advogados — OAB/RN
+            <br />Cavalcante Albuquerque Sociedade de Advogados — OAB/RN
           </p>
-          <Link href="/" style={{ color: '#c4a96a', fontSize: '13px', textDecoration: 'none', display: 'inline-block', marginTop: '12px' }}>
+          <Link href="/" style={{ color: 'var(--color-ca-steel-500)', fontSize: '13px', textDecoration: 'none', display: 'inline-block', marginTop: '12px' }}>
             ← Voltar ao site
           </Link>
         </div>

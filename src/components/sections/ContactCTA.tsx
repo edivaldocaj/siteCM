@@ -61,7 +61,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
 
   const labelStyle: React.CSSProperties = {
     display: 'block',
-    color: 'rgba(184,191,200,0.6)',
+    color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)',
     fontSize: '11px',
     fontFamily: 'var(--font-body)',
     textTransform: 'uppercase',
@@ -77,7 +77,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
         left: 0,
         right: 0,
         height: '1px',
-        background: 'linear-gradient(to right, transparent, rgba(196,169,106,0.3), transparent)',
+        background: 'linear-gradient(to right, transparent, color-mix(in srgb, var(--color-ca-steel-500) 30%, transparent), transparent)',
       }} />
 
       <div className="container-wide mx-auto section-padding">
@@ -115,7 +115,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
             </h2>
 
             <p style={{
-              color: 'rgba(184,191,200,0.6)',
+              color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)',
               fontFamily: 'var(--font-body)',
               fontSize: '18px',
               lineHeight: 1.6,
@@ -126,21 +126,21 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
             </p>
 
             <div style={{ marginBottom: '40px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'rgba(184,191,200,0.6)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)' }}>
                 <MapPin style={{ width: '20px', height: '20px', color: 'var(--color-brand-gold-dark)', flexShrink: 0 }} />
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px' }}>
                   {contactAddress}
                 </span>
               </div>
               {cmsData?.email && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'rgba(184,191,200,0.6)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)' }}>
                   <Send style={{ width: '20px', height: '20px', color: 'var(--color-brand-gold-dark)', flexShrink: 0 }} />
-                  <a href={`mailto:${cmsData.email}`} style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(184,191,200,0.6)', textDecoration: 'none' }}>
+                  <a href={`mailto:${cmsData.email}`} style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)', textDecoration: 'none' }}>
                     {cmsData.email}
                   </a>
                 </div>
               )}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'rgba(184,191,200,0.6)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)' }}>
                 <Phone style={{ width: '20px', height: '20px', color: 'var(--color-brand-gold-dark)', flexShrink: 0 }} />
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px' }}>
                   {contactPhone}
@@ -174,7 +174,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
                 }}>
                   Mensagem Enviada!
                 </h3>
-                <p style={{ color: 'rgba(184,191,200,0.6)', fontFamily: 'var(--font-body)' }}>
+                <p style={{ color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)', fontFamily: 'var(--font-body)' }}>
                   Recebemos sua mensagem e retornaremos em breve. Obrigado pela confiança.
                 </p>
               </div>
@@ -241,7 +241,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
                   </button>
 
                   <p style={{
-                    color: 'rgba(184,191,200,0.3)',
+                    color: 'color-mix(in srgb, var(--color-ca-steel-400) 30%, transparent)',
                     fontSize: '12px',
                     fontFamily: 'var(--font-body)',
                     textAlign: 'center',
@@ -260,7 +260,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
           .contact-grid { grid-template-columns: 1fr 1fr !important; gap: 80px !important; }
         }
         .contact-grid input:focus, .contact-grid select:focus, .contact-grid textarea:focus {
-          border-color: rgba(196,169,106,0.5) !important;
+          border-color: color-mix(in srgb, var(--color-ca-steel-500) 50%, transparent) !important;
         }
       `}} />
     </section>

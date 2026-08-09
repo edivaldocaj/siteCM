@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { BarChart3, Eye, MessageCircle, FileText, Share2, Users, TrendingUp, RefreshCw, ArrowLeft, Trophy, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
-import { useAdminAuth } from '@/components/admin/AdminAuthContext'
 
 interface CampaignMetrics {
   slug: string
@@ -40,7 +39,6 @@ const categoryLabels: Record<string, string> = {
 }
 
 export default function CampaignAnalyticsPage() {
-  const { token } = useAdminAuth()
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<AnalyticsData | null>(null)
   const [error, setError] = useState('')
@@ -50,7 +48,7 @@ export default function CampaignAnalyticsPage() {
     setError('')
     try {
       const res = await fetch('/api/campaign-track', {
-        headers: { 'Authorization': `Bearer ${token}` },
+        credentials: 'include',
       })
       const json = await res.json()
       if (!res.ok) {
@@ -70,23 +68,23 @@ export default function CampaignAnalyticsPage() {
   const s = data?.summary
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0e1628', padding: '32px' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--color-ca-navy-900)', padding: '32px' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
-              <Link href="/admin-tools" style={{ color: '#b8bfc8', fontSize: '13px', textDecoration: 'none' }}>
+              <Link href="/admin-tools" style={{ color: 'var(--color-ca-steel-400)', fontSize: '13px', textDecoration: 'none' }}>
                 <ArrowLeft style={{ width: '16px', height: '16px' }} />
               </Link>
-              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: '#f1eae2', margin: 0 }}>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: 'var(--color-ca-platinum-100)', margin: 0 }}>
                 Analytics de Campanhas
               </h1>
             </div>
-            <p style={{ color: '#b8bfc8', fontSize: '14px' }}>Métricas de performance em tempo real</p>
+            <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px' }}>Métricas de performance em tempo real</p>
           </div>
           <button onClick={fetchAnalytics} disabled={loading}
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: 'rgba(196,169,106,0.15)', border: '1px solid rgba(196,169,106,0.3)', borderRadius: '4px', color: '#c4a96a', fontSize: '13px', fontWeight: 600, cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: 'color-mix(in srgb, var(--color-ca-steel-500) 15%, transparent)', border: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 30%, transparent)', borderRadius: '4px', color: 'var(--color-ca-steel-500)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             <RefreshCw style={{ width: '14px', height: '14px', animation: loading ? 'spin 1s linear infinite' : 'none' }} />
             Atualizar
           </button>
@@ -103,7 +101,7 @@ export default function CampaignAnalyticsPage() {
         {s && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px', marginBottom: '32px' }}>
             {[
-              { icon: <BarChart3 style={{ width: '20px', height: '20px', color: '#c4a96a' }} />, value: s.totalCampaigns, label: 'Campanhas Ativas', color: '#c4a96a' },
+              { icon: <BarChart3 style={{ width: '20px', height: '20px', color: 'var(--color-ca-steel-500)' }} />, value: s.totalCampaigns, label: 'Campanhas Ativas', color: 'var(--color-ca-steel-500)' },
               { icon: <Eye style={{ width: '20px', height: '20px', color: '#60a5fa' }} />, value: s.totalViews.toLocaleString('pt-BR'), label: 'Visualizações Total', color: '#60a5fa' },
               { icon: <Users style={{ width: '20px', height: '20px', color: '#25D366' }} />, value: s.totalLeads, label: 'Leads Captados', color: '#25D366' },
               { icon: <Trophy style={{ width: '20px', height: '20px', color: '#f59e0b' }} />, value: s.totalConverted, label: 'Convertidos', color: '#f59e0b' },
@@ -111,7 +109,7 @@ export default function CampaignAnalyticsPage() {
               <div key={i} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
                   {stat.icon}
-                  <span style={{ color: 'rgba(184,191,200,0.6)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{stat.label}</span>
+                  <span style={{ color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{stat.label}</span>
                 </div>
                 <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '32px', fontWeight: 700, color: stat.color }}>
                   {stat.value}
@@ -141,21 +139,21 @@ export default function CampaignAnalyticsPage() {
                     {/* Campaign Header */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '8px' }}>
                       <div>
-                        <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: '#f1eae2', margin: 0, marginBottom: '4px' }}>
+                        <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: 'var(--color-ca-platinum-100)', margin: 0, marginBottom: '4px' }}>
                           {campaign.title}
                         </h3>
                         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                          <span style={{ fontSize: '11px', color: '#c4a96a', background: 'rgba(196,169,106,0.1)', padding: '2px 8px', borderRadius: '2px' }}>
+                          <span style={{ fontSize: '11px', color: 'var(--color-ca-steel-500)', background: 'color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)', padding: '2px 8px', borderRadius: '2px' }}>
                             {categoryLabels[campaign.category] || campaign.category}
                           </span>
-                          <span style={{ fontSize: '11px', color: '#b8bfc8' }}>/{campaign.slug}</span>
+                          <span style={{ fontSize: '11px', color: 'var(--color-ca-steel-400)' }}>/{campaign.slug}</span>
                         </div>
                       </div>
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '24px', fontWeight: 700, color: convRate >= 5 ? '#25D366' : convRate >= 2 ? '#c4a96a' : '#b8bfc8', fontFamily: "'Playfair Display', serif" }}>
+                        <div style={{ fontSize: '24px', fontWeight: 700, color: convRate >= 5 ? '#25D366' : convRate >= 2 ? 'var(--color-ca-steel-500)' : 'var(--color-ca-steel-400)', fontFamily: "'Playfair Display', serif" }}>
                           {m.conversionRate}
                         </div>
-                        <div style={{ fontSize: '10px', color: 'rgba(184,191,200,0.5)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Taxa de Conversão</div>
+                        <div style={{ fontSize: '10px', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Taxa de Conversão</div>
                       </div>
                     </div>
 
@@ -164,15 +162,15 @@ export default function CampaignAnalyticsPage() {
                       {[
                         { icon: <Eye style={{ width: '14px', height: '14px' }} />, value: m.views, label: 'Views', color: '#60a5fa' },
                         { icon: <MessageCircle style={{ width: '14px', height: '14px' }} />, value: m.whatsappClicks, label: 'WhatsApp', color: '#25D366' },
-                        { icon: <FileText style={{ width: '14px', height: '14px' }} />, value: m.formSubmits, label: 'Formulários', color: '#c4a96a' },
+                        { icon: <FileText style={{ width: '14px', height: '14px' }} />, value: m.formSubmits, label: 'Formulários', color: 'var(--color-ca-steel-500)' },
                         { icon: <Share2 style={{ width: '14px', height: '14px' }} />, value: m.shares, label: 'Shares', color: '#a78bfa' },
                         { icon: <Users style={{ width: '14px', height: '14px' }} />, value: m.totalLeads, label: 'Leads', color: '#f59e0b' },
                         { icon: <Trophy style={{ width: '14px', height: '14px' }} />, value: m.convertedLeads, label: 'Conversões', color: '#34d399' },
                       ].map((metric, i) => (
                         <div key={i} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '6px', padding: '12px', textAlign: 'center' }}>
                           <div style={{ color: metric.color, marginBottom: '4px' }}>{metric.icon}</div>
-                          <div style={{ fontSize: '20px', fontWeight: 700, color: '#f1eae2', fontFamily: "'Playfair Display', serif" }}>{metric.value}</div>
-                          <div style={{ fontSize: '10px', color: 'rgba(184,191,200,0.5)', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '2px' }}>{metric.label}</div>
+                          <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--color-ca-platinum-100)', fontFamily: "'Playfair Display', serif" }}>{metric.value}</div>
+                          <div style={{ fontSize: '10px', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '2px' }}>{metric.label}</div>
                         </div>
                       ))}
                     </div>
@@ -182,12 +180,12 @@ export default function CampaignAnalyticsPage() {
                       <div style={{ marginTop: '16px' }}>
                         <div style={{ display: 'flex', gap: '2px', height: '6px', borderRadius: '3px', overflow: 'hidden', background: 'rgba(255,255,255,0.05)' }}>
                           <div style={{ width: '100%', background: 'rgba(96,165,250,0.3)', borderRadius: '3px 0 0 3px' }} title="Views" />
-                          <div style={{ width: `${Math.min((m.totalLeads / m.views) * 100, 100)}%`, background: 'rgba(196,169,106,0.6)' }} title="Leads" />
+                          <div style={{ width: `${Math.min((m.totalLeads / m.views) * 100, 100)}%`, background: 'color-mix(in srgb, var(--color-ca-steel-500) 60%, transparent)' }} title="Leads" />
                           <div style={{ width: `${Math.min((m.convertedLeads / Math.max(m.views, 1)) * 100, 100)}%`, background: '#25D366', borderRadius: '0 3px 3px 0' }} title="Convertidos" />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
                           <span style={{ fontSize: '10px', color: 'rgba(96,165,250,0.6)' }}>Views</span>
-                          <span style={{ fontSize: '10px', color: 'rgba(196,169,106,0.6)' }}>Leads</span>
+                          <span style={{ fontSize: '10px', color: 'color-mix(in srgb, var(--color-ca-steel-500) 60%, transparent)' }}>Leads</span>
                           <span style={{ fontSize: '10px', color: 'rgba(37,211,102,0.6)' }}>Convertidos</span>
                         </div>
                       </div>
@@ -197,7 +195,7 @@ export default function CampaignAnalyticsPage() {
               })}
           </div>
         ) : !loading && (
-          <div style={{ textAlign: 'center', padding: '64px', color: '#b8bfc8' }}>
+          <div style={{ textAlign: 'center', padding: '64px', color: 'var(--color-ca-steel-400)' }}>
             <BarChart3 style={{ width: '48px', height: '48px', opacity: 0.3, margin: '0 auto 16px' }} />
             <p>Nenhuma campanha ativa encontrada.</p>
           </div>
@@ -208,3 +206,5 @@ export default function CampaignAnalyticsPage() {
     </div>
   )
 }
+
+

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { adminOnly, adminOrEditor, authenticated } from '../access'
 
 export const Jurisprudence: CollectionConfig = {
   slug: 'jurisprudence',
@@ -10,10 +11,10 @@ export const Jurisprudence: CollectionConfig = {
     listSearchableFields: ['title', 'caseNumber', 'summary'],
   },
   access: {
-    read: () => true,
-    create: () => true,
-    update: () => true,
-    delete: () => true,
+    read: authenticated,
+    create: adminOrEditor,
+    update: adminOrEditor,
+    delete: adminOnly,
   },
   fields: [
     { name: 'title', type: 'text', required: true, label: 'Título / Ementa Resumida' },
@@ -86,3 +87,4 @@ export const Jurisprudence: CollectionConfig = {
     },
   ],
 }
+

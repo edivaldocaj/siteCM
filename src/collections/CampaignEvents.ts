@@ -1,12 +1,15 @@
 import type { CollectionConfig } from 'payload'
+import { adminOnly, adminOrStaff, anyone } from '../access'
 
 export const CampaignEvents: CollectionConfig = {
   slug: 'campaign-events',
+  endpoints: false,
+  graphQL: false,
   access: {
-    read: () => true,
-    create: () => true,
-    update: () => true,
-    delete: () => true,
+    read: adminOrStaff,
+    create: anyone,
+    update: adminOnly,
+    delete: adminOnly,
   },
   admin: {
     useAsTitle: 'eventType',
@@ -50,3 +53,4 @@ export const CampaignEvents: CollectionConfig = {
     },
   ],
 }
+

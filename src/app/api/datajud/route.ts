@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { getClientIp, checkRateLimit } from '@/lib/rate-limit'
 
 const DATAJUD_BASE = 'https://api-publica.datajud.cnj.jus.br'
-const API_KEY = process.env.DATAJUD_API_KEY || 'cDZHYzlZa0JadVREZDJCendQbXY6SkJlTzNjLV9TRENyQk1RdnFKZGRQdw=='
+const getApiKey = () => process.env.DATAJUD_API_KEY || null
 
 const TRIBUNAL_ENDPOINTS: Record<string, string> = {
   tjrn: 'api_publica_tjrn',
@@ -14,6 +15,8 @@ const TRIBUNAL_ENDPOINTS: Record<string, string> = {
 }
 
 async function searchProcess(processNumber: string, tribunal?: string) {
+  const apiKey = getApiKey()
+  if (!apiKey) throw new Error('DATAJUD_API_KEY não configurada')
   const cleanNumber = processNumber.replace(/[.\-\s]/g, '')
   const tribunals = tribunal && TRIBUNAL_ENDPOINTS[tribunal] ? [tribunal] : ['tjrn', 'trt21', 'trf5']
 
@@ -23,7 +26,7 @@ async function searchProcess(processNumber: string, tribunal?: string) {
     try {
       const res = await fetch(`${DATAJUD_BASE}/${endpoint}/_search`, {
         method: 'POST',
-        headers: { 'Authorization': `APIKey ${API_KEY}`, 'Content-Type': 'application/json' },
+        headers: { 'Authorization': `APIKey ${apiKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: { match: { numeroProcesso: cleanNumber } }, size: 1 }),
       })
       if (!res.ok) continue
@@ -44,11 +47,20 @@ async function searchProcess(processNumber: string, tribunal?: string) {
 }
 
 export async function POST(req: NextRequest) {
+  const clientIp = getClientIp(req.headers)
+  if (!checkRateLimit(`datajud:${clientIp}`)) {
+    return NextResponse.json({ error: 'Muitas tentativas. Tente novamente em alguns minutos.' }, { status: 429 })
+  }
+
+  if (!getApiKey()) {
+    return NextResponse.json({ error: 'DATAJUD_API_KEY não configurada.' }, { status: 503 })
+  }
+
   try {
     const body = await req.json()
     const { token, processNumber, tribunal } = body
 
-    if (!token) return NextResponse.json({ error: 'Token de acesso obrigatório.' }, { status: 401 })
+    if (!token) return NextResponse.json({ error: 'Token de acesso obrigatÃ³rio.' }, { status: 401 })
 
     const payload = await getPayload({ config: configPromise })
 
@@ -59,15 +71,15 @@ export async function POST(req: NextRequest) {
     })
 
     const client = clients.docs?.[0]
-    if (!client) return NextResponse.json({ error: 'Token inválido ou acesso desativado.' }, { status: 401 })
+    if (!client) return NextResponse.json({ error: 'Token invÃ¡lido ou acesso desativado.' }, { status: 401 })
 
     if (processNumber) {
       const clientProcesses = client.processes || []
       const hasAccess = clientProcesses.some((p: any) => p.processNumber.replace(/\D/g, '') === processNumber.replace(/\D/g, ''))
-      if (!hasAccess) return NextResponse.json({ error: 'Processo não vinculado à sua conta.' }, { status: 403 })
+      if (!hasAccess) return NextResponse.json({ error: 'Processo nÃ£o vinculado Ã  sua conta.' }, { status: 403 })
 
       const processData = await searchProcess(processNumber, tribunal)
-      if (!processData) return NextResponse.json({ error: 'Processo não encontrado no Datajud.' }, { status: 404 })
+      if (!processData) return NextResponse.json({ error: 'Processo nÃ£o encontrado no Datajud.' }, { status: 404 })
       return NextResponse.json({ success: true, process: processData })
     }
 
@@ -88,3 +100,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Erro interno.' }, { status: 500 })
   }
 }
+
+
+

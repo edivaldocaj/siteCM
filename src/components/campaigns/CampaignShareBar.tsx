@@ -16,7 +16,7 @@ export function CampaignShareBar({
   subtitle,
   shareUrl,
   whatsappMessage,
-  accentColor = '#c4a96a',
+  accentColor = 'var(--color-ca-steel-500)',
 }: CampaignShareBarProps) {
   const [copied, setCopied] = useState(false)
 
@@ -67,15 +67,15 @@ export function CampaignShareBar({
       background: '#ffffff',
       padding: '32px',
       borderRadius: '4px',
-      boxShadow: '0 4px 16px rgba(21,33,56,0.04)',
-      border: '1px solid rgba(21,33,56,0.06)',
+      boxShadow: '0 4px 16px color-mix(in srgb, var(--color-ca-navy-950) 4%, transparent)',
+      border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 6%, transparent)',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
         <Share2 style={{ width: '20px', height: '20px', color: accentColor }} />
         <h3 style={{
           fontFamily: "'Playfair Display', serif",
           fontSize: '18px',
-          color: '#152138',
+          color: 'var(--color-ca-navy-950)',
           margin: 0,
           fontWeight: 600,
         }}>
@@ -84,7 +84,7 @@ export function CampaignShareBar({
       </div>
 
       <p style={{
-        color: 'rgba(21,33,56,0.5)',
+        color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)',
         fontSize: '14px',
         fontFamily: "'Source Sans 3', sans-serif",
         lineHeight: 1.5,
@@ -144,9 +144,9 @@ export function CampaignShareBar({
           onClick={copyLink}
           style={{
             ...btnStyle,
-            background: copied ? 'rgba(4,120,87,0.1)' : 'rgba(21,33,56,0.05)',
-            color: copied ? '#059669' : '#152138',
-            border: `1px solid ${copied ? '#059669' : 'rgba(21,33,56,0.1)'}`,
+            background: copied ? 'rgba(4,120,87,0.1)' : 'color-mix(in srgb, var(--color-ca-navy-950) 5%, transparent)',
+            color: copied ? '#059669' : 'var(--color-ca-navy-950)',
+            border: `1px solid ${copied ? '#059669' : 'color-mix(in srgb, var(--color-ca-navy-950) 10%, transparent)'}`,
           }}
         >
           {copied ? <Check style={{ width: '16px', height: '16px' }} /> : <Copy style={{ width: '16px', height: '16px' }} />}

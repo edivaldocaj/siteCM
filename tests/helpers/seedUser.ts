@@ -4,6 +4,8 @@ import config from '../../src/payload.config.js'
 export const testUser = {
   email: 'dev@payloadcms.com',
   password: 'test',
+  name: 'Dev User',
+  roles: ['admin' as const],
 }
 
 /**
@@ -44,3 +46,6 @@ export async function cleanupTestUser(): Promise<void> {
     },
   })
 }
+
+
+

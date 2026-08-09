@@ -1,31 +1,33 @@
-import type { GlobalConfig } from 'payload'
+﻿import type { GlobalConfig } from 'payload'
+import { adminOnly, anyone } from '../access'
 
 export const Homepage: GlobalConfig = {
   slug: 'homepage',
-  label: 'Página Inicial (Gestão)',
-  access: { read: () => true, update: () => true },
+  label: 'PÃ¡gina Inicial (GestÃ£o)',
+  access: { read: anyone, update: adminOnly },
   fields: [
     {
       name: 'aboutPartners',
       type: 'group',
-      label: 'Sessão: Sobre os Sócios',
+      label: 'Sessao: Equipe',
       fields: [
-        { name: 'sectionTitle', type: 'text', defaultValue: 'Sócios Fundadores', label: 'Título da Sessão' },
-        { name: 'sectionDescription', type: 'textarea', defaultValue: 'Profissionais comprometidos com a excelência, ética e resultados para nossos clientes.', label: 'Subtítulo' },
+        { name: 'sectionTitle', type: 'text', defaultValue: 'Quem conduz o seu caso', label: 'TÃ­tulo da SessÃ£o' },
+        { name: 'sectionDescription', type: 'textarea', defaultValue: 'Profissionais comprometidos com a excelÃªncia, Ã©tica e resultados para nossos clientes.', label: 'SubtÃ­tulo' },
         {
           name: 'partnersList',
           type: 'array',
           label: 'Lista de Advogados',
           fields: [
-            { name: 'name', type: 'text', required: true, label: 'Nome Completo (ex: Dr. Edivaldo Cavalcante)' },
-            { name: 'role', type: 'text', required: true, label: 'Cargo (ex: Sócio-Administrador)' },
-            { name: 'areas', type: 'text', label: 'Áreas de Atuação (separar por vírgula)' },
-            { name: 'oab', type: 'text', label: 'Inscrição OAB' },
+            { name: 'name', type: 'text', required: true, label: 'Nome completo' },
+            { name: 'role', type: 'text', required: true, label: 'Cargo' },
+            { name: 'areas', type: 'text', label: 'Ãreas de AtuaÃ§Ã£o (separar por vÃ­rgula)' },
+            { name: 'oab', type: 'text', label: 'InscriÃ§Ã£o OAB' },
             { name: 'bio', type: 'textarea', label: 'Biografia' },
-            { name: 'photo', type: 'upload', relationTo: 'media', label: 'Foto (opcional — sem foto mostra iniciais)' },
+            { name: 'photo', type: 'upload', relationTo: 'media', label: 'Foto (opcional â€” sem foto mostra iniciais)' },
           ],
         },
       ],
     },
   ],
 }
+

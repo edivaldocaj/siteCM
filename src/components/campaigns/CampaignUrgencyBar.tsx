@@ -5,7 +5,7 @@ interface CampaignUrgencyBarProps {
   accentColor?: string
 }
 
-export function CampaignUrgencyBar({ text, accentColor = '#c4a96a' }: CampaignUrgencyBarProps) {
+export function CampaignUrgencyBar({ text, accentColor = 'var(--color-ca-steel-500)' }: CampaignUrgencyBarProps) {
   return (
     <div
       className="campaign-urgency-bar"
@@ -29,7 +29,7 @@ export function CampaignUrgencyBar({ text, accentColor = '#c4a96a' }: CampaignUr
         animation: 'urgencyPulse 3s ease-in-out infinite',
       }}>
         <span style={{
-          color: '#152138',
+          color: 'var(--color-ca-navy-950)',
           fontFamily: "'Source Sans 3', sans-serif",
           fontSize: '13px',
           fontWeight: 700,

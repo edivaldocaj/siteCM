@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { Calendar, AlertTriangle, Clock, CheckCircle, ArrowLeft, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import { useAdminAuth } from '@/components/admin/AdminAuthContext'
 
 interface Deadline {
   id: string
@@ -28,11 +27,10 @@ const alertColors: Record<string, { bg: string; border: string; text: string }> 
   critical: { bg: 'rgba(220,38,38,0.08)', border: '#dc2626', text: '#dc2626' },
   urgent: { bg: 'rgba(234,88,12,0.08)', border: '#ea580c', text: '#ea580c' },
   attention: { bg: 'rgba(234,179,8,0.08)', border: '#eab308', text: '#eab308' },
-  normal: { bg: 'rgba(255,255,255,0.03)', border: 'rgba(255,255,255,0.08)', text: '#b8bfc8' },
+  normal: { bg: 'rgba(255,255,255,0.03)', border: 'rgba(255,255,255,0.08)', text: 'var(--color-ca-steel-400)' },
 }
 
 export default function DeadlinesPage() {
-  const { token } = useAdminAuth()
   const [loading, setLoading] = useState(false)
   const [deadlines, setDeadlines] = useState<Deadline[]>([])
   const [summary, setSummary] = useState<any>(null)
@@ -44,7 +42,7 @@ export default function DeadlinesPage() {
     setError('')
     try {
       const res = await fetch(`/api/deadlines?days=${days}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        credentials: 'include',
       })
       const json = await res.json()
       if (!res.ok) { setError(json.error || 'Erro'); return }
@@ -72,22 +70,22 @@ export default function DeadlinesPage() {
   })
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0f172a', color: '#f1eae2', fontFamily: "'Source Sans 3', sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: '#0f172a', color: 'var(--color-ca-platinum-100)', fontFamily: "'Source Sans 3', sans-serif" }}>
       {/* Header */}
-      <div style={{ background: '#152138', padding: '20px 24px', borderBottom: '1px solid rgba(196,169,106,0.15)' }}>
+      <div style={{ background: 'var(--color-ca-navy-950)', padding: '20px 24px', borderBottom: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 15%, transparent)' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <Link href="/admin-tools" style={{ color: '#b8bfc8', textDecoration: 'none' }}><ArrowLeft style={{ width: '20px' }} /></Link>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', margin: 0 }}>Prazos <span style={{ color: '#c4a96a' }}>Processuais</span></h1>
+            <Link href="/admin-tools" style={{ color: 'var(--color-ca-steel-400)', textDecoration: 'none' }}><ArrowLeft style={{ width: '20px' }} /></Link>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', margin: 0 }}>Prazos <span style={{ color: 'var(--color-ca-steel-500)' }}>Processuais</span></h1>
           </div>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <select value={days} onChange={e => { setDays(Number(e.target.value)); setTimeout(fetchDeadlines, 100) }} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 12px', color: '#b8bfc8', fontSize: '12px' }}>
+            <select value={days} onChange={e => { setDays(Number(e.target.value)); setTimeout(fetchDeadlines, 100) }} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 12px', color: 'var(--color-ca-steel-400)', fontSize: '12px' }}>
               <option value={7}>7 dias</option>
               <option value={14}>14 dias</option>
               <option value={30}>30 dias</option>
               <option value={60}>60 dias</option>
             </select>
-            <button onClick={fetchDeadlines} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 12px', color: '#b8bfc8', cursor: 'pointer', fontSize: '12px' }}>
+            <button onClick={fetchDeadlines} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 12px', color: 'var(--color-ca-steel-400)', cursor: 'pointer', fontSize: '12px' }}>
               <RefreshCw style={{ width: '12px' }} />
             </button>
           </div>
@@ -107,7 +105,7 @@ export default function DeadlinesPage() {
               <div key={label} style={{ background: `${color}10`, border: `1px solid ${color}25`, borderRadius: '10px', padding: '16px', textAlign: 'center' }}>
                 <Icon style={{ width: '20px', height: '20px', color, margin: '0 auto 8px' }} />
                 <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', fontWeight: 700, color }}>{count}</div>
-                <div style={{ fontSize: '11px', color: '#b8bfc8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</div>
+                <div style={{ fontSize: '11px', color: 'var(--color-ca-steel-400)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</div>
               </div>
             ))}
           </div>
@@ -138,8 +136,8 @@ export default function DeadlinesPage() {
                 flexWrap: 'wrap',
               }}>
                 <div style={{ flex: 1, minWidth: '200px' }}>
-                  <div style={{ fontWeight: 600, fontSize: '15px', color: '#f1eae2', marginBottom: '4px' }}>{d.title}</div>
-                  <div style={{ fontSize: '12px', color: '#b8bfc8', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  <div style={{ fontWeight: 600, fontSize: '15px', color: 'var(--color-ca-platinum-100)', marginBottom: '4px' }}>{d.title}</div>
+                  <div style={{ fontSize: '12px', color: 'var(--color-ca-steel-400)', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     <span style={{ color: ac.text, fontWeight: 600 }}>{typeLabels[d.deadlineType] || d.deadlineType}</span>
                     {d.clientName && <span>• {d.clientName}</span>}
                     {d.processNumber && <span>• {d.processNumber}</span>}
@@ -147,7 +145,7 @@ export default function DeadlinesPage() {
                   </div>
                 </div>
                 <div style={{ textAlign: 'right', minWidth: '120px' }}>
-                  <div style={{ fontSize: '13px', color: '#b8bfc8' }}>{dateStr}</div>
+                  <div style={{ fontSize: '13px', color: 'var(--color-ca-steel-400)' }}>{dateStr}</div>
                   <div style={{ fontSize: '14px', fontWeight: 700, color: ac.text, marginTop: '2px' }}>
                     {d.daysUntil === 0 ? 'HOJE' : d.daysUntil === 1 ? 'AMANHÃ' : `${d.daysUntil} dias`}
                   </div>
@@ -160,3 +158,5 @@ export default function DeadlinesPage() {
     </div>
   )
 }
+
+

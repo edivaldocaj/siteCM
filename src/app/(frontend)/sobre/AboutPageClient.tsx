@@ -1,9 +1,8 @@
-'use client'
+﻿'use client'
 
-import { Scale, Users, Award, MapPin, Phone, Shield, Heart } from 'lucide-react'
+import { Award, Heart, MapPin, Phone, Scale, Shield, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-/* ── Icon map para valores do CMS ── */
 const valueIconMap: Record<string, LucideIcon> = {
   scale: Scale,
   users: Users,
@@ -12,63 +11,27 @@ const valueIconMap: Record<string, LucideIcon> = {
   heart: Heart,
 }
 
-/* ── Defaults (usados se o CMS estiver vazio) ── */
-const defaultPartners = [
-  {
-    name: 'Dr. Edivaldo Cavalcante',
-    role: 'Sócio-Administrador',
-    initials: 'EC',
-    bio: 'Advogado com atuação estratégica em Direito Digital e LGPD, aliando tecnologia e inovação à prática jurídica. Também atua em Direito Civil, Licitações e Contratos Administrativos, além de Direito Penal com atendimento 24 horas para casos urgentes.',
-    areas: ['Direito Digital', 'LGPD', 'Direito Civil', 'Licitações e Contratos', 'Direito Penal'],
-  },
-  {
-    name: 'Dra. Gabrielly Melo',
-    role: 'Sócia-Administradora',
-    initials: 'GM',
-    bio: 'Advogada especialista em Direito Tributário e Imobiliário, com foco em planejamento fiscal, regularização de imóveis e assessoria contratual. Atua também em Direito Civil com atenção ao detalhe e compromisso com resultados.',
-    areas: ['Direito Tributário', 'Direito Imobiliário', 'Direito Civil'],
-  },
-]
-
-const defaultTimeline = [
-  { year: '2025', title: 'Fundação', description: 'Cavalcante & Melo Sociedade de Advogados é fundada em Natal/RN.' },
-  { year: '2025', title: 'Especialização Digital', description: 'Foco estratégico em Direito Digital, LGPD e tecnologia jurídica.' },
-  { year: '2026', title: 'Expansão', description: 'Ampliação das áreas de atuação e consolidação no mercado potiguar.' },
-]
-
-const defaultValues = [
-  { icon: 'scale', title: 'Ética', description: 'Compromisso absoluto com a ética profissional e o Código da OAB.' },
-  { icon: 'users', title: 'Proximidade', description: 'Atendimento humanizado, tratando cada cliente com atenção individual.' },
-  { icon: 'award', title: 'Resultado', description: 'Foco em soluções concretas e eficazes para cada caso.' },
-]
-
-const defaultHistory = 'A Cavalcante & Melo Sociedade de Advogados nasceu em 2025 com a missão de oferecer advocacia de excelência em Natal/RN. Fundada por profissionais com experiência complementar, o escritório se destaca pela combinação de expertise em áreas tradicionais do Direito com a inovação do Direito Digital e LGPD.'
-
 export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteConfig: any }) {
-  /* ── SiteConfig fields ── */
-  const aboutTitle = siteConfig?.aboutTitle || 'Sobre o Escritório'
-  const aboutSubtitle = siteConfig?.aboutSubtitle || 'Advocacia estratégica e humanizada, construída sobre os pilares da ética, proximidade e busca por resultados concretos.'
-  const aboutHistory = siteConfig?.aboutHistory || defaultHistory
+  const aboutTitle = siteConfig?.aboutTitle || 'Sobre o Escritorio'
+  const aboutSubtitle = siteConfig?.aboutSubtitle || 'Advocacia com estrategia e solidez.'
+  const aboutHistory = siteConfig?.aboutHistory || ''
 
-  // Timeline do CMS ou default
   const timeline = siteConfig?.aboutTimeline?.length
     ? siteConfig.aboutTimeline.map((t: any) => ({
         year: t.year,
         title: t.title,
         description: t.description,
       }))
-    : defaultTimeline
+    : []
 
-  // Valores do CMS ou default
   const values = siteConfig?.aboutValues?.length
     ? siteConfig.aboutValues.map((v: any) => ({
         icon: v.icon || 'scale',
         title: v.title,
         description: v.description,
       }))
-    : defaultValues
+    : []
 
-  // Partners do Homepage global
   const partners = homepage?.aboutPartners?.partnersList?.length
     ? homepage.aboutPartners.partnersList.map((p: any) => ({
         name: p.name,
@@ -80,146 +43,145 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
         })(),
         bio: p.bio,
         oab: p.oab,
-        areas: (p.areas || p.role).split(/[,|]/).map((a: string) => a.trim()).filter(Boolean),
+        areas: (p.areas || p.role || '').split(/[,|]/).map((a: string) => a.trim()).filter(Boolean),
         photoUrl: p.photo?.url || null,
       }))
-    : defaultPartners
+    : []
+
+  const contactAddress = siteConfig?.contactAddress || ''
 
   return (
     <>
-      {/* Hero */}
-      <section style={{ background: 'linear-gradient(135deg, #152138 0%, #1c2d4a 50%, #0e1628 100%)', padding: '140px 24px 80px' }}>
+      <section style={{ background: 'linear-gradient(135deg, var(--color-ca-navy-950) 0%, var(--color-ca-navy-800) 50%, var(--color-ca-navy-900) 100%)', padding: '140px 24px 80px' }}>
         <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
           <span style={{ color: 'var(--color-brand-gold-dark)', fontSize: '12px', fontFamily: 'var(--font-body)', textTransform: 'uppercase', letterSpacing: '0.25em', display: 'block', marginBottom: '16px' }}>
-            Quem Somos
+            Quem somos
           </span>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 600, color: 'var(--color-brand-champagne)', lineHeight: 1.1, marginBottom: '24px' }}>
             {aboutTitle}
           </h1>
-          <p style={{ color: 'rgba(184,191,200,0.7)', fontFamily: 'var(--font-body)', fontSize: '18px', lineHeight: 1.6, maxWidth: '600px' }}>
+          <p style={{ color: 'color-mix(in srgb, var(--color-ca-steel-400) 70%, transparent)', fontFamily: 'var(--font-body)', fontSize: '18px', lineHeight: 1.6, maxWidth: '600px' }}>
             {aboutSubtitle}
           </p>
         </div>
       </section>
 
-      {/* Nossa História */}
-      <section style={{ padding: '80px 24px', backgroundColor: 'var(--color-brand-cream)' }}>
-        <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: 'var(--color-brand-navy)', marginBottom: '24px' }}>
-            Nossa História
-          </h2>
-          <p style={{ color: 'rgba(21,33,56,0.7)', fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.8, maxWidth: '900px', marginBottom: '48px', whiteSpace: 'pre-line' }}>
-            {aboutHistory}
-          </p>
-
-          {/* Timeline */}
-          <div style={{ position: 'relative', paddingLeft: '32px', borderLeft: '2px solid rgba(196,169,106,0.2)' }}>
-            {timeline.map((item: any, i: number) => (
-              <div key={i} style={{ marginBottom: i < timeline.length - 1 ? '40px' : '0', position: 'relative' }}>
-                <div style={{ position: 'absolute', left: '-41px', top: '4px', width: '18px', height: '18px', borderRadius: '50%', background: 'var(--color-brand-gold-dark)', border: '3px solid var(--color-brand-cream)' }} />
-                <span style={{ color: 'var(--color-brand-gold-dark)', fontSize: '14px', fontFamily: 'var(--font-body)', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
-                  {item.year}
-                </span>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--color-brand-navy)', fontWeight: 600, marginBottom: '8px' }}>
-                  {item.title}
-                </h3>
-                <p style={{ color: 'rgba(21,33,56,0.6)', fontFamily: 'var(--font-body)', fontSize: '15px', lineHeight: 1.6 }}>
-                  {item.description}
+      {(aboutHistory || timeline.length > 0) && (
+        <section style={{ padding: '80px 24px', backgroundColor: 'var(--color-brand-cream)' }}>
+          <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
+            {aboutHistory && (
+              <>
+                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: 'var(--color-brand-navy)', marginBottom: '24px' }}>
+                  Nossa historia
+                </h2>
+                <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 70%, transparent)', fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.8, maxWidth: '900px', marginBottom: timeline.length > 0 ? '48px' : 0, whiteSpace: 'pre-line' }}>
+                  {aboutHistory}
                 </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+              </>
+            )}
 
-      {/* Nossos Valores */}
-      <section style={{ padding: '80px 24px', backgroundColor: 'white' }}>
-        <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: 'var(--color-brand-navy)', textAlign: 'center', marginBottom: '48px' }}>
-            Nossos Valores
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(values.length, 3)}, 1fr)`, gap: '24px' }} className="values-grid">
-            {values.map((v: any) => {
-              const IconComp = valueIconMap[v.icon] || Scale
-              return (
-                <div key={v.title} style={{ backgroundColor: 'var(--color-brand-cream)', borderRadius: '8px', padding: '40px 32px', textAlign: 'center' }}>
-                  <IconComp style={{ width: '40px', height: '40px', color: 'var(--color-brand-gold-dark)', margin: '0 auto 20px' }} strokeWidth={1.5} />
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--color-brand-navy)', fontWeight: 600, marginBottom: '12px' }}>
-                    {v.title}
-                  </h3>
-                  <p style={{ color: 'rgba(21,33,56,0.6)', fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.6 }}>
-                    {v.description}
-                  </p>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Sócios Fundadores */}
-      <section style={{ padding: '80px 24px', backgroundColor: 'var(--color-brand-cream)' }}>
-        <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: 'var(--color-brand-navy)', textAlign: 'center', marginBottom: '48px' }}>
-            Sócios Fundadores
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '32px', maxWidth: '900px', margin: '0 auto' }} className="partners-grid">
-            {partners.map((p: any) => (
-              <div key={p.name} style={{ backgroundColor: 'white', borderRadius: '8px', padding: '40px 32px', border: '1px solid rgba(237,225,195,0.3)' }}>
-                {/* Avatar */}
-                {p.photoUrl ? (
-                  <img src={p.photoUrl} alt={p.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px' }} />
-                ) : (
-                  <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(135deg, #152138, #1c2d4a)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-                    <span className="text-silver-gradient" style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 'bold' }}>{p.initials}</span>
-                  </div>
-                )}
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>
-                  {p.name}
-                </h3>
-                <p style={{ color: 'var(--color-brand-gold-dark)', fontSize: '14px', fontFamily: 'var(--font-body)', fontWeight: 500, marginBottom: '16px' }}>
-                  {p.role}
-                </p>
-                {p.oab && (
-                  <p style={{ color: 'rgba(21,33,56,0.4)', fontSize: '12px', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>
-                    {p.oab}
-                  </p>
-                )}
-                <p style={{ color: 'rgba(21,33,56,0.6)', fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.7, marginBottom: '20px' }}>
-                  {p.bio}
-                </p>
-                {/* Area pills */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                  {(p.areas || []).map((area: string) => (
-                    <span key={area} style={{ fontSize: '10px', fontFamily: 'var(--font-body)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'rgba(21,33,56,0.5)', background: 'var(--color-brand-cream)', padding: '4px 12px', borderRadius: '2px', border: '1px solid rgba(196,169,106,0.1)' }}>
-                      {area}
+            {timeline.length > 0 && (
+              <div style={{ position: 'relative', paddingLeft: '32px', borderLeft: '2px solid color-mix(in srgb, var(--color-ca-steel-500) 20%, transparent)' }}>
+                {timeline.map((item: any, i: number) => (
+                  <div key={`${item.year}-${item.title}`} style={{ marginBottom: i < timeline.length - 1 ? '40px' : '0', position: 'relative' }}>
+                    <div style={{ position: 'absolute', left: '-41px', top: '4px', width: '18px', height: '18px', borderRadius: '50%', background: 'var(--color-brand-gold-dark)', border: '3px solid var(--color-brand-cream)' }} />
+                    <span style={{ color: 'var(--color-brand-gold-dark)', fontSize: '14px', fontFamily: 'var(--font-body)', fontWeight: 600, display: 'block', marginBottom: '4px' }}>
+                      {item.year}
                     </span>
-                  ))}
-                </div>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--color-brand-navy)', fontWeight: 600, marginBottom: '8px' }}>
+                      {item.title}
+                    </h3>
+                    <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontFamily: 'var(--font-body)', fontSize: '15px', lineHeight: 1.6 }}>
+                      {item.description}
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Localização */}
-      <section style={{ padding: '64px 24px', background: 'linear-gradient(135deg, #152138 0%, #1c2d4a 50%, #0e1628 100%)', textAlign: 'center' }}>
-        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-          <MapPin style={{ width: '32px', height: '32px', color: 'var(--color-brand-gold-dark)', margin: '0 auto 16px' }} />
-          <p style={{ color: 'rgba(184,191,200,0.7)', fontFamily: 'var(--font-body)', fontSize: '16px', marginBottom: '24px' }}>
-            {siteConfig?.contactAddress || 'Rua Francisco Maia Sobrinho, 1950 — Lagoa Nova, Natal/RN'}
-          </p>
-          <a
-            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary"
-          >
-            <Phone style={{ width: '16px', height: '16px' }} />
-            Fale com um Advogado
-          </a>
-        </div>
-      </section>
+      {values.length > 0 && (
+        <section style={{ padding: '80px 24px', backgroundColor: 'white' }}>
+          <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: 'var(--color-brand-navy)', textAlign: 'center', marginBottom: '48px' }}>
+              Nossos valores
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(values.length, 3)}, 1fr)`, gap: '24px' }} className="values-grid">
+              {values.map((v: any) => {
+                const IconComp = valueIconMap[v.icon] || Scale
+                return (
+                  <div key={v.title} style={{ backgroundColor: 'var(--color-brand-cream)', borderRadius: '8px', padding: '40px 32px', textAlign: 'center' }}>
+                    <IconComp style={{ width: '40px', height: '40px', color: 'var(--color-brand-gold-dark)', margin: '0 auto 20px' }} strokeWidth={1.5} />
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--color-brand-navy)', fontWeight: 600, marginBottom: '12px' }}>
+                      {v.title}
+                    </h3>
+                    <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.6 }}>
+                      {v.description}
+                    </p>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {partners.length > 0 && (
+        <section style={{ padding: '80px 24px', backgroundColor: 'var(--color-brand-cream)' }}>
+          <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: 'var(--color-brand-navy)', textAlign: 'center', marginBottom: '48px' }}>
+              Quem conduz o seu caso
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '32px', maxWidth: '900px', margin: '0 auto' }} className="partners-grid">
+              {partners.map((p: any) => (
+                <div key={p.name} style={{ backgroundColor: 'white', borderRadius: '8px', padding: '40px 32px', border: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 12%, transparent)' }}>
+                  {p.photoUrl ? (
+                    <img src={p.photoUrl} alt={p.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px' }} />
+                  ) : (
+                    <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--color-ca-navy-950), var(--color-ca-navy-800))', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                      <span className="text-silver-gradient" style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 600 }}>{p.initials}</span>
+                    </div>
+                  )}
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>
+                    {p.name}
+                  </h3>
+                  <p style={{ color: 'var(--color-brand-gold-dark)', fontSize: '14px', fontFamily: 'var(--font-body)', fontWeight: 500, marginBottom: '16px' }}>
+                    {p.role}
+                  </p>
+                  {p.oab && <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 40%, transparent)', fontSize: '12px', fontFamily: 'var(--font-body)', marginBottom: '12px' }}>{p.oab}</p>}
+                  {p.bio && <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.7, marginBottom: '20px' }}>{p.bio}</p>}
+                  {p.areas.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {p.areas.map((area: string) => (
+                        <span key={area} style={{ fontSize: '10px', fontFamily: 'var(--font-body)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)', background: 'var(--color-brand-cream)', padding: '4px 12px', borderRadius: '2px', border: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)' }}>
+                          {area}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {contactAddress && (
+        <section style={{ padding: '64px 24px', background: 'linear-gradient(135deg, var(--color-ca-navy-950) 0%, var(--color-ca-navy-800) 50%, var(--color-ca-navy-900) 100%)', textAlign: 'center' }}>
+          <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+            <MapPin style={{ width: '32px', height: '32px', color: 'var(--color-brand-gold-dark)', margin: '0 auto 16px' }} />
+            <p style={{ color: 'color-mix(in srgb, var(--color-ca-steel-400) 70%, transparent)', fontFamily: 'var(--font-body)', fontSize: '16px', marginBottom: '24px', whiteSpace: 'pre-line' }}>
+              {contactAddress}
+            </p>
+            <a href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}`} target="_blank" rel="noopener noreferrer" className="btn-primary">
+              <Phone style={{ width: '16px', height: '16px' }} />
+              Fale com um advogado
+            </a>
+          </div>
+        </section>
+      )}
 
       <style dangerouslySetInnerHTML={{ __html: `
         @media (max-width: 768px) {

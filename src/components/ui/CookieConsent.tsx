@@ -23,7 +23,7 @@ export function CookieConsent() {
       <div className="max-w-3xl mx-auto bg-brand-navy/95 backdrop-blur-md border border-brand-silver/10 rounded-lg p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 shadow-2xl">
         <p className="text-brand-silver/70 font-body text-sm flex-1">
           Utilizamos cookies para melhorar sua experiência. Ao continuar navegando, você concorda com nossa{' '}
-          <a href="/politica-de-privacidade" className="text-brand-gold-dark underline">
+          <a href="/privacidade" className="text-brand-gold-dark underline">
             Política de Privacidade
           </a>{' '}
           conforme a LGPD.

@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Shield, Scale, ShoppingBag, Home, Receipt, FileText, Gavel, Laptop, Landmark, Building, Briefcase, ShieldAlert, ArrowRight } from 'lucide-react'
+import { resolveTeamDisplayName } from '@/lib/team-display'
 
 const iconMap: Record<string, any> = {
   shield: Shield, scale: Scale, 'shopping-bag': ShoppingBag,
@@ -10,35 +11,17 @@ const iconMap: Record<string, any> = {
   building: Building, briefcase: Briefcase, 'shield-alert': ShieldAlert,
 }
 
-const attorneyNames: Record<string, string> = {
-  edivaldo: 'Dr. Edivaldo Cavalcante',
-  gabrielly: 'Dra. Gabrielly Melo',
-  both: 'Ambos os sócios',
-}
-
-const defaultAreas = [
-  { icon: 'laptop', title: 'Direito Digital e LGPD', slug: 'direito-digital-lgpd', shortDescription: 'Proteção de dados pessoais, adequação à LGPD, crimes cibernéticos, compliance digital e consultoria para empresas de tecnologia.', attorney: 'edivaldo' },
-  { icon: 'scale', title: 'Direito Civil', slug: 'direito-civil', shortDescription: 'Contratos, responsabilidade civil, direito de família, sucessões, ações indenizatórias e resolução de conflitos.', attorney: 'both' },
-  { icon: 'shopping-bag', title: 'Direito do Consumidor', slug: 'direito-consumidor', shortDescription: 'Fraudes bancárias, negativação indevida, revisão de juros abusivos, problemas com planos de saúde e defesa contra cobranças indevidas.', attorney: 'gabrielly' },
-  { icon: 'home', title: 'Direito Imobiliário', slug: 'direito-imobiliario', shortDescription: 'Compra e venda de imóveis, contratos imobiliários, usucapião, regularização fundiária e disputas de propriedade.', attorney: 'gabrielly' },
-  { icon: 'landmark', title: 'Direito Tributário', slug: 'direito-tributario', shortDescription: 'Planejamento fiscal, defesa em execuções fiscais, recuperação de tributos pagos indevidamente e consultoria tributária.', attorney: 'gabrielly' },
-  { icon: 'file-text', title: 'Licitações e Contratos', slug: 'licitacoes-contratos', shortDescription: 'Assessoria em licitações públicas, impugnações, contratos administrativos e defesa em processos do TCE/TCU.', attorney: 'edivaldo' },
-  { icon: 'gavel', title: 'Direito Penal', slug: 'direito-penal', shortDescription: 'Defesa criminal em todas as fases, habeas corpus, audiência de custódia, crimes contra a honra e estelionato. Atendimento 24h.', attorney: 'edivaldo', is24h: true },
-]
+const defaultAreas: any[] = []
 
 export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfig: any }) {
   const practiceTitle = siteConfig?.practiceTitle || 'Áreas de Atuação'
   const practiceSubtitle = siteConfig?.practiceSubtitle || 'Atuação estratégica em diversas áreas do Direito, com foco na defesa dos seus interesses e na busca por resultados concretos.'
-  // Se CMS retorna áreas mas falta Direito Penal, adiciona do fallback
-  let list = areas.length > 0 ? [...areas] : defaultAreas
-  if (areas.length > 0 && !areas.some((a: any) => a.slug === 'direito-penal' || a.is24h === true)) {
-    list.push(defaultAreas[defaultAreas.length - 1])
-  }
+  const list = areas.length > 0 ? [...areas] : defaultAreas
 
   return (
     <>
       {/* Hero */}
-      <section style={{ background: 'linear-gradient(135deg, #152138 0%, #1c2d4a 50%, #0e1628 100%)', padding: '140px 24px 80px' }}>
+      <section style={{ background: 'linear-gradient(135deg, var(--color-ca-navy-950) 0%, var(--color-ca-navy-800) 50%, var(--color-ca-navy-900) 100%)', padding: '140px 24px 80px' }}>
         <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
           <span style={{ color: 'var(--color-brand-gold-dark)', fontSize: '12px', fontFamily: 'var(--font-body)', textTransform: 'uppercase', letterSpacing: '0.25em', display: 'block', marginBottom: '16px' }}>
             Especialidades
@@ -46,7 +29,7 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 600, color: 'var(--color-brand-champagne)', lineHeight: 1.1, marginBottom: '24px' }}>
             {practiceTitle}
           </h1>
-          <p style={{ color: 'rgba(184,191,200,0.7)', fontFamily: 'var(--font-body)', fontSize: '18px', lineHeight: 1.6, maxWidth: '600px' }}>
+          <p style={{ color: 'color-mix(in srgb, var(--color-ca-steel-400) 70%, transparent)', fontFamily: 'var(--font-body)', fontSize: '18px', lineHeight: 1.6, maxWidth: '600px' }}>
             {practiceSubtitle}
           </p>
         </div>
@@ -60,6 +43,9 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
               const is24h = area.is24h === true || area.is24h === 'true' || area.slug === 'direito-penal'
               const IconComponent = iconMap[area.icon] || Scale
               const isLast = i === list.length - 1
+              const responsibleName = area.responsibleRef || area.byFirm || area.by_firm || area.attorney
+                ? resolveTeamDisplayName(area, 'responsibleRef', 'attorney')
+                : ''
 
               return (
                 <Link
@@ -74,9 +60,9 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
                     textDecoration: 'none',
                     borderRadius: is24h ? '8px' : '0',
                     transition: 'all 0.3s',
-                    borderBottom: is24h ? 'none' : '1px solid rgba(21,33,56,0.06)',
+                    borderBottom: is24h ? 'none' : '1px solid color-mix(in srgb, var(--color-ca-navy-950) 6%, transparent)',
                     ...(is24h
-                      ? { background: 'linear-gradient(135deg, #152138, #1c2d4a)', marginTop: '8px' }
+                      ? { background: 'linear-gradient(135deg, var(--color-ca-navy-950), var(--color-ca-navy-800))', marginTop: '8px' }
                       : { background: 'transparent' }),
                   }}
                 >
@@ -85,7 +71,7 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
                     width: '56px',
                     height: '56px',
                     borderRadius: '8px',
-                    background: is24h ? 'rgba(196,169,106,0.15)' : 'rgba(196,169,106,0.1)',
+                    background: is24h ? 'color-mix(in srgb, var(--color-ca-steel-500) 15%, transparent)' : 'color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -113,7 +99,7 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
                       )}
                     </div>
                     <p style={{
-                      color: is24h ? 'rgba(184,191,200,0.6)' : 'rgba(21,33,56,0.55)',
+                      color: is24h ? 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)' : 'color-mix(in srgb, var(--color-ca-navy-950) 55%, transparent)',
                       fontFamily: 'var(--font-body)',
                       fontSize: '14px',
                       lineHeight: 1.5,
@@ -121,14 +107,14 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
                     }}>
                       {area.shortDescription || area.short_description}
                     </p>
-                    <span style={{ color: is24h ? 'rgba(184,191,200,0.4)' : 'rgba(21,33,56,0.35)', fontSize: '12px', fontFamily: 'var(--font-body)' }}>
-                      {attorneyNames[area.attorney] || ''}
+                    <span style={{ color: is24h ? 'color-mix(in srgb, var(--color-ca-steel-400) 40%, transparent)' : 'color-mix(in srgb, var(--color-ca-navy-950) 35%, transparent)', fontSize: '12px', fontFamily: 'var(--font-body)' }}>
+                      {responsibleName}
                     </span>
                   </div>
 
                   {/* Arrow */}
                   <span style={{
-                    color: is24h ? 'var(--color-brand-gold-dark)' : 'rgba(21,33,56,0.2)',
+                    color: is24h ? 'var(--color-brand-gold-dark)' : 'color-mix(in srgb, var(--color-ca-navy-950) 20%, transparent)',
                     fontSize: '12px',
                     fontFamily: 'var(--font-body)',
                     fontWeight: 600,
@@ -151,7 +137,7 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
       </section>
 
       <style dangerouslySetInnerHTML={{ __html: `
-        .area-list-card:hover { background: rgba(21,33,56,0.02) !important; }
+        .area-list-card:hover { background: color-mix(in srgb, var(--color-ca-navy-950) 2%, transparent) !important; }
         .area-list-card:hover span:last-child { color: var(--color-brand-gold-dark) !important; }
         @media (max-width: 768px) {
           .area-list-card { flex-direction: column !important; align-items: flex-start !important; }

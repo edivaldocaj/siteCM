@@ -14,15 +14,7 @@ const iconMap: Record<string, any> = {
   building: Building, briefcase: Briefcase, 'shield-alert': ShieldAlert,
 }
 
-const defaultAreas = [
-  { icon: 'shield', title: 'Direito Digital e LGPD', slug: 'direito-digital-lgpd', shortDescription: 'Proteção de dados, crimes cibernéticos, compliance digital e adequação à LGPD.' },
-  { icon: 'scale', title: 'Direito Civil', slug: 'direito-civil', shortDescription: 'Contratos, responsabilidade civil, família, sucessões e ações indenizatórias.' },
-  { icon: 'shopping-bag', title: 'Direito do Consumidor', slug: 'direito-consumidor', shortDescription: 'Fraudes bancárias, negativação indevida, revisão de juros e planos de saúde.' },
-  { icon: 'home', title: 'Direito Imobiliário', slug: 'direito-imobiliario', shortDescription: 'Compra e venda, contratos imobiliários, usucapião e regularização.' },
-  { icon: 'receipt', title: 'Direito Tributário', slug: 'direito-tributario', shortDescription: 'Planejamento fiscal, defesa em execuções fiscais e recuperação de tributos.' },
-  { icon: 'file-text', title: 'Licitações e Contratos', slug: 'licitacoes-contratos', shortDescription: 'Assessoria em licitações, impugnações, contratos administrativos.' },
-  { icon: 'gavel', title: 'Direito Penal', slug: 'direito-penal', shortDescription: 'Defesa criminal, habeas corpus, audiência de custódia. Atendimento 24h.', is24h: true },
-]
+const defaultAreas: any[] = []
 
 interface PracticeAreasGridProps {
   cmsAreas?: any[]
@@ -30,10 +22,7 @@ interface PracticeAreasGridProps {
 }
 
 export function PracticeAreasGrid({ cmsAreas = [], showTitle = true }: PracticeAreasGridProps) {
-  let areas = cmsAreas.length > 0 ? [...cmsAreas] : defaultAreas
-  if (cmsAreas.length > 0 && !cmsAreas.some((a: any) => a.slug === 'direito-penal' || a.is24h === true)) {
-    areas.push(defaultAreas[defaultAreas.length - 1])
-  }
+  const areas = cmsAreas.length > 0 ? [...cmsAreas] : defaultAreas
 
   return (
     <section className="section-padding" style={{ backgroundColor: 'var(--color-brand-cream)' }}>
@@ -62,7 +51,7 @@ export function PracticeAreasGrid({ cmsAreas = [], showTitle = true }: PracticeA
               Áreas de Atuação
             </h2>
             <p style={{
-              color: 'rgba(21,33,56,0.6)',
+              color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)',
               fontFamily: 'var(--font-body)',
               fontSize: '18px',
               maxWidth: '40rem',
@@ -99,12 +88,12 @@ export function PracticeAreasGrid({ cmsAreas = [], showTitle = true }: PracticeA
                   transition: 'all 0.5s',
                   ...(is24h
                     ? {
-                        background: 'linear-gradient(135deg, #152138, #1c2d4a)',
-                        border: '1px solid rgba(196,169,106,0.2)',
+                        background: 'linear-gradient(135deg, var(--color-ca-navy-950), var(--color-ca-navy-800))',
+                        border: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 20%, transparent)',
                       }
                     : {
                         background: 'white',
-                        border: '1px solid rgba(196,169,106,0.1)',
+                        border: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)',
                       }),
                 }}
               >
@@ -131,7 +120,7 @@ export function PracticeAreasGrid({ cmsAreas = [], showTitle = true }: PracticeA
                   width: '40px',
                   height: '40px',
                   marginBottom: '24px',
-                  color: is24h ? 'var(--color-brand-gold-dark)' : 'rgba(21,33,56,0.3)',
+                  color: is24h ? 'var(--color-brand-gold-dark)' : 'color-mix(in srgb, var(--color-ca-navy-950) 30%, transparent)',
                   transition: 'color 0.3s',
                 }} />
 
@@ -149,7 +138,7 @@ export function PracticeAreasGrid({ cmsAreas = [], showTitle = true }: PracticeA
                   fontFamily: 'var(--font-body)',
                   fontSize: '14px',
                   lineHeight: 1.6,
-                  color: is24h ? 'rgba(184,191,200,0.7)' : 'rgba(21,33,56,0.5)',
+                  color: is24h ? 'color-mix(in srgb, var(--color-ca-steel-400) 70%, transparent)' : 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)',
                 }}>
                   {area.shortDescription || area.short_description}
                 </p>
@@ -161,7 +150,7 @@ export function PracticeAreasGrid({ cmsAreas = [], showTitle = true }: PracticeA
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
                   fontWeight: 600,
-                  color: is24h ? 'var(--color-brand-gold-dark)' : 'rgba(21,33,56,0.3)',
+                  color: is24h ? 'var(--color-brand-gold-dark)' : 'color-mix(in srgb, var(--color-ca-navy-950) 30%, transparent)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '4px',

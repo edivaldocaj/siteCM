@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { ArrowLeft, RefreshCw, Phone, Mail, Calendar, Star, Loader2, ChevronDown, ChevronUp, User, MessageCircle, ExternalLink, Filter } from 'lucide-react'
 import Link from 'next/link'
-import { useAdminAuth } from '@/components/admin/AdminAuthContext'
 
 interface Lead {
   id: string
@@ -27,13 +26,13 @@ const columns = [
   { key: 'new', label: 'Novo', emoji: '🟡', color: '#eab308' },
   { key: 'contacted', label: 'Contatado', emoji: '📞', color: '#3b82f6' },
   { key: 'qualified', label: 'Qualificado', emoji: '✅', color: '#8b5cf6' },
-  { key: 'proposal', label: 'Proposta', emoji: '📋', color: '#c4a96a' },
+  { key: 'proposal', label: 'Proposta', emoji: '📋', color: 'var(--color-ca-steel-500)' },
   { key: 'converted', label: 'Convertido', emoji: '🎉', color: '#25D366' },
   { key: 'lost', label: 'Perdido', emoji: '❌', color: '#dc2626' },
 ]
 
 const urgencyColors: Record<string, string> = {
-  low: '#25D366', medium: '#c4a96a', high: '#ea580c', urgent: '#dc2626',
+  low: '#25D366', medium: 'var(--color-ca-steel-500)', high: '#ea580c', urgent: '#dc2626',
 }
 const urgencyLabels: Record<string, string> = {
   low: 'Baixa', medium: 'Média', high: 'Alta', urgent: 'Urgente',
@@ -46,7 +45,7 @@ function LeadCard({ lead, onStatusChange }: { lead: Lead; onStatusChange: (id: s
   const [expanded, setExpanded] = useState(false)
   const [changingStatus, setChangingStatus] = useState(false)
 
-  const scoreColor = lead.score >= 60 ? '#25D366' : lead.score >= 30 ? '#c4a96a' : '#b8bfc8'
+  const scoreColor = lead.score >= 60 ? '#25D366' : lead.score >= 30 ? 'var(--color-ca-steel-500)' : 'var(--color-ca-steel-400)'
   const whatsappUrl = `https://wa.me/55${lead.phone.replace(/\D/g, '')}`
   const timeSince = getTimeSince(lead.createdAt)
 
@@ -57,7 +56,7 @@ function LeadCard({ lead, onStatusChange }: { lead: Lead; onStatusChange: (id: s
       borderRadius: '10px',
       padding: '14px',
       marginBottom: '10px',
-      borderLeft: `3px solid ${urgencyColors[lead.urgency] || '#c4a96a'}`,
+      borderLeft: `3px solid ${urgencyColors[lead.urgency] || 'var(--color-ca-steel-500)'}`,
       cursor: 'pointer',
       transition: 'all 0.2s',
     }}>
@@ -65,14 +64,14 @@ function LeadCard({ lead, onStatusChange }: { lead: Lead; onStatusChange: (id: s
       <div onClick={() => setExpanded(!expanded)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span style={{ fontWeight: 600, fontSize: '14px', color: '#f1eae2' }}>{lead.name}</span>
+            <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-ca-platinum-100)' }}>{lead.name}</span>
             <span style={{
               background: `${scoreColor}20`, color: scoreColor,
               fontSize: '10px', fontWeight: 700, padding: '2px 6px', borderRadius: '4px',
             }}>{lead.score}</span>
           </div>
-          <div style={{ fontSize: '12px', color: '#b8bfc8', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {lead.campaignSlug && <span style={{ color: '#c4a96a' }}>{lead.campaignSlug}</span>}
+          <div style={{ fontSize: '12px', color: 'var(--color-ca-steel-400)', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {lead.campaignSlug && <span style={{ color: 'var(--color-ca-steel-500)' }}>{lead.campaignSlug}</span>}
             <span>{sourceLabels[lead.source] || lead.source}</span>
             <span>• {timeSince}</span>
           </div>
@@ -96,7 +95,7 @@ function LeadCard({ lead, onStatusChange }: { lead: Lead; onStatusChange: (id: s
           </div>
 
           {/* Details */}
-          <div style={{ fontSize: '12px', color: '#b8bfc8' }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-ca-steel-400)' }}>
             <p><strong style={{ color: '#999' }}>Tel:</strong> {lead.phone}</p>
             {lead.email && <p><strong style={{ color: '#999' }}>Email:</strong> {lead.email}</p>}
             {lead.estimatedValue > 0 && <p><strong style={{ color: '#999' }}>Valor:</strong> R$ {Number(lead.estimatedValue).toLocaleString('pt-BR')}</p>}
@@ -124,7 +123,7 @@ function LeadCard({ lead, onStatusChange }: { lead: Lead; onStatusChange: (id: s
 
           {/* CMS link */}
           <div style={{ marginTop: '12px', textAlign: 'right' }}>
-            <a href={`/admin/collections/leads/${lead.id}`} target="_blank" rel="noopener" style={{ color: '#c4a96a', fontSize: '12px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <a href={`/admin/collections/leads/${lead.id}`} target="_blank" rel="noopener" style={{ color: 'var(--color-ca-steel-500)', fontSize: '12px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
               Abrir no CMS <ExternalLink style={{ width: '12px' }} />
             </a>
           </div>
@@ -145,7 +144,6 @@ function getTimeSince(dateStr: string): string {
 }
 
 export default function LeadsKanbanPage() {
-  const { token } = useAdminAuth()
   const [loading, setLoading] = useState(false)
   const [leads, setLeads] = useState<Lead[]>([])
   const [error, setError] = useState('')
@@ -157,7 +155,7 @@ export default function LeadsKanbanPage() {
     setError('')
     try {
       const res = await fetch('/api/leads', {
-        headers: { Authorization: `Bearer ${token}` },
+        credentials: 'include',
       })
       const json = await res.json()
       if (!res.ok) { setError(json.error || 'Erro'); return }
@@ -181,8 +179,8 @@ export default function LeadsKanbanPage() {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
+        credentials: 'include',
         body: JSON.stringify({ id: leadId, status: newStatus }),
       })
     } catch {
@@ -201,34 +199,34 @@ export default function LeadsKanbanPage() {
 
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0f172a', color: '#f1eae2', fontFamily: "'Source Sans 3', sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: '#0f172a', color: 'var(--color-ca-platinum-100)', fontFamily: "'Source Sans 3', sans-serif" }}>
       {/* Header */}
-      <div style={{ background: '#152138', padding: '16px 24px', borderBottom: '1px solid rgba(196,169,106,0.15)', position: 'sticky', top: 0, zIndex: 50 }}>
+      <div style={{ background: 'var(--color-ca-navy-950)', padding: '16px 24px', borderBottom: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 15%, transparent)', position: 'sticky', top: 0, zIndex: 50 }}>
         <div style={{ maxWidth: '1600px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <Link href="/admin-tools" style={{ color: '#b8bfc8', textDecoration: 'none' }}><ArrowLeft style={{ width: '20px' }} /></Link>
+            <Link href="/admin-tools" style={{ color: 'var(--color-ca-steel-400)', textDecoration: 'none' }}><ArrowLeft style={{ width: '20px' }} /></Link>
             <div>
-              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '20px', margin: 0 }}>Pipeline de <span style={{ color: '#c4a96a' }}>Leads</span></h1>
-              <p style={{ color: '#b8bfc8', fontSize: '12px' }}>{filteredLeads.length} leads • {leads.filter(l => l.status === 'new').length} novos</p>
+              <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '20px', margin: 0 }}>Pipeline de <span style={{ color: 'var(--color-ca-steel-500)' }}>Leads</span></h1>
+              <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '12px' }}>{filteredLeads.length} leads • {leads.filter(l => l.status === 'new').length} novos</p>
             </div>
           </div>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             {/* Filtros */}
-            <select value={filterAttorney} onChange={e => setFilterAttorney(e.target.value)} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 12px', color: '#b8bfc8', fontSize: '12px' }}>
+            <select value={filterAttorney} onChange={e => setFilterAttorney(e.target.value)} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 12px', color: 'var(--color-ca-steel-400)', fontSize: '12px' }}>
               <option value="">Todos advogados</option>
               <option value="edivaldo">Dr. Edivaldo</option>
               <option value="gabrielly">Dra. Gabrielly</option>
             </select>
             {campaigns.length > 0 && (
-              <select value={filterCampaign} onChange={e => setFilterCampaign(e.target.value)} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 12px', color: '#b8bfc8', fontSize: '12px' }}>
+              <select value={filterCampaign} onChange={e => setFilterCampaign(e.target.value)} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 12px', color: 'var(--color-ca-steel-400)', fontSize: '12px' }}>
                 <option value="">Todas campanhas</option>
                 {campaigns.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             )}
-            <button onClick={fetchLeads} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 12px', color: '#b8bfc8', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <button onClick={fetchLeads} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '6px 12px', color: 'var(--color-ca-steel-400)', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <RefreshCw style={{ width: '12px' }} /> Atualizar
             </button>
-            <Link href="/admin-tools/dashboard" style={{ background: '#c4a96a', color: '#152138', borderRadius: '6px', padding: '6px 16px', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
+            <Link href="/admin-tools/dashboard" style={{ background: 'var(--color-ca-steel-500)', color: 'var(--color-ca-navy-950)', borderRadius: '6px', padding: '6px 16px', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
               Dashboard →
             </Link>
           </div>
@@ -286,3 +284,5 @@ export default function LeadsKanbanPage() {
     </div>
   )
 }
+
+

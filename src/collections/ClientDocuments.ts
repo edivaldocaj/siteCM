@@ -1,7 +1,10 @@
 import type { CollectionConfig } from 'payload'
+import { adminOnly, adminOrStaff, ownClientData } from '../access'
 
 export const ClientDocuments: CollectionConfig = {
   slug: 'client-documents',
+  endpoints: false,
+  graphQL: false,
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'clientName', 'processNumber', 'documentType', 'uploadedBy', 'createdAt'],
@@ -9,10 +12,10 @@ export const ClientDocuments: CollectionConfig = {
     group: 'Portal do Cliente',
   },
   access: {
-    read: () => true,
-    create: () => true,
-    update: () => true,
-    delete: () => true,
+    read: ownClientData,
+    create: adminOrStaff,
+    update: adminOrStaff,
+    delete: adminOnly,
   },
   fields: [
     {
@@ -75,3 +78,4 @@ export const ClientDocuments: CollectionConfig = {
     { name: 'notes', type: 'textarea', label: 'Observações' },
   ],
 }
+

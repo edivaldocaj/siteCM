@@ -41,7 +41,7 @@ export function NewsSection({ cmsNews = [], cmsData }: NewsSectionProps) {
               {sectionTitle}
             </h2>
           </div>
-          <p style={{ color: 'rgba(21,33,56,0.55)', fontFamily: 'var(--font-body)', fontSize: '15px', maxWidth: '340px', lineHeight: 1.6, marginTop: '28px' }}>
+          <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 55%, transparent)', fontFamily: 'var(--font-body)', fontSize: '15px', maxWidth: '340px', lineHeight: 1.6, marginTop: '28px' }}>
             {sectionSubtitle}
           </p>
         </div>
@@ -61,14 +61,14 @@ export function NewsSection({ cmsNews = [], cmsData }: NewsSectionProps) {
                 : null
 
             return (
-              <div key={i} style={{ background: 'white', padding: '28px 32px', borderRadius: '4px', border: '1px solid rgba(21,33,56,0.06)', boxShadow: '0 2px 12px rgba(21,33,56,0.04)', transition: 'all 0.3s' }} className="news-card">
+              <div key={i} style={{ background: 'white', padding: '28px 32px', borderRadius: '4px', border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 6%, transparent)', boxShadow: '0 2px 12px color-mix(in srgb, var(--color-ca-navy-950) 4%, transparent)', transition: 'all 0.3s' }} className="news-card">
                 {/* Top: category + date */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-                  <span style={{ fontSize: '10px', textTransform: 'uppercase', color: 'var(--color-brand-gold-dark)', background: 'rgba(196,169,106,0.1)', padding: '4px 10px', borderRadius: '2px', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', fontWeight: 600 }}>
+                  <span style={{ fontSize: '10px', textTransform: 'uppercase', color: 'var(--color-brand-gold-dark)', background: 'color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)', padding: '4px 10px', borderRadius: '2px', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', fontWeight: 600 }}>
                     {item.category || 'Geral'}
                   </span>
                   {(item.publishedAt || item.published_at) && (
-                    <span style={{ color: 'rgba(21,33,56,0.35)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 35%, transparent)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <Clock style={{ width: '12px', height: '12px' }} />
                       {formatDate(item.publishedAt || item.published_at)}
                     </span>
@@ -84,14 +84,14 @@ export function NewsSection({ cmsNews = [], cmsData }: NewsSectionProps) {
 
                 {/* Summary */}
                 {(item.summary || item.excerpt) && (
-                  <p style={{ color: 'rgba(21,33,56,0.5)', fontSize: '14px', fontFamily: 'var(--font-body)', lineHeight: 1.5, marginBottom: '16px' }}>
+                  <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)', fontSize: '14px', fontFamily: 'var(--font-body)', lineHeight: 1.5, marginBottom: '16px' }}>
                     {item.summary || item.excerpt}
                   </p>
                 )}
 
                 {/* Bottom: source + campaign link */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ color: 'rgba(21,33,56,0.35)', fontSize: '12px', fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 35%, transparent)', fontSize: '12px', fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <Globe style={{ width: '12px', height: '12px' }} />
                     {item.source || 'Judiciário'}
                   </span>
@@ -101,7 +101,7 @@ export function NewsSection({ cmsNews = [], cmsData }: NewsSectionProps) {
                       Ver Campanha <ArrowRight style={{ width: '12px', height: '12px' }} />
                     </Link>
                   ) : (
-                    <a href={href} target={isExternal ? '_blank' : '_self'} style={{ color: 'rgba(21,33,56,0.3)', fontSize: '11px', fontFamily: 'var(--font-body)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
+                    <a href={href} target={isExternal ? '_blank' : '_self'} style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 30%, transparent)', fontSize: '11px', fontFamily: 'var(--font-body)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
                       Ler mais {isExternal && <ExternalLink style={{ width: '10px', height: '10px' }} />}
                       {!isExternal && <ArrowRight style={{ width: '12px', height: '12px' }} />}
                     </a>
@@ -114,7 +114,7 @@ export function NewsSection({ cmsNews = [], cmsData }: NewsSectionProps) {
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
-        .news-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(21,33,56,0.08) !important; }
+        .news-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent) !important; }
         @media (max-width: 768px) { .news-grid { grid-template-columns: 1fr !important; } }
       `}} />
     </section>

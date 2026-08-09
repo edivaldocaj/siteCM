@@ -60,8 +60,8 @@ export function TrustBar({ cmsData }: TrustBarProps) {
   return (
     <section style={{
       backgroundColor: 'var(--color-brand-champagne)',
-      borderTop: '1px solid rgba(196,169,106,0.2)',
-      borderBottom: '1px solid rgba(196,169,106,0.2)',
+      borderTop: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 20%, transparent)',
+      borderBottom: '1px solid color-mix(in srgb, var(--color-ca-steel-500) 20%, transparent)',
     }}>
       <div className="container-wide mx-auto" style={{ padding: '56px 16px' }}>
         <div style={{
@@ -73,7 +73,7 @@ export function TrustBar({ cmsData }: TrustBarProps) {
             <div key={stat.label} style={{ textAlign: 'center' }}>
               <AnimatedCounter target={stat.value} suffix={stat.suffix} />
               <p style={{
-                color: 'rgba(21,33,56,0.6)',
+                color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)',
                 fontFamily: 'var(--font-body)',
                 fontSize: '13px',
                 marginTop: '8px',

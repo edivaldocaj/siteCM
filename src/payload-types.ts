@@ -69,6 +69,23 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    team: Team;
+    pages: Page;
+    posts: Post;
+    campaigns: Campaign;
+    testimonials: Testimonial;
+    'practice-areas': PracticeArea;
+    'news-articles': NewsArticle;
+    clients: Client;
+    leads: Lead;
+    'campaign-events': CampaignEvent;
+    'client-documents': ClientDocument;
+    'nps-responses': NpsResponse;
+    deadlines: Deadline;
+    jurisprudence: Jurisprudence;
+    faqs: Faq;
+    'automation-runs': AutomationRun;
+    'audit-log': AuditLog;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,17 +95,46 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    team: TeamSelect<false> | TeamSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    campaigns: CampaignsSelect<false> | CampaignsSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    'practice-areas': PracticeAreasSelect<false> | PracticeAreasSelect<true>;
+    'news-articles': NewsArticlesSelect<false> | NewsArticlesSelect<true>;
+    clients: ClientsSelect<false> | ClientsSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
+    'campaign-events': CampaignEventsSelect<false> | CampaignEventsSelect<true>;
+    'client-documents': ClientDocumentsSelect<false> | ClientDocumentsSelect<true>;
+    'nps-responses': NpsResponsesSelect<false> | NpsResponsesSelect<true>;
+    deadlines: DeadlinesSelect<false> | DeadlinesSelect<true>;
+    jurisprudence: JurisprudenceSelect<false> | JurisprudenceSelect<true>;
+    faqs: FaqsSelect<false> | FaqsSelect<true>;
+    'automation-runs': AutomationRunsSelect<false> | AutomationRunsSelect<true>;
+    'audit-log': AuditLogSelect<false> | AuditLogSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    homepage: Homepage;
+    'site-config': SiteConfig;
+    'brand-config': BrandConfig;
+    navigation: Navigation;
+    'automation-config': AutomationConfig;
+  };
+  globalsSelect: {
+    homepage: HomepageSelect<false> | HomepageSelect<true>;
+    'site-config': SiteConfigSelect<false> | SiteConfigSelect<true>;
+    'brand-config': BrandConfigSelect<false> | BrandConfigSelect<true>;
+    navigation: NavigationSelect<false> | NavigationSelect<true>;
+    'automation-config': AutomationConfigSelect<false> | AutomationConfigSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -122,7 +168,13 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
+  name: string;
+  roles: ('admin' | 'editor' | 'staff' | 'client')[];
+  /**
+   * Campo legado. Use roles para novas permissões.
+   */
+  role?: ('admin' | 'editor') | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -147,7 +199,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -160,13 +212,816 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    ogImage?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    feedSquare?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    story?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team".
+ */
+export interface Team {
+  id: number;
+  name: string;
+  shortName?: string | null;
+  slug: string;
+  role: string;
+  oab?: string | null;
+  email?: string | null;
+  whatsapp?: string | null;
+  bio?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  photo?: (number | null) | Media;
+  practiceAreas?: (number | PracticeArea)[] | null;
+  linkedin?: string | null;
+  lattes?: string | null;
+  order?: number | null;
+  active?: boolean | null;
+  showOnSite?: boolean | null;
+  /**
+   * Mantém autoria histórica em conteúdo antigo sem exibir no site.
+   */
+  formerMember?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "practice-areas".
+ */
+export interface PracticeArea {
+  id: number;
+  title: string;
+  slug: string;
+  shortDescription?: string | null;
+  icon?:
+    | (
+        | 'shield'
+        | 'scale'
+        | 'shopping-bag'
+        | 'home'
+        | 'receipt'
+        | 'file-text'
+        | 'gavel'
+        | 'laptop'
+        | 'building'
+        | 'briefcase'
+      )
+    | null;
+  heroHeadline?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  caseTypes?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  faq?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  attorney?: ('edivaldo' | 'gabrielly' | 'both') | null;
+  /**
+   * Campo temporário para migração. Mantém attorney legado.
+   */
+  responsibleRef?: (number | null) | Team;
+  byFirm?: boolean | null;
+  is24h?: boolean | null;
+  order?: number | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  slug: string;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+  };
+  status?: ('draft' | 'published') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  featuredImage?: (number | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  category:
+    | 'direito-digital'
+    | 'direito-civil'
+    | 'direito-consumidor'
+    | 'direito-imobiliario'
+    | 'direito-tributario'
+    | 'licitacoes'
+    | 'direito-penal'
+    | 'lgpd'
+    | 'geral';
+  author?: ('edivaldo' | 'gabrielly' | 'escritorio') | null;
+  /**
+   * Campo temporário para migração. Mantém author legado até validação do backfill.
+   */
+  authorRef?: (number | null) | Team;
+  /**
+   * Usado quando author legado for escritorio.
+   */
+  byFirm?: boolean | null;
+  tags?: string[] | null;
+  readTime?: number | null;
+  publishedAt?: string | null;
+  status?: ('draft' | 'published') | null;
+  /**
+   * Ex: fraudes-bancarias. Se preenchido, mostra link para a campanha no card do post.
+   */
+  linkedCampaign?: string | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Campanhas jurídicas — cada campanha gera uma landing page independente.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaigns".
+ */
+export interface Campaign {
+  id: number;
+  title: string;
+  slug: string;
+  category: 'consumidor' | 'digital' | 'criminal' | 'imobiliario' | 'tributario';
+  status: 'draft' | 'active' | 'paused' | 'ended';
+  heroImage?: (number | null) | Media;
+  subtitle?: string | null;
+  problemDescription?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  rightsExplanation?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  benefits?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  socialProof?:
+    | {
+        text: string;
+        author?: string | null;
+        caseType?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  faq?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  whatsappMessage?: string | null;
+  showForm?: boolean | null;
+  urgencyText?: string | null;
+  featuredOnHomepage?: boolean | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  /**
+   * Imagem quadrada para posts de feed no Instagram/Facebook.
+   */
+  coverImage?: (number | null) | Media;
+  /**
+   * Imagem vertical para Stories, Reels e TikTok.
+   */
+  storyImage?: (number | null) | Media;
+  /**
+   * Link para embed de vídeo curto na landing page.
+   */
+  videoUrl?: string | null;
+  /**
+   * Upload de vídeo curto (até 60s) — MP4 recomendado.
+   */
+  videoFile?: (number | null) | Media;
+  /**
+   * Texto pré-escrito para copiar e colar nos posts. Máx ~2200 caracteres (limite do Instagram).
+   */
+  socialCaption?: string | null;
+  /**
+   * Ex: #direitodoconsumidor, #lgpd, #advocaciadigital
+   */
+  socialHashtags?: string[] | null;
+  colorAccent?: ('gold' | 'red' | 'blue' | 'green') | null;
+  /**
+   * Descrição do público-alvo para segmentação de anúncios.
+   */
+  targetAudience?: string | null;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  /**
+   * Imagem de preview quando o link for compartilhado no WhatsApp/Telegram/Facebook.
+   */
+  ogImage?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  authorName: string;
+  text: string;
+  caseType?: string | null;
+  rating?: number | null;
+  featured?: boolean | null;
+  approved?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Notícias jurídicas — alimentadas automaticamente via API e curadas manualmente.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "news-articles".
+ */
+export interface NewsArticle {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  sourceUrl?: string | null;
+  source?: string | null;
+  imageUrl?: string | null;
+  /**
+   * Usado pelas automacoes para evitar importar a mesma noticia mais de uma vez.
+   */
+  sourceHash?: string | null;
+  /**
+   * Pontuacao calculada/curada para priorizar noticias relevantes ao escritorio.
+   */
+  relevanceScore?: number | null;
+  /**
+   * Rascunho interno para curadoria editorial. Revise antes de publicar.
+   */
+  aiSummary?: string | null;
+  /**
+   * Observacoes para revisao humana, vinculos com campanhas ou orientacao de pauta.
+   */
+  editorialNotes?: string | null;
+  /**
+   * Data usada por automacoes para arquivar ou limpar noticias pendentes antigas.
+   */
+  expiresAt?: string | null;
+  category?:
+    | (
+        | 'direito-digital'
+        | 'direito-civil'
+        | 'direito-consumidor'
+        | 'direito-imobiliario'
+        | 'direito-tributario'
+        | 'direito-penal'
+        | 'lgpd'
+        | 'legislacao'
+        | 'tribunais'
+        | 'geral'
+      )
+    | null;
+  status?: ('pending' | 'published' | 'rejected') | null;
+  autoImported?: boolean | null;
+  publishedAt?: string | null;
+  linkedCampaign?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Clientes com acesso ao portal de acompanhamento processual.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients".
+ */
+export interface Client {
+  id: number;
+  name: string;
+  /**
+   * Pode conter pontos e traÃ§os (ex: 123.456.789-00)
+   */
+  cpf: string;
+  email?: string | null;
+  phone?: string | null;
+  processes?:
+    | {
+        /**
+         * Formato: NNNNNNN-DD.AAAA.J.TR.OOOO
+         */
+        processNumber: string;
+        tribunal?: ('tjrn' | 'trt21' | 'trf5' | 'stj' | 'stf' | 'outro') | null;
+        description?: string | null;
+        attorney?: ('edivaldo' | 'gabrielly') | null;
+        /**
+         * Campo temporário para migração. Mantém attorney legado.
+         */
+        attorneyRef?: (number | null) | Team;
+        lawyerSummary?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Token Ãºnico para o cliente acessar o portal.
+   */
+  accessToken: string;
+  active?: boolean | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Pipeline de leads â€” todos os contatos captados pelo site, formulÃ¡rios e campanhas.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  name: string;
+  phone: string;
+  email?: string | null;
+  cpf?: string | null;
+  source: 'campaign-form' | 'contact-form' | 'whatsapp' | 'referral' | 'calculator' | 'other';
+  /**
+   * Slug da campanha (preenchido automaticamente)
+   */
+  campaignSlug?: string | null;
+  /**
+   * google, instagram, facebook...
+   */
+  utmSource?: string | null;
+  /**
+   * cpc, social, email...
+   */
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+  utmContent?: string | null;
+  referrerUrl?: string | null;
+  consentText?: string | null;
+  consentedAt?: string | null;
+  ip?: string | null;
+  userAgent?: string | null;
+  /**
+   * Preenchido automaticamente pelo formulÃ¡rio multi-step da campanha.
+   */
+  qualificationAnswers?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  caseDescription?: string | null;
+  /**
+   * Valor informado pelo lead ou estimado pelo formulÃ¡rio.
+   */
+  estimatedValue?: number | null;
+  urgency?: ('low' | 'medium' | 'high' | 'urgent') | null;
+  status: 'new' | 'contacted' | 'qualified' | 'proposal' | 'converted' | 'lost';
+  /**
+   * Calculado automaticamente. Quanto maior, mais qualificado.
+   */
+  score?: number | null;
+  assignedTo?: ('edivaldo' | 'gabrielly') | null;
+  /**
+   * Campo temporário para migração. Mantém assignedTo legado.
+   */
+  assignedToRef?: (number | null) | Team;
+  byFirm?: boolean | null;
+  lostReason?: ('no-response' | 'competitor' | 'gave-up' | 'no-merit' | 'price' | 'other') | null;
+  notes?:
+    | {
+        text: string;
+        author?: ('edivaldo' | 'gabrielly' | 'system') | null;
+        date?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Data para lembrete de acompanhamento.
+   */
+  nextFollowUp?: string | null;
+  /**
+   * Quando convertido, vincular ao registro de cliente.
+   */
+  convertedToClient?: (number | null) | Client;
+  conversionDate?: string | null;
+  contractValue?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Eventos de analytics das campanhas (visualizações, cliques, conversões).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaign-events".
+ */
+export interface CampaignEvent {
+  id: number;
+  campaignSlug: string;
+  eventType: 'page_view' | 'whatsapp_click' | 'form_start' | 'form_submit' | 'share' | 'cta_click' | 'scroll_complete';
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+  referrer?: string | null;
+  userAgent?: string | null;
+  /**
+   * Dados adicionais do evento (ex: variante A/B, tempo na página).
+   */
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Documentos compartilhados entre escritório e clientes.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "client-documents".
+ */
+export interface ClientDocument {
+  id: number;
+  title: string;
+  documentType?:
+    | ('petition' | 'power-of-attorney' | 'decision' | 'contract' | 'receipt' | 'personal-doc' | 'other')
+    | null;
+  client: number | Client;
+  clientName?: string | null;
+  processNumber?: string | null;
+  file: number | Media;
+  uploadedBy?: ('attorney' | 'client') | null;
+  visibility?: ('client-visible' | 'internal') | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Pesquisas de satisfaÃ§Ã£o e NPS dos clientes.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nps-responses".
+ */
+export interface NpsResponse {
+  id: number;
+  client?: (number | null) | Client;
+  clientName: string;
+  score: number;
+  processNumber?: string | null;
+  attorney?: ('edivaldo' | 'gabrielly') | null;
+  /**
+   * Campo temporário para migração. Mantém attorney legado.
+   */
+  attorneyRef?: (number | null) | Team;
+  feedback?: string | null;
+  consentText?: string | null;
+  consentedAt?: string | null;
+  ip?: string | null;
+  userAgent?: string | null;
+  status?: ('pending' | 'reviewed' | 'testimonial-approved' | 'discarded') | null;
+  testimonialText?: string | null;
+  testimonialApproved?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Prazos processuais com alertas escalonados (7d, 3d, 1d).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "deadlines".
+ */
+export interface Deadline {
+  id: number;
+  title: string;
+  client?: (number | null) | Client;
+  clientName?: string | null;
+  processNumber?: string | null;
+  deadlineDate: string;
+  deadlineType?:
+    | ('contestation' | 'appeal' | 'manifestation' | 'hearing' | 'expertise' | 'sentence-compliance' | 'other')
+    | null;
+  attorney?: ('edivaldo' | 'gabrielly') | null;
+  /**
+   * Campo temporário para migração. Mantém attorney legado.
+   */
+  attorneyRef?: (number | null) | Team;
+  status?: ('pending' | 'in-progress' | 'completed' | 'missed') | null;
+  priority?: ('normal' | 'attention' | 'critical') | null;
+  notes?: string | null;
+  alertSent7d?: boolean | null;
+  alertSent3d?: boolean | null;
+  alertSent1d?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Banco de precedentes (TST, STJ, TJRN) curado manualmente para uso nas minutas com IA.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jurisprudence".
+ */
+export interface Jurisprudence {
+  id: number;
+  title: string;
+  court: 'stf' | 'stj' | 'tst' | 'tjrn' | 'trt21' | 'trf5' | 'other';
+  caseNumber?: string | null;
+  category?:
+    | ('consumidor' | 'digital' | 'criminal' | 'imobiliario' | 'tributario' | 'trabalhista' | 'administrativo')
+    | null;
+  decisionDate?: string | null;
+  summary: string;
+  fullText?: string | null;
+  /**
+   * Ex: negativação indevida, dano moral, repetição de indébito
+   */
+  tags?: string[] | null;
+  relevance?: ('essential' | 'high' | 'medium' | 'reference') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  question: string;
+  answer: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  area?: (number | null) | PracticeArea;
+  order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "automation-runs".
+ */
+export interface AutomationRun {
+  id: number;
+  task: string;
+  status: string;
+  startedAt: string;
+  finishedAt?: string | null;
+  itemsIn?: number | null;
+  itemsOut?: number | null;
+  errorMessage?: string | null;
+  payload?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-log".
+ */
+export interface AuditLog {
+  id: number;
+  action: string;
+  collectionSlug?: string | null;
+  documentId?: string | null;
+  user?: (number | null) | User;
+  before?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  after?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -183,20 +1038,88 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'team';
+        value: number | Team;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'campaigns';
+        value: number | Campaign;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: number | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'practice-areas';
+        value: number | PracticeArea;
+      } | null)
+    | ({
+        relationTo: 'news-articles';
+        value: number | NewsArticle;
+      } | null)
+    | ({
+        relationTo: 'clients';
+        value: number | Client;
+      } | null)
+    | ({
+        relationTo: 'leads';
+        value: number | Lead;
+      } | null)
+    | ({
+        relationTo: 'campaign-events';
+        value: number | CampaignEvent;
+      } | null)
+    | ({
+        relationTo: 'client-documents';
+        value: number | ClientDocument;
+      } | null)
+    | ({
+        relationTo: 'nps-responses';
+        value: number | NpsResponse;
+      } | null)
+    | ({
+        relationTo: 'deadlines';
+        value: number | Deadline;
+      } | null)
+    | ({
+        relationTo: 'jurisprudence';
+        value: number | Jurisprudence;
+      } | null)
+    | ({
+        relationTo: 'faqs';
+        value: number | Faq;
+      } | null)
+    | ({
+        relationTo: 'automation-runs';
+        value: number | AutomationRun;
+      } | null)
+    | ({
+        relationTo: 'audit-log';
+        value: number | AuditLog;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -206,10 +1129,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -229,7 +1152,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -240,6 +1163,9 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  roles?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -274,6 +1200,482 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        ogImage?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        feedSquare?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        story?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team_select".
+ */
+export interface TeamSelect<T extends boolean = true> {
+  name?: T;
+  shortName?: T;
+  slug?: T;
+  role?: T;
+  oab?: T;
+  email?: T;
+  whatsapp?: T;
+  bio?: T;
+  photo?: T;
+  practiceAreas?: T;
+  linkedin?: T;
+  lattes?: T;
+  order?: T;
+  active?: T;
+  showOnSite?: T;
+  formerMember?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  content?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+      };
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  featuredImage?: T;
+  content?: T;
+  category?: T;
+  author?: T;
+  authorRef?: T;
+  byFirm?: T;
+  tags?: T;
+  readTime?: T;
+  publishedAt?: T;
+  status?: T;
+  linkedCampaign?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaigns_select".
+ */
+export interface CampaignsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  category?: T;
+  status?: T;
+  heroImage?: T;
+  subtitle?: T;
+  problemDescription?: T;
+  rightsExplanation?: T;
+  benefits?: T;
+  socialProof?:
+    | T
+    | {
+        text?: T;
+        author?: T;
+        caseType?: T;
+        id?: T;
+      };
+  faq?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  whatsappMessage?: T;
+  showForm?: T;
+  urgencyText?: T;
+  featuredOnHomepage?: T;
+  startDate?: T;
+  endDate?: T;
+  coverImage?: T;
+  storyImage?: T;
+  videoUrl?: T;
+  videoFile?: T;
+  socialCaption?: T;
+  socialHashtags?: T;
+  colorAccent?: T;
+  targetAudience?: T;
+  metaTitle?: T;
+  metaDescription?: T;
+  ogImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  authorName?: T;
+  text?: T;
+  caseType?: T;
+  rating?: T;
+  featured?: T;
+  approved?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "practice-areas_select".
+ */
+export interface PracticeAreasSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  shortDescription?: T;
+  icon?: T;
+  heroHeadline?: T;
+  content?: T;
+  caseTypes?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  faq?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  attorney?: T;
+  responsibleRef?: T;
+  byFirm?: T;
+  is24h?: T;
+  order?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "news-articles_select".
+ */
+export interface NewsArticlesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  content?: T;
+  sourceUrl?: T;
+  source?: T;
+  imageUrl?: T;
+  sourceHash?: T;
+  relevanceScore?: T;
+  aiSummary?: T;
+  editorialNotes?: T;
+  expiresAt?: T;
+  category?: T;
+  status?: T;
+  autoImported?: T;
+  publishedAt?: T;
+  linkedCampaign?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients_select".
+ */
+export interface ClientsSelect<T extends boolean = true> {
+  name?: T;
+  cpf?: T;
+  email?: T;
+  phone?: T;
+  processes?:
+    | T
+    | {
+        processNumber?: T;
+        tribunal?: T;
+        description?: T;
+        attorney?: T;
+        attorneyRef?: T;
+        lawyerSummary?: T;
+        id?: T;
+      };
+  accessToken?: T;
+  active?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  name?: T;
+  phone?: T;
+  email?: T;
+  cpf?: T;
+  source?: T;
+  campaignSlug?: T;
+  utmSource?: T;
+  utmMedium?: T;
+  utmCampaign?: T;
+  utmContent?: T;
+  referrerUrl?: T;
+  consentText?: T;
+  consentedAt?: T;
+  ip?: T;
+  userAgent?: T;
+  qualificationAnswers?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  caseDescription?: T;
+  estimatedValue?: T;
+  urgency?: T;
+  status?: T;
+  score?: T;
+  assignedTo?: T;
+  assignedToRef?: T;
+  byFirm?: T;
+  lostReason?: T;
+  notes?:
+    | T
+    | {
+        text?: T;
+        author?: T;
+        date?: T;
+        id?: T;
+      };
+  nextFollowUp?: T;
+  convertedToClient?: T;
+  conversionDate?: T;
+  contractValue?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaign-events_select".
+ */
+export interface CampaignEventsSelect<T extends boolean = true> {
+  campaignSlug?: T;
+  eventType?: T;
+  utmSource?: T;
+  utmMedium?: T;
+  utmCampaign?: T;
+  referrer?: T;
+  userAgent?: T;
+  metadata?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "client-documents_select".
+ */
+export interface ClientDocumentsSelect<T extends boolean = true> {
+  title?: T;
+  documentType?: T;
+  client?: T;
+  clientName?: T;
+  processNumber?: T;
+  file?: T;
+  uploadedBy?: T;
+  visibility?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nps-responses_select".
+ */
+export interface NpsResponsesSelect<T extends boolean = true> {
+  client?: T;
+  clientName?: T;
+  score?: T;
+  processNumber?: T;
+  attorney?: T;
+  attorneyRef?: T;
+  feedback?: T;
+  consentText?: T;
+  consentedAt?: T;
+  ip?: T;
+  userAgent?: T;
+  status?: T;
+  testimonialText?: T;
+  testimonialApproved?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "deadlines_select".
+ */
+export interface DeadlinesSelect<T extends boolean = true> {
+  title?: T;
+  client?: T;
+  clientName?: T;
+  processNumber?: T;
+  deadlineDate?: T;
+  deadlineType?: T;
+  attorney?: T;
+  attorneyRef?: T;
+  status?: T;
+  priority?: T;
+  notes?: T;
+  alertSent7d?: T;
+  alertSent3d?: T;
+  alertSent1d?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jurisprudence_select".
+ */
+export interface JurisprudenceSelect<T extends boolean = true> {
+  title?: T;
+  court?: T;
+  caseNumber?: T;
+  category?: T;
+  decisionDate?: T;
+  summary?: T;
+  fullText?: T;
+  tags?: T;
+  relevance?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs_select".
+ */
+export interface FaqsSelect<T extends boolean = true> {
+  question?: T;
+  answer?: T;
+  area?: T;
+  order?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "automation-runs_select".
+ */
+export interface AutomationRunsSelect<T extends boolean = true> {
+  task?: T;
+  status?: T;
+  startedAt?: T;
+  finishedAt?: T;
+  itemsIn?: T;
+  itemsOut?: T;
+  errorMessage?: T;
+  payload?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-log_select".
+ */
+export interface AuditLogSelect<T extends boolean = true> {
+  action?: T;
+  collectionSlug?: T;
+  documentId?: T;
+  user?: T;
+  before?: T;
+  after?: T;
+  metadata?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -314,6 +1716,474 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage".
+ */
+export interface Homepage {
+  id: number;
+  aboutPartners?: {
+    sectionTitle?: string | null;
+    sectionDescription?: string | null;
+    partnersList?:
+      | {
+          name: string;
+          role: string;
+          areas?: string | null;
+          oab?: string | null;
+          bio?: string | null;
+          photo?: (number | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-config".
+ */
+export interface SiteConfig {
+  id: number;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+  heroButtonText?: string | null;
+  trustBarStats?:
+    | {
+        value: number;
+        suffix?: string | null;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  criminalTag?: string | null;
+  criminalTitle?: string | null;
+  criminalHighlight?: string | null;
+  criminalDescription?: string | null;
+  campaignsTitle?: string | null;
+  campaignsSubtitle?: string | null;
+  testimonialsTitle?: string | null;
+  newsTitle?: string | null;
+  newsSubtitle?: string | null;
+  blogTitle?: string | null;
+  blogSubtitle?: string | null;
+  aboutTitle?: string | null;
+  aboutSubtitle?: string | null;
+  aboutHistory?: string | null;
+  aboutTimeline?:
+    | {
+        year: string;
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  aboutValues?:
+    | {
+        title: string;
+        description: string;
+        icon?: ('scale' | 'users' | 'award' | 'shield' | 'heart') | null;
+        id?: string | null;
+      }[]
+    | null;
+  practiceTitle?: string | null;
+  practiceSubtitle?: string | null;
+  contactTitle?: string | null;
+  contactSubtitle?: string | null;
+  contactEmail?: string | null;
+  contactPhone?: string | null;
+  contactAddress?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brand-config".
+ */
+export interface BrandConfig {
+  id: number;
+  tradeName: string;
+  descriptor: string;
+  legalName: string;
+  cnpj: string;
+  oabRegistration: string;
+  founderName: string;
+  foundedYear?: string | null;
+  tagline: string;
+  domain: string;
+  logoLight?: (number | null) | Media;
+  logoDark?: (number | null) | Media;
+  symbol?: (number | null) | Media;
+  ogDefault?: (number | null) | Media;
+  favicon?: (number | null) | Media;
+  email?: string | null;
+  phone?: string | null;
+  whatsapp?: string | null;
+  whatsappDefaultMessage?: string | null;
+  addressStreet?: string | null;
+  addressDistrict?: string | null;
+  addressCity?: string | null;
+  addressState?: string | null;
+  addressZip?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  businessHours?:
+    | {
+        day: string;
+        opensAt?: string | null;
+        closesAt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  emergencyLine?: string | null;
+  emergencyLabel?: string | null;
+  instagram?: string | null;
+  linkedin?: string | null;
+  facebook?: string | null;
+  youtube?: string | null;
+  googleBusiness?: string | null;
+  privacyPolicy?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  termsOfUse?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  cookiePolicy?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  dpoName?: string | null;
+  dpoEmail?: string | null;
+  oabDisclaimer?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation".
+ */
+export interface Navigation {
+  id: number;
+  headerLinks?:
+    | {
+        label: string;
+        href: string;
+        highlight?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  footerColumns?:
+    | {
+        title: string;
+        links: {
+          label: string;
+          href: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+      }[]
+    | null;
+  legalLinks?:
+    | {
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  ctaLabel?: string | null;
+  ctaHref?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "automation-config".
+ */
+export interface AutomationConfig {
+  id: number;
+  newsEnabled?: boolean | null;
+  newsIntervalHours?: number | null;
+  newsAutoPublishScore?: number | null;
+  newsRetentionDays?: number | null;
+  newsSources?:
+    | {
+        label: string;
+        url: string;
+        enabled?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  leadAutoReply?: boolean | null;
+  leadAutoReplyTemplate?: string | null;
+  leadSlaHours?: number | null;
+  leadEscalationEmail?: string | null;
+  deadlineAlertsEnabled?: boolean | null;
+  deadlineAlertDays?:
+    | {
+        days: number;
+        id?: string | null;
+      }[]
+    | null;
+  deadlineAlertHour?: number | null;
+  datajudSyncEnabled?: boolean | null;
+  datajudSyncHour?: number | null;
+  npsTriggerDays?: number | null;
+  npsAutoTestimonial?: boolean | null;
+  socialAutoGenerate?: boolean | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_select".
+ */
+export interface HomepageSelect<T extends boolean = true> {
+  aboutPartners?:
+    | T
+    | {
+        sectionTitle?: T;
+        sectionDescription?: T;
+        partnersList?:
+          | T
+          | {
+              name?: T;
+              role?: T;
+              areas?: T;
+              oab?: T;
+              bio?: T;
+              photo?: T;
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-config_select".
+ */
+export interface SiteConfigSelect<T extends boolean = true> {
+  heroTitle?: T;
+  heroSubtitle?: T;
+  heroButtonText?: T;
+  trustBarStats?:
+    | T
+    | {
+        value?: T;
+        suffix?: T;
+        label?: T;
+        id?: T;
+      };
+  criminalTag?: T;
+  criminalTitle?: T;
+  criminalHighlight?: T;
+  criminalDescription?: T;
+  campaignsTitle?: T;
+  campaignsSubtitle?: T;
+  testimonialsTitle?: T;
+  newsTitle?: T;
+  newsSubtitle?: T;
+  blogTitle?: T;
+  blogSubtitle?: T;
+  aboutTitle?: T;
+  aboutSubtitle?: T;
+  aboutHistory?: T;
+  aboutTimeline?:
+    | T
+    | {
+        year?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  aboutValues?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
+  practiceTitle?: T;
+  practiceSubtitle?: T;
+  contactTitle?: T;
+  contactSubtitle?: T;
+  contactEmail?: T;
+  contactPhone?: T;
+  contactAddress?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brand-config_select".
+ */
+export interface BrandConfigSelect<T extends boolean = true> {
+  tradeName?: T;
+  descriptor?: T;
+  legalName?: T;
+  cnpj?: T;
+  oabRegistration?: T;
+  founderName?: T;
+  foundedYear?: T;
+  tagline?: T;
+  domain?: T;
+  logoLight?: T;
+  logoDark?: T;
+  symbol?: T;
+  ogDefault?: T;
+  favicon?: T;
+  email?: T;
+  phone?: T;
+  whatsapp?: T;
+  whatsappDefaultMessage?: T;
+  addressStreet?: T;
+  addressDistrict?: T;
+  addressCity?: T;
+  addressState?: T;
+  addressZip?: T;
+  latitude?: T;
+  longitude?: T;
+  businessHours?:
+    | T
+    | {
+        day?: T;
+        opensAt?: T;
+        closesAt?: T;
+        id?: T;
+      };
+  emergencyLine?: T;
+  emergencyLabel?: T;
+  instagram?: T;
+  linkedin?: T;
+  facebook?: T;
+  youtube?: T;
+  googleBusiness?: T;
+  privacyPolicy?: T;
+  termsOfUse?: T;
+  cookiePolicy?: T;
+  dpoName?: T;
+  dpoEmail?: T;
+  oabDisclaimer?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation_select".
+ */
+export interface NavigationSelect<T extends boolean = true> {
+  headerLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        highlight?: T;
+        id?: T;
+      };
+  footerColumns?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  legalLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  ctaLabel?: T;
+  ctaHref?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "automation-config_select".
+ */
+export interface AutomationConfigSelect<T extends boolean = true> {
+  newsEnabled?: T;
+  newsIntervalHours?: T;
+  newsAutoPublishScore?: T;
+  newsRetentionDays?: T;
+  newsSources?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        enabled?: T;
+        id?: T;
+      };
+  leadAutoReply?: T;
+  leadAutoReplyTemplate?: T;
+  leadSlaHours?: T;
+  leadEscalationEmail?: T;
+  deadlineAlertsEnabled?: T;
+  deadlineAlertDays?:
+    | T
+    | {
+        days?: T;
+        id?: T;
+      };
+  deadlineAlertHour?: T;
+  datajudSyncEnabled?: T;
+  datajudSyncHour?: T;
+  npsTriggerDays?: T;
+  npsAutoTestimonial?: T;
+  socialAutoGenerate?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

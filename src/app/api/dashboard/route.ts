@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { requireAdminRole } from '@/lib/admin-auth'
 
 /* GET: KPIs gerenciais do escritório */
 export async function GET(req: NextRequest) {
-  const secret = req.headers.get('Authorization')?.replace('Bearer ', '')
-  if (secret !== process.env.NEWS_REVALIDATE_SECRET) {
-    return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
-  }
+  const denied = await requireAdminRole(req, ['admin', 'staff'])
+  if (denied) return denied
 
   try {
     const payload = await getPayload({ config: configPromise })
@@ -191,3 +190,4 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Erro interno.' }, { status: 500 })
   }
 }
+

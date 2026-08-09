@@ -1,0 +1,49 @@
+<!--
+  Cavalcante Albuquerque — Símbolo (3 barras ascendentes)
+  ATENÇÃO: traçado técnico derivado por medição do bitmap logo111.png (1254×1254).
+  Serve como referência de proporção e para uso imediato em UI (favicon, header, ícones).
+  Substituir pelo vetor oficial assim que o arquivo .ai/.svg da agência estiver disponível.
+
+  Geometria medida (caixa 1254px):
+    barra 1 (navy, ponta inferior): x 388→499 | topo 495→407 | base 1027 | ponta 1080
+    barra 2 (metal):               x 585→698 | topo 350→280 | base 963
+    barra 3 (metal):               x 780→893 | topo 221→152 | base 965
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Cavalcante Albuquerque">
+  <title>Cavalcante Albuquerque</title>
+
+  <defs>
+    <!-- Aço escovado: highlight deslocado do centro, como na marca original -->
+    <linearGradient id="ca-steel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#5C646E"/>
+      <stop offset="14%"  stop-color="#8B98AC"/>
+      <stop offset="34%"  stop-color="#EEF1F4"/>
+      <stop offset="52%"  stop-color="#AEB8C4"/>
+      <stop offset="76%"  stop-color="#6E7A8A"/>
+      <stop offset="100%" stop-color="#D0D2D9"/>
+    </linearGradient>
+
+    <!-- Navy da barra 1: leve volume, não chapado -->
+    <linearGradient id="ca-navy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#011536"/>
+      <stop offset="55%"  stop-color="#0A2049"/>
+      <stop offset="100%" stop-color="#01102A"/>
+    </linearGradient>
+
+    <linearGradient id="ca-edge" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#D0D2D9"/>
+      <stop offset="50%"  stop-color="#EEF1F4"/>
+      <stop offset="100%" stop-color="#8B98AC"/>
+    </linearGradient>
+  </defs>
+
+  <!-- barra 1 — navy com fio metálico e ponta de pena -->
+  <path d="M158.4 202.1 L203.7 166.2 L203.7 419.3 L181.1 441.0 L158.4 419.3 Z"
+        fill="#011536" stroke="#011536" stroke-width="2.5" stroke-linejoin="miter"/>
+
+  <!-- barra 2 -->
+  <path d="M238.9 142.9 L285.0 114.3 L285.0 393.2 L238.9 393.2 Z" fill="#011536"/>
+
+  <!-- barra 3 -->
+  <path d="M318.5 90.2 L364.6 62.1 L364.6 394.0 L318.5 394.0 Z" fill="#011536"/>
+</svg>

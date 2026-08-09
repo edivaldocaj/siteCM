@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { requireAdminRole } from '@/lib/admin-auth'
 
 const categoryTemplates: Record<string, string> = {
   consumidor: `Você é um advogado especializado em Direito do Consumidor atuando no RN. Gere uma MINUTA de petição inicial com base nos dados fornecidos. Use os precedentes jurisprudenciais fornecidos. Estruture com: Qualificação das partes, Dos fatos, Do direito (com fundamentação legal: CDC, CC, jurisprudência), Dos danos (material e moral se aplicável), Dos pedidos, Do valor da causa.`,
@@ -12,11 +13,8 @@ const categoryTemplates: Record<string, string> = {
 
 /* POST: Gerar minuta de petição com IA */
 export async function POST(req: NextRequest) {
-  const secret = req.headers.get('Authorization')?.replace('Bearer ', '')
-  if (secret !== process.env.NEWS_REVALIDATE_SECRET) {
-    return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
-  }
-
+  const denied = await requireAdminRole(req, ['admin', 'staff'])
+  if (denied) return denied
   try {
     const body = await req.json()
     const { leadId, category, additionalContext } = body
@@ -134,3 +132,6 @@ IMPORTANTE:
     return NextResponse.json({ error: 'Erro interno.' }, { status: 500 })
   }
 }
+
+
+

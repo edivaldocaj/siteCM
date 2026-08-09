@@ -20,7 +20,7 @@ export function CriminalUrgency({ cmsData }: CriminalUrgencyProps) {
   return (
     <section className="relative overflow-hidden">
       {/* Dark background */}
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #0e1628, #152138)' }} />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, var(--color-ca-navy-900), var(--color-ca-navy-950))' }} />
       <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(122,27,27,0.1), transparent, rgba(122,27,27,0.05))' }} />
       <div className="absolute top-0 left-0 right-0" style={{ height: '3px', background: 'linear-gradient(90deg, var(--color-brand-urgency), var(--color-brand-gold-dark), var(--color-brand-urgency))' }} />
 
@@ -60,7 +60,7 @@ export function CriminalUrgency({ cmsData }: CriminalUrgencyProps) {
             </h2>
 
             <p style={{
-              color: 'rgba(184,191,200,0.6)',
+              color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)',
               fontFamily: 'var(--font-body)',
               fontSize: '18px',
               lineHeight: 1.6,
@@ -84,7 +84,7 @@ export function CriminalUrgency({ cmsData }: CriminalUrgencyProps) {
                 href="tel:+5584991243985"
                 className="btn-outline"
                 style={{
-                  borderColor: 'rgba(196,169,106,0.4)',
+                  borderColor: 'color-mix(in srgb, var(--color-ca-steel-500) 40%, transparent)',
                   color: 'var(--color-brand-gold-dark)',
                   fontSize: '15px',
                 }}
@@ -128,7 +128,7 @@ export function CriminalUrgency({ cmsData }: CriminalUrgencyProps) {
                   width: '48px',
                   height: '48px',
                   borderRadius: '8px',
-                  background: 'rgba(196,169,106,0.1)',
+                  background: 'color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -147,7 +147,7 @@ export function CriminalUrgency({ cmsData }: CriminalUrgencyProps) {
                     {item.title}
                   </h3>
                   <p style={{
-                    color: 'rgba(184,191,200,0.5)',
+                    color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)',
                     fontFamily: 'var(--font-body)',
                     fontSize: '14px',
                     lineHeight: 1.6,

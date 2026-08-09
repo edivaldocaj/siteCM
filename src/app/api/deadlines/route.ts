@@ -1,29 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { requireAdminRole } from '@/lib/admin-auth'
+import { getBearerToken, getRequiredSecret, safeCompare } from '@/lib/secrets'
 
-const attorneyEmails: Record<string, string> = {
-  edivaldo: process.env.CONTACT_EMAIL || 'contato@cavalcantemelo.adv.br',
-  gabrielly: process.env.CONTACT_EMAIL_2 || process.env.CONTACT_EMAIL || 'contato@cavalcantemelo.adv.br',
-}
+const getAttorneyEmails = (): Record<string, string | undefined> => ({
+  edivaldo: process.env.CONTACT_EMAIL,
+  gabrielly: process.env.CONTACT_EMAIL_2 || process.env.CONTACT_EMAIL,
+})
 
 const deadlineTypeLabels: Record<string, string> = {
-  contestation: 'Contestação',
+  contestation: 'ContestaÃ§Ã£o',
   appeal: 'Recurso',
-  manifestation: 'Manifestação',
-  hearing: 'Audiência',
-  expertise: 'Perícia',
-  'sentence-compliance': 'Cumprimento de Sentença',
+  manifestation: 'ManifestaÃ§Ã£o',
+  hearing: 'AudiÃªncia',
+  expertise: 'PerÃ­cia',
+  'sentence-compliance': 'Cumprimento de SentenÃ§a',
   other: 'Outro',
 }
 
-/* GET: Listar prazos próximos (protegido) */
+/* GET: Listar prazos prÃ³ximos (protegido) */
 export async function GET(req: NextRequest) {
-  const secret = req.headers.get('Authorization')?.replace('Bearer ', '')
-  if (secret !== process.env.NEWS_REVALIDATE_SECRET) {
-    return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
-  }
-
+  const denied = await requireAdminRole(req, ['admin', 'staff'])
+  if (denied) return denied
   try {
     const payload = await getPayload({ config: configPromise })
     const { searchParams } = new URL(req.url)
@@ -46,7 +45,7 @@ export async function GET(req: NextRequest) {
       limit: 100,
     })
 
-    // Categorizar por urgência
+    // Categorizar por urgÃªncia
     const categorized = deadlines.docs.map((d: any) => {
       const daysUntil = Math.ceil((new Date(d.deadlineDate).getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
       let alertLevel = 'normal'
@@ -75,9 +74,13 @@ export async function GET(req: NextRequest) {
 
 /* POST: Verificar e enviar alertas de prazos (chamado por cron/n8n) */
 export async function POST(req: NextRequest) {
-  const secret = req.headers.get('Authorization')?.replace('Bearer ', '')
-  if (secret !== process.env.NEWS_REVALIDATE_SECRET) {
-    return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
+  const secret = getRequiredSecret('CRON_SECRET')
+  if (!secret) {
+    return NextResponse.json({ error: 'CRON_SECRET não configurado.' }, { status: 503 })
+  }
+
+  if (!safeCompare(getBearerToken(req.headers), secret)) {
+    return NextResponse.json({ error: 'NÃ£o autorizado.' }, { status: 401 })
   }
 
   try {
@@ -85,7 +88,7 @@ export async function POST(req: NextRequest) {
     const now = new Date()
     const alerts: any[] = []
 
-    // Buscar prazos pendentes nos próximos 8 dias
+    // Buscar prazos pendentes nos prÃ³ximos 8 dias
     const futureDate = new Date(now.getTime() + 8 * 24 * 60 * 60 * 1000)
     const deadlines = await (payload as any).find({
       collection: 'deadlines',
@@ -105,20 +108,22 @@ export async function POST(req: NextRequest) {
 
       if (daysUntil <= 1 && !deadline.alertSent1d) {
         shouldAlert = true
-        alertType = '🔴 CRÍTICO — Amanhã'
+        alertType = 'ðŸ”´ CRÃTICO â€” AmanhÃ£'
         updateField = 'alertSent1d'
       } else if (daysUntil <= 3 && !deadline.alertSent3d) {
         shouldAlert = true
-        alertType = '🟠 URGENTE — 3 dias'
+        alertType = 'ðŸŸ  URGENTE â€” 3 dias'
         updateField = 'alertSent3d'
       } else if (daysUntil <= 7 && !deadline.alertSent7d) {
         shouldAlert = true
-        alertType = '🟡 Atenção — 7 dias'
+        alertType = 'ðŸŸ¡ AtenÃ§Ã£o â€” 7 dias'
         updateField = 'alertSent7d'
       }
 
       if (shouldAlert && process.env.RESEND_API_KEY) {
-        const toEmail = attorneyEmails[deadline.attorney] || process.env.CONTACT_EMAIL || 'contato@cavalcantemelo.adv.br'
+        const attorneyEmails = getAttorneyEmails()
+        const toEmail = attorneyEmails[deadline.attorney] || process.env.CONTACT_EMAIL
+        if (!toEmail) continue
         const typeLabel = deadlineTypeLabels[deadline.deadlineType] || deadline.deadlineType
 
         try {
@@ -129,12 +134,12 @@ export async function POST(req: NextRequest) {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              from: 'Cavalcante & Melo <onboarding@resend.dev>',
+              from: process.env.RESEND_FROM_EMAIL || 'Cavalcante Albuquerque <nao-responda@cavalcantealbuquerque.com.br>',
               to: [toEmail],
-              subject: `${alertType} — Prazo: ${deadline.title}`,
+              subject: `${alertType} â€” Prazo: ${deadline.title}`,
               html: `
                 <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-                  <div style="background: ${daysUntil <= 1 ? '#dc2626' : daysUntil <= 3 ? '#ea580c' : '#152138'}; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+                  <div style="background: ${daysUntil <= 1 ? '#dc2626' : daysUntil <= 3 ? '#ea580c' : 'var(--color-ca-navy-950)'}; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
                     <h2 style="color: #fff; margin: 0;">${alertType}</h2>
                   </div>
                   <div style="background: #fff; padding: 24px; border: 1px solid #e5e5e5;">
@@ -142,7 +147,7 @@ export async function POST(req: NextRequest) {
                     <table style="width: 100%; font-size: 14px;">
                       <tr><td style="padding: 8px; color: #999;">Tipo</td><td style="padding: 8px;">${typeLabel}</td></tr>
                       <tr><td style="padding: 8px; color: #999;">Data</td><td style="padding: 8px; font-weight: bold;">${new Date(deadline.deadlineDate).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</td></tr>
-                      <tr><td style="padding: 8px; color: #999;">Dias restantes</td><td style="padding: 8px; font-weight: bold; color: ${daysUntil <= 1 ? '#dc2626' : daysUntil <= 3 ? '#ea580c' : '#c4a96a'};">${daysUntil} dia(s)</td></tr>
+                      <tr><td style="padding: 8px; color: #999;">Dias restantes</td><td style="padding: 8px; font-weight: bold; color: ${daysUntil <= 1 ? '#dc2626' : daysUntil <= 3 ? '#ea580c' : 'var(--color-ca-steel-500)'};">${daysUntil} dia(s)</td></tr>
                       ${deadline.clientName ? `<tr><td style="padding: 8px; color: #999;">Cliente</td><td style="padding: 8px;">${deadline.clientName}</td></tr>` : ''}
                       ${deadline.processNumber ? `<tr><td style="padding: 8px; color: #999;">Processo</td><td style="padding: 8px;">${deadline.processNumber}</td></tr>` : ''}
                     </table>
@@ -173,3 +178,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Erro interno.' }, { status: 500 })
   }
 }
+
+
+
+

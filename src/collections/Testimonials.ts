@@ -1,7 +1,14 @@
 import type { CollectionConfig } from 'payload'
+import { adminOnly, adminOrEditor, approvedOnly } from '../access'
 
 export const Testimonials: CollectionConfig = {
   slug: 'testimonials',
+  access: {
+    read: approvedOnly,
+    create: adminOrEditor,
+    update: adminOrEditor,
+    delete: adminOnly,
+  },
   admin: { useAsTitle: 'authorName', defaultColumns: ['authorName', 'caseType', 'rating', 'featured'] },
   fields: [
     { name: 'authorName', type: 'text', required: true, label: 'Nome do Cliente' },
@@ -9,5 +16,8 @@ export const Testimonials: CollectionConfig = {
     { name: 'caseType', type: 'text', label: 'Tipo de Caso' },
     { name: 'rating', type: 'number', min: 1, max: 5, defaultValue: 5, label: 'Avaliação (1-5)' },
     { name: 'featured', type: 'checkbox', label: 'Destaque na Homepage', defaultValue: false },
+    { name: 'approved', type: 'checkbox', label: 'Aprovado para publicação', defaultValue: false },
   ],
 }
+
+

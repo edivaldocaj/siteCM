@@ -1,14 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { requireAdminRole } from '@/lib/admin-auth'
+import { getClientIp, checkRateLimit } from '@/lib/rate-limit'
+import { isLikelyBotSubmission, LEAD_CONSENT_TEXT } from '@/lib/public-form-security'
 
-/* ── Lead Score Calculator ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ Lead Score Calculator Ã¢â€â‚¬Ã¢â€â‚¬ */
 function calculateScore(data: any): number {
   let score = 0
 
   if (data.phone) score += 10
   if (data.email) score += 10
-  if (data.cpf) score += 5
   if (data.caseDescription) score += 10
 
   if (data.qualificationAnswers?.length) {
@@ -32,23 +34,30 @@ function calculateScore(data: any): number {
   return Math.min(score, 100)
 }
 
-/* ── Urgency label for email ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ Urgency label for email Ã¢â€â‚¬Ã¢â€â‚¬ */
 const urgencyLabels: Record<string, string> = {
-  low: '🟢 Baixa',
-  medium: '🟡 Média',
-  high: '🟠 Alta',
-  urgent: '🔴 Urgente',
+  low: 'Ã°Å¸Å¸Â¢ Baixa',
+  medium: 'Ã°Å¸Å¸Â¡ MÃƒÂ©dia',
+  high: 'Ã°Å¸Å¸Â  Alta',
+  urgent: 'Ã°Å¸â€Â´ Urgente',
 }
 
-/* ── POST: Create a new lead ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ POST: Create a new lead Ã¢â€â‚¬Ã¢â€â‚¬ */
 export async function POST(req: NextRequest) {
   try {
+    const clientIp = getClientIp(req.headers)
+    if (!checkRateLimit(`leads:${clientIp}`)) {
+      return NextResponse.json({ error: 'Muitas tentativas. Tente novamente em alguns minutos.' }, { status: 429 })
+    }
+
     const body = await req.json()
+    if (isLikelyBotSubmission(body)) {
+      return NextResponse.json({ error: 'Envio invÃ¡lido.' }, { status: 400 })
+    }
     const {
       name,
       phone,
       email,
-      cpf,
       source,
       campaignSlug,
       caseDescription,
@@ -60,12 +69,18 @@ export async function POST(req: NextRequest) {
       utmCampaign,
       utmContent,
       referrerUrl,
+      consentAccepted,
+      consentText,
     } = body
 
     // Validation
+    if (!consentAccepted) {
+      return NextResponse.json({ error: 'Consentimento obrigatÃ³rio.' }, { status: 400 })
+    }
+
     if (!name || !phone) {
       return NextResponse.json(
-        { error: 'Nome e telefone são obrigatórios.' },
+        { error: 'Nome e telefone sÃƒÂ£o obrigatÃƒÂ³rios.' },
         { status: 400 }
       )
     }
@@ -81,7 +96,6 @@ export async function POST(req: NextRequest) {
         name,
         phone,
         email: email || undefined,
-        cpf: cpf || undefined,
         source: source || 'campaign-form',
         campaignSlug: campaignSlug || undefined,
         caseDescription: caseDescription || undefined,
@@ -93,11 +107,15 @@ export async function POST(req: NextRequest) {
         utmCampaign: utmCampaign || undefined,
         utmContent: utmContent || undefined,
         referrerUrl: referrerUrl || undefined,
+        consentText: consentText || LEAD_CONSENT_TEXT,
+        consentedAt: new Date().toISOString(),
+        ip: clientIp,
+        userAgent: req.headers.get('user-agent') || undefined,
         status: 'new',
         score,
         notes: [
           {
-            text: `Lead captado via ${source || 'campaign-form'}${campaignSlug ? ` — Campanha: ${campaignSlug}` : ''}. Score: ${score}/100.`,
+            text: `Lead captado via ${source || 'campaign-form'}${campaignSlug ? ` Ã¢â‚¬â€ Campanha: ${campaignSlug}` : ''}. Score: ${score}/100.`,
             author: 'system',
             date: new Date().toISOString(),
           },
@@ -113,8 +131,8 @@ export async function POST(req: NextRequest) {
             .join('')
         : ''
 
-      const scoreColor = score >= 60 ? '#25D366' : score >= 30 ? '#c4a96a' : '#b8bfc8'
-      const scoreEmoji = score >= 60 ? '🔥' : score >= 30 ? '⭐' : '📋'
+      const scoreColor = score >= 60 ? '#25D366' : score >= 30 ? 'var(--color-ca-steel-500)' : 'var(--color-ca-steel-400)'
+      const scoreEmoji = score >= 60 ? 'Ã°Å¸â€Â¥' : score >= 30 ? 'Ã¢Â­Â' : 'Ã°Å¸â€œâ€¹'
 
       try {
         await fetch('https://api.resend.com/emails', {
@@ -124,14 +142,14 @@ export async function POST(req: NextRequest) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'Site Cavalcante & Melo <onboarding@resend.dev>',
-            to: [process.env.CONTACT_EMAIL || 'contato@cavalcantemelo.adv.br'],
-            subject: `${scoreEmoji} Novo Lead (Score ${score}) — ${name}${campaignSlug ? ` [${campaignSlug}]` : ''}`,
+            from: 'Site Cavalcante Albuquerque <onboarding@resend.dev>',
+            to: [process.env.CONTACT_EMAIL || 'contato@cavalcantealbuquerque.com.br'],
+            subject: `${scoreEmoji} Novo Lead (Score ${score}) Ã¢â‚¬â€ ${name}${campaignSlug ? ` [${campaignSlug}]` : ''}`,
             html: `
               <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto;">
-                <div style="background: #152138; padding: 24px; text-align: center; border-radius: 8px 8px 0 0;">
-                  <h1 style="color: #f1eae2; font-size: 22px; margin: 0;">Novo Lead Captado</h1>
-                  <p style="color: #b8bfc8; font-size: 14px; margin-top: 4px;">cavalcantemelo.adv.br</p>
+                <div style="background: var(--color-ca-navy-950); padding: 24px; text-align: center; border-radius: 8px 8px 0 0;">
+                  <h1 style="color: var(--color-ca-platinum-100); font-size: 22px; margin: 0;">Novo Lead Captado</h1>
+                  <p style="color: var(--color-ca-steel-400); font-size: 14px; margin-top: 4px;">cavalcantealbuquerque.com.br</p>
                 </div>
                 
                 <div style="background: #ffffff; padding: 24px; border: 1px solid #e5e5e5;">
@@ -140,7 +158,7 @@ export async function POST(req: NextRequest) {
                     <span style="display: inline-block; background: ${scoreColor}; color: #fff; font-size: 28px; font-weight: bold; width: 64px; height: 64px; line-height: 64px; border-radius: 50%;">
                       ${score}
                     </span>
-                    <p style="color: #666; font-size: 12px; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.1em;">Score de Qualificação</p>
+                    <p style="color: #666; font-size: 12px; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.1em;">Score de QualificaÃƒÂ§ÃƒÂ£o</p>
                   </div>
 
                   <!-- Lead info -->
@@ -148,23 +166,22 @@ export async function POST(req: NextRequest) {
                     <tr><td style="padding: 8px; color: #999; font-size: 13px; width: 120px;">Nome</td><td style="padding: 8px; font-weight: 600;">${name}</td></tr>
                     <tr><td style="padding: 8px; color: #999; font-size: 13px;">Telefone</td><td style="padding: 8px;"><a href="https://wa.me/55${phone.replace(/\D/g, '')}" style="color: #25D366; font-weight: 600;">${phone}</a></td></tr>
                     ${email ? `<tr><td style="padding: 8px; color: #999; font-size: 13px;">E-mail</td><td style="padding: 8px;">${email}</td></tr>` : ''}
-                    ${cpf ? `<tr><td style="padding: 8px; color: #999; font-size: 13px;">CPF</td><td style="padding: 8px;">${cpf}</td></tr>` : ''}
-                    ${campaignSlug ? `<tr><td style="padding: 8px; color: #999; font-size: 13px;">Campanha</td><td style="padding: 8px; color: #c4a96a; font-weight: 600;">${campaignSlug}</td></tr>` : ''}
-                    <tr><td style="padding: 8px; color: #999; font-size: 13px;">Urgência</td><td style="padding: 8px;">${urgencyLabels[urgency] || urgency || 'Média'}</td></tr>
+                    ${campaignSlug ? `<tr><td style="padding: 8px; color: #999; font-size: 13px;">Campanha</td><td style="padding: 8px; color: var(--color-ca-steel-500); font-weight: 600;">${campaignSlug}</td></tr>` : ''}
+                    <tr><td style="padding: 8px; color: #999; font-size: 13px;">UrgÃƒÂªncia</td><td style="padding: 8px;">${urgencyLabels[urgency] || urgency || 'MÃƒÂ©dia'}</td></tr>
                     ${estimatedValue ? `<tr><td style="padding: 8px; color: #999; font-size: 13px;">Valor Estimado</td><td style="padding: 8px; font-weight: 600;">R$ ${Number(estimatedValue).toLocaleString('pt-BR')}</td></tr>` : ''}
                   </table>
 
-                  ${caseDescription ? `<div style="margin-top: 16px; padding: 16px; background: #f8f8f8; border-radius: 6px;"><p style="color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Descrição do Caso</p><p style="color: #333; font-size: 14px; line-height: 1.6;">${caseDescription}</p></div>` : ''}
+                  ${caseDescription ? `<div style="margin-top: 16px; padding: 16px; background: #f8f8f8; border-radius: 6px;"><p style="color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">DescriÃƒÂ§ÃƒÂ£o do Caso</p><p style="color: #333; font-size: 14px; line-height: 1.6;">${caseDescription}</p></div>` : ''}
 
-                  ${qualAnswersHtml ? `<div style="margin-top: 16px; padding: 16px; background: rgba(196,169,106,0.06); border-radius: 6px; border-left: 3px solid #c4a96a;"><p style="color: #c4a96a; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Respostas de Qualificação</p>${qualAnswersHtml}</div>` : ''}
+                  ${qualAnswersHtml ? `<div style="margin-top: 16px; padding: 16px; background: color-mix(in srgb, var(--color-ca-steel-500) 6%, transparent); border-radius: 6px; border-left: 3px solid var(--color-ca-steel-500);"><p style="color: var(--color-ca-steel-500); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Respostas de QualificaÃƒÂ§ÃƒÂ£o</p>${qualAnswersHtml}</div>` : ''}
 
                   ${utmSource ? `<div style="margin-top: 16px; padding: 12px; background: #f8f8f8; border-radius: 6px;"><p style="color: #999; font-size: 11px; margin-bottom: 4px;">Origem: ${utmSource}${utmMedium ? ` / ${utmMedium}` : ''}${utmCampaign ? ` / ${utmCampaign}` : ''}</p></div>` : ''}
                 </div>
 
-                <div style="background: #152138; padding: 16px; text-align: center; border-radius: 0 0 8px 8px;">
-                  <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantemelo.adv.br'}/admin/collections/leads/${lead.id}" 
-                     style="color: #c4a96a; text-decoration: none; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em;">
-                    Ver no CMS →
+                <div style="background: var(--color-ca-navy-950); padding: 16px; text-align: center; border-radius: 0 0 8px 8px;">
+                  <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquerque.com.br'}/admin/collections/leads/${lead.id}" 
+                     style="color: var(--color-ca-steel-500); text-decoration: none; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em;">
+                    Ver no CMS Ã¢â€ â€™
                   </a>
                 </div>
               </div>
@@ -188,12 +205,10 @@ export async function POST(req: NextRequest) {
   }
 }
 
-/* ── GET: List leads (admin only, protected by secret) ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ GET: List leads (admin only, protected by secret) Ã¢â€â‚¬Ã¢â€â‚¬ */
 export async function GET(req: NextRequest) {
-  const secret = req.headers.get('Authorization')?.replace('Bearer ', '')
-  if (secret !== process.env.NEWS_REVALIDATE_SECRET) {
-    return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
-  }
+  const denied = await requireAdminRole(req, ['admin', 'staff'])
+  if (denied) return denied
 
   try {
     const payload = await getPayload({ config: configPromise })
@@ -222,19 +237,17 @@ export async function GET(req: NextRequest) {
   }
 }
 
-/* ── PATCH: Update lead status (Kanban) ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ PATCH: Update lead status (Kanban) Ã¢â€â‚¬Ã¢â€â‚¬ */
 export async function PATCH(req: NextRequest) {
-  const secret = req.headers.get('Authorization')?.replace('Bearer ', '')
-  if (secret !== process.env.NEWS_REVALIDATE_SECRET) {
-    return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
-  }
+  const denied = await requireAdminRole(req, ['admin', 'staff'])
+  if (denied) return denied
 
   try {
     const body = await req.json()
     const { id, status, assignedTo, notes } = body
 
     if (!id) {
-      return NextResponse.json({ error: 'ID do lead obrigatório.' }, { status: 400 })
+      return NextResponse.json({ error: 'ID do lead obrigatÃƒÂ³rio.' }, { status: 400 })
     }
 
     const payload = await getPayload({ config: configPromise })
@@ -260,3 +273,10 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: 'Erro interno.' }, { status: 500 })
   }
 }
+
+
+
+
+
+
+

@@ -61,7 +61,7 @@ export function CampaignCountdown({ endDate, campaignSlug, accentColor, helpedCo
 
   return (
     <div style={{
-      background: 'linear-gradient(135deg, rgba(21,33,56,0.95) 0%, rgba(21,33,56,0.85) 100%)',
+      background: 'linear-gradient(135deg, color-mix(in srgb, var(--color-ca-navy-950) 95%, transparent) 0%, color-mix(in srgb, var(--color-ca-navy-950) 85%, transparent) 100%)',
       backdropFilter: 'blur(8px)',
       border: `1px solid ${accentColor}33`,
       borderRadius: '12px',
@@ -96,12 +96,12 @@ export function CampaignCountdown({ endDate, campaignSlug, accentColor, helpedCo
                     fontFamily: "'Playfair Display', serif",
                     fontSize: '24px',
                     fontWeight: 700,
-                    color: '#f1eae2',
+                    color: 'var(--color-ca-platinum-100)',
                     lineHeight: 1,
                   }}>
                     {String(value).padStart(2, '0')}
                   </div>
-                  <div style={{ fontSize: '10px', color: '#b8bfc8', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '4px' }}>
+                  <div style={{ fontSize: '10px', color: 'var(--color-ca-steel-400)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '4px' }}>
                     {label}
                   </div>
                 </div>
@@ -159,12 +159,12 @@ export function CampaignCountdown({ endDate, campaignSlug, accentColor, helpedCo
               fontFamily: "'Playfair Display', serif",
               fontSize: '36px',
               fontWeight: 700,
-              color: '#f1eae2',
+              color: 'var(--color-ca-platinum-100)',
               lineHeight: 1,
             }}>
               {leadCount}+
             </div>
-            <div style={{ fontSize: '12px', color: '#b8bfc8', marginTop: '4px' }}>
+            <div style={{ fontSize: '12px', color: 'var(--color-ca-steel-400)', marginTop: '4px' }}>
               pessoas com este problema
             </div>
           </div>

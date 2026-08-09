@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Send, CheckCircle, AlertCircle, ChevronRight, ChevronLeft, User, Phone, Mail, FileText, Loader2 } from 'lucide-react'
+import { LEAD_CONSENT_TEXT } from '@/lib/public-form-security'
 
 /* ── Perguntas de qualificação por categoria ── */
 const qualificationQuestions: Record<string, Array<{ question: string; type: 'select' | 'text' | 'number'; options?: string[] }>> = {
@@ -60,6 +61,8 @@ export function CampaignLeadForm({
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
   const [score, setScore] = useState(0)
+  const [consentAccepted, setConsentAccepted] = useState(false)
+  const [formStartedAt] = useState(() => Date.now())
 
   // Form data
   const [name, setName] = useState('')
@@ -113,6 +116,11 @@ export function CampaignLeadForm({
   }
 
   async function handleSubmit() {
+    if (!consentAccepted) {
+      setError('Confirme o consentimento para enviar.')
+      return
+    }
+
     setLoading(true)
     setError('')
 
@@ -148,6 +156,10 @@ export function CampaignLeadForm({
           estimatedValue,
           urgency,
           qualificationAnswers: answers.filter((a) => a.answer),
+          website: '',
+          formStartedAt,
+          consentAccepted,
+          consentText: LEAD_CONSENT_TEXT,
           ...utmParams,
         }),
       })
@@ -177,7 +189,7 @@ export function CampaignLeadForm({
           background: '#ffffff',
           borderRadius: '8px',
           padding: '48px 32px',
-          boxShadow: '0 10px 40px rgba(21,33,56,0.08)',
+          boxShadow: '0 10px 40px color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent)',
           borderTop: `4px solid #25D366`,
           textAlign: 'center',
           animation: 'fadeInUp 0.5s ease',
@@ -201,14 +213,14 @@ export function CampaignLeadForm({
           style={{
             fontFamily: "'Playfair Display', serif",
             fontSize: '24px',
-            color: '#152138',
+            color: 'var(--color-ca-navy-950)',
             marginBottom: '12px',
           }}
         >
           Recebemos sua solicitação!
         </h3>
-        <p style={{ color: 'rgba(21,33,56,0.6)', fontSize: '15px', lineHeight: 1.7, marginBottom: '32px', maxWidth: '400px', margin: '0 auto 32px' }}>
-          Nossa equipe analisará seu caso e entrará em contato em até <strong style={{ color: '#152138' }}>24 horas úteis</strong>.
+        <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontSize: '15px', lineHeight: 1.7, marginBottom: '32px', maxWidth: '400px', margin: '0 auto 32px' }}>
+          Nossa equipe analisará seu caso e entrará em contato em até <strong style={{ color: 'var(--color-ca-navy-950)' }}>24 horas úteis</strong>.
           {score >= 60 && (
             <span style={{ display: 'block', marginTop: '8px', color: '#25D366', fontWeight: 600 }}>
               Seu caso foi identificado como prioritário.
@@ -255,39 +267,39 @@ export function CampaignLeadForm({
         background: '#ffffff',
         borderRadius: '8px',
         padding: '40px 32px',
-        boxShadow: '0 10px 40px rgba(21,33,56,0.08)',
+        boxShadow: '0 10px 40px color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent)',
         borderTop: `4px solid ${accentColor}`,
       }}
     >
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
-        <FileText style={{ width: '24px', height: '24px', color: '#152138' }} strokeWidth={1.5} />
+        <FileText style={{ width: '24px', height: '24px', color: 'var(--color-ca-navy-950)' }} strokeWidth={1.5} />
         <h3
           style={{
             fontFamily: "'Playfair Display', serif",
             fontSize: '22px',
-            color: '#152138',
+            color: 'var(--color-ca-navy-950)',
             margin: 0,
           }}
         >
           Análise Gratuita do Seu Caso
         </h3>
       </div>
-      <p style={{ color: 'rgba(21,33,56,0.5)', fontSize: '14px', marginBottom: '24px' }}>
+      <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)', fontSize: '14px', marginBottom: '24px' }}>
         Responda algumas perguntas para que possamos avaliar sua situação.
       </p>
 
       {/* Progress bar */}
       <div style={{ marginBottom: '32px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-          <span style={{ fontSize: '11px', color: 'rgba(21,33,56,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+          <span style={{ fontSize: '11px', color: 'color-mix(in srgb, var(--color-ca-navy-950) 40%, transparent)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
             Etapa {step + 1} de {totalSteps}
           </span>
           <span style={{ fontSize: '11px', color: accentColor, fontWeight: 600 }}>
             {Math.round(progress)}%
           </span>
         </div>
-        <div style={{ width: '100%', height: '4px', background: 'rgba(21,33,56,0.06)', borderRadius: '2px', overflow: 'hidden' }}>
+        <div style={{ width: '100%', height: '4px', background: 'color-mix(in srgb, var(--color-ca-navy-950) 6%, transparent)', borderRadius: '2px', overflow: 'hidden' }}>
           <div
             style={{
               width: `${progress}%`,
@@ -304,7 +316,7 @@ export function CampaignLeadForm({
       {step === 0 && (
         <div style={{ animation: 'fadeIn 0.3s ease' }}>
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#152138', marginBottom: '8px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: 'var(--color-ca-navy-950)', marginBottom: '8px' }}>
               <User style={{ width: '14px', height: '14px' }} />
               Nome Completo *
             </label>
@@ -317,20 +329,20 @@ export function CampaignLeadForm({
               style={{
                 width: '100%',
                 padding: '14px 16px',
-                border: '1px solid rgba(21,33,56,0.15)',
+                border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)',
                 borderRadius: '6px',
                 fontSize: '15px',
-                color: '#152138',
+                color: 'var(--color-ca-navy-950)',
                 outline: 'none',
                 boxSizing: 'border-box',
                 transition: 'border-color 0.3s',
               }}
               onFocus={(e) => (e.currentTarget.style.borderColor = accentColor)}
-              onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(21,33,56,0.15)')}
+              onBlur={(e) => (e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)')}
             />
           </div>
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#152138', marginBottom: '8px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: 'var(--color-ca-navy-950)', marginBottom: '8px' }}>
               <Phone style={{ width: '14px', height: '14px' }} />
               WhatsApp / Telefone *
             </label>
@@ -344,22 +356,22 @@ export function CampaignLeadForm({
               style={{
                 width: '100%',
                 padding: '14px 16px',
-                border: '1px solid rgba(21,33,56,0.15)',
+                border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)',
                 borderRadius: '6px',
                 fontSize: '15px',
-                color: '#152138',
+                color: 'var(--color-ca-navy-950)',
                 outline: 'none',
                 boxSizing: 'border-box',
                 transition: 'border-color 0.3s',
               }}
               onFocus={(e) => (e.currentTarget.style.borderColor = accentColor)}
-              onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(21,33,56,0.15)')}
+              onBlur={(e) => (e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)')}
             />
           </div>
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#152138', marginBottom: '8px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: 'var(--color-ca-navy-950)', marginBottom: '8px' }}>
               <Mail style={{ width: '14px', height: '14px' }} />
-              E-mail <span style={{ fontWeight: 300, color: 'rgba(21,33,56,0.4)' }}>(opcional)</span>
+              E-mail <span style={{ fontWeight: 300, color: 'color-mix(in srgb, var(--color-ca-navy-950) 40%, transparent)' }}>(opcional)</span>
             </label>
             <input
               type="email"
@@ -369,16 +381,16 @@ export function CampaignLeadForm({
               style={{
                 width: '100%',
                 padding: '14px 16px',
-                border: '1px solid rgba(21,33,56,0.15)',
+                border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)',
                 borderRadius: '6px',
                 fontSize: '15px',
-                color: '#152138',
+                color: 'var(--color-ca-navy-950)',
                 outline: 'none',
                 boxSizing: 'border-box',
                 transition: 'border-color 0.3s',
               }}
               onFocus={(e) => (e.currentTarget.style.borderColor = accentColor)}
-              onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(21,33,56,0.15)')}
+              onBlur={(e) => (e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)')}
             />
           </div>
         </div>
@@ -391,7 +403,7 @@ export function CampaignLeadForm({
 
         return (
           <div key={step} style={{ animation: 'fadeIn 0.3s ease' }}>
-            <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: '#152138', marginBottom: '20px' }}>
+            <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: 'var(--color-ca-navy-950)', marginBottom: '20px' }}>
               {q.question}
             </h4>
 
@@ -404,10 +416,10 @@ export function CampaignLeadForm({
                     onClick={() => handleAnswerChange(step - 1, q.question, option)}
                     style={{
                       padding: '14px 20px',
-                      border: `2px solid ${currentAnswer === option ? accentColor : 'rgba(21,33,56,0.1)'}`,
+                      border: `2px solid ${currentAnswer === option ? accentColor : 'color-mix(in srgb, var(--color-ca-navy-950) 10%, transparent)'}`,
                       borderRadius: '6px',
                       background: currentAnswer === option ? `${accentColor}0D` : '#fff',
-                      color: '#152138',
+                      color: 'var(--color-ca-navy-950)',
                       fontSize: '15px',
                       textAlign: 'left',
                       cursor: 'pointer',
@@ -421,7 +433,7 @@ export function CampaignLeadForm({
               </div>
             ) : q.type === 'number' ? (
               <div style={{ position: 'relative' }}>
-                <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(21,33,56,0.4)', fontSize: '15px' }}>R$</span>
+                <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'color-mix(in srgb, var(--color-ca-navy-950) 40%, transparent)', fontSize: '15px' }}>R$</span>
                 <input
                   type="text"
                   value={currentAnswer}
@@ -433,16 +445,16 @@ export function CampaignLeadForm({
                   style={{
                     width: '100%',
                     padding: '14px 16px 14px 42px',
-                    border: '1px solid rgba(21,33,56,0.15)',
+                    border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)',
                     borderRadius: '6px',
                     fontSize: '20px',
                     fontWeight: 600,
-                    color: '#152138',
+                    color: 'var(--color-ca-navy-950)',
                     outline: 'none',
                     boxSizing: 'border-box',
                   }}
                   onFocus={(e) => (e.currentTarget.style.borderColor = accentColor)}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(21,33,56,0.15)')}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)')}
                 />
               </div>
             ) : (
@@ -454,17 +466,17 @@ export function CampaignLeadForm({
                 style={{
                   width: '100%',
                   padding: '14px 16px',
-                  border: '1px solid rgba(21,33,56,0.15)',
+                  border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)',
                   borderRadius: '6px',
                   fontSize: '15px',
-                  color: '#152138',
+                  color: 'var(--color-ca-navy-950)',
                   outline: 'none',
                   boxSizing: 'border-box',
                   resize: 'vertical',
                   fontFamily: "'Source Sans 3', sans-serif",
                 }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = accentColor)}
-                onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(21,33,56,0.15)')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)')}
               />
             )}
           </div>
@@ -474,10 +486,10 @@ export function CampaignLeadForm({
       {/* Last step: Case description + Submit */}
       {step === questions.length + 1 && (
         <div style={{ animation: 'fadeIn 0.3s ease' }}>
-          <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: '#152138', marginBottom: '8px' }}>
+          <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', color: 'var(--color-ca-navy-950)', marginBottom: '8px' }}>
             Quer acrescentar algo?
           </h4>
-          <p style={{ color: 'rgba(21,33,56,0.5)', fontSize: '13px', marginBottom: '16px' }}>
+          <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)', fontSize: '13px', marginBottom: '16px' }}>
             Opcional — descreva detalhes adicionais do seu caso.
           </p>
           <textarea
@@ -488,10 +500,10 @@ export function CampaignLeadForm({
             style={{
               width: '100%',
               padding: '14px 16px',
-              border: '1px solid rgba(21,33,56,0.15)',
+              border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)',
               borderRadius: '6px',
               fontSize: '15px',
-              color: '#152138',
+              color: 'var(--color-ca-navy-950)',
               outline: 'none',
               boxSizing: 'border-box',
               resize: 'vertical',
@@ -500,17 +512,24 @@ export function CampaignLeadForm({
           />
 
           {/* Summary */}
-          <div style={{ marginTop: '24px', padding: '20px', background: 'rgba(21,33,56,0.02)', borderRadius: '6px', border: '1px solid rgba(21,33,56,0.06)' }}>
-            <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(21,33,56,0.4)', marginBottom: '12px' }}>Resumo</p>
-            <p style={{ fontSize: '14px', color: '#152138', marginBottom: '4px' }}><strong>{name}</strong> — {phone}</p>
-            {email && <p style={{ fontSize: '13px', color: 'rgba(21,33,56,0.6)' }}>{email}</p>}
+          <div style={{ marginTop: '24px', padding: '20px', background: 'color-mix(in srgb, var(--color-ca-navy-950) 2%, transparent)', borderRadius: '6px', border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 6%, transparent)' }}>
+            <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-navy-950) 40%, transparent)', marginBottom: '12px' }}>Resumo</p>
+            <p style={{ fontSize: '14px', color: 'var(--color-ca-navy-950)', marginBottom: '4px' }}><strong>{name}</strong> — {phone}</p>
+            {email && <p style={{ fontSize: '13px', color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)' }}>{email}</p>}
             {answers.filter((a) => a.answer).map((a, i) => (
-              <p key={i} style={{ fontSize: '13px', color: 'rgba(21,33,56,0.5)', marginTop: '4px' }}>
-                {a.question}: <strong style={{ color: '#152138' }}>{a.answer}</strong>
+              <p key={i} style={{ fontSize: '13px', color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)', marginTop: '4px' }}>
+                {a.question}: <strong style={{ color: 'var(--color-ca-navy-950)' }}>{a.answer}</strong>
               </p>
             ))}
           </div>
         </div>
+      )}
+
+      {step === questions.length + 1 && (
+        <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', color: 'var(--color-ca-navy-950)', fontSize: '12px', lineHeight: 1.5, marginTop: '18px' }}>
+          <input type="checkbox" checked={consentAccepted} onChange={(e) => setConsentAccepted(e.target.checked)} required style={{ marginTop: '3px' }} />
+          <span>{LEAD_CONSENT_TEXT}</span>
+        </label>
       )}
 
       {/* Error */}
@@ -532,10 +551,10 @@ export function CampaignLeadForm({
               alignItems: 'center',
               gap: '6px',
               padding: '12px 20px',
-              border: '1px solid rgba(21,33,56,0.15)',
+              border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)',
               borderRadius: '4px',
               background: 'transparent',
-              color: 'rgba(21,33,56,0.6)',
+              color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)',
               fontSize: '14px',
               cursor: 'pointer',
               fontFamily: "'Source Sans 3', sans-serif",
@@ -560,8 +579,8 @@ export function CampaignLeadForm({
               padding: '12px 28px',
               border: 'none',
               borderRadius: '4px',
-              background: canProceed() ? accentColor : 'rgba(21,33,56,0.1)',
-              color: canProceed() ? '#fff' : 'rgba(21,33,56,0.3)',
+              background: canProceed() ? accentColor : 'color-mix(in srgb, var(--color-ca-navy-950) 10%, transparent)',
+              color: canProceed() ? '#fff' : 'color-mix(in srgb, var(--color-ca-navy-950) 30%, transparent)',
               fontSize: '14px',
               fontWeight: 600,
               cursor: canProceed() ? 'pointer' : 'not-allowed',
@@ -586,8 +605,8 @@ export function CampaignLeadForm({
               padding: '14px 32px',
               border: 'none',
               borderRadius: '4px',
-              background: loading ? 'rgba(21,33,56,0.3)' : '#152138',
-              color: '#f1eae2',
+              background: loading ? 'color-mix(in srgb, var(--color-ca-navy-950) 30%, transparent)' : 'var(--color-ca-navy-950)',
+              color: 'var(--color-ca-platinum-100)',
               fontSize: '14px',
               fontWeight: 600,
               cursor: loading ? 'not-allowed' : 'pointer',
@@ -613,7 +632,7 @@ export function CampaignLeadForm({
       </div>
 
       {/* Privacy note */}
-      <p style={{ color: 'rgba(21,33,56,0.3)', fontSize: '11px', textAlign: 'center', marginTop: '20px', lineHeight: 1.6 }}>
+      <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 30%, transparent)', fontSize: '11px', textAlign: 'center', marginTop: '20px', lineHeight: 1.6 }}>
         Seus dados são protegidos conforme a LGPD. Utilizaremos suas informações exclusivamente para análise do caso e contato.
       </p>
 
@@ -624,3 +643,4 @@ export function CampaignLeadForm({
     </div>
   )
 }
+
