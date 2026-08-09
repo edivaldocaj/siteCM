@@ -1,24 +1,30 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
-import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react'
+import Image from 'next/image'
+import { CheckCircle, Clock, Mail, MapPin, Phone, Send } from 'lucide-react'
+import { LEAD_CONSENT_TEXT } from '@/lib/public-form-security'
 
 export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
+  const [formStartedAt] = useState(() => Date.now())
 
   const contactEmail = siteConfig?.contactEmail || 'contato@cavalcantealbuquerque.com.br'
-  const contactPhone = siteConfig?.contactPhone || '(84) 99999-9999'
-  const contactAddress = siteConfig?.contactAddress || 'Rua Francisco Maia Sobrinho, 1950\nLagoa Nova â€” Natal/RN'
+  const contactPhone = siteConfig?.contactPhone || '(84) 99124-3985'
+  const contactAddress = siteConfig?.contactAddress || 'Rua Francisco Maia Sobrinho, 1950\nLagoa Nova - Natal/RN'
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const formData = new FormData(e.currentTarget)
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
     try {
-      const res = await fetch('/api/contact', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -26,171 +32,148 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
           phone: formData.get('phone'),
           subject: formData.get('subject'),
           message: formData.get('message'),
+          website: formData.get('website'),
+          formStartedAt,
+          consentAccepted: formData.get('consentAccepted') === 'on',
+          consentText: LEAD_CONSENT_TEXT,
         }),
       })
-      if (!res.ok) throw new Error()
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null)
+        throw new Error(payload?.error || 'Ocorreu um erro ao enviar. Tente novamente pelo WhatsApp.')
+      }
+
       setSuccess(true)
-    } catch {
-      setError('Ocorreu um erro ao enviar. Tente novamente.')
+      form.reset()
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : 'Ocorreu um erro ao enviar. Tente novamente pelo WhatsApp.')
     } finally {
       setLoading(false)
     }
   }
 
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    padding: '14px 16px',
-    borderRadius: '4px',
-    border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 15%, transparent)',
-    fontFamily: 'var(--font-body)',
-    fontSize: '14px',
-    color: 'var(--color-brand-navy)',
-    outline: 'none',
-    transition: 'border-color 0.3s',
-    background: 'white',
-  }
-
-  const labelStyle: React.CSSProperties = {
-    display: 'block',
-    color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)',
-    fontSize: '11px',
-    fontFamily: 'var(--font-body)',
-    textTransform: 'uppercase',
-    letterSpacing: '0.1em',
-    marginBottom: '8px',
-    fontWeight: 600,
-  }
-
   return (
     <>
-      {/* Hero */}
-      <section style={{ background: 'linear-gradient(135deg, var(--color-ca-navy-950) 0%, var(--color-ca-navy-800) 50%, var(--color-ca-navy-900) 100%)', padding: '140px 24px 80px' }}>
-        <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
-          <span style={{ color: 'var(--color-brand-gold-dark)', fontSize: '12px', fontFamily: 'var(--font-body)', textTransform: 'uppercase', letterSpacing: '0.25em', display: 'block', marginBottom: '16px' }}>
-            Fale Conosco
-          </span>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 600, color: 'var(--color-brand-champagne)', lineHeight: 1.1, marginBottom: '24px' }}>
-            Contato
-          </h1>
-          <p style={{ color: 'color-mix(in srgb, var(--color-ca-steel-400) 70%, transparent)', fontFamily: 'var(--font-body)', fontSize: '18px', lineHeight: 1.6, maxWidth: '600px' }}>
-            Entre em contato pelo formulÃ¡rio, WhatsApp ou visite nosso escritÃ³rio.
-          </p>
+      <section className="ca-page-hero ca-page-hero--contact">
+        <div className="ca-page-hero__mark" aria-hidden="true">
+          <Image src="/brand/symbol-mono-light.svg" alt="" width={360} height={360} />
+        </div>
+        <div className="container-wide mx-auto ca-page-hero__inner">
+          <span className="ca-eyebrow ca-eyebrow--dark">Fale conosco</span>
+          <h1>Contato</h1>
+          <p>Entre em contato pelo formulario, WhatsApp ou pelos canais institucionais do escritorio.</p>
         </div>
       </section>
 
-      {/* Content */}
-      <section style={{ padding: '80px 24px', backgroundColor: 'var(--color-brand-cream)' }}>
-        <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px' }} className="contact-page-grid">
-            {/* Left - InformaÃ§Ãµes */}
-            <div>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', color: 'var(--color-brand-navy)', fontWeight: 600, marginBottom: '32px' }}>
-                InformaÃ§Ãµes
-              </h2>
+      <section className="ca-contact-page">
+        <div className="container-wide mx-auto ca-contact-page__grid">
+          <aside className="ca-contact-page__info" aria-label="Informacoes de contato">
+            <span className="ca-eyebrow">Canais</span>
+            <h2>Atendimento objetivo desde o primeiro contato</h2>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', marginBottom: '40px' }}>
-                <div style={{ display: 'flex', gap: '16px' }}>
-                  <MapPin style={{ width: '22px', height: '22px', color: 'var(--color-brand-gold-dark)', flexShrink: 0, marginTop: '2px' }} />
-                  <div>
-                    <h4 style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>EndereÃ§o</h4>
-                    <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontSize: '14px', lineHeight: 1.6, whiteSpace: 'pre-line' }}>{contactAddress}</p>
-                  </div>
+            <div className="ca-contact-page__items">
+              <article>
+                <MapPin size={21} />
+                <div>
+                  <h3>Endereco</h3>
+                  <p>{contactAddress}</p>
                 </div>
-                <div style={{ display: 'flex', gap: '16px' }}>
-                  <Phone style={{ width: '22px', height: '22px', color: 'var(--color-brand-gold-dark)', flexShrink: 0 }} />
-                  <div>
-                    <h4 style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>Telefone / WhatsApp</h4>
-                    <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontSize: '14px' }}>{contactPhone}</p>
-                  </div>
+              </article>
+              <article>
+                <Phone size={21} />
+                <div>
+                  <h3>Telefone / WhatsApp</h3>
+                  <p>{contactPhone}</p>
                 </div>
-                <div style={{ display: 'flex', gap: '16px' }}>
-                  <Mail style={{ width: '22px', height: '22px', color: 'var(--color-brand-gold-dark)', flexShrink: 0 }} />
-                  <div>
-                    <h4 style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>E-mail</h4>
-                    <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontSize: '14px' }}>{contactEmail}</p>
-                  </div>
+              </article>
+              <article>
+                <Mail size={21} />
+                <div>
+                  <h3>E-mail</h3>
+                  <p>{contactEmail}</p>
                 </div>
-                <div style={{ display: 'flex', gap: '16px' }}>
-                  <Clock style={{ width: '22px', height: '22px', color: 'var(--color-brand-gold-dark)', flexShrink: 0 }} />
-                  <div>
-                    <h4 style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 600, color: 'var(--color-brand-navy)', marginBottom: '4px' }}>HorÃ¡rio</h4>
-                    <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontSize: '14px', lineHeight: 1.6 }}>Seg a Sex: 8h Ã s 18h<br />Penal: Atendimento 24h</p>
-                  </div>
+              </article>
+              <article>
+                <Clock size={21} />
+                <div>
+                  <h3>Horario</h3>
+                  <p>Segunda a sexta, 8h as 18h. Penal: atendimento emergencial.</p>
                 </div>
+              </article>
+            </div>
+
+            <a
+              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-whatsapp"
+            >
+              <Phone size={18} />
+              Falar pelo WhatsApp
+            </a>
+          </aside>
+
+          <div className="ca-contact-page__form-panel">
+            {success ? (
+              <div className="ca-contact-page__success">
+                <CheckCircle size={54} />
+                <h2>Mensagem enviada</h2>
+                <p>Nossa equipe recebeu sua solicitacao e retornara pelos dados informados.</p>
               </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="ca-contact-page__form">
+                <h2>Envie sua mensagem</h2>
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" className="ca-honeypot" />
 
-              <a
-                href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-whatsapp"
-                style={{ fontSize: '14px' }}
-              >
-                <Phone style={{ width: '18px', height: '18px' }} />
-                Falar pelo WhatsApp
-              </a>
-            </div>
+                <label>
+                  <span>Nome completo</span>
+                  <input name="name" required placeholder="Seu nome" />
+                </label>
 
-            {/* Right - FormulÃ¡rio */}
-            <div>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', color: 'var(--color-brand-navy)', fontWeight: 600, marginBottom: '32px' }}>
-                Envie sua mensagem
-              </h2>
+                <label>
+                  <span>Telefone / WhatsApp</span>
+                  <input name="phone" type="tel" required placeholder="(84) 99999-9999" />
+                </label>
 
-              {success ? (
-                <div style={{ background: 'rgba(37,211,102,0.08)', border: '1px solid rgba(37,211,102,0.3)', padding: '40px', borderRadius: '8px', textAlign: 'center' }}>
-                  <h3 style={{ color: '#25D366', fontSize: '20px', fontWeight: 600, marginBottom: '8px' }}>Mensagem Enviada!</h3>
-                  <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 60%, transparent)', fontSize: '14px' }}>Nossa equipe entrarÃ¡ em contato em breve.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <div>
-                    <label style={labelStyle}>Nome completo</label>
-                    <input name="name" required style={inputStyle} placeholder="Seu nome" />
-                  </div>
-                  <div>
-                    <label style={labelStyle}>Telefone / WhatsApp</label>
-                    <input name="phone" type="tel" required style={inputStyle} placeholder="(84) 99999-9999" />
-                  </div>
-                  <div>
-                    <label style={labelStyle}>Assunto</label>
-                    <select name="subject" required style={inputStyle}>
-                      <option value="">Selecione</option>
-                      <option value="consumidor">Direito do Consumidor</option>
-                      <option value="digital">Direito Digital / LGPD</option>
-                      <option value="civil">Direito Civil</option>
-                      <option value="imobiliario">Direito ImobiliÃ¡rio</option>
-                      <option value="tributario">Direito TributÃ¡rio</option>
-                      <option value="licitacoes">LicitaÃ§Ãµes</option>
-                      <option value="penal">Direito Penal (Urgente)</option>
-                      <option value="outro">Outro</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label style={labelStyle}>Mensagem</label>
-                    <textarea name="message" rows={5} style={{ ...inputStyle, resize: 'none' }} placeholder="Descreva brevemente seu caso..." />
-                  </div>
-                  {error && <p style={{ color: '#dc2626', fontSize: '14px', margin: 0 }}>{error}</p>}
-                  <button type="submit" disabled={loading} className="btn-primary" style={{ width: '100%', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1 }}>
-                    <Send style={{ width: '16px', height: '16px' }} />
-                    {loading ? 'Enviando...' : 'Enviar Mensagem'}
-                  </button>
-                  <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 35%, transparent)', fontSize: '12px', textAlign: 'center', margin: 0 }}>
-                    Protegido conforme a LGPD.
-                  </p>
-                </form>
-              )}
-            </div>
+                <label>
+                  <span>Assunto</span>
+                  <select name="subject" required defaultValue="">
+                    <option value="" disabled>
+                      Selecione
+                    </option>
+                    <option value="consumidor">Direito do Consumidor</option>
+                    <option value="digital">Direito Digital / LGPD</option>
+                    <option value="civil">Direito Civil</option>
+                    <option value="imobiliario">Direito Imobiliario</option>
+                    <option value="tributario">Direito Tributario</option>
+                    <option value="licitacoes">Licitacoes</option>
+                    <option value="penal">Direito Penal urgente</option>
+                    <option value="outro">Outro</option>
+                  </select>
+                </label>
+
+                <label>
+                  <span>Mensagem</span>
+                  <textarea name="message" rows={5} placeholder="Descreva brevemente seu caso" />
+                </label>
+
+                <label className="ca-contact-page__consent">
+                  <input name="consentAccepted" type="checkbox" required />
+                  <span>{LEAD_CONSENT_TEXT}</span>
+                </label>
+
+                {error && <p className="ca-contact-page__error">{error}</p>}
+
+                <button type="submit" disabled={loading} className="btn-primary">
+                  <Send size={16} />
+                  {loading ? 'Enviando...' : 'Enviar mensagem'}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </section>
-
-      <style dangerouslySetInnerHTML={{ __html: `
-        @media (max-width: 768px) { .contact-page-grid { grid-template-columns: 1fr !important; gap: 40px !important; } }
-        .contact-page-grid input:focus, .contact-page-grid select:focus, .contact-page-grid textarea:focus {
-          border-color: var(--color-brand-gold-dark) !important;
-        }
-      `}} />
     </>
   )
 }
