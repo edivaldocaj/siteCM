@@ -128,7 +128,7 @@ export const Campaigns: CollectionConfig = {
               type: 'select',
               label: 'Cor de Destaque (cards sociais)',
               options: [
-                { label: 'Dourado (padrão CM)', value: 'gold' },
+                { label: 'Aço escovado (padrão CA)', value: 'gold' },
                 { label: 'Vermelho (urgência)', value: 'red' },
                 { label: 'Azul (institucional)', value: 'blue' },
                 { label: 'Verde (positivo)', value: 'green' },

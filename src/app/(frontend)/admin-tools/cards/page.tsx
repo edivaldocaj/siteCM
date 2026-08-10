@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { Download, Copy, Check, ArrowLeft, Image, Smartphone, RefreshCw } from 'lucide-react'
@@ -37,6 +37,31 @@ function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number)
   return lines
 }
 
+
+function drawScaleMark(ctx: CanvasRenderingContext2D, x: number, y: number, scale: number, color: string) {
+  const bars = [
+    { x: 0, y: 48, w: 18, h: 62 },
+    { x: 32, y: 22, w: 18, h: 88 },
+    { x: 64, y: 0, w: 18, h: 110 },
+  ]
+
+  ctx.save()
+  ctx.translate(x, y)
+  ctx.scale(scale, scale)
+  ctx.fillStyle = color
+  for (const bar of bars) {
+    ctx.beginPath()
+    ctx.moveTo(bar.x, bar.y)
+    ctx.lineTo(bar.x + bar.w, bar.y)
+    ctx.lineTo(bar.x + bar.w, bar.y + bar.h - 10)
+    ctx.lineTo(bar.x + bar.w / 2, bar.y + bar.h)
+    ctx.lineTo(bar.x, bar.y + bar.h - 10)
+    ctx.closePath()
+    ctx.fill()
+  }
+  ctx.restore()
+}
+
 /* â”€â”€ Draw card on Canvas â”€â”€ */
 async function drawCard(
   canvas: HTMLCanvasElement,
@@ -56,19 +81,11 @@ async function drawCard(
   ctx.fillStyle = grad
   ctx.fillRect(0, 0, w, h)
 
-  // Diamond pattern (subtle)
-  ctx.strokeStyle = t.accent
-  ctx.globalAlpha = 0.04
-  ctx.lineWidth = 0.5
-  for (let x = 0; x < w; x += 60) {
-    for (let y = 0; y < h; y += 60) {
-      ctx.beginPath()
-      ctx.moveTo(x + 30, y)
-      ctx.lineTo(x + 60, y + 30)
-      ctx.lineTo(x + 30, y + 60)
-      ctx.lineTo(x, y + 30)
-      ctx.closePath()
-      ctx.stroke()
+  // Subtle brand scale pattern
+  ctx.globalAlpha = 0.035
+  for (let x = -80; x < w; x += 180) {
+    for (let y = -80; y < h; y += 180) {
+      drawScaleMark(ctx, x, y, 0.58, t.accent)
     }
   }
   ctx.globalAlpha = 1
@@ -77,12 +94,9 @@ async function drawCard(
   ctx.fillStyle = t.accent
   ctx.fillRect(0, 0, w, 6)
 
-  // CM watermark
-  ctx.globalAlpha = 0.04
-  ctx.fillStyle = t.accent
-  ctx.font = `bold ${isStory ? 400 : 500}px Georgia`
-  ctx.textAlign = 'right'
-  ctx.fillText('CA', w + 20, h - (isStory ? 40 : 80))
+  // Brand watermark
+  ctx.globalAlpha = 0.05
+  drawScaleMark(ctx, w - (isStory ? 330 : 360), h - (isStory ? 520 : 410), isStory ? 3.6 : 4.2, t.accent)
   ctx.globalAlpha = 1
 
   const px = isStory ? 56 : 72
@@ -111,7 +125,7 @@ async function drawCard(
 
   // Title â€” large, wrapped
   const titleSize = title.length > 30 ? (isStory ? 56 : 64) : (isStory ? 68 : 80)
-  ctx.font = `bold ${titleSize}px Georgia`
+  ctx.font = `bold ${titleSize}px Cormorant Garamond`
   ctx.fillStyle = t.text
   ctx.textBaseline = 'top'
   const titleLines = wrapText(ctx, title, contentW)
@@ -149,7 +163,7 @@ async function drawCard(
   // Brand footer
   const footY = h - (isStory ? 120 : 60)
   ctx.textAlign = isStory ? 'center' : 'right'
-  ctx.font = `bold 22px Georgia`
+  ctx.font = `bold 22px Cormorant Garamond`
   ctx.fillStyle = t.accent
   ctx.textBaseline = 'bottom'
   ctx.fillText('CAVALCANTE ALBUQUERQUE', isStory ? w / 2 : w - px, footY)
@@ -215,7 +229,7 @@ export default function CardGeneratorPage() {
       const canvas = document.createElement('canvas')
       await drawCard(canvas, { w: fmt.w, h: fmt.h, title, subtitle, category, cta, template })
       const link = document.createElement('a')
-      link.download = `cm-${title.toLowerCase().replace(/\s+/g, '-')}-${format}.png`
+      link.download = `ca-${title.toLowerCase().replace(/\s+/g, '-')}-${format}.png`
       link.href = canvas.toDataURL('image/png')
       link.click()
     } catch {
@@ -245,7 +259,7 @@ export default function CardGeneratorPage() {
             <a href="/admin-tools" style={{ color: 'var(--color-ca-steel-400)', fontSize: '13px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '8px' }}>
               <ArrowLeft style={{ width: '14px', height: '14px' }} /> Admin Tools
             </a>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', margin: 0 }}>Gerador de Cards para Redes Sociais</h1>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '28px', margin: 0 }}>Gerador de Cards para Redes Sociais</h1>
             <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px', marginTop: '4px' }}>Agora com Canvas nativo â€” texto renderizado pixel a pixel.</p>
           </div>
           <button onClick={loadCampaigns} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: 'var(--color-ca-steel-400)', fontSize: '12px', cursor: 'pointer' }}>

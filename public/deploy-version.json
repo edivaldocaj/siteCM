@@ -1,1 +1,1 @@
-{"marker":"fast-runner-image-v8","note":"removed recursive chown from Docker build"}
+{"marker":"migration-table-and-rebrand-v9","note":"ensures payload_migrations table and removes CM visual marks"}

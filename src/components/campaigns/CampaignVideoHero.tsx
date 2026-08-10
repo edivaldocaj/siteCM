@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Play } from 'lucide-react'
 
 interface CampaignVideoHeroProps {
@@ -88,7 +89,7 @@ export function CampaignVideoHero({ videoUrl, videoFileUrl, heroImageUrl }: Camp
               background: 'linear-gradient(135deg, var(--color-ca-navy-950), var(--color-ca-navy-800))',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <span style={{ color: 'color-mix(in srgb, var(--color-ca-steel-400) 10%, transparent)', fontFamily: "'Playfair Display', serif", fontSize: '120px', fontWeight: 'bold' }}>CM</span>
+              <Image src="/brand/symbol-mono-light.svg" alt="" width={120} height={120} style={{ width: '120px', height: '120px', opacity: 0.12 }} />
             </div>
           )}
 

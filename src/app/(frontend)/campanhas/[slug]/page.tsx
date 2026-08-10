@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import type { Metadata } from 'next'
@@ -127,9 +128,9 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           }} />
         )}
 
-        {/* CM watermark */}
+        {/* Brand watermark */}
         <div style={{ position: 'absolute', top: '-20%', right: '-5%', opacity: 0.03, pointerEvents: 'none' }}>
-          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '600px', fontWeight: 'bold', color: 'var(--color-ca-platinum-100)' }}>CM</span>
+          <Image src="/brand/symbol-mono-light.svg" alt="" width={520} height={520} style={{ width: 'min(46vw, 520px)', height: 'auto', display: 'block' }} />
         </div>
 
         <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative', zIndex: 10 }}>

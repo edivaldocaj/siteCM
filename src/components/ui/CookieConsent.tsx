@@ -7,12 +7,12 @@ export function CookieConsent() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    const accepted = localStorage.getItem('cm-cookies-accepted')
+    const accepted = localStorage.getItem('ca-cookies-accepted')
     if (!accepted) setShow(true)
   }, [])
 
   function accept() {
-    localStorage.setItem('cm-cookies-accepted', 'true')
+    localStorage.setItem('ca-cookies-accepted', 'true')
     setShow(false)
   }
 
