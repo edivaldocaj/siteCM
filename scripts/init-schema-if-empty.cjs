@@ -1,6 +1,16 @@
 const { Client } = require('pg')
 const { spawnSync } = require('child_process')
 
+const requiredTables = [
+  'users',
+  'media',
+  'leads',
+  'nps_responses',
+  'posts',
+  'practice_areas',
+  'payload_migrations',
+]
+
 async function main() {
   if (!process.env.DATABASE_URL) {
     console.error('[schema:init] DATABASE_URL ausente')
@@ -10,17 +20,26 @@ async function main() {
   const client = new Client({ connectionString: process.env.DATABASE_URL })
   await client.connect()
 
+  let missingTables = []
   try {
-    const result = await client.query("select to_regclass('public.users') as users_table")
-    if (result.rows[0]?.users_table) {
-      console.log('[schema:init] Schema existente detectado; pulando push inicial.')
+    const result = await client.query(
+      `select table_name
+       from information_schema.tables
+       where table_schema = 'public'
+         and table_name = any($1::text[])`,
+      [requiredTables],
+    )
+    const existing = new Set(result.rows.map((row) => row.table_name))
+    missingTables = requiredTables.filter((table) => !existing.has(table))
+    if (missingTables.length === 0) {
+      console.log('[schema:init] Schema base existente detectado; pulando push inicial.')
       return
     }
   } finally {
     await client.end()
   }
 
-  console.log('[schema:init] Banco sem tabela users; criando schema inicial do Payload...')
+  console.log(`[schema:init] Schema incompleto; tabelas ausentes: ${missingTables.join(', ')}. Sincronizando schema inicial do Payload...`)
   const result = spawnSync('npm', ['run', 'schema:push'], {
     stdio: 'inherit',
     shell: process.platform === 'win32',

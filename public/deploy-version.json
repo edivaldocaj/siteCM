@@ -1,1 +1,1 @@
-{"marker":"migration-table-and-rebrand-v9","note":"ensures payload_migrations table and removes CM visual marks"}
+{"marker":"partial-schema-init-v10","note":"schema init detects missing core tables before migrations"}
