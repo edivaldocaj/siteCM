@@ -465,7 +465,7 @@ export default function CalculadoraPage() {
           <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 30%, transparent)', fontSize: '11px', lineHeight: 1.6 }}>
             Esta calculadora oferece estimativas com base em decisões judiciais recentes e não constitui aconselhamento jurídico.
             Os valores reais podem variar conforme as circunstâncias específicas de cada caso.
-            <br />Cavalcante Albuquerque Sociedade de Advogados — OAB/RN
+            <br />Cavalcante Albuquerque Advocacia e Consultoria — OAB/RN
           </p>
           <Link href="/" style={{ color: 'var(--color-ca-steel-500)', fontSize: '13px', textDecoration: 'none', display: 'inline-block', marginTop: '12px' }}>
             ← Voltar ao site

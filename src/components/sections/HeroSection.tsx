@@ -39,7 +39,7 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
             />
             <div className="ca-hero__brand-text" aria-hidden="true">
               <strong>Cavalcante Albuquerque</strong>
-              <span>Sociedade de Advogados</span>
+              <span>Advocacia e Consultoria</span>
             </div>
           </div>
 

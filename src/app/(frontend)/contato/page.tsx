@@ -4,7 +4,7 @@ import { ContatoPageClient } from './ContatoPageClient'
 
 export const metadata = {
   title: 'Contato',
-  description: 'Entre em contato com o Cavalcante Albuquerque Sociedade de Advogados. Atendimento em Natal/RN.',
+  description: 'Entre em contato com o Cavalcante Albuquerque Advocacia e Consultoria. Atendimento em Natal/RN.',
 }
 
 export const dynamic = 'force-dynamic'

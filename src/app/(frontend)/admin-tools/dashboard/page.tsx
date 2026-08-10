@@ -168,7 +168,7 @@ export default function DashboardPage() {
           <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '24px' }}>
             <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '18px', marginBottom: '20px' }}>Performance por Advogado</h3>
             {Object.entries(breakdown.byAttorney).map(([key, stats]) => {
-              const name = key === 'edivaldo' ? 'Dr. Edivaldo Cavalcante' : 'Dra. Gabrielly Melo'
+              const name = key === 'edivaldo' ? 'Dr. Edivaldo Cavalcante Albuquerque' : 'Nao atribuido'
               const rate = stats.total > 0 ? ((stats.converted / stats.total) * 100).toFixed(0) : '0'
               return (
                 <div key={key} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px', padding: '16px', marginBottom: '12px' }}>

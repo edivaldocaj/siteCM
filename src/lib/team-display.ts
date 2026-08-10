@@ -7,8 +7,7 @@ type MaybeTeam = {
 }
 
 const legacyPeople: Record<string, string> = {
-  edivaldo: 'Dr. Edivaldo Cavalcante',
-  gabrielly: 'Dra. Gabrielly Melo',
+  edivaldo: 'Dr. Edivaldo Cavalcante Albuquerque',
 }
 
 const firmName = 'Cavalcante Albuquerque'

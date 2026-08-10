@@ -208,7 +208,7 @@ export default function ClientePortalPage() {
               Portal do Cliente
             </h1>
             <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px', lineHeight: 1.6 }}>
-              Cavalcante Albuquerque Sociedade de Advogados
+              Cavalcante Albuquerque Advocacia e Consultoria
             </p>
             <p style={{ color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', fontSize: '13px', marginTop: '8px' }}>
               Acompanhe o andamento dos seus processos
@@ -344,7 +344,7 @@ export default function ClientePortalPage() {
         {/* Footer */}
         <div style={{ textAlign: 'center', marginTop: '48px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
           <p style={{ color: 'color-mix(in srgb, var(--color-ca-steel-400) 30%, transparent)', fontSize: '12px' }}>
-            Cavalcante Albuquerque Sociedade de Advogados — Natal/RN
+            Cavalcante Albuquerque Advocacia e Consultoria — Natal/RN
           </p>
           <p style={{ color: 'color-mix(in srgb, var(--color-ca-steel-400) 20%, transparent)', fontSize: '11px', marginTop: '4px' }}>
             Dados processuais obtidos da API pública do Datajud (CNJ). Podem haver atrasos na atualização.
