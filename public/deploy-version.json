@@ -1,1 +1,1 @@
-{"marker":"healthcheck-port-v4","note":"docker healthcheck follows runtime PORT"}
+{"marker":"live-healthcheck-v5","note":"docker healthcheck no longer depends on database"}
