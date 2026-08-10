@@ -23,7 +23,7 @@ Se o Easypanel usar Dockerfile:
 
 - Build: usa o `Dockerfile` do repositorio.
 - Porta interna: `3000`.
-- Healthcheck HTTP: `/api/health`.
+- Healthcheck HTTP do Easypanel: `/api/live` (liveness sem banco). Use `/api/health` apenas para diagnóstico completo com banco/Payload.
 - Volume persistente recomendado: `/app/public/media`.
 
 Se o Easypanel usar modo Node/buildpack:
@@ -55,6 +55,7 @@ RUN_PREFLIGHT_ON_START=true
 RUN_MIGRATIONS_ON_START=true
 BOOTSTRAP_NEW_DB_ON_START=true
 DB_WAIT_SECONDS=60
+DB_STARTUP_STRICT=false
 ADMIN_EMAIL=seu-email@dominio.com
 ADMIN_PASSWORD=senha-forte
 ```
@@ -68,13 +69,14 @@ RUN_MIGRATIONS_ON_START=false
 
 O container aguarda o Postgres por ate `DB_WAIT_SECONDS` quando migrations ou bootstrap estiverem ativos.
 
-Manter migrations automaticas em todo start pode ser aceitavel no come?o, mas para producao estavel prefira rodar npm run migrate de forma controlada antes do reload.
+Manter tarefas automáticas de banco em todo start pode ser aceitável no começo, mas para produção estável prefira rodar preparo de banco de forma controlada antes do reload. `DB_STARTUP_STRICT=false` evita 502 por falha de bootstrap, mantendo o app no ar para diagnóstico.
 
 ## Smoke test
 
 Depois que o app reiniciar:
 
 ```bash
+curl -fsS "$NEXT_PUBLIC_SITE_URL/api/live"
 curl -fsS "$NEXT_PUBLIC_SITE_URL/api/health"
 curl -I "$NEXT_PUBLIC_SITE_URL/"
 curl -I "$NEXT_PUBLIC_SITE_URL/admin"
@@ -82,7 +84,7 @@ curl -I "$NEXT_PUBLIC_SITE_URL/robots.txt"
 curl -I "$NEXT_PUBLIC_SITE_URL/sitemap.xml"
 ```
 
-Resultado esperado para `/api/health`: HTTP 200 e `status: "ok"`.
+Resultado esperado para `/api/live`: HTTP 200 e `status: "ok"`. Resultado esperado para `/api/health`: HTTP 200 quando banco e Payload estiverem prontos; se retornar 503, o app subiu, mas o banco/CMS ainda precisa de correção.
 
 ## Primeira revisao no CMS
 

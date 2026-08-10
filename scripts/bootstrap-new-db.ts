@@ -71,22 +71,22 @@ async function seedGlobals(payload: any) {
       oabRegistration: pending,
       founderName: pending,
       foundedYear: pending,
-      tagline: 'Advocacia com estrategia e solidez.',
+      tagline: 'Advocacia com estratégia e solidez.',
       domain: 'cavalcantealbuquerque.com.br',
       email: process.env.PUBLIC_CONTACT_EMAIL || pending,
       phone: process.env.PUBLIC_CONTACT_PHONE || pending,
       whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || pending,
-      whatsappDefaultMessage: 'Ola, gostaria de atendimento juridico.',
+      whatsappDefaultMessage: 'Olá, gostaria de atendimento jurídico.',
       addressStreet: pending,
       addressDistrict: pending,
       addressCity: 'Natal',
       addressState: 'RN',
       addressZip: pending,
       emergencyLine: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || pending,
-      emergencyLabel: 'Plantao criminal 24h',
+      emergencyLabel: 'Plantão criminal 24h',
       dpoName: pending,
       dpoEmail: pending,
-      oabDisclaimer: 'Informacoes de carater exclusivamente informativo, sem promessa de resultado e conforme o Codigo de Etica e Disciplina da OAB.',
+      oabDisclaimer: 'Informações de caráter exclusivamente informativo, sem promessa de resultado e conforme o Código de Ética e Disciplina da OAB.',
     },
   })
   console.log('updated: brand-config')
@@ -95,17 +95,17 @@ async function seedGlobals(payload: any) {
     slug: 'navigation',
     data: {
       headerLinks: [
-        { label: 'Inicio', href: '/', highlight: false },
+        { label: 'Início', href: '/', highlight: false },
         { label: 'Sobre', href: '/sobre', highlight: false },
-        { label: 'Areas de atuacao', href: '/areas-de-atuacao', highlight: false },
+        { label: 'Áreas de atuação', href: '/areas-de-atuacao', highlight: false },
         { label: 'Campanhas', href: '/campanhas', highlight: false },
         { label: 'Blog', href: '/blog', highlight: false },
         { label: 'Contato', href: '/contato', highlight: false },
       ],
       legalLinks: [
-        { label: 'Politica de privacidade', href: '/privacidade' },
+        { label: 'Política de privacidade', href: '/privacidade' },
         { label: 'Termos de uso', href: '/termos-de-uso' },
-        { label: 'Politica de cookies', href: '/politica-de-cookies' },
+        { label: 'Política de cookies', href: '/politica-de-cookies' },
       ],
       ctaLabel: 'Fale com um advogado',
       ctaHref: '/contato',
@@ -116,22 +116,22 @@ async function seedGlobals(payload: any) {
   await payload.updateGlobal({
     slug: 'site-config',
     data: {
-      heroTitle: 'Advocacia com estrategia e solidez.',
-      heroSubtitle: 'Atendimento juridico em Natal/RN com analise tecnica e acompanhamento direto.',
+      heroTitle: 'Advocacia com estratégia e solidez.',
+      heroSubtitle: 'Atendimento jurídico em Natal/RN com análise técnica e acompanhamento direto.',
       heroButtonText: 'Fale com um advogado',
       contactTitle: 'Fale com nossa equipe',
-      contactSubtitle: 'Envie sua demanda para uma avaliacao inicial.',
+      contactSubtitle: 'Envie sua demanda para uma avaliação inicial.',
       contactEmail: process.env.PUBLIC_CONTACT_EMAIL || pending,
       contactPhone: process.env.PUBLIC_CONTACT_PHONE || pending,
       contactAddress: pending,
-      practiceTitle: 'Areas de Atuacao',
-      practiceSubtitle: 'Atuacao juridica organizada por contexto e necessidade do cliente.',
-      campaignsTitle: 'Campanhas Juridicas',
+      practiceTitle: 'Áreas de Atuação',
+      practiceSubtitle: 'Atuação jurídica organizada por contexto e necessidade do cliente.',
+      campaignsTitle: 'Campanhas Jurídicas',
       campaignsSubtitle: 'Iniciativas ativas para demandas recorrentes.',
       blogTitle: 'Artigos Recentes',
-      blogSubtitle: 'Conteudo juridico em linguagem direta.',
-      newsTitle: 'Noticias do Direito',
-      newsSubtitle: 'Atualizacoes juridicas acompanhadas pela equipe.',
+      blogSubtitle: 'Conteúdo jurídico em linguagem direta.',
+      newsTitle: 'Notícias do Direito',
+      newsSubtitle: 'Atualizações jurídicas acompanhadas pela equipe.',
       testimonialsTitle: 'O que nossos clientes dizem',
     },
   })
@@ -164,7 +164,7 @@ async function seedGlobals(payload: any) {
     data: {
       aboutPartners: {
         sectionTitle: 'Quem conduz o seu caso',
-        sectionDescription: 'Atendimento juridico com responsabilidade tecnica e comunicacao direta.',
+        sectionDescription: 'Atendimento jurídico com responsabilidade técnica e comunicação direta.',
         partnersList: [
           {
             name: 'Dr. Edivaldo Cavalcante Albuquerque',
@@ -203,13 +203,13 @@ async function seedTeam(payload: any) {
 
 async function seedPracticeAreas(payload: any) {
   const areas = [
-    ['Direito Digital e LGPD', 'direito-digital', 'shield', 'Atuacao em protecao de dados, privacidade, plataformas digitais e conflitos envolvendo tecnologia.'],
-    ['Direito Civil', 'direito-civil', 'scale', 'Atuacao em contratos, responsabilidade civil, obrigacoes e conflitos patrimoniais.'],
-    ['Direito do Consumidor', 'direito-consumidor', 'shopping-bag', 'Atuacao em relacoes de consumo, bancos, servicos, cobrancas e indenizacoes.'],
-    ['Direito Imobiliario', 'direito-imobiliario', 'home', 'Atuacao em contratos imobiliarios, posse, propriedade, locacao e regularizacao.'],
-    ['Direito Tributario', 'direito-tributario', 'receipt', 'Consultoria e contencioso tributario para pessoas fisicas e empresas.'],
-    ['Licitacoes e Contratos Administrativos', 'licitacoes', 'file-text', 'Apoio juridico em licitacoes, contratos publicos e relacoes com a administracao.'],
-    ['Direito Penal', 'direito-penal', 'gavel', 'Defesa tecnica em demandas criminais e atendimento em situacoes urgentes.'],
+    ['Direito Digital e LGPD', 'direito-digital', 'shield', 'Atuação em proteção de dados, privacidade, plataformas digitais e conflitos envolvendo tecnologia.'],
+    ['Direito Civil', 'direito-civil', 'scale', 'Atuação em contratos, responsabilidade civil, obrigações e conflitos patrimoniais.'],
+    ['Direito do Consumidor', 'direito-consumidor', 'shopping-bag', 'Atuação em relações de consumo, bancos, serviços, cobranças e indenizações.'],
+    ['Direito Imobiliario', 'direito-imobiliario', 'home', 'Atuação em contratos imobiliários, posse, propriedade, locação e regularização.'],
+    ['Direito Tributario', 'direito-tributario', 'receipt', 'Consultoria e contencioso tributário para pessoas físicas e empresas.'],
+    ['Licitações e Contratos Administrativos', 'licitacoes', 'file-text', 'Apoio jurídico em licitações, contratos públicos e relações com a administração.'],
+    ['Direito Penal', 'direito-penal', 'gavel', 'Defesa técnica em demandas criminais e atendimento em situações urgentes.'],
   ] as const
 
   for (const [title, slug, icon, shortDescription] of areas) {

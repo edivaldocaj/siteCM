@@ -1,4 +1,4 @@
 {
-  "marker": "encoding-repair-v21",
-  "note": "repairs Portuguese accent mojibake across public, admin, and API copy"
+  "marker": "startup-resilience-v22",
+  "note": "keeps app online when database preparation fails and documents live healthcheck"
 }

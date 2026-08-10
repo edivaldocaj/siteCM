@@ -34,6 +34,7 @@ const steps = [
   ['Check wait-for-db', 'node', ['--check', 'scripts/wait-for-db.cjs']],
   ['Check build-preserve-seed', 'node', ['--check', 'scripts/build-preserve-seed.cjs']],
   ['Check production-preflight', 'node', ['--check', 'scripts/production-preflight.cjs']],
+  ['Check db-startup', 'node', ['--check', 'scripts/db-startup.cjs']],
   ['Build', 'npm', ['run', 'build']],
 ]
 

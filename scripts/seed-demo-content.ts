@@ -87,71 +87,71 @@ async function seedGlobals(payload: PayloadInstance) {
       oabRegistration: pending,
       founderName: 'Dr. Edivaldo Cavalcante Albuquerque',
       foundedYear: pending,
-      tagline: 'Advocacia com estrategia e solidez.',
+      tagline: 'Advocacia com estratégia e solidez.',
       domain: 'cavalcantealbuquerque.com.br',
       email: process.env.PUBLIC_CONTACT_EMAIL || process.env.CONTACT_EMAIL || 'contato@cavalcantealbuquerque.com.br',
       phone: process.env.PUBLIC_CONTACT_PHONE || '(84) 99124-3985',
       whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985',
-      whatsappDefaultMessage: process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || 'Ola, gostaria de atendimento juridico.',
+      whatsappDefaultMessage: process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || 'Olá, gostaria de atendimento jurídico.',
       addressStreet: 'Rua Francisco Maia Sobrinho, 1950',
       addressDistrict: 'Lagoa Nova',
       addressCity: 'Natal',
       addressState: 'RN',
       addressZip: '59062-250',
       emergencyLine: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985',
-      emergencyLabel: 'Plantao criminal 24h',
+      emergencyLabel: 'Plantão criminal 24h',
       businessHours: [
         { day: 'Segunda a sexta', opensAt: '08:00', closesAt: '18:00' },
-        { day: 'Urgencias criminais', opensAt: '24h', closesAt: '24h' },
+        { day: 'Urgências criminais', opensAt: '24h', closesAt: '24h' },
       ],
       dpoName: pending,
       dpoEmail: pending,
-      oabDisclaimer: 'Conteudo informativo, sem promessa de resultado e conforme o Codigo de Etica e Disciplina da OAB.',
+      oabDisclaimer: 'Conteúdo informativo, sem promessa de resultado e conforme o Código de Ética e Disciplina da OAB.',
     },
   })
 
   await (payload as any).updateGlobal({
     slug: 'site-config',
     data: {
-      heroTitle: 'Advocacia com estrategia e solidez.',
-      heroSubtitle: 'Atendimento juridico em Natal/RN com analise tecnica, comunicacao direta e acompanhamento cuidadoso em cada etapa do caso.',
+      heroTitle: 'Advocacia com estratégia e solidez.',
+      heroSubtitle: 'Atendimento jurídico em Natal/RN com análise técnica, comunicação direta e acompanhamento cuidadoso em cada etapa do caso.',
       heroButtonText: 'Fale com um advogado',
       trustBarStats: [
-        { value: 24, suffix: 'h', label: 'Plantao criminal' },
-        { value: 7, suffix: '+', label: 'Areas de atuacao' },
-        { value: 100, suffix: '%', label: 'Atendimento tecnico' },
+        { value: 24, suffix: 'h', label: 'Plantão criminal' },
+        { value: 7, suffix: '+', label: 'Áreas de atuação' },
+        { value: 100, suffix: '%', label: 'Atendimento técnico' },
         { value: 1, suffix: ':1', label: 'Contato direto' },
       ],
       criminalTag: 'Defesa criminal - atendimento imediato',
-      criminalTitle: 'Urgencia exige tecnica e resposta rapida.',
-      criminalHighlight: 'Atuacao 24h para flagrantes, audiencias de custodia e medidas urgentes.',
-      criminalDescription: 'Em situacoes criminais, cada hora importa. O atendimento inicial organiza documentos, identifica riscos e define os proximos passos com objetividade.',
-      practiceTitle: 'Areas de atuacao',
-      practiceSubtitle: 'Atuacao organizada por contexto, urgencia e estrategia processual.',
-      campaignsTitle: 'Campanhas juridicas',
-      campaignsSubtitle: 'Frentes de atendimento para demandas recorrentes de consumidores, empresas e familias.',
+      criminalTitle: 'Urgência exige técnica e resposta rápida.',
+      criminalHighlight: 'Atuação 24h para flagrantes, audiências de custódia e medidas urgentes.',
+      criminalDescription: 'Em situações criminais, cada hora importa. O atendimento inicial organiza documentos, identifica riscos e define os próximos passos com objetividade.',
+      practiceTitle: 'Áreas de atuação',
+      practiceSubtitle: 'Atuação organizada por contexto, urgência e estratégia processual.',
+      campaignsTitle: 'Campanhas jurídicas',
+      campaignsSubtitle: 'Frentes de atendimento para demandas recorrentes de consumidores, empresas e famílias.',
       testimonialsTitle: 'Relatos de atendimento',
-      newsTitle: 'Noticias do Direito',
-      newsSubtitle: 'Atualizacoes juridicas selecionadas para leitura rapida.',
+      newsTitle: 'Notícias do Direito',
+      newsSubtitle: 'Atualizações jurídicas selecionadas para leitura rápida.',
       blogTitle: 'Artigos recentes',
-      blogSubtitle: 'Conteudo juridico em linguagem direta para orientar decisoes.',
+      blogSubtitle: 'Conteúdo jurídico em linguagem direta para orientar decisões.',
       contactTitle: 'Fale com a Cavalcante Albuquerque',
-      contactSubtitle: 'Descreva sua demanda para uma avaliacao inicial do melhor caminho juridico.',
+      contactSubtitle: 'Descreva sua demanda para uma avaliação inicial do melhor caminho jurídico.',
       contactEmail: process.env.PUBLIC_CONTACT_EMAIL || process.env.CONTACT_EMAIL || 'contato@cavalcantealbuquerque.com.br',
       contactPhone: process.env.PUBLIC_CONTACT_PHONE || '(84) 99124-3985',
       contactAddress: 'Rua Francisco Maia Sobrinho, 1950\nLagoa Nova - Natal/RN, 59062-250',
       aboutTitle: 'Sobre a Cavalcante Albuquerque',
-      aboutSubtitle: 'Advocacia e consultoria com foco em estrategia, solidez e comunicacao direta.',
-      aboutHistory: 'A Cavalcante Albuquerque nasce para oferecer atendimento juridico tecnico, organizado e proximo do cliente. A estrutura combina atuacao consultiva, contenciosa e resposta rapida em urgencias.',
+      aboutSubtitle: 'Advocacia e consultoria com foco em estratégia, solidez e comunicação direta.',
+      aboutHistory: 'A Cavalcante Albuquerque nasce para oferecer atendimento jurídico técnico, organizado e próximo do cliente. A estrutura combina atuação consultiva, contenciosa e resposta rápida em urgências.',
       aboutTimeline: [
-        { year: 'Formacao', title: 'Base tecnica', description: 'Experiencia construida em demandas civeis, consumidor, digital, criminal e consultoria.' },
-        { year: 'Atuacao', title: 'Metodo de acompanhamento', description: 'Cada caso recebe analise de risco, organizacao documental e comunicacao objetiva.' },
-        { year: 'Hoje', title: 'Cavalcante Albuquerque', description: 'Escritorio estruturado para atendimento estrategico em Natal/RN e canais digitais.' },
+        { year: 'Formação', title: 'Base técnica', description: 'Experiência construída em demandas cíveis, consumidor, digital, criminal e consultoria.' },
+        { year: 'Atuação', title: 'Método de acompanhamento', description: 'Cada caso recebe análise de risco, organização documental e comunicação objetiva.' },
+        { year: 'Hoje', title: 'Cavalcante Albuquerque', description: 'Escritório estruturado para atendimento estratégico em Natal/RN e canais digitais.' },
       ],
       aboutValues: [
-        { title: 'Tecnica', description: 'Analise juridica consistente antes de qualquer medida.', icon: 'scale' },
-        { title: 'Clareza', description: 'Comunicacao direta sobre riscos, prazos e proximos passos.', icon: 'users' },
-        { title: 'Solidez', description: 'Estrategias sustentadas por documentos, precedentes e contexto do cliente.', icon: 'shield' },
+        { title: 'Técnica', description: 'Análise jurídica consistente antes de qualquer medida.', icon: 'scale' },
+        { title: 'Clareza', description: 'Comunicação direta sobre riscos, prazos e próximos passos.', icon: 'users' },
+        { title: 'Solidez', description: 'Estratégias sustentadas por documentos, precedentes e contexto do cliente.', icon: 'shield' },
       ],
     },
   })
@@ -161,14 +161,14 @@ async function seedGlobals(payload: PayloadInstance) {
     data: {
       aboutPartners: {
         sectionTitle: 'Quem conduz o seu caso',
-        sectionDescription: 'Atendimento juridico com responsabilidade tecnica, leitura estrategica e contato direto.',
+        sectionDescription: 'Atendimento jurídico com responsabilidade técnica, leitura estratégica e contato direto.',
         partnersList: [
           {
             name: 'Dr. Edivaldo Cavalcante Albuquerque',
             role: 'Advogado Titular',
             areas: 'Civil, Consumidor, Digital, Penal e Consultoria',
             oab: pending,
-            bio: 'Atuacao focada em estrategia juridica, protecao de direitos e acompanhamento proximo do cliente.',
+            bio: 'Atuação focada em estratégia jurídica, proteção de direitos e acompanhamento próximo do cliente.',
           },
         ],
       },
@@ -179,9 +179,9 @@ async function seedGlobals(payload: PayloadInstance) {
     slug: 'navigation',
     data: {
       headerLinks: [
-        { label: 'Inicio', href: '/', highlight: false },
+        { label: 'Início', href: '/', highlight: false },
         { label: 'Sobre', href: '/sobre', highlight: false },
-        { label: 'Areas de atuacao', href: '/areas-de-atuacao', highlight: false },
+        { label: 'Áreas de atuação', href: '/areas-de-atuacao', highlight: false },
         { label: 'Campanhas', href: '/campanhas', highlight: true },
         { label: 'Blog', href: '/blog', highlight: false },
         { label: 'Contato', href: '/contato', highlight: false },
@@ -191,16 +191,16 @@ async function seedGlobals(payload: PayloadInstance) {
           title: 'Institucional',
           links: [
             { label: 'Sobre', href: '/sobre' },
-            { label: 'Areas de atuacao', href: '/areas-de-atuacao' },
+            { label: 'Áreas de atuação', href: '/areas-de-atuacao' },
             { label: 'Campanhas', href: '/campanhas' },
             { label: 'Blog', href: '/blog' },
           ],
         },
       ],
       legalLinks: [
-        { label: 'Politica de privacidade', href: '/privacidade' },
+        { label: 'Política de privacidade', href: '/privacidade' },
         { label: 'Termos de uso', href: '/termos-de-uso' },
-        { label: 'Politica de cookies', href: '/politica-de-cookies' },
+        { label: 'Política de cookies', href: '/politica-de-cookies' },
       ],
       ctaLabel: 'Fale com um advogado',
       ctaHref: '/contato',
@@ -216,7 +216,7 @@ async function seedTeam(payload: PayloadInstance) {
     shortName: 'Dr. Edivaldo',
     role: 'Advogado Titular',
     oab: pending,
-    bio: richText('Advogado titular da Cavalcante Albuquerque, com atuacao em demandas consultivas e contenciosas.', 'Atendimento orientado por estrategia, organizacao documental e comunicacao direta com o cliente.'),
+    bio: richText('Advogado titular da Cavalcante Albuquerque, com atuação em demandas consultivas e contenciosas.', 'Atendimento orientado por estratégia, organização documental e comunicação direta com o cliente.'),
     order: 1,
     active: true,
     showOnSite: true,
@@ -228,38 +228,38 @@ async function seedPracticeAreas(payload: PayloadInstance) {
   const areas = [
     {
       title: 'Direito Digital e LGPD', slug: 'direito-digital', icon: 'shield', order: 1,
-      shortDescription: 'Protecao de dados, contratos digitais, incidentes de seguranca e conflitos em plataformas.',
-      caseTypes: ['Adequacao LGPD', 'Vazamento de dados', 'Remocao de conteudo', 'Contratos digitais'],
+      shortDescription: 'Proteção de dados, contratos digitais, incidentes de segurança e conflitos em plataformas.',
+      caseTypes: ['Adequação LGPD', 'Vazamento de dados', 'Remoção de conteúdo', 'Contratos digitais'],
     },
     {
       title: 'Direito Civil', slug: 'direito-civil', icon: 'scale', order: 2,
-      shortDescription: 'Contratos, responsabilidade civil, cobrancas, indenizacoes e conflitos patrimoniais.',
-      caseTypes: ['Revisao contratual', 'Indenizacao', 'Cobranca', 'Obrigacoes'],
+      shortDescription: 'Contratos, responsabilidade civil, cobranças, indenizações e conflitos patrimoniais.',
+      caseTypes: ['Revisão contratual', 'Indenização', 'Cobrança', 'Obrigações'],
     },
     {
       title: 'Direito do Consumidor', slug: 'direito-consumidor', icon: 'shopping-bag', order: 3,
-      shortDescription: 'Fraudes bancarias, negativacao indevida, cobrancas abusivas e falhas de servico.',
-      caseTypes: ['Fraude bancaria', 'Negativacao indevida', 'Cobran?a abusiva', 'Produto com defeito'],
+      shortDescription: 'Fraudes bancárias, negativação indevida, cobranças abusivas e falhas de serviço.',
+      caseTypes: ['Fraude bancária', 'Negativação indevida', 'Cobrança abusiva', 'Produto com defeito'],
     },
     {
       title: 'Direito Imobiliario', slug: 'direito-imobiliario', icon: 'home', order: 4,
-      shortDescription: 'Compra e venda, locacao, posse, propriedade, regularizacao e conflitos condominiais.',
-      caseTypes: ['Contrato imobiliario', 'Locacao', 'Usucapiao', 'Condominio'],
+      shortDescription: 'Compra e venda, locação, posse, propriedade, regularização e conflitos condominiais.',
+      caseTypes: ['Contrato imobiliário', 'Locação', 'Usucapião', 'Condomínio'],
     },
     {
       title: 'Direito Tributario', slug: 'direito-tributario', icon: 'receipt', order: 5,
-      shortDescription: 'Consultoria, defesa administrativa, execucoes fiscais e planejamento tributario.',
-      caseTypes: ['Execucao fiscal', 'Defesa administrativa', 'Parcelamento', 'Planejamento'],
+      shortDescription: 'Consultoria, defesa administrativa, execuções fiscais e planejamento tributário.',
+      caseTypes: ['Execução fiscal', 'Defesa administrativa', 'Parcelamento', 'Planejamento'],
     },
     {
-      title: 'Licitacoes e Contratos Administrativos', slug: 'licitacoes', icon: 'file-text', order: 6,
-      shortDescription: 'Apoio em editais, recursos, impugnacoes, contratos publicos e relacoes com a administracao.',
-      caseTypes: ['Impugnacao de edital', 'Recurso administrativo', 'Contrato publico', 'Sancoes administrativas'],
+      title: 'Licitações e Contratos Administrativos', slug: 'licitacoes', icon: 'file-text', order: 6,
+      shortDescription: 'Apoio em editais, recursos, impugnações, contratos públicos e relações com a administração.',
+      caseTypes: ['Impugnação de edital', 'Recurso administrativo', 'Contrato público', 'Sanções administrativas'],
     },
     {
       title: 'Direito Penal', slug: 'direito-penal', icon: 'gavel', order: 7,
-      shortDescription: 'Defesa tecnica em investigacoes, flagrantes, audiencias de custodia e medidas urgentes.',
-      caseTypes: ['Flagrante', 'Audiencia de custodia', 'Inquerito policial', 'Medidas cautelares'], is24h: true,
+      shortDescription: 'Defesa técnica em investigações, flagrantes, audiências de custódia e medidas urgentes.',
+      caseTypes: ['Flagrante', 'Audiência de custódia', 'Inquérito policial', 'Medidas cautelares'], is24h: true,
     },
   ]
 
@@ -270,13 +270,13 @@ async function seedPracticeAreas(payload: PayloadInstance) {
       shortDescription: area.shortDescription,
       heroHeadline: area.shortDescription,
       content: richText(
-        `${area.title} exige avaliacao individual do contexto, documentos disponiveis e riscos envolvidos.`,
-        'Este conteudo de demonstracao serve para validar o layout e deve ser substituido pela redacao final aprovada pelo escritorio.',
+        `${area.title} exige avaliação individual do contexto, documentos disponíveis e riscos envolvidos.`,
+        'Este conteúdo de demonstração serve para validar o layout e deve ser substituído pela redação final aprovada pelo escritório.',
       ),
       caseTypes: area.caseTypes.map((name) => ({ name })),
       faq: [
-        { question: 'Como funciona o primeiro atendimento?', answer: 'A equipe coleta os fatos principais, documentos e prazos para indicar os proximos passos.' },
-        { question: 'O atendimento pode ser online?', answer: 'Sim. O contato inicial pode ocorrer por WhatsApp, telefone ou formulario do site.' },
+        { question: 'Como funciona o primeiro atendimento?', answer: 'A equipe coleta os fatos principais, documentos e prazos para indicar os próximos passos.' },
+        { question: 'O atendimento pode ser online?', answer: 'Sim. O contato inicial pode ocorrer por WhatsApp, telefone ou formulário do site.' },
       ],
       attorney: 'edivaldo',
       byFirm: true,
@@ -290,22 +290,22 @@ async function seedPracticeAreas(payload: PayloadInstance) {
 async function seedCampaigns(payload: PayloadInstance) {
   const campaigns = [
     {
-      title: 'Fraudes bancarias e golpes digitais', slug: 'fraudes-bancarias', category: 'consumidor', colorAccent: 'gold',
-      subtitle: 'Contestacao de transacoes nao reconhecidas, emprestimos fraudulentos e falhas de seguranca bancaria.',
-      urgencyText: 'Atendimento para bloqueio de danos e organizacao de provas.',
-      whatsappMessage: 'Ola! Preciso de orientacao sobre fraude bancaria ou golpe digital.',
+      title: 'Fraudes bancárias e golpes digitais', slug: 'fraudes-bancarias', category: 'consumidor', colorAccent: 'gold',
+      subtitle: 'Contestação de transações não reconhecidas, empréstimos fraudulentos e falhas de segurança bancária.',
+      urgencyText: 'Atendimento para bloqueio de danos e organização de provas.',
+      whatsappMessage: 'Olá! Preciso de orientação sobre fraude bancária ou golpe digital.',
     },
     {
-      title: 'Negativacao indevida', slug: 'negativacao-indevida', category: 'consumidor', colorAccent: 'blue',
-      subtitle: 'Avaliacao de inscricoes indevidas em SPC/Serasa e pedidos de retirada com indenizacao quando cabivel.',
-      urgencyText: 'Verifique documentos e prazos antes de negociar a divida.',
-      whatsappMessage: 'Ola! Meu nome foi negativado e quero avaliar meu caso.',
+      title: 'Negativação indevida', slug: 'negativacao-indevida', category: 'consumidor', colorAccent: 'blue',
+      subtitle: 'Avaliação de inscrições indevidas em SPC/Serasa e pedidos de retirada com indenização quando cabível.',
+      urgencyText: 'Verifique documentos e prazos antes de negociar a dívida.',
+      whatsappMessage: 'Olá! Meu nome foi negativado e quero avaliar meu caso.',
     },
     {
-      title: 'Plantao criminal 24h', slug: 'plantao-criminal-24h', category: 'criminal', colorAccent: 'red',
-      subtitle: 'Atendimento para flagrante, audiencia de custodia, busca e apreensao e medidas urgentes.',
-      urgencyText: 'Plantao criminal: resposta imediata por WhatsApp.',
-      whatsappMessage: 'Ola! Preciso de atendimento criminal urgente.',
+      title: 'Plantão criminal 24h', slug: 'plantao-criminal-24h', category: 'criminal', colorAccent: 'red',
+      subtitle: 'Atendimento para flagrante, audiência de custódia, busca e apreensão e medidas urgentes.',
+      urgencyText: 'Plantão criminal: resposta imediata por WhatsApp.',
+      whatsappMessage: 'Olá! Preciso de atendimento criminal urgente.',
     },
   ]
 
@@ -316,19 +316,19 @@ async function seedCampaigns(payload: PayloadInstance) {
       featuredOnHomepage: true,
       showForm: true,
       startDate: now,
-      problemDescription: richText('Muitas demandas chegam ao cliente com informacao fragmentada e prazos curtos.', 'A campanha organiza o atendimento inicial e facilita a coleta de informacoes essenciais.'),
-      rightsExplanation: richText('Cada caso exige analise individual. A avaliacao inicial verifica documentos, provas, prazos e riscos juridicos.'),
-      benefits: richText('A atuacao busca reduzir incerteza, preservar provas e definir uma estrategia compativel com o contexto do cliente.'),
+      problemDescription: richText('Muitas demandas chegam ao cliente com informação fragmentada e prazos curtos.', 'A campanha organiza o atendimento inicial e facilita a coleta de informações essenciais.'),
+      rightsExplanation: richText('Cada caso exige análise individual. A avaliação inicial verifica documentos, provas, prazos e riscos jurídicos.'),
+      benefits: richText('A atuação busca reduzir incerteza, preservar provas e definir uma estratégia compatível com o contexto do cliente.'),
       socialProof: [
         { text: 'Atendimento claro e cuidadoso desde o primeiro contato.', author: 'Cliente A.', caseType: campaign.category },
       ],
       faq: [
-        { question: 'A analise inicial garante resultado?', answer: 'Nao. A analise indica caminhos possiveis, riscos e documentos necessarios, sem promessa de resultado.' },
+        { question: 'A análise inicial garante resultado?', answer: 'Não. A análise indica caminhos possíveis, riscos e documentos necessários, sem promessa de resultado.' },
         { question: 'Quais documentos devo enviar?', answer: 'Envie contratos, comprovantes, mensagens, protocolos, prints e documentos pessoais relacionados ao caso.' },
       ],
-      socialCaption: `${campaign.title}: entenda seus direitos e organize os documentos antes de tomar uma decisao.`,
+      socialCaption: `${campaign.title}: entenda seus direitos e organize os documentos antes de tomar uma decisão.`,
       socialHashtags: ['#CavalcanteAlbuquerque', '#Advocacia', '#DireitoRN'],
-      targetAudience: 'Pessoas fisicas e empresas em Natal/RN com demanda juridica relacionada ao tema da campanha.',
+      targetAudience: 'Pessoas físicas e empresas em Natal/RN com demanda jurídica relacionada ao tema da campanha.',
       seo: { metaTitle: `${campaign.title} | Cavalcante Albuquerque`, metaDescription: campaign.subtitle },
     })
   }
@@ -336,16 +336,16 @@ async function seedCampaigns(payload: PayloadInstance) {
 
 async function seedPosts(payload: PayloadInstance, teamId: number | null) {
   const posts = [
-    { title: 'Como organizar documentos antes de falar com um advogado', slug: 'organizar-documentos-atendimento-juridico', category: 'geral', linkedCampaign: '', excerpt: 'Uma lista objetiva do que separar para tornar a primeira avaliacao juridica mais eficiente.' },
-    { title: 'Fraude bancaria: primeiros passos para reduzir prejuizos', slug: 'fraude-bancaria-primeiros-passos', category: 'direito-consumidor', linkedCampaign: 'fraudes-bancarias', excerpt: 'Medidas iniciais para preservar provas, comunicar o banco e avaliar responsabilidades.' },
-    { title: 'LGPD na pratica: riscos comuns em pequenos negocios', slug: 'lgpd-riscos-pequenos-negocios', category: 'lgpd', linkedCampaign: '', excerpt: 'Pontos frequentes de atencao em cadastro de clientes, contratos, WhatsApp e armazenamento de dados.' },
-    { title: 'Atendimento criminal urgente: o que informar no primeiro contato', slug: 'atendimento-criminal-urgente-primeiro-contato', category: 'direito-penal', linkedCampaign: 'plantao-criminal-24h', excerpt: 'Informacoes essenciais para orientar uma resposta rapida em situacoes criminais.' },
+    { title: 'Como organizar documentos antes de falar com um advogado', slug: 'organizar-documentos-atendimento-juridico', category: 'geral', linkedCampaign: '', excerpt: 'Uma lista objetiva do que separar para tornar a primeira avaliação jurídica mais eficiente.' },
+    { title: 'Fraude bancária: primeiros passos para reduzir prejuizos', slug: 'fraude-bancaria-primeiros-passos', category: 'direito-consumidor', linkedCampaign: 'fraudes-bancarias', excerpt: 'Medidas iniciais para preservar provas, comunicar o banco e avaliar responsabilidades.' },
+    { title: 'LGPD na prática: riscos comuns em pequenos negócios', slug: 'lgpd-riscos-pequenos-negocios', category: 'lgpd', linkedCampaign: '', excerpt: 'Pontos frequentes de atenção em cadastro de clientes, contratos, WhatsApp e armazenamento de dados.' },
+    { title: 'Atendimento criminal urgente: o que informar no primeiro contato', slug: 'atendimento-criminal-urgente-primeiro-contato', category: 'direito-penal', linkedCampaign: 'plantao-criminal-24h', excerpt: 'Informações essenciais para orientar uma resposta rápida em situações criminais.' },
   ]
 
   for (const [index, post] of posts.entries()) {
     await upsertBySlug(payload, 'posts', post.slug, {
       ...post,
-      content: richText(post.excerpt, 'Este artigo demonstrativo ajuda a validar o layout do blog e deve ser revisado antes de uso definitivo.', 'A orientacao juridica depende da analise concreta dos documentos e fatos.'),
+      content: richText(post.excerpt, 'Este artigo demonstrativo ajuda a validar o layout do blog e deve ser revisado antes de uso definitivo.', 'A orientação jurídica depende da análise concreta dos documentos e fatos.'),
       author: 'edivaldo',
       authorRef: teamId || undefined,
       byFirm: false,
@@ -360,22 +360,22 @@ async function seedPosts(payload: PayloadInstance, teamId: number | null) {
 
 async function seedNews(payload: PayloadInstance) {
   const news = [
-    { title: 'STJ reforca importancia da prova documental em relacoes de consumo', slug: 'stj-prova-documental-consumo', category: 'direito-consumidor', source: 'Demonstracao editorial', linkedCampaign: 'fraudes-bancarias' },
-    { title: 'ANPD publica orientacoes sobre seguranca e tratamento de dados', slug: 'anpd-orientacoes-seguranca-dados', category: 'lgpd', source: 'Demonstracao editorial', linkedCampaign: '' },
-    { title: 'Prazos processuais exigem acompanhamento preventivo', slug: 'prazos-processuais-acompanhamento-preventivo', category: 'geral', source: 'Demonstracao editorial', linkedCampaign: '' },
-    { title: 'Audiencia de custodia: informacao rapida faz diferenca', slug: 'audiencia-custodia-informacao-rapida', category: 'direito-penal', source: 'Demonstracao editorial', linkedCampaign: 'plantao-criminal-24h' },
+    { title: 'STJ reforça importância da prova documental em relações de consumo', slug: 'stj-prova-documental-consumo', category: 'direito-consumidor', source: 'Demonstração editorial', linkedCampaign: 'fraudes-bancarias' },
+    { title: 'ANPD publica orientações sobre segurança e tratamento de dados', slug: 'anpd-orientacoes-seguranca-dados', category: 'lgpd', source: 'Demonstração editorial', linkedCampaign: '' },
+    { title: 'Prazos processuais exigem acompanhamento preventivo', slug: 'prazos-processuais-acompanhamento-preventivo', category: 'geral', source: 'Demonstração editorial', linkedCampaign: '' },
+    { title: 'Audiência de custódia: informação rápida faz diferença', slug: 'audiencia-custodia-informacao-rapida', category: 'direito-penal', source: 'Demonstração editorial', linkedCampaign: 'plantao-criminal-24h' },
   ]
 
   for (const [index, item] of news.entries()) {
     await upsertBySlug(payload, 'news-articles', item.slug, {
       ...item,
-      excerpt: 'Nota demonstrativa para validar a secao de noticias e o comportamento visual da homepage.',
-      content: richText('Resumo editorial de demonstracao para homologacao visual do site.'),
+      excerpt: 'Nota demonstrativa para validar a seção de notícias e o comportamento visual da homepage.',
+      content: richText('Resumo editorial de demonstração para homologação visual do site.'),
       sourceUrl: 'https://cavalcantealbuquerque.com.br',
       sourceHash: `demo-${item.slug}`,
       relevanceScore: 80 - index,
-      aiSummary: 'Conteudo demonstrativo para composicao visual.',
-      editorialNotes: 'Substituir por noticia real antes da publicacao definitiva.',
+      aiSummary: 'Conteúdo demonstrativo para composição visual.',
+      editorialNotes: 'Substituir por notícia real antes da publicação definitiva.',
       autoImported: false,
       status: 'published',
       publishedAt: new Date(Date.now() - (index + 1) * 43200000).toISOString(),
@@ -385,9 +385,9 @@ async function seedNews(payload: PayloadInstance) {
 
 async function seedTestimonials(payload: PayloadInstance) {
   const testimonials = [
-    { authorName: 'Cliente empresarial', caseType: 'Consultoria', text: 'A comunicacao foi objetiva e o encaminhamento do caso trouxe seguranca para decidir os proximos passos.' },
-    { authorName: 'Cliente consumidor', caseType: 'Consumidor', text: 'Recebi orientacao clara sobre documentos, prazos e alternativas antes de qualquer medida.' },
-    { authorName: 'Cliente pessoa fisica', caseType: 'Civil', text: 'O atendimento foi cuidadoso e organizado, com explicacao simples sobre riscos e possibilidades.' },
+    { authorName: 'Cliente empresarial', caseType: 'Consultoria', text: 'A comunicação foi objetiva e o encaminhamento do caso trouxe segurança para decidir os próximos passos.' },
+    { authorName: 'Cliente consumidor', caseType: 'Consumidor', text: 'Recebi orientação clara sobre documentos, prazos e alternativas antes de qualquer medida.' },
+    { authorName: 'Cliente pessoa física', caseType: 'Civil', text: 'O atendimento foi cuidadoso e organizado, com explicação simples sobre riscos e possibilidades.' },
   ]
 
   for (const item of testimonials) {
@@ -403,15 +403,15 @@ async function seedTestimonials(payload: PayloadInstance) {
 
 async function seedPages(payload: PayloadInstance) {
   const pages = [
-    { title: 'Politica de Privacidade', slug: 'politica-de-privacidade', description: 'Texto demonstrativo de politica de privacidade para validacao visual.' },
-    { title: 'Termos de Uso', slug: 'termos-de-uso', description: 'Texto demonstrativo de termos de uso para validacao visual.' },
-    { title: 'Politica de Cookies', slug: 'politica-de-cookies', description: 'Texto demonstrativo de politica de cookies para validacao visual.' },
+    { title: 'Política de Privacidade', slug: 'politica-de-privacidade', description: 'Texto demonstrativo de política de privacidade para validação visual.' },
+    { title: 'Termos de Uso', slug: 'termos-de-uso', description: 'Texto demonstrativo de termos de uso para validação visual.' },
+    { title: 'Política de Cookies', slug: 'politica-de-cookies', description: 'Texto demonstrativo de política de cookies para validação visual.' },
   ]
 
   for (const page of pages) {
     await upsertBySlug(payload, 'pages', page.slug, {
       title: page.title,
-      content: richText(page.description, 'Substituir este conteudo pela versao juridica definitiva antes da publicacao final.'),
+      content: richText(page.description, 'Substituir este conteúdo pela versão jurídica definitiva antes da publicação final.'),
       status: 'published',
       seo: { metaTitle: `${page.title} | Cavalcante Albuquerque`, metaDescription: page.description },
     })
@@ -419,8 +419,8 @@ async function seedPages(payload: PayloadInstance) {
 }
 
 async function main() {
-  if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL nao configurado')
-  if (!process.env.PAYLOAD_SECRET) throw new Error('PAYLOAD_SECRET nao configurado')
+  if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL não configurado')
+  if (!process.env.PAYLOAD_SECRET) throw new Error('PAYLOAD_SECRET não configurado')
 
   const payload = await getPayload({ config })
   const teamId = await getTeamId(payload)

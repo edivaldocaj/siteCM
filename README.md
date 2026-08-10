@@ -37,9 +37,10 @@ Antes de migrar/buildar em producao, valide as variaveis:
 npm run preflight:production
 ```
 
-Depois que o app estiver no ar, valide o healthcheck:
+Depois que o app estiver no ar, valide liveness e health completo:
 
 ```bash
+curl -fsS "$NEXT_PUBLIC_SITE_URL/api/live"
 curl -fsS "$NEXT_PUBLIC_SITE_URL/api/health"
 ```
 
@@ -66,7 +67,7 @@ npm run start
 
 Dados juridicos/institucionais nao confirmados ficam como `__PENDENTE__` para revisao no painel.
 
-Em Docker/Easypanel, tambem e possivel usar temporariamente `RUN_PREFLIGHT_ON_START=true`, `RUN_MIGRATIONS_ON_START=true` e `BOOTSTRAP_NEW_DB_ON_START=true` na primeira subida. Depois do primeiro acesso ao `/admin`, volte `BOOTSTRAP_NEW_DB_ON_START` e `RUN_MIGRATIONS_ON_START` para `false`.
+Em Docker/Easypanel, também é possível usar temporariamente `RUN_PREFLIGHT_ON_START=true`, `RUN_SCHEMA_PUSH_ON_START=true`, `BOOTSTRAP_NEW_DB_ON_START=true` e `SEED_DEMO_CONTENT_ON_START=true` na primeira subida. Mantenha `DB_STARTUP_STRICT=false` para evitar 502 se o preparo falhar. Depois do primeiro acesso ao `/admin`, volte `BOOTSTRAP_NEW_DB_ON_START`, `SEED_DEMO_CONTENT_ON_START` e `RUN_SCHEMA_PUSH_ON_START` para `false`.
 
 ## Exportar banco atual sem perder dados
 
