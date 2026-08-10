@@ -1,8 +1,12 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
-const payloadCookieNames = ['payload-token']
+const payloadCookieNames = ['payload-token', 'users-token']
 
 export function middleware(req: NextRequest) {
+  if (process.env.PROTECT_ADMIN_TOOLS !== 'true') {
+    return NextResponse.next()
+  }
+
   const hasPayloadSession = payloadCookieNames.some((name) => Boolean(req.cookies.get(name)?.value))
 
   if (!hasPayloadSession) {

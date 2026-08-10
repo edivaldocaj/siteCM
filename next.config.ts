@@ -56,9 +56,10 @@ const nextConfig: NextConfig = {
   },
   images: {
     localPatterns: [
-      {
-        pathname: '/api/media/file/**',
-      },
+      { pathname: '/api/media/file/**' },
+      { pathname: '/brand/**' },
+      { pathname: '/icon.svg' },
+      { pathname: '/apple-icon.png' },
     ],
   },
   webpack: (webpackConfig) => {

@@ -1,1 +1,1 @@
-﻿{"marker":"schema-push-env-v18","note":"entrypoint honors RUN_SCHEMA_PUSH_ON_START and schema push runs in development mode"}
+﻿{"marker":"admin-tools-images-v19","note":"allows brand assets in next image and makes admin-tools UI accessible by default"}
