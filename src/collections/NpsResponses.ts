@@ -8,7 +8,7 @@ export const NpsResponses: CollectionConfig = {
   admin: {
     useAsTitle: 'clientName',
     defaultColumns: ['clientName', 'score', 'attorney', 'status', 'createdAt'],
-    description: 'Pesquisas de satisfaÃ§Ã£o e NPS dos clientes.',
+    description: 'Pesquisas de satisfação e NPS dos clientes.',
     group: 'Portal do Cliente',
   },
   access: {
@@ -61,7 +61,7 @@ export const NpsResponses: CollectionConfig = {
         },
       ],
     },
-    { name: 'feedback', type: 'textarea', label: 'ComentÃ¡rio do Cliente' },
+    { name: 'feedback', type: 'textarea', label: 'Comentário do Cliente' },
     { name: 'consentText', type: 'textarea', label: 'Texto do Consentimento', admin: { readOnly: true } },
     { name: 'consentedAt', type: 'date', label: 'Consentido em', admin: { readOnly: true } },
     { name: 'ip', type: 'text', label: 'IP', admin: { readOnly: true } },
@@ -72,10 +72,10 @@ export const NpsResponses: CollectionConfig = {
       label: 'Status',
       defaultValue: 'pending',
       options: [
-        { label: 'â³ Pendente', value: 'pending' },
-        { label: 'âœ… Revisado', value: 'reviewed' },
-        { label: 'ðŸŽ‰ Depoimento Aprovado', value: 'testimonial-approved' },
-        { label: 'âŒ Descartado', value: 'discarded' },
+        { label: '⏳ Pendente', value: 'pending' },
+        { label: '✅ Revisado', value: 'reviewed' },
+        { label: '🎉 Depoimento Aprovado', value: 'testimonial-approved' },
+        { label: '❌ Descartado', value: 'discarded' },
       ],
       admin: { position: 'sidebar' },
     },
@@ -85,7 +85,7 @@ export const NpsResponses: CollectionConfig = {
       admin: { initCollapsed: true },
       fields: [
         { name: 'testimonialText', type: 'textarea', label: 'Texto do Depoimento' },
-        { name: 'testimonialApproved', type: 'checkbox', label: 'Aprovado para publicaÃ§Ã£o', defaultValue: false },
+        { name: 'testimonialApproved', type: 'checkbox', label: 'Aprovado para publicação', defaultValue: false },
       ],
     },
   ],

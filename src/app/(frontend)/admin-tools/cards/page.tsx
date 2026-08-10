@@ -4,13 +4,13 @@ import { useState, useEffect, useRef } from 'react'
 import { Download, Copy, Check, ArrowLeft, Image, Smartphone, RefreshCw } from 'lucide-react'
 
 const TEMPLATES: Record<string, { label: string; desc: string; bgStart: string; bgEnd: string; accent: string; text: string; subtext: string; tagBg: string; tagText: string; ctaBg: string; ctaText: string }> = {
-  editorial: { label: 'Editorial', desc: 'SÃ³brio institucional', bgStart: '#011536', bgEnd: '#0A2049', accent: '#8B98AC', text: '#EEF1F4', subtext: '#99A8BB', tagBg: 'rgba(139,152,172,0.2)', tagText: '#8B98AC', ctaBg: '#8B98AC', ctaText: '#011536' },
-  urgency: { label: 'UrgÃªncia', desc: 'Vermelho impactante', bgStart: '#1a0505', bgEnd: '#3b0a0a', accent: '#ef4444', text: '#fef2f2', subtext: '#d4a0a0', tagBg: 'rgba(239,68,68,0.25)', tagText: '#fca5a5', ctaBg: '#ef4444', ctaText: '#ffffff' },
-  educativo: { label: 'Educativo', desc: 'Azul confiÃ¡vel', bgStart: '#0c1929', bgEnd: '#1e3a5f', accent: '#60a5fa', text: '#e0f2fe', subtext: '#7ba4c4', tagBg: 'rgba(96,165,250,0.2)', tagText: '#93c5fd', ctaBg: '#60a5fa', ctaText: '#0c1929' },
+  editorial: { label: 'Editorial', desc: 'Sóbrio institucional', bgStart: '#011536', bgEnd: '#0A2049', accent: '#8B98AC', text: '#EEF1F4', subtext: '#99A8BB', tagBg: 'rgba(139,152,172,0.2)', tagText: '#8B98AC', ctaBg: '#8B98AC', ctaText: '#011536' },
+  urgency: { label: 'Urgência', desc: 'Vermelho impactante', bgStart: '#1a0505', bgEnd: '#3b0a0a', accent: '#ef4444', text: '#fef2f2', subtext: '#d4a0a0', tagBg: 'rgba(239,68,68,0.25)', tagText: '#fca5a5', ctaBg: '#ef4444', ctaText: '#ffffff' },
+  educativo: { label: 'Educativo', desc: 'Azul confiável', bgStart: '#0c1929', bgEnd: '#1e3a5f', accent: '#60a5fa', text: '#e0f2fe', subtext: '#7ba4c4', tagBg: 'rgba(96,165,250,0.2)', tagText: '#93c5fd', ctaBg: '#60a5fa', ctaText: '#0c1929' },
   clean: { label: 'Clean', desc: 'Fundo claro elegante', bgStart: '#F8F6F4', bgEnd: '#EEF1F4', accent: '#011536', text: '#011536', subtext: '#5C646E', tagBg: 'rgba(1,21,54,0.1)', tagText: '#011536', ctaBg: '#011536', ctaText: '#EEF1F4' },
 }
 
-const CATEGORIES: Record<string, string> = { consumidor: 'Consumidor / CÃ­vel', digital: 'Digital / LGPD', criminal: 'Criminal', imobiliario: 'ImobiliÃ¡rio', tributario: 'TributÃ¡rio' }
+const CATEGORIES: Record<string, string> = { consumidor: 'Consumidor / Cível', digital: 'Digital / LGPD', criminal: 'Criminal', imobiliario: 'Imobiliário', tributario: 'Tributário' }
 
 const FORMATS = {
   feed: { w: 1080, h: 1080, label: 'Feed (1080Ã—1080)', icon: Image },
@@ -19,7 +19,7 @@ const FORMATS = {
 
 type Campaign = { id: number; title: string; slug: string; category: string; subtitle: string; socialCaption: string; socialHashtags: string[]; colorAccent: string }
 
-/* â”€â”€ Canvas text wrapping helper â”€â”€ */
+/* ── Canvas text wrapping helper ── */
 function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
   const words = text.split(' ')
   const lines: string[] = []
@@ -62,7 +62,7 @@ function drawScaleMark(ctx: CanvasRenderingContext2D, x: number, y: number, scal
   ctx.restore()
 }
 
-/* â”€â”€ Draw card on Canvas â”€â”€ */
+/* ── Draw card on Canvas ── */
 async function drawCard(
   canvas: HTMLCanvasElement,
   opts: { w: number; h: number; title: string; subtitle: string; category: string; cta: string; template: string }
@@ -123,7 +123,7 @@ async function drawCard(
   ctx.textBaseline = 'middle'
   ctx.fillText(catLabel, px + 20, catY + catH / 2)
 
-  // Title â€” large, wrapped
+  // Title — large, wrapped
   const titleSize = title.length > 30 ? (isStory ? 56 : 64) : (isStory ? 68 : 80)
   ctx.font = `bold ${titleSize}px Cormorant Garamond`
   ctx.fillStyle = t.text
@@ -134,7 +134,7 @@ async function drawCard(
     ctx.fillText(line, px, titleY + i * (titleSize * 1.15))
   })
 
-  // Subtitle â€” below title
+  // Subtitle — below title
   const subY = titleY + titleLines.length * (titleSize * 1.15) + 28
   const subSize = isStory ? 24 : 28
   ctx.font = `300 ${subSize}px sans-serif`
@@ -178,8 +178,8 @@ async function drawCard(
 export default function CardGeneratorPage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([])
   const [selectedId, setSelectedId] = useState<number | null>(null)
-  const [title, setTitle] = useState('Fraudes BancÃ¡rias')
-  const [subtitle, setSubtitle] = useState('CobranÃ§as abusivas? VocÃª pode ter direito a restituiÃ§Ã£o em dobro.')
+  const [title, setTitle] = useState('Fraudes Bancárias')
+  const [subtitle, setSubtitle] = useState('Cobranças abusivas? Você pode ter direito a restituição em dobro.')
   const [category, setCategory] = useState('consumidor')
   const [cta, setCta] = useState('Verifique seu caso gratuitamente')
   const [template, setTemplate] = useState('editorial')
@@ -260,7 +260,7 @@ export default function CardGeneratorPage() {
               <ArrowLeft style={{ width: '14px', height: '14px' }} /> Admin Tools
             </a>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '28px', margin: 0 }}>Gerador de Cards para Redes Sociais</h1>
-            <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px', marginTop: '4px' }}>Agora com Canvas nativo â€” texto renderizado pixel a pixel.</p>
+            <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px', marginTop: '4px' }}>Agora com Canvas nativo — texto renderizado pixel a pixel.</p>
           </div>
           <button onClick={loadCampaigns} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: 'var(--color-ca-steel-400)', fontSize: '12px', cursor: 'pointer' }}>
             <RefreshCw style={{ width: '14px', height: '14px' }} /> Atualizar campanhas
@@ -341,14 +341,14 @@ export default function CardGeneratorPage() {
 
             {/* Title */}
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', marginBottom: '8px', fontWeight: 600 }}>TÃ­tulo</label>
+              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', marginBottom: '8px', fontWeight: 600 }}>Título</label>
               <input value={title} onChange={(e) => setTitle(e.target.value)}
                 style={{ width: '100%', padding: '10px 14px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', fontSize: '16px', fontWeight: 600, color: 'var(--color-ca-platinum-100)', background: 'rgba(255,255,255,0.05)', boxSizing: 'border-box' }} />
             </div>
 
             {/* Subtitle */}
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', marginBottom: '8px', fontWeight: 600 }}>SubtÃ­tulo</label>
+              <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', marginBottom: '8px', fontWeight: 600 }}>Subtítulo</label>
               <textarea value={subtitle} onChange={(e) => setSubtitle(e.target.value)} rows={3}
                 style={{ width: '100%', padding: '10px 14px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', fontSize: '14px', color: 'var(--color-ca-platinum-100)', background: 'rgba(255,255,255,0.05)', resize: 'none', boxSizing: 'border-box', fontFamily: "'Source Sans 3', sans-serif" }} />
             </div>
@@ -404,7 +404,7 @@ export default function CardGeneratorPage() {
           <div style={{ flex: '1 1 400px', display: 'flex', justifyContent: 'center' }}>
             <div style={{ width: '100%', maxWidth: format === 'story' ? 360 : 540 }}>
               <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)', marginBottom: '10px', fontWeight: 600, textAlign: 'center' }}>
-                Preview (Canvas nativo â€” idÃªntico ao PNG exportado)
+                Preview (Canvas nativo — idêntico ao PNG exportado)
               </label>
               <div style={{
                 width: '100%',

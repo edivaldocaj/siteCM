@@ -1,1 +1,4 @@
-﻿{"marker":"seo-404-admin-polish-v20","note":"adds frontend 404, LegalService JSON-LD and cleans admin tools copy"}
+{
+  "marker": "encoding-repair-v21",
+  "note": "repairs Portuguese accent mojibake across public, admin, and API copy"
+}

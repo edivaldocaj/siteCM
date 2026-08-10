@@ -82,12 +82,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const post = docs[0]
 
-  // A CORREÃ‡ÃƒO ESTÃ AQUI: Se o post nÃ£o existir no banco, forÃ§a o erro 404 (PÃ¡gina nÃ£o encontrada)
+  // A CORREÇÃO ESTÁ AQUI: Se o post não existir no banco, força o erro 404 (Página não encontrada)
   if (!post) {
     notFound()
   }
 
-  // Formata a data de publicaÃ§Ã£o
+  // Formata a data de publicação
   const publishDate = post.publishedAt || post.createdAt
   const formattedDate = new Date(publishDate).toLocaleDateString('pt-BR', { 
     day: '2-digit', month: 'long', year: 'numeric' 
@@ -97,7 +97,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   return (
     <div style={{ backgroundColor: 'var(--color-ca-bone)', minHeight: '100vh', paddingBottom: '80px' }}>
       
-      {/* CabeÃ§alho do Artigo */}
+      {/* Cabeçalho do Artigo */}
       <section style={{ background: 'linear-gradient(135deg, var(--color-ca-navy-950) 0%, var(--color-ca-navy-800) 50%, var(--color-ca-navy-900) 100%)', paddingTop: '120px', paddingBottom: '100px', paddingLeft: '16px', paddingRight: '16px' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <Link href="/blog" style={{ color: 'var(--color-ca-steel-500)', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '32px', width: 'fit-content' }}>
@@ -133,7 +133,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
       </section>
 
-      {/* ConteÃºdo do Artigo */}
+      {/* Conteúdo do Artigo */}
       <section style={{ maxWidth: '800px', margin: '-40px auto 0', position: 'relative', zIndex: 10, padding: '0 16px' }}>
         <div style={{ background: 'white', padding: '40px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 5%, transparent)' }}>
           
@@ -141,12 +141,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {post.excerpt}
           </div>
 
-          {/* O Renderizador que puxa os parÃ¡grafos diretos do CMS */}
+          {/* O Renderizador que puxa os parágrafos diretos do CMS */}
           <div style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 70%, transparent)', fontSize: '16px', lineHeight: 1.8 }} className="cms-rich-text">
             {post.content ? (
               <RichText data={post.content} />
             ) : (
-              <p>ConteÃºdo nÃ£o disponÃ­vel.</p>
+              <p>Conteúdo não disponível.</p>
             )}
           </div>
           

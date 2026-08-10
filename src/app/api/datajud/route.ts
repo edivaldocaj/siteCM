@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { token, processNumber, tribunal } = body
 
-    if (!token) return NextResponse.json({ error: 'Token de acesso obrigatÃ³rio.' }, { status: 401 })
+    if (!token) return NextResponse.json({ error: 'Token de acesso obrigatório.' }, { status: 401 })
 
     const payload = await getPayload({ config: configPromise })
 
@@ -71,15 +71,15 @@ export async function POST(req: NextRequest) {
     })
 
     const client = clients.docs?.[0]
-    if (!client) return NextResponse.json({ error: 'Token invÃ¡lido ou acesso desativado.' }, { status: 401 })
+    if (!client) return NextResponse.json({ error: 'Token inválido ou acesso desativado.' }, { status: 401 })
 
     if (processNumber) {
       const clientProcesses = client.processes || []
       const hasAccess = clientProcesses.some((p: any) => p.processNumber.replace(/\D/g, '') === processNumber.replace(/\D/g, ''))
-      if (!hasAccess) return NextResponse.json({ error: 'Processo nÃ£o vinculado Ã  sua conta.' }, { status: 403 })
+      if (!hasAccess) return NextResponse.json({ error: 'Processo não vinculado à sua conta.' }, { status: 403 })
 
       const processData = await searchProcess(processNumber, tribunal)
-      if (!processData) return NextResponse.json({ error: 'Processo nÃ£o encontrado no Datajud.' }, { status: 404 })
+      if (!processData) return NextResponse.json({ error: 'Processo não encontrado no Datajud.' }, { status: 404 })
       return NextResponse.json({ success: true, process: processData })
     }
 

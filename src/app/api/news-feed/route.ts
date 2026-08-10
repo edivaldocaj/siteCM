@@ -12,20 +12,20 @@ const RSS_SOURCES = [
 
 const GOOGLE_NEWS_QUERIES = [
   { query: 'direito consumidor Brasil', category: 'direito-consumidor' },
-  { query: 'LGPD proteÃ§Ã£o dados', category: 'lgpd' },
+  { query: 'LGPD proteção dados', category: 'lgpd' },
   { query: 'direito penal criminal Brasil', category: 'direito-penal' },
-  { query: 'direito imobiliÃ¡rio usucapiÃ£o', category: 'direito-imobiliario' },
-  { query: 'STJ STF jurisprudÃªncia', category: 'direito-tributario' },
+  { query: 'direito imobiliário usucapião', category: 'direito-imobiliario' },
+  { query: 'STJ STF jurisprudência', category: 'direito-tributario' },
 ]
 
 function categorize(title: string): string {
   const t = title.toLowerCase()
   if (t.includes('lgpd') || t.includes('dados') || t.includes('digital') || t.includes('cyber') || t.includes('anpd')) return 'lgpd'
-  if (t.includes('consumidor') || t.includes('banco') || t.includes('negativaÃ§Ã£o') || t.includes('indenizaÃ§Ã£o') || t.includes('juros')) return 'direito-consumidor'
+  if (t.includes('consumidor') || t.includes('banco') || t.includes('negativação') || t.includes('indenização') || t.includes('juros')) return 'direito-consumidor'
   if (t.includes('penal') || t.includes('preso') || t.includes('habeas') || t.includes('crime') || t.includes('criminal')) return 'direito-penal'
-  if (t.includes('imobiliÃ¡rio') || t.includes('usucapiÃ£o') || t.includes('imÃ³vel') || t.includes('fundiÃ¡ria')) return 'direito-imobiliario'
-  if (t.includes('tributÃ¡rio') || t.includes('fiscal') || t.includes('imposto') || t.includes('tributo')) return 'direito-tributario'
-  if (t.includes('licitaÃ§Ã£o') || t.includes('contrato administrativo') || t.includes('tce') || t.includes('tcu')) return 'licitacoes'
+  if (t.includes('imobiliário') || t.includes('usucapião') || t.includes('imóvel') || t.includes('fundiária')) return 'direito-imobiliario'
+  if (t.includes('tributário') || t.includes('fiscal') || t.includes('imposto') || t.includes('tributo')) return 'direito-tributario'
+  if (t.includes('licitação') || t.includes('contrato administrativo') || t.includes('tce') || t.includes('tcu')) return 'licitacoes'
   return 'geral'
 }
 

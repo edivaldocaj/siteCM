@@ -14,11 +14,11 @@ export const Leads: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'phone', 'source', 'campaignSlug', 'status', 'score', 'assignedTo', 'createdAt'],
-    description: 'Pipeline de leads â€” todos os contatos captados pelo site, formulÃ¡rios e campanhas.',
+    description: 'Pipeline de leads — todos os contatos captados pelo site, formulários e campanhas.',
     listSearchableFields: ['name', 'phone', 'email', 'campaignSlug'],
   },
   fields: [
-    /* â”€â”€ DADOS DO LEAD â”€â”€ */
+    /* ── DADOS DO LEAD ── */
     {
       type: 'row',
       fields: [
@@ -34,7 +34,7 @@ export const Leads: CollectionConfig = {
       ],
     },
 
-    /* â”€â”€ ORIGEM â”€â”€ */
+    /* ── ORIGEM ── */
     {
       type: 'row',
       fields: [
@@ -45,10 +45,10 @@ export const Leads: CollectionConfig = {
           label: 'Origem',
           defaultValue: 'contact-form',
           options: [
-            { label: 'FormulÃ¡rio de Campanha', value: 'campaign-form' },
-            { label: 'FormulÃ¡rio de Contato', value: 'contact-form' },
+            { label: 'Formulário de Campanha', value: 'campaign-form' },
+            { label: 'Formulário de Contato', value: 'contact-form' },
             { label: 'WhatsApp (manual)', value: 'whatsapp' },
-            { label: 'IndicaÃ§Ã£o', value: 'referral' },
+            { label: 'Indicação', value: 'referral' },
             { label: 'Calculadora do Site', value: 'calculator' },
             { label: 'Outro', value: 'other' },
           ],
@@ -62,7 +62,7 @@ export const Leads: CollectionConfig = {
       ],
     },
 
-    /* â”€â”€ UTM TRACKING â”€â”€ */
+    /* ── UTM TRACKING ── */
     {
       type: 'collapsible',
       label: 'Rastreamento (UTM)',
@@ -82,7 +82,7 @@ export const Leads: CollectionConfig = {
             { name: 'utmContent', type: 'text', label: 'UTM Content' },
           ],
         },
-        { name: 'referrerUrl', type: 'text', label: 'URL de ReferÃªncia' },
+        { name: 'referrerUrl', type: 'text', label: 'URL de Referência' },
         { name: 'consentText', type: 'textarea', label: 'Texto do Consentimento', admin: { readOnly: true } },
         { name: 'consentedAt', type: 'date', label: 'Consentido em', admin: { readOnly: true } },
         { name: 'ip', type: 'text', label: 'IP', admin: { readOnly: true } },
@@ -90,39 +90,39 @@ export const Leads: CollectionConfig = {
       ],
     },
 
-    /* â”€â”€ QUALIFICAÃ‡ÃƒO â”€â”€ */
+    /* ── QUALIFICAÇÃO ── */
     {
       type: 'tabs',
       tabs: [
         {
-          label: 'QualificaÃ§Ã£o',
+          label: 'Qualificação',
           fields: [
             {
               name: 'qualificationAnswers',
               type: 'array',
-              label: 'Respostas de QualificaÃ§Ã£o',
-              admin: { description: 'Preenchido automaticamente pelo formulÃ¡rio multi-step da campanha.' },
+              label: 'Respostas de Qualificação',
+              admin: { description: 'Preenchido automaticamente pelo formulário multi-step da campanha.' },
               fields: [
                 { name: 'question', type: 'text', required: true, label: 'Pergunta' },
                 { name: 'answer', type: 'text', required: true, label: 'Resposta' },
               ],
             },
-            { name: 'caseDescription', type: 'textarea', label: 'DescriÃ§Ã£o do Caso (pelo lead)' },
+            { name: 'caseDescription', type: 'textarea', label: 'Descrição do Caso (pelo lead)' },
             {
               name: 'estimatedValue',
               type: 'number',
               label: 'Valor Estimado da Causa (R$)',
-              admin: { description: 'Valor informado pelo lead ou estimado pelo formulÃ¡rio.' },
+              admin: { description: 'Valor informado pelo lead ou estimado pelo formulário.' },
             },
             {
               name: 'urgency',
               type: 'select',
-              label: 'UrgÃªncia',
+              label: 'Urgência',
               options: [
-                { label: 'Baixa â€” Informativo', value: 'low' },
-                { label: 'MÃ©dia â€” Quer resolver', value: 'medium' },
-                { label: 'Alta â€” Prazo correndo', value: 'high' },
-                { label: 'Urgente â€” EmergÃªncia', value: 'urgent' },
+                { label: 'Baixa — Informativo', value: 'low' },
+                { label: 'Média — Quer resolver', value: 'medium' },
+                { label: 'Alta — Prazo correndo', value: 'high' },
+                { label: 'Urgente — Emergência', value: 'urgent' },
               ],
               defaultValue: 'medium',
             },
@@ -138,12 +138,12 @@ export const Leads: CollectionConfig = {
               label: 'Status',
               defaultValue: 'new',
               options: [
-                { label: 'ðŸŸ¡ Novo', value: 'new' },
-                { label: 'ðŸ“ž Contatado', value: 'contacted' },
-                { label: 'âœ… Qualificado', value: 'qualified' },
-                { label: 'ðŸ“‹ Proposta Enviada', value: 'proposal' },
-                { label: 'ðŸŽ‰ Convertido (Cliente)', value: 'converted' },
-                { label: 'âŒ Perdido', value: 'lost' },
+                { label: '🟡 Novo', value: 'new' },
+                { label: '📞 Contatado', value: 'contacted' },
+                { label: '✅ Qualificado', value: 'qualified' },
+                { label: '📋 Proposta Enviada', value: 'proposal' },
+                { label: '🎉 Convertido (Cliente)', value: 'converted' },
+                { label: '❌ Perdido', value: 'lost' },
               ],
               admin: { position: 'sidebar' },
             },
@@ -162,7 +162,7 @@ export const Leads: CollectionConfig = {
             {
               name: 'assignedTo',
               type: 'select',
-              label: 'Advogado ResponsÃ¡vel',
+              label: 'Advogado Responsável',
               options: [
                 { label: 'Dr. Edivaldo Cavalcante', value: 'edivaldo' },
                 { label: 'Dra. Gabrielly Melo', value: 'gabrielly' },
@@ -189,10 +189,10 @@ export const Leads: CollectionConfig = {
               label: 'Motivo da Perda',
               options: [
                 { label: 'Sem resposta', value: 'no-response' },
-                { label: 'Escolheu outro escritÃ³rio', value: 'competitor' },
-                { label: 'Desistiu da aÃ§Ã£o', value: 'gave-up' },
-                { label: 'Sem mÃ©rito jurÃ­dico', value: 'no-merit' },
-                { label: 'Valor inviÃ¡vel', value: 'price' },
+                { label: 'Escolheu outro escritório', value: 'competitor' },
+                { label: 'Desistiu da ação', value: 'gave-up' },
+                { label: 'Sem mérito jurídico', value: 'no-merit' },
+                { label: 'Valor inviável', value: 'price' },
                 { label: 'Outro', value: 'other' },
               ],
               admin: {
@@ -207,9 +207,9 @@ export const Leads: CollectionConfig = {
             {
               name: 'notes',
               type: 'array',
-              label: 'AnotaÃ§Ãµes / Follow-up',
+              label: 'Anotações / Follow-up',
               fields: [
-                { name: 'text', type: 'textarea', required: true, label: 'AnotaÃ§Ã£o' },
+                { name: 'text', type: 'textarea', required: true, label: 'Anotação' },
                 {
                   name: 'author',
                   type: 'select',
@@ -227,7 +227,7 @@ export const Leads: CollectionConfig = {
             {
               name: 'nextFollowUp',
               type: 'date',
-              label: 'PrÃ³ximo Follow-up',
+              label: 'Próximo Follow-up',
               admin: {
                 position: 'sidebar',
                 description: 'Data para lembrete de acompanhamento.',
@@ -237,7 +237,7 @@ export const Leads: CollectionConfig = {
           ],
         },
         {
-          label: 'ConversÃ£o',
+          label: 'Conversão',
           fields: [
             {
               name: 'convertedToClient',
@@ -252,7 +252,7 @@ export const Leads: CollectionConfig = {
             {
               name: 'conversionDate',
               type: 'date',
-              label: 'Data de ConversÃ£o',
+              label: 'Data de Conversão',
               admin: {
                 condition: (data) => data?.status === 'converted',
               },

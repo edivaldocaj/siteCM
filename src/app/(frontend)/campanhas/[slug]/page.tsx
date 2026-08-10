@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic'
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquerque.com.br').replace(/\/$/, '')
 
-/* â”€â”€ SEO dinÃ¢mico por campanha â”€â”€ */
+/* ── SEO dinâmico por campanha ── */
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   try {
@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-/* â”€â”€ Cor de destaque â”€â”€ */
+/* ── Cor de destaque ── */
 const accentColors: Record<string, { border: string; bg: string; text: string }> = {
   gold: { border: 'var(--color-ca-steel-500)', bg: 'color-mix(in srgb, var(--color-ca-steel-500) 8%, transparent)', text: 'var(--color-ca-steel-500)' },
   red: { border: '#b91c1c', bg: 'rgba(185,28,28,0.06)', text: '#dc2626' },
@@ -65,11 +65,11 @@ const accentColors: Record<string, { border: string; bg: string; text: string }>
 }
 
 const categoryLabels: Record<string, string> = {
-  consumidor: 'Consumidor / CÃ­vel',
+  consumidor: 'Consumidor / Cível',
   digital: 'Digital / LGPD',
   criminal: 'Criminal',
-  imobiliario: 'ImobiliÃ¡rio',
-  tributario: 'TributÃ¡rio',
+  imobiliario: 'Imobiliário',
+  tributario: 'Tributário',
 }
 
 export default async function CampaignPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -85,7 +85,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
   if (!campaign) return notFound()
 
   const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'
-  const message = campaign.whatsappMessage || `OlÃ¡! Gostaria de falar sobre: ${campaign.title}`
+  const message = campaign.whatsappMessage || `Olá! Gostaria de falar sobre: ${campaign.title}`
   const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
 
   const accent = accentColors[campaign.colorAccent || 'gold'] || accentColors.gold
@@ -100,15 +100,15 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
   return (
     <div style={{ backgroundColor: 'var(--color-ca-platinum-100)', minHeight: '100vh', fontFamily: "'Source Sans 3', sans-serif" }}>
 
-      {/* â”€â”€ Analytics Tracker â”€â”€ */}
+      {/* ── Analytics Tracker ── */}
       <CampaignTracker campaignSlug={slug} />
 
-      {/* â”€â”€ Barra de urgÃªncia animada â”€â”€ */}
+      {/* ── Barra de urgência animada ── */}
       {campaign.urgencyText && (
         <CampaignUrgencyBar text={campaign.urgencyText} accentColor={accent.border} />
       )}
 
-      {/* â”€â”€ Hero com vÃ­deo ou imagem â”€â”€ */}
+      {/* ── Hero com vídeo ou imagem ── */}
       <section style={{
         backgroundColor: 'var(--color-ca-navy-950)',
         paddingTop: campaign.urgencyText ? '100px' : '140px',
@@ -173,7 +173,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
         </div>
       </section>
 
-      {/* â”€â”€ ConteÃºdo principal â”€â”€ */}
+      {/* ── Conteúdo principal ── */}
       <section style={{ maxWidth: '800px', margin: '-60px auto 0', position: 'relative', zIndex: 20, padding: '0 24px', paddingBottom: '100px' }}>
 
         {/* Problema */}
@@ -216,7 +216,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           </div>
         )}
 
-        {/* BenefÃ­cios */}
+        {/* Benefícios */}
         {campaign.benefits && (
           <div style={{
             background: '#ffffff',
@@ -228,7 +228,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
               <CheckCircle style={{ color: 'var(--color-ca-navy-950)', width: '28px', height: '28px' }} strokeWidth={1.5} />
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: 'var(--color-ca-navy-950)', margin: 0 }}>A Nossa SoluÃ§Ã£o</h2>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: 'var(--color-ca-navy-950)', margin: 0 }}>A Nossa Solução</h2>
             </div>
             <div style={{ color: '#4a5568', fontSize: '17px', lineHeight: 1.8, fontWeight: 300 }} className="cms-rich-text">
               <RichText data={campaign.benefits} />
@@ -259,7 +259,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
                       </span>
                     )}
                     {proof.caseType && (
-                      <span style={{ fontSize: '12px', color: accent.text }}>â€” {proof.caseType}</span>
+                      <span style={{ fontSize: '12px', color: accent.text }}>— {proof.caseType}</span>
                     )}
                   </div>
                 </div>
@@ -301,7 +301,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           </div>
         )}
 
-        {/* â”€â”€ Barra de Compartilhamento â”€â”€ */}
+        {/* ── Barra de Compartilhamento ── */}
         <CampaignShareBar
           title={campaign.title}
           subtitle={campaign.subtitle || ''}
@@ -310,7 +310,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           accentColor={accent.border}
         />
 
-        {/* â”€â”€ FormulÃ¡rio de CaptaÃ§Ã£o de Lead â”€â”€ */}
+        {/* ── Formulário de Captação de Lead ── */}
         {campaign.showForm !== false && (
           <div style={{ marginTop: '32px' }}>
             <CampaignLeadForm
@@ -323,7 +323,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           </div>
         )}
 
-        {/* â”€â”€ CTA Final â”€â”€ */}
+        {/* ── CTA Final ── */}
         <div style={{
           background: 'linear-gradient(to right, var(--color-ca-navy-950), var(--color-ca-navy-800))',
           padding: '56px 40px',
@@ -336,7 +336,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
             {campaign.urgencyText || 'Tome uma atitude pelo seu direito hoje.'}
           </h3>
           <p style={{ color: 'rgba(241,234,226,0.7)', fontSize: '16px', marginBottom: '40px', fontWeight: 300 }}>
-            Oferecemos uma anÃ¡lise profissional, confidencial e sem compromisso.
+            Oferecemos uma análise profissional, confidencial e sem compromisso.
           </p>
           <a
             href={whatsappUrl}

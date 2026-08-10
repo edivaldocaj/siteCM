@@ -11,11 +11,11 @@ export const Posts: CollectionConfig = {
   },
   admin: { useAsTitle: 'title', defaultColumns: ['title', 'category', 'status', 'publishedAt'] },
   fields: [
-    { name: 'title', type: 'text', required: true, label: 'TÃ­tulo' },
+    { name: 'title', type: 'text', required: true, label: 'Título' },
     { name: 'slug', type: 'text', required: true, unique: true }, // Removido position: 'sidebar'
     { name: 'excerpt', type: 'textarea', required: true, label: 'Resumo', maxLength: 300 },
     { name: 'featuredImage', type: 'upload', relationTo: 'media', label: 'Imagem Destaque' },
-    { name: 'content', type: 'richText', required: true, label: 'ConteÃºdo' },
+    { name: 'content', type: 'richText', required: true, label: 'Conteúdo' },
     {
       name: 'category',
       type: 'select',
@@ -25,9 +25,9 @@ export const Posts: CollectionConfig = {
         { label: 'Direito Digital', value: 'direito-digital' },
         { label: 'Direito Civil', value: 'direito-civil' },
         { label: 'Direito do Consumidor', value: 'direito-consumidor' },
-        { label: 'Direito ImobiliÃ¡rio', value: 'direito-imobiliario' },
-        { label: 'Direito TributÃ¡rio', value: 'direito-tributario' },
-        { label: 'LicitaÃ§Ãµes', value: 'licitacoes' },
+        { label: 'Direito Imobiliário', value: 'direito-imobiliario' },
+        { label: 'Direito Tributário', value: 'direito-tributario' },
+        { label: 'Licitações', value: 'licitacoes' },
         { label: 'Direito Penal', value: 'direito-penal' },
         { label: 'LGPD', value: 'lgpd' },
         { label: 'Geral', value: 'geral' },
@@ -58,7 +58,7 @@ export const Posts: CollectionConfig = {
     },
     { name: 'tags', type: 'text', hasMany: true, label: 'Tags' },
     { name: 'readTime', type: 'number', label: 'Tempo de Leitura (min)' }, // Removido position
-    { name: 'publishedAt', type: 'date', label: 'Data de PublicaÃ§Ã£o' }, // Removido position
+    { name: 'publishedAt', type: 'date', label: 'Data de Publicação' }, // Removido position
     { name: 'status', type: 'select', options: ['draft', 'published'], defaultValue: 'draft' }, // Removido position
     { name: 'linkedCampaign', type: 'text', label: 'Slug da Campanha Vinculada', admin: { description: 'Ex: fraudes-bancarias. Se preenchido, mostra link para a campanha no card do post.' } },
     {

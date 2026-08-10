@@ -7,7 +7,7 @@ export const Deadlines: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'clientName', 'processNumber', 'deadlineDate', 'deadlineType', 'status', 'attorney'],
     description: 'Prazos processuais com alertas escalonados (7d, 3d, 1d).',
-    group: 'EscritÃ³rio',
+    group: 'Escritório',
   },
   access: {
     read: adminOrStaff,
@@ -16,7 +16,7 @@ export const Deadlines: CollectionConfig = {
     delete: adminOnly,
   },
   fields: [
-    { name: 'title', type: 'text', required: true, label: 'DescriÃ§Ã£o do Prazo' },
+    { name: 'title', type: 'text', required: true, label: 'Descrição do Prazo' },
     {
       type: 'row',
       fields: [
@@ -32,7 +32,7 @@ export const Deadlines: CollectionConfig = {
     {
       type: 'row',
       fields: [
-        { name: 'processNumber', type: 'text', label: 'NÃºmero do Processo' },
+        { name: 'processNumber', type: 'text', label: 'Número do Processo' },
         {
           name: 'deadlineDate',
           type: 'date',
@@ -51,19 +51,19 @@ export const Deadlines: CollectionConfig = {
           label: 'Tipo de Prazo',
           defaultValue: 'other',
           options: [
-            { label: 'ContestaÃ§Ã£o', value: 'contestation' },
+            { label: 'Contestação', value: 'contestation' },
             { label: 'Recurso', value: 'appeal' },
-            { label: 'ManifestaÃ§Ã£o', value: 'manifestation' },
-            { label: 'AudiÃªncia', value: 'hearing' },
-            { label: 'PerÃ­cia', value: 'expertise' },
-            { label: 'Cumprimento de sentenÃ§a', value: 'sentence-compliance' },
+            { label: 'Manifestação', value: 'manifestation' },
+            { label: 'Audiência', value: 'hearing' },
+            { label: 'Perícia', value: 'expertise' },
+            { label: 'Cumprimento de sentença', value: 'sentence-compliance' },
             { label: 'Outro', value: 'other' },
           ],
         },
         {
           name: 'attorney',
           type: 'select',
-          label: 'Advogado ResponsÃ¡vel',
+          label: 'Advogado Responsável',
           options: [
             { label: 'Dr. Edivaldo Cavalcante', value: 'edivaldo' },
             { label: 'Dra. Gabrielly Melo', value: 'gabrielly' },
@@ -85,10 +85,10 @@ export const Deadlines: CollectionConfig = {
       label: 'Status',
       defaultValue: 'pending',
       options: [
-        { label: 'â³ Pendente', value: 'pending' },
-        { label: 'ðŸ”„ Em andamento', value: 'in-progress' },
-        { label: 'âœ… Cumprido', value: 'completed' },
-        { label: 'âŒ Perdido', value: 'missed' },
+        { label: '⏳ Pendente', value: 'pending' },
+        { label: '🔄 Em andamento', value: 'in-progress' },
+        { label: '✅ Cumprido', value: 'completed' },
+        { label: '❌ Perdido', value: 'missed' },
       ],
       admin: { position: 'sidebar' },
     },
@@ -98,16 +98,16 @@ export const Deadlines: CollectionConfig = {
       label: 'Prioridade',
       defaultValue: 'normal',
       options: [
-        { label: 'ðŸŸ¢ Normal', value: 'normal' },
-        { label: 'ðŸŸ¡ AtenÃ§Ã£o', value: 'attention' },
-        { label: 'ðŸ”´ CrÃ­tico', value: 'critical' },
+        { label: '🟢 Normal', value: 'normal' },
+        { label: '🟡 Atenção', value: 'attention' },
+        { label: '🔴 Crítico', value: 'critical' },
       ],
       admin: { position: 'sidebar' },
     },
-    { name: 'notes', type: 'textarea', label: 'ObservaÃ§Ãµes' },
+    { name: 'notes', type: 'textarea', label: 'Observações' },
     {
       type: 'collapsible',
-      label: 'Controle de Alertas (automÃ¡tico)',
+      label: 'Controle de Alertas (automático)',
       admin: { initCollapsed: true },
       fields: [
         { name: 'alertSent7d', type: 'checkbox', label: 'Alerta 7 dias enviado', defaultValue: false },

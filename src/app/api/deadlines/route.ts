@@ -10,16 +10,16 @@ const getAttorneyEmails = (): Record<string, string | undefined> => ({
 })
 
 const deadlineTypeLabels: Record<string, string> = {
-  contestation: 'ContestaÃ§Ã£o',
+  contestation: 'Contestação',
   appeal: 'Recurso',
-  manifestation: 'ManifestaÃ§Ã£o',
-  hearing: 'AudiÃªncia',
-  expertise: 'PerÃ­cia',
-  'sentence-compliance': 'Cumprimento de SentenÃ§a',
+  manifestation: 'Manifestação',
+  hearing: 'Audiência',
+  expertise: 'Perícia',
+  'sentence-compliance': 'Cumprimento de Sentença',
   other: 'Outro',
 }
 
-/* GET: Listar prazos prÃ³ximos (protegido) */
+/* GET: Listar prazos próximos (protegido) */
 export async function GET(req: NextRequest) {
   const denied = await requireAdminRole(req, ['admin', 'staff'])
   if (denied) return denied
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
       limit: 100,
     })
 
-    // Categorizar por urgÃªncia
+    // Categorizar por urgência
     const categorized = deadlines.docs.map((d: any) => {
       const daysUntil = Math.ceil((new Date(d.deadlineDate).getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
       let alertLevel = 'normal'
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (!safeCompare(getBearerToken(req.headers), secret)) {
-    return NextResponse.json({ error: 'NÃ£o autorizado.' }, { status: 401 })
+    return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
 
   try {
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
     const now = new Date()
     const alerts: any[] = []
 
-    // Buscar prazos pendentes nos prÃ³ximos 8 dias
+    // Buscar prazos pendentes nos próximos 8 dias
     const futureDate = new Date(now.getTime() + 8 * 24 * 60 * 60 * 1000)
     const deadlines = await (payload as any).find({
       collection: 'deadlines',
@@ -108,15 +108,15 @@ export async function POST(req: NextRequest) {
 
       if (daysUntil <= 1 && !deadline.alertSent1d) {
         shouldAlert = true
-        alertType = 'ðŸ”´ CRÃTICO â€” AmanhÃ£'
+        alertType = '🔴 CRÍTICO — Amanhã'
         updateField = 'alertSent1d'
       } else if (daysUntil <= 3 && !deadline.alertSent3d) {
         shouldAlert = true
-        alertType = 'ðŸŸ  URGENTE â€” 3 dias'
+        alertType = '🟠 URGENTE — 3 dias'
         updateField = 'alertSent3d'
       } else if (daysUntil <= 7 && !deadline.alertSent7d) {
         shouldAlert = true
-        alertType = 'ðŸŸ¡ AtenÃ§Ã£o â€” 7 dias'
+        alertType = '🟡 Atenção — 7 dias'
         updateField = 'alertSent7d'
       }
 
@@ -136,7 +136,7 @@ export async function POST(req: NextRequest) {
             body: JSON.stringify({
               from: process.env.RESEND_FROM_EMAIL || 'Cavalcante Albuquerque <nao-responda@cavalcantealbuquerque.com.br>',
               to: [toEmail],
-              subject: `${alertType} â€” Prazo: ${deadline.title}`,
+              subject: `${alertType} — Prazo: ${deadline.title}`,
               html: `
                 <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
                   <div style="background: ${daysUntil <= 1 ? '#dc2626' : daysUntil <= 3 ? '#ea580c' : 'var(--color-ca-navy-950)'}; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">

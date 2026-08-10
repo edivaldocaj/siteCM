@@ -13,20 +13,20 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json()
     if (isLikelyBotSubmission(body)) {
-      return NextResponse.json({ error: 'Envio invÃ¡lido.' }, { status: 400 })
+      return NextResponse.json({ error: 'Envio inválido.' }, { status: 400 })
     }
 
     const { name, phone, subject, message, consentAccepted, consentText } = body
 
     if (!consentAccepted) {
-      return NextResponse.json({ error: 'Consentimento obrigatÃ³rio.' }, { status: 400 })
+      return NextResponse.json({ error: 'Consentimento obrigatório.' }, { status: 400 })
     }
 
     if (!name || !phone || !subject) {
-      return NextResponse.json({ error: 'Campos obrigatÃƒÂ³rios nÃƒÂ£o preenchidos.' }, { status: 400 })
+      return NextResponse.json({ error: 'Campos obrigatórios não preenchidos.' }, { status: 400 })
     }
 
-    // Ã¢â€â‚¬Ã¢â€â‚¬ 1. Salvar como Lead no CMS Ã¢â€â‚¬Ã¢â€â‚¬
+    // ── 1. Salvar como Lead no CMS ──
     try {
       const payload = await getPayload({ config: configPromise })
       await (payload as any).create({
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
           ],
           notes: [
             {
-              text: `Lead captado via formulÃƒÂ¡rio de contato. Assunto: ${subject}.${message ? ` Mensagem: ${message}` : ''}`,
+              text: `Lead captado via formulário de contato. Assunto: ${subject}.${message ? ` Mensagem: ${message}` : ''}`,
               author: 'system',
               date: new Date().toISOString(),
             },
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       console.error('[Contact] Erro ao salvar lead no CMS:', leadError)
     }
 
-    // Ã¢â€â‚¬Ã¢â€â‚¬ 2. Enviar e-mail via Resend Ã¢â€â‚¬Ã¢â€â‚¬
+    // ── 2. Enviar e-mail via Resend ──
     if (process.env.RESEND_API_KEY) {
       const res = await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           from: 'Site Cavalcante Albuquerque <onboarding@resend.dev>',
           to: [process.env.CONTACT_EMAIL || 'contato@cavalcantealbuquerque.com.br'],
-          subject: `Novo Lead: ${subject} Ã¢â‚¬â€ ${name}`,
+          subject: `Novo Lead: ${subject} — ${name}`,
           html: `
             <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto;">
               <div style="background: var(--color-ca-navy-950); padding: 24px; text-align: center; border-radius: 8px 8px 0 0;">
@@ -92,8 +92,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Falha ao enviar o e-mail.' }, { status: 500 })
       }
     } else {
-      console.error('Falta a variÃƒÂ¡vel RESEND_API_KEY')
-      return NextResponse.json({ error: 'ServiÃƒÂ§o de e-mail nÃƒÂ£o configurado no servidor.' }, { status: 500 })
+      console.error('Falta a variável RESEND_API_KEY')
+      return NextResponse.json({ error: 'Serviço de e-mail não configurado no servidor.' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true })

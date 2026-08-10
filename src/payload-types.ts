@@ -655,6 +655,7 @@ export interface NewsArticle {
         | 'direito-penal'
         | 'lgpd'
         | 'legislacao'
+        | 'licitacoes'
         | 'tribunais'
         | 'geral'
       )
@@ -676,7 +677,7 @@ export interface Client {
   id: number;
   name: string;
   /**
-   * Pode conter pontos e traÃ§os (ex: 123.456.789-00)
+   * Pode conter pontos e traços (ex: 123.456.789-00)
    */
   cpf: string;
   email?: string | null;
@@ -699,7 +700,7 @@ export interface Client {
       }[]
     | null;
   /**
-   * Token Ãºnico para o cliente acessar o portal.
+   * Token único para o cliente acessar o portal.
    */
   accessToken: string;
   active?: boolean | null;
@@ -708,7 +709,7 @@ export interface Client {
   createdAt: string;
 }
 /**
- * Pipeline de leads â€” todos os contatos captados pelo site, formulÃ¡rios e campanhas.
+ * Pipeline de leads — todos os contatos captados pelo site, formulários e campanhas.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "leads".
@@ -740,7 +741,7 @@ export interface Lead {
   ip?: string | null;
   userAgent?: string | null;
   /**
-   * Preenchido automaticamente pelo formulÃ¡rio multi-step da campanha.
+   * Preenchido automaticamente pelo formulário multi-step da campanha.
    */
   qualificationAnswers?:
     | {
@@ -751,7 +752,7 @@ export interface Lead {
     | null;
   caseDescription?: string | null;
   /**
-   * Valor informado pelo lead ou estimado pelo formulÃ¡rio.
+   * Valor informado pelo lead ou estimado pelo formulário.
    */
   estimatedValue?: number | null;
   urgency?: ('low' | 'medium' | 'high' | 'urgent') | null;
@@ -841,7 +842,7 @@ export interface ClientDocument {
   createdAt: string;
 }
 /**
- * Pesquisas de satisfaÃ§Ã£o e NPS dos clientes.
+ * Pesquisas de satisfação e NPS dos clientes.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nps-responses".
