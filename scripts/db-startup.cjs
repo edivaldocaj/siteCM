@@ -5,6 +5,7 @@ const lockKey = 82417031
 const runMigrations = process.env.RUN_MIGRATIONS_ON_START === 'true'
 const runBootstrap = process.env.BOOTSTRAP_NEW_DB_ON_START === 'true'
 const runDemoSeed = process.env.SEED_DEMO_CONTENT_ON_START === 'true'
+const forcePayloadMigrate = process.env.FORCE_PAYLOAD_MIGRATE === 'true'
 
 function run(command, args, options = {}) {
   return new Promise((resolve, reject) => {
@@ -79,7 +80,7 @@ async function main() {
     return
   }
 
-  console.log('[db:startup] Preparacao do banco iniciada em background.')
+  console.log('[db:startup] Preparacao do banco iniciada.')
   await run('node', ['scripts/wait-for-db.cjs'])
 
   await withDatabaseLock(async () => {
@@ -88,8 +89,14 @@ async function main() {
 
     if (runMigrations) {
       await ensurePayloadMigrationsTable()
-      console.log('[db:startup] Aplicando migrations do Payload...')
-      await run('npm', ['run', 'migrate'])
+
+      if (forcePayloadMigrate) {
+        console.log('[db:startup] FORCE_PAYLOAD_MIGRATE=true; aplicando migrations do Payload...')
+        await run('npm', ['run', 'migrate'])
+      } else {
+        console.log('[db:startup] Schema atual sincronizado; registrando migrations como aplicadas para evitar replay sobre banco novo...')
+        await run('npm', ['run', 'migrations:mark-applied'])
+      }
     }
 
     if (runBootstrap) {

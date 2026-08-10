@@ -1,1 +1,1 @@
-﻿{"marker":"public-audit-fixes-v12","note":"logo webp, public health minimization, legal fallbacks and copy accents"}
+﻿{"marker":"foreground-db-prep-v14","note":"database schema is prepared before Next starts; historical migrations are marked after schema push"}
