@@ -1,1 +1,1 @@
-﻿{"marker":"foreground-db-prep-v14","note":"database schema is prepared before Next starts; historical migrations are marked after schema push"}
+﻿{"marker":"migration-marker-casts-v15","note":"casts migration marker parameters for postgres compatibility"}
