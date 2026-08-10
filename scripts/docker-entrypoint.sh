@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 set -eu
 
+echo 'Deploy marker: schema-init-entrypoint-v2'
+
 if [ "${RUN_PREFLIGHT_ON_START:-false}" = "true" ]; then
   echo "Running production preflight..."
   npm run preflight:production
