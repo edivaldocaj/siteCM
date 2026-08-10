@@ -1,19 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, ExternalLink, Clock, Globe } from 'lucide-react'
-
-const defaultNews = [
-  { title: 'STJ firma entendimento sobre revisão de juros abusivos', summary: 'Decisão reforça direito do consumidor à revisão contratual.', source: 'Conjur', category: 'Direito do Consumidor', slug: 'stj-revisao-juros', publishedAt: '2026-03-24' },
-  { title: 'ANPD aplica multa milionária por vazamento de dados', summary: 'Empresa é penalizada após exposição de dados pessoais.', source: 'Migalhas', category: 'LGPD', slug: 'anpd-multa-vazamento', publishedAt: '2026-03-23' },
-  { title: 'Nova lei amplia penas para estelionato digital', summary: 'Legislação aumenta rigor contra golpes praticados pela internet.', source: 'Consultor Jurídico', category: 'Direito Penal', slug: 'nova-lei-estelionato', publishedAt: '2026-03-21' },
-  { title: 'TJRN decide sobre requisitos de usucapião urbana em Natal', summary: 'Novos parâmetros para regularização fundiária na capital.', source: 'TJRN', category: 'Direito Imobiliário', slug: 'tjrn-usucapiao', publishedAt: '2026-03-19' },
-]
+import { ArrowRight, Clock, ExternalLink, Globe } from 'lucide-react'
 
 function formatDate(dateStr?: string) {
   if (!dateStr) return ''
-  const d = new Date(dateStr)
-  return d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' }).replace('.', '')
+  const date = new Date(dateStr)
+  return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' }).replace('.', '')
 }
 
 interface NewsSectionProps {
@@ -25,34 +18,27 @@ interface NewsSectionProps {
 }
 
 export function NewsSection({ cmsNews = [], cmsData }: NewsSectionProps) {
-  const news = cmsNews.length > 0 ? cmsNews : defaultNews
-  const sectionTitle = cmsData?.title || 'Notícias do Direito'
-  const sectionSubtitle = cmsData?.subtitle || 'Notícias relevantes do mundo jurídico, selecionadas e comentadas pela nossa equipe.'
+  if (cmsNews.length === 0) return null
+
+  const sectionTitle = cmsData?.title || 'Noticias do Direito'
+  const sectionSubtitle = cmsData?.subtitle || 'Atualizacoes relevantes do mundo juridico, selecionadas para leitura rapida.'
 
   return (
-    <section className="section-padding" style={{ backgroundColor: 'var(--color-brand-cream)' }}>
+    <section className="ca-news-strip" aria-labelledby="home-news-title">
       <div className="container-wide mx-auto">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '48px', flexWrap: 'wrap', gap: '24px' }}>
+        <div className="ca-section-heading ca-section-heading--split">
           <div>
-            <span style={{ color: 'var(--color-brand-gold-dark)', fontSize: '12px', fontFamily: 'var(--font-body)', textTransform: 'uppercase', letterSpacing: '0.25em', display: 'block', marginBottom: '16px' }}>
-              Atualidades Jurídicas
-            </span>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 4vw, 3rem)', fontWeight: 600, color: 'var(--color-brand-navy)' }}>
-              {sectionTitle}
-            </h2>
+            <span className="ca-eyebrow">Atualidades Juridicas</span>
+            <h2 id="home-news-title">{sectionTitle}</h2>
           </div>
-          <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 55%, transparent)', fontFamily: 'var(--font-body)', fontSize: '15px', maxWidth: '340px', lineHeight: 1.6, marginTop: '28px' }}>
-            {sectionSubtitle}
-          </p>
+          <p>{sectionSubtitle}</p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }} className="news-grid">
-          {news.slice(0, 4).map((item: any, i: number) => {
+        <div className="ca-news-strip__grid">
+          {cmsNews.slice(0, 4).map((item: any) => {
             const hasUrl = item.sourceUrl || item.source_url
-            const isExternal = !!hasUrl
+            const isExternal = Boolean(hasUrl)
             const href = isExternal ? hasUrl : `/blog/${item.slug || '#'}`
-
-            // Resolve linkedCampaign — pode ser string (slug) ou objeto populado pelo Payload
             const rawLinked = item.linkedCampaign || item.linked_campaign
             const linkedCampaignSlug = typeof rawLinked === 'object' && rawLinked?.slug
               ? rawLinked.slug
@@ -61,62 +47,45 @@ export function NewsSection({ cmsNews = [], cmsData }: NewsSectionProps) {
                 : null
 
             return (
-              <div key={i} style={{ background: 'white', padding: '28px 32px', borderRadius: '4px', border: '1px solid color-mix(in srgb, var(--color-ca-navy-950) 6%, transparent)', boxShadow: '0 2px 12px color-mix(in srgb, var(--color-ca-navy-950) 4%, transparent)', transition: 'all 0.3s' }} className="news-card">
-                {/* Top: category + date */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-                  <span style={{ fontSize: '10px', textTransform: 'uppercase', color: 'var(--color-brand-gold-dark)', background: 'color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)', padding: '4px 10px', borderRadius: '2px', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', fontWeight: 600 }}>
-                    {item.category || 'Geral'}
-                  </span>
+              <article key={item.id || item.slug} className="ca-news-strip__card">
+                <div className="ca-news-strip__meta">
+                  <span>{item.category || 'Geral'}</span>
                   {(item.publishedAt || item.published_at) && (
-                    <span style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 35%, transparent)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Clock style={{ width: '12px', height: '12px' }} />
+                    <small>
+                      <Clock size={12} />
                       {formatDate(item.publishedAt || item.published_at)}
-                    </span>
+                    </small>
                   )}
                 </div>
 
-                {/* Title */}
-                <a href={href} target={isExternal ? '_blank' : '_self'} rel={isExternal ? 'noopener noreferrer' : undefined} style={{ textDecoration: 'none' }}>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--color-brand-navy)', lineHeight: 1.35, marginBottom: '8px', fontWeight: 600 }}>
-                    {item.title}
-                  </h3>
+                <a href={href} target={isExternal ? '_blank' : '_self'} rel={isExternal ? 'noopener noreferrer' : undefined}>
+                  <h3>{item.title}</h3>
                 </a>
 
-                {/* Summary */}
-                {(item.summary || item.excerpt) && (
-                  <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)', fontSize: '14px', fontFamily: 'var(--font-body)', lineHeight: 1.5, marginBottom: '16px' }}>
-                    {item.summary || item.excerpt}
-                  </p>
-                )}
+                {(item.summary || item.excerpt || item.aiSummary) && <p>{item.summary || item.excerpt || item.aiSummary}</p>}
 
-                {/* Bottom: source + campaign link */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 35%, transparent)', fontSize: '12px', fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <Globe style={{ width: '12px', height: '12px' }} />
-                    {item.source || 'Judiciário'}
-                  </span>
-
+                <div className="ca-news-strip__footer">
+                  <small>
+                    <Globe size={12} />
+                    {item.source || 'Judiciario'}
+                  </small>
                   {linkedCampaignSlug ? (
-                    <Link href={`/campanhas/${linkedCampaignSlug}`} style={{ color: 'var(--color-brand-gold-dark)', fontSize: '11px', fontFamily: 'var(--font-body)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
-                      Ver Campanha <ArrowRight style={{ width: '12px', height: '12px' }} />
+                    <Link href={`/campanhas/${linkedCampaignSlug}`}>
+                      Ver campanha
+                      <ArrowRight size={12} />
                     </Link>
                   ) : (
-                    <a href={href} target={isExternal ? '_blank' : '_self'} style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 30%, transparent)', fontSize: '11px', fontFamily: 'var(--font-body)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
-                      Ler mais {isExternal && <ExternalLink style={{ width: '10px', height: '10px' }} />}
-                      {!isExternal && <ArrowRight style={{ width: '12px', height: '12px' }} />}
+                    <a href={href} target={isExternal ? '_blank' : '_self'} rel={isExternal ? 'noopener noreferrer' : undefined}>
+                      Ler mais
+                      {isExternal ? <ExternalLink size={12} /> : <ArrowRight size={12} />}
                     </a>
                   )}
                 </div>
-              </div>
+              </article>
             )
           })}
         </div>
       </div>
-
-      <style dangerouslySetInnerHTML={{ __html: `
-        .news-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px color-mix(in srgb, var(--color-ca-navy-950) 8%, transparent) !important; }
-        @media (max-width: 768px) { .news-grid { grid-template-columns: 1fr !important; } }
-      `}} />
     </section>
   )
 }

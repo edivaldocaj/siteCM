@@ -2187,3 +2187,298 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   .ca-hero__brand-lockup { display: grid; }
   .ca-hero__brand-text { padding-left: 0; border-left: 0; }
 }
+
+.ca-home-editorial,
+.ca-news-strip {
+  padding: clamp(72px, 9vw, 128px) 24px;
+  background: var(--color-ca-bone);
+}
+
+.ca-news-strip {
+  background: #fff;
+}
+
+.ca-home-editorial__grid,
+.ca-news-strip__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--color-ca-line);
+  border: 1px solid var(--color-ca-line);
+}
+
+.ca-news-strip__grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ca-home-editorial__card,
+.ca-news-strip__card {
+  background: #fff;
+  color: var(--color-ca-navy-950);
+}
+
+.ca-home-editorial__card {
+  min-height: 430px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ca-home-editorial__media {
+  position: relative;
+  min-height: 182px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--color-ca-navy-950);
+}
+
+.ca-home-editorial__media::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/brand/pattern-watermark.png');
+  background-size: 520px auto;
+  background-position: center;
+  opacity: 0.11;
+}
+
+.ca-home-editorial__media img {
+  object-fit: cover;
+}
+
+.ca-home-editorial__media > img:not([data-nimg='fill']) {
+  position: relative;
+  opacity: 0.22;
+}
+
+.ca-home-editorial__body,
+.ca-news-strip__card {
+  padding: 28px;
+}
+
+.ca-home-editorial__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ca-home-editorial__meta,
+.ca-news-strip__meta,
+.ca-home-editorial__footer,
+.ca-news-strip__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.ca-home-editorial__meta,
+.ca-news-strip__meta {
+  margin-bottom: 20px;
+}
+
+.ca-home-editorial__meta span,
+.ca-news-strip__meta span {
+  border: 1px solid var(--color-ca-line);
+  padding: 5px 9px;
+  color: var(--color-ca-steel-500);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ca-home-editorial__meta small,
+.ca-news-strip__meta small,
+.ca-home-editorial__footer small,
+.ca-news-strip__footer small {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: color-mix(in srgb, var(--color-ca-navy-950) 44%, transparent);
+  font-size: 0.78rem;
+}
+
+.ca-home-editorial__title,
+.ca-news-strip__card a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ca-home-editorial__title h3,
+.ca-news-strip__card h3 {
+  margin: 0;
+  color: var(--color-ca-navy-950);
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.14;
+}
+
+.ca-home-editorial__title:hover h3,
+.ca-news-strip__card a:hover h3 {
+  color: var(--color-ca-steel-500);
+}
+
+.ca-home-editorial__body p,
+.ca-news-strip__card p {
+  margin: 16px 0 0;
+  color: color-mix(in srgb, var(--color-ca-navy-950) 62%, transparent);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.ca-home-editorial__footer,
+.ca-news-strip__footer {
+  margin-top: auto;
+  padding-top: 26px;
+  justify-content: space-between;
+}
+
+.ca-home-editorial__campaign,
+.ca-news-strip__footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-ca-steel-500);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.ca-home-editorial__all {
+  margin-top: 34px;
+}
+
+.ca-testimonials {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(72px, 9vw, 128px) 24px;
+  background: var(--color-ca-navy-950);
+  color: var(--color-ca-platinum-100);
+}
+
+.ca-testimonials::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/brand/symbol-mono-light.svg');
+  background-position: right -80px center;
+  background-repeat: no-repeat;
+  background-size: min(42vw, 520px) auto;
+  opacity: 0.045;
+  pointer-events: none;
+}
+
+.ca-testimonials__inner {
+  position: relative;
+}
+
+.ca-testimonials .ca-section-heading h2 {
+  color: var(--color-ca-platinum-100);
+}
+
+.ca-testimonials__quote {
+  position: relative;
+  margin-top: 44px;
+  padding: clamp(28px, 5vw, 54px);
+  border: 1px solid rgba(226, 232, 240, 0.16);
+  background: rgba(255, 255, 255, 0.055);
+  text-align: center;
+}
+
+.ca-testimonials__quote-icon {
+  position: absolute;
+  left: 28px;
+  top: 22px;
+  color: rgba(226, 232, 240, 0.12);
+}
+
+.ca-testimonials__stars {
+  display: inline-flex;
+  gap: 5px;
+  color: var(--color-ca-steel-500);
+}
+
+.ca-testimonials__stars svg {
+  fill: currentColor;
+}
+
+.ca-testimonials__quote p {
+  margin: 28px auto 0;
+  max-width: 740px;
+  color: color-mix(in srgb, var(--color-ca-platinum-100) 82%, transparent);
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2.3rem);
+  line-height: 1.32;
+}
+
+.ca-testimonials__quote footer {
+  margin-top: 28px;
+  display: grid;
+  gap: 6px;
+}
+
+.ca-testimonials__quote strong {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+.ca-testimonials__quote span {
+  color: color-mix(in srgb, var(--color-ca-platinum-100) 58%, transparent);
+  font-size: 0.82rem;
+}
+
+.ca-testimonials__controls {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  align-items: center;
+}
+
+.ca-testimonials__controls button {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(226, 232, 240, 0.18);
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-ca-platinum-100);
+  cursor: pointer;
+}
+
+.ca-testimonials__dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ca-testimonials__dots button {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border-color: transparent;
+  background: rgba(226, 232, 240, 0.28);
+}
+
+.ca-testimonials__dots button.is-active {
+  width: 30px;
+  background: var(--color-ca-steel-500);
+}
+
+@media (max-width: 1100px) {
+  .ca-home-editorial__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  .ca-home-editorial,
+  .ca-news-strip,
+  .ca-testimonials { padding-inline: 20px; }
+  .ca-home-editorial__grid,
+  .ca-news-strip__grid { grid-template-columns: 1fr; }
+  .ca-testimonials__quote-icon { display: none; }
+}

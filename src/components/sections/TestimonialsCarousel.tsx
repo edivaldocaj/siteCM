@@ -1,8 +1,7 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react'
-
+import { ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react'
 
 interface TestimonialsCarouselProps {
   cmsTestimonials?: any[]
@@ -16,161 +15,58 @@ export function TestimonialsCarousel({ cmsTestimonials = [], cmsData }: Testimon
   const sectionTitle = cmsData?.title || 'O que nossos clientes dizem'
   const [current, setCurrent] = useState(0)
 
-  const prev = () => setCurrent((c) => (c === 0 ? testimonials.length - 1 : c - 1))
-  const next = () => setCurrent((c) => (c === testimonials.length - 1 ? 0 : c + 1))
-
   if (testimonials.length === 0) return null
 
-  const t = testimonials[current]
+  const active = testimonials[current]
+  const rating = Math.max(1, Math.min(Number(active.rating || 5), 5))
+
+  const prev = () => setCurrent((index) => (index === 0 ? testimonials.length - 1 : index - 1))
+  const next = () => setCurrent((index) => (index === testimonials.length - 1 ? 0 : index + 1))
 
   return (
-    <section className="section-padding gradient-navy relative overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.02]" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0v40M0 20h40' stroke='%23ffffff' stroke-width='0.5' fill='none'/%3E%3C/svg%3E")`,
-      }} />
-
-      <div className="container-narrow mx-auto relative" style={{ zIndex: 10 }}>
-        <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-          <span style={{
-            color: 'var(--color-brand-gold-dark)',
-            fontSize: '12px',
-            fontFamily: 'var(--font-body)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.25em',
-            display: 'block',
-            marginBottom: '16px',
-          }}>
-            Depoimentos
-          </span>
-          <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
-            fontWeight: 600,
-            color: 'var(--color-brand-champagne)',
-          }}>
-            {sectionTitle}
-          </h2>
+    <section className="ca-testimonials" aria-labelledby="testimonials-title">
+      <div className="container-narrow mx-auto ca-testimonials__inner">
+        <div className="ca-section-heading">
+          <span className="ca-eyebrow ca-eyebrow--dark">Depoimentos</span>
+          <h2 id="testimonials-title">{sectionTitle}</h2>
         </div>
 
-        <div style={{ maxWidth: '48rem', margin: '0 auto', position: 'relative' }}>
-          <Quote style={{
-            position: 'absolute',
-            top: '-16px',
-            left: '-16px',
-            width: '64px',
-            height: '64px',
-            color: 'color-mix(in srgb, var(--color-ca-steel-500) 10%, transparent)',
-          }} />
+        <article className="ca-testimonials__quote">
+          <Quote className="ca-testimonials__quote-icon" size={60} aria-hidden="true" />
+          <div className="ca-testimonials__stars" aria-label={`${rating} de 5 estrelas`}>
+            {Array.from({ length: rating }).map((_, index) => (
+              <Star key={index} size={18} />
+            ))}
+          </div>
+          <p>&ldquo;{active.text}&rdquo;</p>
+          <footer>
+            <strong>{active.authorName || active.author_name}</strong>
+            {(active.caseType || active.case_type) && <span>{active.caseType || active.case_type}</span>}
+          </footer>
+        </article>
 
-          <div style={{ textAlign: 'center', padding: '0 32px' }}>
-            {/* Stars */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '4px', marginBottom: '32px' }}>
-              {Array.from({ length: t.rating || 5 }).map((_, i) => (
-                <Star key={i} style={{
-                  width: '20px',
-                  height: '20px',
-                  fill: 'var(--color-brand-gold-dark)',
-                  color: 'var(--color-brand-gold-dark)',
-                }} />
+        {testimonials.length > 1 && (
+          <div className="ca-testimonials__controls">
+            <button onClick={prev} type="button" aria-label="Depoimento anterior">
+              <ChevronLeft size={20} />
+            </button>
+            <div className="ca-testimonials__dots" aria-label="Selecionar depoimento">
+              {testimonials.map((_: any, index: number) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setCurrent(index)}
+                  className={index === current ? 'is-active' : ''}
+                  aria-label={`Depoimento ${index + 1}`}
+                  aria-current={index === current ? 'true' : undefined}
+                />
               ))}
             </div>
-
-            {/* Quote */}
-            <p style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'clamp(18px, 2.5vw, 24px)',
-              color: 'var(--color-brand-silver-light)',
-              lineHeight: 1.6,
-              marginBottom: '32px',
-              fontStyle: 'italic',
-            }}>
-              &ldquo;{t.text}&rdquo;
-            </p>
-
-            {/* Author */}
-            <p style={{
-              fontFamily: 'var(--font-display)',
-              color: 'var(--color-brand-champagne)',
-              fontWeight: 600,
-              fontSize: '18px',
-              marginBottom: '4px',
-            }}>
-              {t.authorName || t.author_name}
-            </p>
-            <p style={{
-              color: 'color-mix(in srgb, var(--color-ca-steel-400) 50%, transparent)',
-              fontFamily: 'var(--font-body)',
-              fontSize: '14px',
-            }}>
-              {t.caseType || t.case_type}
-            </p>
+            <button onClick={next} type="button" aria-label="Proximo depoimento">
+              <ChevronRight size={20} />
+            </button>
           </div>
-
-          {/* Controls */}
-          {testimonials.length > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '48px' }}>
-              <button
-                onClick={prev}
-                style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '50%',
-                  border: '1px solid color-mix(in srgb, var(--color-ca-steel-400) 20%, transparent)',
-                  background: 'none',
-                  color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.3s',
-                }}
-                aria-label="Anterior"
-              >
-                <ChevronLeft style={{ width: '20px', height: '20px' }} />
-              </button>
-
-              {/* Dots */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                {testimonials.map((_: any, i: number) => (
-                  <button
-                    key={i}
-                    onClick={() => setCurrent(i)}
-                    style={{
-                      width: i === current ? '32px' : '10px',
-                      height: '10px',
-                      borderRadius: '5px',
-                      background: i === current ? 'var(--color-brand-gold-dark)' : 'color-mix(in srgb, var(--color-ca-steel-400) 30%, transparent)',
-                      border: 'none',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s',
-                    }}
-                    aria-label={`Depoimento ${i + 1}`}
-                  />
-                ))}
-              </div>
-
-              <button
-                onClick={next}
-                style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '50%',
-                  border: '1px solid color-mix(in srgb, var(--color-ca-steel-400) 20%, transparent)',
-                  background: 'none',
-                  color: 'color-mix(in srgb, var(--color-ca-steel-400) 60%, transparent)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.3s',
-                }}
-                aria-label="PrÃ³ximo"
-              >
-                <ChevronRight style={{ width: '20px', height: '20px' }} />
-              </button>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </section>
   )
