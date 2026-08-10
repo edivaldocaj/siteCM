@@ -13,8 +13,8 @@ interface HeroSectionProps {
 
 export function HeroSection({ cmsData }: HeroSectionProps) {
   const buttonText = cmsData?.heroButtonText || 'Fale com um advogado'
-  const title = cmsData?.heroTitle || 'Advocacia com estrategia e solidez.'
-  const subtitle = cmsData?.heroSubtitle || 'Atendimento juridico em Natal/RN com analise tecnica, comunicacao direta e acompanhamento cuidadoso em cada etapa do caso.'
+  const title = cmsData?.heroTitle || 'Advocacia com estratégia e solidez.'
+  const subtitle = cmsData?.heroSubtitle || 'Atendimento jurídico em Natal/RN com análise técnica, comunicação direta e acompanhamento cuidadoso em cada etapa do caso.'
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'
   const whatsappMessage = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || 'Ola! Gostaria de falar com um advogado.'
 
@@ -30,7 +30,7 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
         <div className="ca-hero__content">
           <div className="ca-hero__brand-lockup">
             <Image
-              src="/brand/lockup-light.svg"
+              src="/brand/lockup-light.webp"
               alt="Cavalcante Albuquerque"
               width={330}
               height={83}
@@ -76,11 +76,11 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
             </div>
             <div>
               <dt>Metodo</dt>
-              <dd>Analise tecnica do caso</dd>
+              <dd>Análise técnica do caso</dd>
             </div>
             <div>
               <dt>Urgencia</dt>
-              <dd>Plantao criminal 24h</dd>
+              <dd>Plantão criminal 24h</dd>
             </div>
           </dl>
         </div>

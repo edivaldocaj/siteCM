@@ -14,9 +14,9 @@ type FooterProps = {
 }
 
 const fallbackNavLinks: LinkItem[] = [
-  { href: '/sobre', label: 'Sobre o escritorio' },
-  { href: '/campanhas', label: 'Campanhas juridicas' },
-  { href: '/blog', label: 'Blog juridico' },
+  { href: '/sobre', label: 'Sobre o escritório' },
+  { href: '/campanhas', label: 'Campanhas jurídicas' },
+  { href: '/blog', label: 'Blog jurídico' },
   { href: '/contato', label: 'Contato' },
 ]
 
@@ -36,15 +36,15 @@ export function Footer({
   const email = siteConfig?.contactEmail || 'contato@cavalcantealbuquerque.com.br'
   const phone = siteConfig?.contactPhone || '(84) 99124-3985'
   const address = siteConfig?.contactAddress || 'Rua Francisco Maia Sobrinho, 1950\nLagoa Nova - Natal/RN, 59062-250'
-  const areaLinks = practiceAreas.length > 0 ? practiceAreas : [{ href: '/areas-de-atuacao', label: 'Areas de atuacao' }]
+  const areaLinks = practiceAreas.length > 0 ? practiceAreas : [{ href: '/areas-de-atuacao', label: 'Áreas de atuação' }]
   const cmsFooterColumns = footerColumns?.filter((column) => column.title && column.links?.length)
   const navigationColumn = cmsFooterColumns?.[0] || { title: 'Navegacao', links: navItems }
   const legalColumnLinks = legalLinks?.length
     ? legalLinks
     : [
-        { href: '/privacidade', label: 'Politica de privacidade' },
+        { href: '/privacidade', label: 'Política de privacidade' },
         { href: '/termos-de-uso', label: 'Termos de uso' },
-        { href: '/politica-de-cookies', label: 'Politica de cookies' },
+        { href: '/politica-de-cookies', label: 'Política de cookies' },
       ]
 
   return (
@@ -52,15 +52,15 @@ export function Footer({
       <div className="ca-footer__inner">
         <div className="ca-footer__grid">
           <div className="ca-footer__brand-col">
-            <Image src="/brand/lockup-light.svg" alt="Cavalcante Albuquerque" width={240} height={60} className="ca-footer__lockup" />
-            <p className="ca-footer__tagline">Advocacia com estrategia e solidez.</p>
+            <Image src="/brand/lockup-light.webp" alt="Cavalcante Albuquerque" width={240} height={60} className="ca-footer__lockup" />
+            <p className="ca-footer__tagline">Advocacia com estratégia e solidez.</p>
             <p className="ca-footer__text">
-              Advocacia e consultoria em Natal/RN com atendimento tecnico, direto e orientado ao contexto de cada caso.
+              Advocacia e consultoria em Natal/RN com atendimento técnico, direto e orientado ao contexto de cada caso.
             </p>
           </div>
 
           <div>
-            <h4 className="ca-footer__title">Areas de atuacao</h4>
+            <h4 className="ca-footer__title">Áreas de atuação</h4>
             <ul className="ca-footer__list">
               {areaLinks.map((area) => (
                 <li key={area.href}>
@@ -98,7 +98,7 @@ export function Footer({
               <li><MapPin aria-hidden="true" /><span>{address}</span></li>
               <li><Phone aria-hidden="true" /><a href={normalizePhoneHref(phone)}>{phone}</a></li>
               <li><Mail aria-hidden="true" /><a href={`mailto:${email}`}>{email}</a></li>
-              <li><Clock aria-hidden="true" /><span>Seg a Sex: 8h as 18h<br />Penal: atendimento 24h</span></li>
+              <li><Clock aria-hidden="true" /><span>Seg a Sex: 8h às 18h<br />Penal: atendimento 24h</span></li>
             </ul>
           </div>
         </div>
@@ -107,7 +107,7 @@ export function Footer({
       <div className="ca-footer__bottom">
         <div className="ca-footer__bottom-inner">
           <p>© {new Date().getFullYear()} Cavalcante Albuquerque. Todos os direitos reservados.</p>
-          <p>Razao social: __PENDENTE__ · CNPJ: __PENDENTE__ · OAB/RN: __PENDENTE__</p>
+          <p>OAB/RN 10.734 · Natal/RN · Publicidade advocatícia informativa.</p>
         </div>
       </div>
     </footer>

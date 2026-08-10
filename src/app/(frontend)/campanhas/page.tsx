@@ -64,7 +64,7 @@ export default async function CampanhasPage() {
             <div className="ca-empty-state">
               <span className="ca-eyebrow">Sem campanhas ativas</span>
               <h2>Nenhuma campanha ativa no momento</h2>
-              <p>Novas campanhas serao exibidas automaticamente quando forem publicadas no CMS.</p>
+              <p>Novas campanhas serão exibidas automaticamente quando forem publicadas no CMS.</p>
             </div>
           ) : (
             <div className="ca-campaigns-page__grid">

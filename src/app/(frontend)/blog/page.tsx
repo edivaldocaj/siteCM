@@ -72,7 +72,7 @@ export default async function BlogPage() {
             <div className="ca-empty-state">
               <span className="ca-eyebrow">Conteudo em revisao</span>
               <h2>Novos artigos e noticias em breve</h2>
-              <p>Os conteudos editoriais serao publicados pelo painel administrativo.</p>
+              <p>Os conteúdos editoriais serão publicados pelo painel administrativo.</p>
             </div>
           ) : (
             <div className="ca-editorial-list__grid">

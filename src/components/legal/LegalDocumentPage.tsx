@@ -1,4 +1,4 @@
-﻿import { RichText } from '@payloadcms/richtext-lexical/react'
+import { RichText } from '@payloadcms/richtext-lexical/react'
 
 type LegalDocumentPageProps = {
   title: string
@@ -37,7 +37,18 @@ export function LegalDocumentPage({ title, description, content, updatedAt }: Le
             {content ? (
               <RichText data={content} />
             ) : (
-              <p>__PENDENTE__</p>
+                            <div>
+                <h2>Documento em consolidação</h2>
+                <p>
+                  Este documento será atualizado com a versão institucional completa. Até lá, os dados enviados pelos
+                  formulários serão tratados apenas para atendimento jurídico, triagem de contato, cumprimento de
+                  obrigações legais e segurança da comunicação.
+                </p>
+                <p>
+                  Para exercer direitos previstos na LGPD ou solicitar informações sobre tratamento de dados, entre em
+                  contato pelo e-mail cavalcantemelo.advs@gmail.com.
+                </p>
+              </div>
             )}
           </div>
         </article>

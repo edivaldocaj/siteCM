@@ -16,9 +16,9 @@ type HeaderProps = {
 }
 
 const fallbackNavLinks: NavItem[] = [
-  { href: '/', label: 'Inicio' },
+  { href: '/', label: 'Início' },
   { href: '/sobre', label: 'Sobre' },
-  { href: '/areas-de-atuacao', label: 'Areas de atuacao' },
+  { href: '/areas-de-atuacao', label: 'Áreas de atuação' },
   { href: '/campanhas', label: 'Campanhas' },
   { href: '/blog', label: 'Blog' },
   { href: '/contato', label: 'Contato' },
@@ -96,7 +96,7 @@ export function Header({
       <div className="ca-header__inner">
         <Link href="/" className="ca-header__brand" aria-label="Cavalcante Albuquerque">
           <Image
-            src={isLight ? '/brand/lockup-dark.svg' : '/brand/lockup-light.svg'}
+            src={isLight ? '/brand/lockup-dark.webp' : '/brand/lockup-light.webp'}
             alt="Cavalcante Albuquerque"
             width={220}
             height={55}

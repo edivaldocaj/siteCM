@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     })
 
     const area = docs?.[0]
-    if (!area) return { title: 'Area nao encontrada | Cavalcante Albuquerque' }
+    if (!area) return { title: 'Área não encontrada | Cavalcante Albuquerque' }
 
     const title = area.seo?.metaTitle || area.title
     const description = area.seo?.metaDescription || area.shortDescription || area.heroHeadline || ''
@@ -50,8 +50,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     }
   } catch {
     return {
-      title: 'Areas de atuacao | Cavalcante Albuquerque',
-      description: 'Areas de atuacao juridica do escritorio Cavalcante Albuquerque.',
+      title: 'Áreas de atuação | Cavalcante Albuquerque',
+      description: 'Áreas de atuação jurídica do escritório Cavalcante Albuquerque.',
     }
   }
 }
@@ -90,7 +90,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
         <div className="container-narrow mx-auto ca-area-detail-hero__inner">
           <Link href="/areas-de-atuacao" className="ca-back-link">
             <ArrowLeft size={16} />
-            Areas de Atuacao
+            Áreas de Atuação
           </Link>
           {isPenal && <span className="ca-area-detail-hero__badge">Atendimento 24h</span>}
           <h1>{title}</h1>
@@ -122,7 +122,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
           {faq.length > 0 && (
             <section className="ca-area-detail__block" aria-labelledby="area-faq-title">
               <div className="ca-section-heading">
-                <span className="ca-eyebrow">Duvidas comuns</span>
+                <span className="ca-eyebrow">Dúvidas comuns</span>
                 <h2 id="area-faq-title">Perguntas frequentes</h2>
               </div>
               <div className="ca-area-detail__faq">
@@ -140,10 +140,10 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
           )}
 
           <aside className={isPenal ? 'ca-area-detail__cta ca-area-detail__cta--urgent' : 'ca-area-detail__cta'}>
-            <h2>{isPenal ? 'Precisa de ajuda urgente?' : 'Tem um caso nessa area?'}</h2>
-            <p>Fale com um advogado para uma primeira leitura tecnica do seu caso.</p>
+            <h2>{isPenal ? 'Precisa de ajuda urgente?' : 'Tem um caso nessa área?'}</h2>
+            <p>Fale com um advogado para uma primeira leitura técnica do seu caso.</p>
             <a
-              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}?text=${encodeURIComponent(`Ola! Preciso de orientacao sobre ${title}.`)}`}
+              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}?text=${encodeURIComponent(`Olá! Preciso de orientação sobre ${title}.`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-whatsapp"

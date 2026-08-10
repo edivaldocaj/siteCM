@@ -11,10 +11,21 @@ function envStatus() {
   }))
 }
 
-export async function GET() {
+function shouldExposeDiagnostics(request: Request) {
+  const token = process.env.HEALTHCHECK_SECRET || process.env.CRON_SECRET
+  if (!token) return false
+
+  const authorization = request.headers.get('authorization')
+  if (authorization === `Bearer ${token}`) return true
+
+  return request.headers.get('x-healthcheck-secret') === token
+}
+
+export async function GET(request: Request) {
   const startedAt = Date.now()
   const env = envStatus()
   const missingEnv = env.filter((item) => !item.configured).map((item) => item.name)
+  const exposeDiagnostics = shouldExposeDiagnostics(request)
 
   let database: 'ok' | 'error' = 'ok'
   let payloadStatus: 'ok' | 'error' = 'ok'
@@ -36,11 +47,15 @@ export async function GET() {
       service: 'cavalcante-albuquerque-site',
       timestamp: new Date().toISOString(),
       latencyMs: Date.now() - startedAt,
-      checks: {
-        env,
-        database,
-        payload: payloadStatus,
-      },
+      ...(exposeDiagnostics
+        ? {
+            checks: {
+              env,
+              database,
+              payload: payloadStatus,
+            },
+          }
+        : {}),
       ...(!ok ? { error: 'unavailable' } : {}),
     },
     {
@@ -53,6 +68,6 @@ export async function GET() {
 }
 
 export async function HEAD() {
-  const response = await GET()
+  const response = await GET(new Request('http://localhost/api/health'))
   return new Response(null, { status: response.status, headers: response.headers })
 }

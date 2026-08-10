@@ -32,9 +32,9 @@ const plexMono = IBM_Plex_Mono({
 
 
 const navItems = [
-  { href: '/', label: 'Inicio' },
+  { href: '/', label: 'Início' },
   { href: '/sobre', label: 'Sobre' },
-  { href: '/areas-de-atuacao', label: 'Areas de atuacao' },
+  { href: '/areas-de-atuacao', label: 'Áreas de atuação' },
   { href: '/campanhas', label: 'Campanhas' },
   { href: '/blog', label: 'Blog' },
   { href: '/contato', label: 'Contato' },
@@ -73,7 +73,7 @@ export const metadata = {
     template: '%s | Cavalcante Albuquerque',
   },
   description:
-    'Advocacia e consultoria em Natal/RN nas areas de Direito Digital, LGPD, Civil, Consumidor, Imobiliario, Tributario, Licitacoes e Direito Penal.',
+    'Advocacia e consultoria em Natal/RN nas áreas de Direito Digital, LGPD, Civil, Consumidor, Imobiliário, Tributário, Licitações e Direito Penal.',
   keywords: ['advogado natal', 'advocacia natal rn', 'advogado criminalista natal', 'lgpd advogado'],
   openGraph: { type: 'website' as const, locale: 'pt_BR', siteName: 'Cavalcante Albuquerque' },
   robots: { index: true, follow: true },

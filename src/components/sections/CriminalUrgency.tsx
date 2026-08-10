@@ -15,27 +15,27 @@ const urgencyItems = [
   {
     icon: Clock,
     title: 'Resposta imediata',
-    text: 'Atuacao em flagrantes, audiencias de custodia e situacoes que exigem decisao rapida.',
+    text: 'Atuação em flagrantes, audiências de custódia e situações que exigem decisão rápida.',
   },
   {
     icon: ShieldCheck,
-    title: 'Defesa tecnica',
-    text: 'Analise objetiva dos riscos, das provas e das medidas cabiveis desde o primeiro contato.',
+    title: 'Defesa técnica',
+    text: 'Análise objetiva dos riscos, das provas e das medidas cabíveis desde o primeiro contato.',
   },
   {
     icon: HeartHandshake,
     title: 'Sigilo absoluto',
-    text: 'Conducao discreta, linguagem clara e suporte para a familia durante a urgencia.',
+    text: 'Condução discreta, linguagem clara e suporte para a família durante a urgência.',
   },
 ]
 
 export function CriminalUrgency({ cmsData }: CriminalUrgencyProps) {
-  const tag = cmsData?.tag || 'Defesa Criminal | Plantao'
-  const title = cmsData?.title || 'Voce nao esta sozinho.'
-  const highlight = cmsData?.highlight || 'Nos sabemos o que fazer.'
+  const tag = cmsData?.tag || 'Defesa Criminal | Plantão'
+  const title = cmsData?.title || 'Você não está sozinho.'
+  const highlight = cmsData?.highlight || 'Nós sabemos o que fazer.'
   const description =
     cmsData?.description ||
-    'Se voce ou alguem proximo foi preso, intimado ou esta sob investigacao, acione uma defesa tecnica antes de qualquer decisao.'
+    'Se você ou alguém próximo foi preso, intimado ou está sob investigação, acione uma defesa técnica antes de qualquer decisão.'
 
   return (
     <section className="ca-criminal" aria-labelledby="criminal-urgency-title">

@@ -20,7 +20,7 @@ function getInitials(name: string): string {
 
 export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteConfig: any }) {
   const aboutTitle = siteConfig?.aboutTitle || 'Sobre o Escritorio'
-  const aboutSubtitle = siteConfig?.aboutSubtitle || 'Advocacia com estrategia, tecnica e presenca institucional.'
+  const aboutSubtitle = siteConfig?.aboutSubtitle || 'Advocacia com estratégia, técnica e presença institucional.'
   const aboutHistory = siteConfig?.aboutHistory || ''
 
   const timeline = siteConfig?.aboutTimeline?.length
@@ -123,7 +123,7 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
                 <span className="ca-eyebrow">Equipe</span>
                 <h2>Quem conduz o seu caso</h2>
               </div>
-              <p>Atendimento juridico conduzido por profissionais responsaveis pela estrategia, comunicacao e acompanhamento do caso.</p>
+              <p>Atendimento jurídico conduzido por profissionais responsáveis pela estratégia, comunicação e acompanhamento do caso.</p>
             </div>
 
             <div className="ca-about-team__grid">

@@ -29,8 +29,8 @@ export function PracticeAreasGrid({ cmsAreas = [], showTitle = true }: PracticeA
         {showTitle && (
           <div className="ca-section-heading ca-practice__heading">
             <span className="ca-eyebrow">Especialidades</span>
-            <h2 id="practice-title">Areas de atuacao</h2>
-            <p>Atuacao juridica organizada por contexto, urgencia e estrategia processual.</p>
+            <h2 id="practice-title">Áreas de atuação</h2>
+            <p>Atuação jurídica organizada por contexto, urgência e estratégia processual.</p>
           </div>
         )}
 

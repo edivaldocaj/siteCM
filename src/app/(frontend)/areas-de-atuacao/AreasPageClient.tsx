@@ -91,7 +91,7 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
           ) : (
             <div className="ca-empty-state">
               <span className="ca-eyebrow">Conteudo em revisao</span>
-              <h2>Areas de atuacao serao publicadas pelo CMS</h2>
+              <h2>Áreas de atuação serão publicadas pelo CMS</h2>
               <p>Assim que o banco for inicializado e o conteudo aprovado, esta listagem sera exibida automaticamente.</p>
             </div>
           )}
