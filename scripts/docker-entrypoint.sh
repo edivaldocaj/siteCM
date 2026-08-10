@@ -1,29 +1,16 @@
 #!/usr/bin/env sh
 set -eu
 
-echo 'Deploy marker: schema-init-entrypoint-v2'
+echo 'Deploy marker: nonblocking-db-startup-v6'
 
 if [ "${RUN_PREFLIGHT_ON_START:-false}" = "true" ]; then
   echo "Running production preflight..."
-  npm run preflight:production
+  npm run preflight:production || echo "Preflight failed; continuing so the app can expose diagnostics."
 fi
 
 if [ "${RUN_MIGRATIONS_ON_START:-false}" = "true" ] || [ "${BOOTSTRAP_NEW_DB_ON_START:-false}" = "true" ]; then
-  echo "Waiting for database..."
-  node scripts/wait-for-db.cjs
-
-  echo "Initializing Payload schema if database is empty..."
-  npm run schema:init
-fi
-
-if [ "${RUN_MIGRATIONS_ON_START:-false}" = "true" ]; then
-  echo "Applying Payload migrations..."
-  npm run migrate
-fi
-
-if [ "${BOOTSTRAP_NEW_DB_ON_START:-false}" = "true" ]; then
-  echo "Running new database bootstrap..."
-  npm run bootstrap:new-db
+  echo "Starting database preparation in background..."
+  node scripts/db-startup.cjs &
 fi
 
 exec npm run start

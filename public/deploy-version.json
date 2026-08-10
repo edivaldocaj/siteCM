@@ -1,1 +1,1 @@
-{"marker":"live-healthcheck-v5","note":"docker healthcheck no longer depends on database"}
+{"marker":"nonblocking-db-startup-v6","note":"app starts before background database preparation"}
