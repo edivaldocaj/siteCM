@@ -1,1 +1,1 @@
-{"marker":"partial-schema-init-v10","note":"schema init detects missing core tables before migrations"}
+{"marker":"demo-content-seed-v11","note":"adds idempotent demo seed for visual QA"}

@@ -26,7 +26,8 @@
                     "migrate":  "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
                     "release:check":  "node scripts/release-check.cjs",
                     "schema:init":  "node scripts/init-schema-if-empty.cjs",
-                    "schema:push":  "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/schema-push.ts"
+                    "schema:push":  "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/schema-push.ts",
+                    "seed:demo-content":  "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/seed-demo-content.ts"
                 },
     "dependencies":  {
                          "@hookform/resolvers":  "^5.2.2",

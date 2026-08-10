@@ -4,6 +4,7 @@ const { Client } = require('pg')
 const lockKey = 82417031
 const runMigrations = process.env.RUN_MIGRATIONS_ON_START === 'true'
 const runBootstrap = process.env.BOOTSTRAP_NEW_DB_ON_START === 'true'
+const runDemoSeed = process.env.SEED_DEMO_CONTENT_ON_START === 'true'
 
 function run(command, args, options = {}) {
   return new Promise((resolve, reject) => {
@@ -73,7 +74,7 @@ async function withDatabaseLock(fn) {
 }
 
 async function main() {
-  if (!runMigrations && !runBootstrap) {
+  if (!runMigrations && !runBootstrap && !runDemoSeed) {
     console.log('[db:startup] Nenhuma tarefa de banco habilitada.')
     return
   }
@@ -94,6 +95,11 @@ async function main() {
     if (runBootstrap) {
       console.log('[db:startup] Executando bootstrap do banco novo...')
       await run('npm', ['run', 'bootstrap:new-db'])
+    }
+
+    if (runDemoSeed) {
+      console.log('[db:startup] Executando seed demonstrativo...')
+      await run('npm', ['run', 'seed:demo-content'])
     }
   })
 
