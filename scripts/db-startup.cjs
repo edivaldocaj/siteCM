@@ -2,6 +2,7 @@ const { spawn } = require('child_process')
 const { Client } = require('pg')
 
 const lockKey = 82417031
+const runSchemaPush = process.env.RUN_SCHEMA_PUSH_ON_START === 'true'
 const runMigrations = process.env.RUN_MIGRATIONS_ON_START === 'true'
 const runBootstrap = process.env.BOOTSTRAP_NEW_DB_ON_START === 'true'
 const runDemoSeed = process.env.SEED_DEMO_CONTENT_ON_START === 'true'
@@ -75,7 +76,7 @@ async function withDatabaseLock(fn) {
 }
 
 async function main() {
-  if (!runMigrations && !runBootstrap && !runDemoSeed) {
+  if (!runSchemaPush && !runMigrations && !runBootstrap && !runDemoSeed) {
     console.log('[db:startup] Nenhuma tarefa de banco habilitada.')
     return
   }

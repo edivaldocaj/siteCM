@@ -1,1 +1,1 @@
-﻿{"marker":"production-schema-push-v17","note":"runs schema push outside production mode and verifies required tables"}
+﻿{"marker":"schema-push-env-v18","note":"entrypoint honors RUN_SCHEMA_PUSH_ON_START and schema push runs in development mode"}
