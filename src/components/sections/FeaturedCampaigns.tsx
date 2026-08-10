@@ -15,8 +15,8 @@ const categoryLabels: Record<string, string> = {
   consumidor: 'Consumidor',
   digital: 'LGPD / Digital',
   criminal: 'Criminal',
-  imobiliario: 'Imobiliario',
-  tributario: 'Tributario',
+  imobiliario: 'Imobiliário',
+  tributario: 'Tributário',
 }
 
 interface FeaturedCampaignsProps {

@@ -17,14 +17,14 @@ export function RecentPosts({ cmsPosts = [], cmsData }: RecentPostsProps) {
   if (cmsPosts.length === 0) return null
 
   const sectionTitle = cmsData?.title || 'Artigos Recentes'
-  const sectionSubtitle = cmsData?.subtitle || 'Conteudo juridico atualizado para ajudar voce a entender seus direitos.'
+  const sectionSubtitle = cmsData?.subtitle || 'Conteúdo jurídico atualizado para ajudar você a entender seus direitos.'
 
   return (
     <section className="ca-home-editorial" aria-labelledby="recent-posts-title">
       <div className="container-wide mx-auto">
         <div className="ca-section-heading ca-section-heading--split">
           <div>
-            <span className="ca-eyebrow">Blog Juridico</span>
+            <span className="ca-eyebrow">Blog Jurídico</span>
             <h2 id="recent-posts-title">{sectionTitle}</h2>
           </div>
           <p>{sectionSubtitle}</p>
@@ -48,7 +48,7 @@ export function RecentPosts({ cmsPosts = [], cmsData }: RecentPostsProps) {
                   {featuredImageUrl ? (
                     <Image src={featuredImageUrl} alt={post.title} fill sizes="(max-width: 900px) 100vw, 33vw" />
                   ) : (
-                    <Image src="/brand/symbol-mono-light.svg" alt="" width={88} height={88} />
+                    <Image src="/brand/symbol-mono-light.svg" alt="" width={88} height={88} unoptimized />
                   )}
                 </Link>
 

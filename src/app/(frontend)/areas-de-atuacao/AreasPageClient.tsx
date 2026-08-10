@@ -35,10 +35,10 @@ const iconMap: Record<string, any> = {
 }
 
 export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfig: any }) {
-  const practiceTitle = siteConfig?.practiceTitle || 'Areas de Atuacao'
+  const practiceTitle = siteConfig?.practiceTitle || 'Áreas de Atuação'
   const practiceSubtitle =
     siteConfig?.practiceSubtitle ||
-    'Atuacao estrategica em areas essenciais do Direito, com leitura tecnica do caso e comunicacao clara desde o primeiro contato.'
+    'Atuação estratégica em áreas essenciais do Direito, com leitura técnica do caso e comunicação clara desde o primeiro contato.'
   const list = areas.length > 0 ? [...areas] : []
 
   return (
@@ -48,7 +48,7 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
           <Image src="/brand/cover-areas.jpg" alt="" fill sizes="100vw" priority />
         </div>
         <div className="ca-page-hero__mark" aria-hidden="true">
-          <Image src="/brand/symbol-mono-light.svg" alt="" width={360} height={360} />
+          <Image src="/brand/symbol-mono-light.svg" alt="" width={360} height={360} unoptimized />
         </div>
         <div className="container-wide mx-auto ca-page-hero__inner">
           <span className="ca-eyebrow ca-eyebrow--dark">Especialidades</span>
@@ -90,9 +90,9 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
             </div>
           ) : (
             <div className="ca-empty-state">
-              <span className="ca-eyebrow">Conteudo em revisao</span>
+              <span className="ca-eyebrow">Conteúdo em revisão</span>
               <h2>Áreas de atuação serão publicadas pelo CMS</h2>
-              <p>Assim que o banco for inicializado e o conteudo aprovado, esta listagem sera exibida automaticamente.</p>
+              <p>Assim que o banco for inicializado e o conteúdo aprovado, esta listagem será exibida automaticamente.</p>
             </div>
           )}
         </div>

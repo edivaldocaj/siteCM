@@ -38,7 +38,7 @@ export function Footer({
   const address = siteConfig?.contactAddress || 'Rua Francisco Maia Sobrinho, 1950\nLagoa Nova - Natal/RN, 59062-250'
   const areaLinks = practiceAreas.length > 0 ? practiceAreas : [{ href: '/areas-de-atuacao', label: 'Áreas de atuação' }]
   const cmsFooterColumns = footerColumns?.filter((column) => column.title && column.links?.length)
-  const navigationColumn = cmsFooterColumns?.[0] || { title: 'Navegacao', links: navItems }
+  const navigationColumn = cmsFooterColumns?.[0] || { title: 'Navegação', links: navItems }
   const legalColumnLinks = legalLinks?.length
     ? legalLinks
     : [

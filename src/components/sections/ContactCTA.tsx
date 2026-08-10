@@ -65,7 +65,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
   return (
     <section className="ca-contact" aria-labelledby="contact-title">
       <div className="ca-contact__mark" aria-hidden="true">
-        <Image src="/brand/symbol-mono-light.svg" alt="" width={260} height={260} />
+        <Image src="/brand/symbol-mono-light.svg" alt="" width={260} height={260} unoptimized />
       </div>
 
       <div className="container-wide mx-auto ca-contact__inner">
@@ -136,9 +136,9 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
                   <option value="consumidor">Direito do Consumidor</option>
                   <option value="digital">Direito Digital / LGPD</option>
                   <option value="civil">Direito Civil</option>
-                  <option value="imobiliario">Direito Imobiliario</option>
-                  <option value="tributario">Direito Tributario</option>
-                  <option value="licitacoes">Licitacoes</option>
+                  <option value="imobiliario">Direito Imobiliário</option>
+                  <option value="tributario">Direito Tributário</option>
+                  <option value="licitacoes">Licitações</option>
                   <option value="penal">Direito Penal urgente</option>
                   <option value="outro">Outro assunto</option>
                 </select>

@@ -5,12 +5,12 @@ import { AreasPageClient } from './AreasPageClient'
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquerque.com.br').replace(/\/$/, '')
 
 export const metadata = {
-  title: 'Areas de Atuacao',
-  description: 'Conheca as areas de especializacao do Cavalcante Albuquerque: Direito Digital, LGPD, Civil, Consumidor, Imobiliario, Tributario, Licitacoes e Penal.',
+  title: 'Áreas de Atuação',
+  description: 'Conheça as áreas de especialização do Cavalcante Albuquerque: Direito Digital, LGPD, Civil, Consumidor, Imobiliário, Tributário, Licitações e Penal.',
   alternates: { canonical: `${siteUrl}/areas-de-atuacao` },
   openGraph: {
-    title: 'Areas de Atuacao',
-    description: 'Conheca as areas de especializacao do Cavalcante Albuquerque.',
+    title: 'Áreas de Atuação',
+    description: 'Conheça as áreas de especialização do Cavalcante Albuquerque.',
     url: `${siteUrl}/areas-de-atuacao`,
     images: [{ url: `${siteUrl}/brand/cover-areas-og.jpg`, width: 1200, height: 630 }],
   },

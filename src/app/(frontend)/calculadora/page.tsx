@@ -234,7 +234,7 @@ export default function CalculadoraPage() {
       {/* Hero */}
       <div style={{ background: 'linear-gradient(135deg, var(--color-ca-navy-950) 0%, var(--color-ca-navy-800) 100%)', padding: '100px 24px 80px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '-20%', right: '-5%', opacity: 0.03, pointerEvents: 'none' }}>
-          <Image src="/brand/symbol-mono-light.svg" alt="" width={440} height={440} style={{ width: 'min(48vw, 440px)', height: 'auto', display: 'block' }} />
+          <Image src="/brand/symbol-mono-light.svg" alt="" width={440} height={440} style={{ width: 'min(48vw, 440px)', height: 'auto', display: 'block' }} unoptimized />
         </div>
         <div style={{ position: 'relative', zIndex: 10, maxWidth: '640px', margin: '0 auto' }}>
           <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: 'color-mix(in srgb, var(--color-ca-steel-500) 15%, transparent)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>

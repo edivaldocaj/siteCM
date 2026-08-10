@@ -145,9 +145,9 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
                     <option value="consumidor">Direito do Consumidor</option>
                     <option value="digital">Direito Digital / LGPD</option>
                     <option value="civil">Direito Civil</option>
-                    <option value="imobiliario">Direito Imobiliario</option>
-                    <option value="tributario">Direito Tributario</option>
-                    <option value="licitacoes">Licitacoes</option>
+                    <option value="imobiliario">Direito Imobiliário</option>
+                    <option value="tributario">Direito Tributário</option>
+                    <option value="licitacoes">Licitações</option>
                     <option value="penal">Direito Penal urgente</option>
                     <option value="outro">Outro</option>
                   </select>

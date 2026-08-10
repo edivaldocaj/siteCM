@@ -20,15 +20,15 @@ interface NewsSectionProps {
 export function NewsSection({ cmsNews = [], cmsData }: NewsSectionProps) {
   if (cmsNews.length === 0) return null
 
-  const sectionTitle = cmsData?.title || 'Noticias do Direito'
-  const sectionSubtitle = cmsData?.subtitle || 'Atualizacoes relevantes do mundo juridico, selecionadas para leitura rapida.'
+  const sectionTitle = cmsData?.title || 'Notícias do Direito'
+  const sectionSubtitle = cmsData?.subtitle || 'Atualizações relevantes do mundo jurídico, selecionadas para leitura rápida.'
 
   return (
     <section className="ca-news-strip" aria-labelledby="home-news-title">
       <div className="container-wide mx-auto">
         <div className="ca-section-heading ca-section-heading--split">
           <div>
-            <span className="ca-eyebrow">Atualidades Juridicas</span>
+            <span className="ca-eyebrow">Atualidades Jurídicas</span>
             <h2 id="home-news-title">{sectionTitle}</h2>
           </div>
           <p>{sectionSubtitle}</p>
@@ -67,7 +67,7 @@ export function NewsSection({ cmsNews = [], cmsData }: NewsSectionProps) {
                 <div className="ca-news-strip__footer">
                   <small>
                     <Globe size={12} />
-                    {item.source || 'Judiciario'}
+                    {item.source || 'Judiciário'}
                   </small>
                   {linkedCampaignSlug ? (
                     <Link href={`/campanhas/${linkedCampaignSlug}`}>

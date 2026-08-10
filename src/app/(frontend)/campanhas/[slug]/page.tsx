@@ -130,7 +130,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
 
         {/* Brand watermark */}
         <div style={{ position: 'absolute', top: '-20%', right: '-5%', opacity: 0.03, pointerEvents: 'none' }}>
-          <Image src="/brand/symbol-mono-light.svg" alt="" width={520} height={520} style={{ width: 'min(46vw, 520px)', height: 'auto', display: 'block' }} />
+          <Image src="/brand/symbol-mono-light.svg" alt="" width={520} height={520} style={{ width: 'min(46vw, 520px)', height: 'auto', display: 'block' }} unoptimized />
         </div>
 
         <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative', zIndex: 10 }}>

@@ -5,12 +5,12 @@ import { AboutPageClient } from './AboutPageClient'
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquerque.com.br').replace(/\/$/, '')
 
 export const metadata = {
-  title: 'Sobre o Escritorio',
-  description: 'Conheca a historia, valores e equipe do Cavalcante Albuquerque Advocacia e Consultoria.',
+  title: 'Sobre o Escritório',
+  description: 'Conheça a história, valores e equipe do Cavalcante Albuquerque Advocacia e Consultoria.',
   alternates: { canonical: `${siteUrl}/sobre` },
   openGraph: {
-    title: 'Sobre o Escritorio',
-    description: 'Conheca a historia, valores e equipe do Cavalcante Albuquerque Advocacia e Consultoria.',
+    title: 'Sobre o Escritório',
+    description: 'Conheça a história, valores e equipe do Cavalcante Albuquerque Advocacia e Consultoria.',
     url: `${siteUrl}/sobre`,
     images: [{ url: `${siteUrl}/brand/og-default.jpg`, width: 1200, height: 630 }],
   },

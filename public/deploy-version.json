@@ -1,4 +1,4 @@
 {
-  "marker": "legal-copy-polish-v23",
-  "note": "removes legacy contact from legal fallback and polishes CMS legal labels"
+    "marker":  "frontend-polish-assets-v24",
+    "note":  "polishes public Portuguese copy and avoids SVG image optimizer failures"
 }

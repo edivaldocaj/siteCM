@@ -10,7 +10,7 @@ export const AutomationConfig: GlobalConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: 'Noticias',
+          label: 'Notícias',
           fields: [
             { name: 'newsEnabled', type: 'checkbox', label: 'Ativar ingestao de noticias', defaultValue: false },
             { name: 'newsIntervalHours', type: 'number', label: 'Intervalo em horas', defaultValue: 4, min: 1 },

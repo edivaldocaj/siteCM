@@ -23,7 +23,7 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
       <div className="ca-hero__media" aria-hidden="true" />
       <div className="ca-hero__shade" aria-hidden="true" />
       <div className="ca-hero__mark" aria-hidden="true">
-        <Image src="/brand/symbol-mono-light.svg" alt="" width={420} height={420} priority />
+        <Image src="/brand/symbol-mono-light.svg" alt="" width={420} height={420} priority unoptimized />
       </div>
 
       <div className="ca-hero__inner">

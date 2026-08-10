@@ -125,7 +125,7 @@ export function TeamSection({ cmsData, cmsTeam }: TeamSectionProps) {
         </div>
 
         <Link href="/sobre" className="ca-inline-link ca-about-team__link">
-          Conheca nossa historia
+          Conheça nossa história
           <ArrowRight size={16} />
         </Link>
       </div>

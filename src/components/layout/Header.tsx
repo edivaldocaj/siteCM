@@ -106,7 +106,7 @@ export function Header({
           <span className="ca-header__brand-text" aria-hidden="true">Cavalcante Albuquerque</span>
         </Link>
 
-        <nav className="ca-header__nav" aria-label="Navegacao principal">
+        <nav className="ca-header__nav" aria-label="Navegação principal">
           {items.map((link) => (
             <Link key={link.href} href={link.href} className={`ca-header__link ${link.highlight ? 'ca-header__link--highlight' : ''}`}>
               {link.label}
@@ -133,7 +133,7 @@ export function Header({
       </div>
 
       <div id="mobile-navigation" ref={panelRef} className={`ca-header__mobile ${isOpen ? 'ca-header__mobile--open' : ''}`}>
-        <nav aria-label="Navegacao mobile">
+        <nav aria-label="Navegação mobile">
           {items.map((link) => (
             <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="ca-header__mobile-link">
               {link.label}

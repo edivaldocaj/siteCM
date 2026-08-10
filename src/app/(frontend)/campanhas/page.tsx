@@ -25,8 +25,8 @@ const categoryLabels: Record<string, string> = {
   consumidor: 'Consumidor',
   digital: 'LGPD / Digital',
   criminal: 'Criminal',
-  imobiliario: 'Imobiliario',
-  tributario: 'Tributario',
+  imobiliario: 'Imobiliário',
+  tributario: 'Tributário',
 }
 
 export default async function CampanhasPage() {
@@ -49,7 +49,7 @@ export default async function CampanhasPage() {
     <>
       <section className="ca-page-hero ca-page-hero--campaigns">
         <div className="ca-page-hero__mark" aria-hidden="true">
-          <Image src="/brand/symbol-mono-light.svg" alt="" width={360} height={360} />
+          <Image src="/brand/symbol-mono-light.svg" alt="" width={360} height={360} unoptimized />
         </div>
         <div className="container-wide mx-auto ca-page-hero__inner">
           <span className="ca-eyebrow ca-eyebrow--dark">Acoes em andamento</span>
