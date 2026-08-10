@@ -1,7 +1,7 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
-import { Newspaper, RefreshCw, CheckCircle, AlertCircle, Image, ArrowRight } from 'lucide-react'
+import { AlertCircle, ArrowRight, BarChart3, CalendarDays, CheckCircle, FileText, Image, KanbanSquare, Newspaper, RefreshCw } from 'lucide-react'
 import Link from 'next/link'
 
 export default function AdminToolsPage() {
@@ -22,12 +22,16 @@ export default function AdminToolsPage() {
       const data = await res.json()
       if (!res.ok) setError(data.error || 'Erro ao buscar notícias')
       else setResult(data)
-    } catch { setError('Erro de conexão.') }
-    finally { setLoading(false) }
+    } catch {
+      setError('Erro de conexão.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function revalidatePages() {
     setLoading(true)
+    setError('')
     try {
       const res = await fetch('/api/revalidate', {
         method: 'POST',
@@ -36,65 +40,73 @@ export default function AdminToolsPage() {
         body: JSON.stringify({ collection: 'news-articles' }),
       })
       const data = await res.json()
-      if (data.revalidated) setResult({ message: 'Cache das páginas atualizado com sucesso!' })
-    } catch { setError('Erro ao revalidar páginas') }
-    finally { setLoading(false) }
+      if (!res.ok) setError(data.error || 'Erro ao revalidar páginas')
+      else if (data.revalidated) setResult({ message: 'Cache das páginas atualizado com sucesso.' })
+    } catch {
+      setError('Erro ao revalidar páginas')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const modules = [
-    { href: '/admin-tools/analytics', title: 'Analytics de Campanhas', desc: 'Views, leads, conversões e taxa de cada campanha em tempo real.', color: '#60a5fa', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> },
-    { href: '/admin-tools/cards', title: 'Gerador de Cards', desc: 'Crie cards 1080×1080 e 1080×1920 com o branding Cavalcante Albuquerque.', color: 'var(--color-ca-steel-500)', icon: <Image style={{ width: '24px', height: '24px', color: 'var(--color-ca-steel-500)' }} /> },
-    { href: '/admin-tools/leads-kanban', title: 'Kanban de Leads', desc: 'Pipeline visual: Novo → Contatado → Qualificado → Convertido.', color: '#25D366', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2"><rect x="3" y="3" width="6" height="18" rx="1"/><rect x="11" y="3" width="6" height="12" rx="1"/><rect x="19" y="3" width="2" height="8" rx="1"/></svg> },
-    { href: '/admin-tools/dashboard', title: 'Dashboard Gerencial', desc: 'KPIs: leads/mês, conversão, NPS, prazos, performance por advogado.', color: '#8b5cf6', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg> },
-    { href: '/admin-tools/deadlines', title: 'Calendário de Prazos', desc: 'Prazos processuais com alertas escalonados (7d, 3d, 1d).', color: '#ea580c', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ea580c" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> },
-    { href: '/admin-tools/petition-generator', title: 'Gerador de Petições IA', desc: 'Minutas via Claude API + banco de jurisprudência.', color: 'var(--color-ca-steel-500)', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-ca-steel-500)" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> },
+    { href: '/admin-tools/analytics', title: 'Analytics de Campanhas', desc: 'Views, leads, conversões e taxa de cada campanha em tempo real.', color: '#60a5fa', icon: BarChart3 },
+    { href: '/admin-tools/cards', title: 'Gerador de Cards', desc: 'Crie cards 1080x1080 e 1080x1920 com o branding Cavalcante Albuquerque.', color: 'var(--color-ca-steel-500)', icon: Image },
+    { href: '/admin-tools/leads-kanban', title: 'Kanban de Leads', desc: 'Pipeline visual: Novo, Contatado, Qualificado e Convertido.', color: '#25D366', icon: KanbanSquare },
+    { href: '/admin-tools/dashboard', title: 'Dashboard Gerencial', desc: 'KPIs de leads, conversão, NPS, prazos e performance por advogado.', color: '#8b5cf6', icon: BarChart3 },
+    { href: '/admin-tools/deadlines', title: 'Calendário de Prazos', desc: 'Prazos processuais com alertas escalonados em 7d, 3d e 1d.', color: '#ea580c', icon: CalendarDays },
+    { href: '/admin-tools/petition-generator', title: 'Gerador de Petições IA', desc: 'Minutas assistidas por IA com banco de jurisprudência.', color: 'var(--color-ca-steel-500)', icon: FileText },
   ]
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-ca-navy-950)', padding: '32px' }}>
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '860px', margin: '0 auto' }}>
         <div style={{ marginBottom: '40px' }}>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '32px', color: 'var(--color-ca-platinum-100)', marginBottom: '8px' }}>Ferramentas Admin</h1>
-          <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px' }}>Cavalcante Albuquerque — Gerenciamento do Site</p>
+          <h1 style={{ fontFamily: 'var(--font-cormorant)', fontSize: '32px', color: 'var(--color-ca-platinum-100)', marginBottom: '8px' }}>Ferramentas Admin</h1>
+          <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px' }}>Cavalcante Albuquerque - gerenciamento do site</p>
           <div style={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
-            <a href="/admin" style={{ color: 'var(--color-ca-steel-500)', fontSize: '13px', textDecoration: 'none' }}>← Voltar ao CMS</a>
-            <a href="/" style={{ color: 'var(--color-ca-steel-400)', fontSize: '13px', textDecoration: 'none' }}>← Voltar ao Site</a>
+            <a href="/admin" style={{ color: 'var(--color-ca-steel-500)', fontSize: '13px', textDecoration: 'none' }}>Voltar ao CMS</a>
+            <a href="/" style={{ color: 'var(--color-ca-steel-400)', fontSize: '13px', textDecoration: 'none' }}>Voltar ao site</a>
           </div>
         </div>
 
-        {modules.map(m => (
-          <Link key={m.href} href={m.href} style={{ textDecoration: 'none', display: 'block', marginBottom: '24px' }}>
-            <div style={{ background: `linear-gradient(135deg, ${m.color}18, ${m.color}08)`, border: `1px solid ${m.color}50`, borderRadius: '8px', padding: '32px', cursor: 'pointer' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: `${m.color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{m.icon}</div>
-                  <div>
-                    <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '20px', color: 'var(--color-ca-platinum-100)', margin: 0, marginBottom: '4px' }}>{m.title}</h2>
-                    <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px', margin: 0 }}>{m.desc}</p>
+        {modules.map((module) => {
+          const Icon = module.icon
+          return (
+            <Link key={module.href} href={module.href} style={{ textDecoration: 'none', display: 'block', marginBottom: '20px' }}>
+              <div style={{ background: `linear-gradient(135deg, ${module.color}18, ${module.color}08)`, border: `1px solid ${module.color}50`, borderRadius: '8px', padding: '28px', cursor: 'pointer' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: `${module.color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Icon style={{ width: '24px', height: '24px', color: module.color }} aria-hidden="true" />
+                    </div>
+                    <div>
+                      <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: '20px', color: 'var(--color-ca-platinum-100)', margin: 0, marginBottom: '4px' }}>{module.title}</h2>
+                      <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px', margin: 0 }}>{module.desc}</p>
+                    </div>
                   </div>
+                  <ArrowRight style={{ width: '20px', height: '20px', color: module.color, flexShrink: 0 }} aria-hidden="true" />
                 </div>
-                <ArrowRight style={{ width: '20px', height: '20px', color: m.color, flexShrink: 0 }} />
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          )
+        })}
 
-        {/* Buscar Notícias */}
-        <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '32px', marginBottom: '24px' }}>
+        <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '28px', marginBottom: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-            <Newspaper style={{ width: '24px', height: '24px', color: 'var(--color-ca-steel-500)' }} />
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '20px', color: 'var(--color-ca-platinum-100)', margin: 0 }}>Buscar Notícias Jurídicas</h2>
+            <Newspaper style={{ width: '24px', height: '24px', color: 'var(--color-ca-steel-500)' }} aria-hidden="true" />
+            <h2 style={{ fontFamily: 'var(--font-cormorant)', fontSize: '20px', color: 'var(--color-ca-platinum-100)', margin: 0 }}>Buscar notícias jurídicas</h2>
           </div>
           <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px', marginBottom: '20px', lineHeight: '1.6' }}>
-            Busca notícias de <strong style={{ color: 'var(--color-ca-platinum-100)' }}>Conjur</strong>, <strong style={{ color: 'var(--color-ca-platinum-100)' }}>Migalhas</strong> e <strong style={{ color: 'var(--color-ca-platinum-100)' }}>Google News</strong>.
+            Busca notícias de Conjur, Migalhas e Google News para triagem editorial no CMS.
           </p>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <button onClick={fetchNews} disabled={loading} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: '#25D366', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '14px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.5 : 1 }}>
-              <RefreshCw style={{ width: '16px', height: '16px', animation: loading ? 'spin 1s linear infinite' : 'none' }} />
-              {loading ? 'Buscando...' : 'Buscar Notícias Agora'}
+            <button onClick={fetchNews} disabled={loading} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: '#25D366', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '14px', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.5 : 1 }}>
+              <RefreshCw style={{ width: '16px', height: '16px', animation: loading ? 'spin 1s linear infinite' : 'none' }} aria-hidden="true" />
+              {loading ? 'Buscando...' : 'Buscar notícias agora'}
             </button>
-            <button onClick={revalidatePages} disabled={loading} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: 'transparent', color: 'var(--color-ca-steel-400)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '4px', fontSize: '14px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.5 : 1 }}>
-              Atualizar Cache do Site
+            <button onClick={revalidatePages} disabled={loading} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: 'transparent', color: 'var(--color-ca-steel-400)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '4px', fontSize: '14px', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.5 : 1 }}>
+              Atualizar cache do site
             </button>
           </div>
         </div>
@@ -102,13 +114,13 @@ export default function AdminToolsPage() {
         {result && (
           <div style={{ background: 'rgba(37,211,102,0.1)', border: '1px solid rgba(37,211,102,0.3)', borderRadius: '8px', padding: '24px', marginBottom: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-              <CheckCircle style={{ width: '20px', height: '20px', color: '#25D366' }} />
-              <strong style={{ color: '#25D366', fontSize: '14px' }}>Sucesso!</strong>
+              <CheckCircle style={{ width: '20px', height: '20px', color: '#25D366' }} aria-hidden="true" />
+              <strong style={{ color: '#25D366', fontSize: '14px' }}>Sucesso</strong>
             </div>
             {result.message ? <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px' }}>{result.message}</p> : (
               <div style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px', lineHeight: '1.8' }}>
                 <p>Notícias encontradas: <strong style={{ color: 'var(--color-ca-platinum-100)' }}>{result.fetched || 0}</strong></p>
-                <p>Notícias salvas (novas): <strong style={{ color: 'var(--color-ca-platinum-100)' }}>{result.saved || 0}</strong></p>
+                <p>Notícias salvas: <strong style={{ color: 'var(--color-ca-platinum-100)' }}>{result.saved || 0}</strong></p>
               </div>
             )}
           </div>
@@ -117,7 +129,7 @@ export default function AdminToolsPage() {
         {error && (
           <div style={{ background: 'rgba(122,27,27,0.2)', border: '1px solid rgba(122,27,27,0.5)', borderRadius: '8px', padding: '24px', marginBottom: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <AlertCircle style={{ width: '20px', height: '20px', color: '#dc2626' }} />
+              <AlertCircle style={{ width: '20px', height: '20px', color: '#dc2626' }} aria-hidden="true" />
               <strong style={{ color: '#dc2626', fontSize: '14px' }}>{error}</strong>
             </div>
           </div>
@@ -127,5 +139,3 @@ export default function AdminToolsPage() {
     </div>
   )
 }
-
-

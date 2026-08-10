@@ -66,6 +66,54 @@ async function getLayoutData() {
     return { siteConfig: null, navigation: null, practiceAreas: [] }
   }
 }
+function buildStructuredData(siteConfig: any) {
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquerque.com.br').replace(/\/$/, '')
+  const phone = siteConfig?.contactPhone || '(84) 99124-3985'
+  const email = siteConfig?.contactEmail || 'contato@cavalcantealbuquerque.com.br'
+  const address = siteConfig?.contactAddress || 'Rua Francisco Maia Sobrinho, 1950, Lagoa Nova, Natal/RN, 59062-250'
+
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'LegalService',
+      '@id': `${siteUrl}/#legal-service`,
+      name: 'Cavalcante Albuquerque Advocacia e Consultoria',
+      url: siteUrl,
+      image: `${siteUrl}/brand/og-default.jpg`,
+      logo: `${siteUrl}/brand/lockup-dark.webp`,
+      telephone: phone,
+      email,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: address,
+        addressLocality: 'Natal',
+        addressRegion: 'RN',
+        postalCode: '59062-250',
+        addressCountry: 'BR',
+      },
+      areaServed: ['Natal', 'Rio Grande do Norte', 'Brasil'],
+      priceRange: '$$',
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+          opens: '08:00',
+          closes: '18:00',
+        },
+      ],
+      sameAs: [],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
+      name: 'Cavalcante Albuquerque',
+      inLanguage: 'pt-BR',
+      publisher: { '@id': `${siteUrl}/#legal-service` },
+    },
+  ]
+}
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquerque.com.br'),
   title: {
@@ -88,10 +136,15 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   const { siteConfig, navigation, practiceAreas } = await getLayoutData()
   const headerItems = navigation?.headerLinks?.length ? navigation.headerLinks : navItems
   const footerNavItems = headerItems.filter((item: any) => item.href !== '/')
+  const structuredData = buildStructuredData(siteConfig)
 
   return (
     <html lang="pt-BR" className={`${cormorant.variable} ${instrument.variable} ${plexMono.variable}`}>
       <body className="ca-app-body ca-surface-light">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <Header items={headerItems} whatsappNumber={siteConfig?.contactPhone} ctaLabel={navigation?.ctaLabel} ctaHref={navigation?.ctaHref} />
         <main className="ca-main">{children}</main>
         <Footer siteConfig={siteConfig} practiceAreas={practiceAreas} navItems={footerNavItems} footerColumns={navigation?.footerColumns} legalLinks={navigation?.legalLinks} />
