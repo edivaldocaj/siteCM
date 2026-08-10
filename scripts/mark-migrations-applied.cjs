@@ -45,10 +45,16 @@ async function main() {
 
     let inserted = 0
     for (const name of names) {
+      const existing = await client.query(
+        'select 1 from "payload_migrations" where "name" = $1::varchar limit 1',
+        [name],
+      )
+
+      if (existing.rowCount && existing.rowCount > 0) continue
+
       const result = await client.query(
         `insert into "payload_migrations" ("name", "batch", "updated_at", "created_at")
-         select $1, $2, now(), now()
-         where not exists (select 1 from "payload_migrations" where "name" = $1)`,
+         values ($1::varchar, $2::numeric, now(), now())`,
         [name, batch],
       )
       inserted += result.rowCount || 0

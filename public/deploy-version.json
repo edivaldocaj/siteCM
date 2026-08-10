@@ -1,1 +1,1 @@
-﻿{"marker":"migration-marker-casts-v15","note":"casts migration marker parameters for postgres compatibility"}
+﻿{"marker":"migration-marker-two-step-v16","note":"marks migrations with separate select/insert and does not block app after schema sync"}

@@ -95,7 +95,11 @@ async function main() {
         await run('npm', ['run', 'migrate'])
       } else {
         console.log('[db:startup] Schema atual sincronizado; registrando migrations como aplicadas para evitar replay sobre banco novo...')
-        await run('npm', ['run', 'migrations:mark-applied'])
+        try {
+          await run('npm', ['run', 'migrations:mark-applied'])
+        } catch (error) {
+          console.error('[db:startup] Falha ao registrar migrations como aplicadas; seguindo porque o schema ja foi sincronizado:', error)
+        }
       }
     }
 
