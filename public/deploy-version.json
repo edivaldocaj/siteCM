@@ -1,1 +1,1 @@
-{"marker":"schema-init-exit-healthcheck-v3","note":"schema push exits cleanly and healthcheck waits for first boot"}
+{"marker":"healthcheck-port-v4","note":"docker healthcheck follows runtime PORT"}
