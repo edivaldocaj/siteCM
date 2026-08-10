@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { shouldSkipPayloadDuringBuild } from '@/lib/runtime-flags'
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquerque.com.br').replace(/\/$/, '')
 
@@ -15,6 +16,8 @@ function entry(path: string, lastModified?: string | Date): MetadataRoute.Sitema
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routes: MetadataRoute.Sitemap = staticRoutes.map((route) => entry(route))
+
+  if (shouldSkipPayloadDuringBuild()) return routes
 
   try {
     const payload = await getPayload({ config: configPromise })

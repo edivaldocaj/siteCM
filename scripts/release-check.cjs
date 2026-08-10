@@ -39,7 +39,8 @@ const steps = [
 
 for (const [label, command, args] of steps) {
   console.log(`\n== ${label} ==`)
-  const result = spawnSync(command, args, { stdio: 'inherit', shell: process.platform === 'win32' })
+  const env = label === 'Build' ? { ...process.env, SKIP_DB_DURING_BUILD: 'true' } : process.env
+  const result = spawnSync(command, args, { stdio: 'inherit', shell: process.platform === 'win32', env })
   if (result.status !== 0) {
     console.error(`\nFalhou: ${label}`)
     process.exit(result.status || 1)

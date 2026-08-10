@@ -1,4 +1,4 @@
-﻿import React from 'react'
+import React from 'react'
 import '../../styles/globals.css'
 import { Cormorant_Garamond, IBM_Plex_Mono, Instrument_Sans } from 'next/font/google'
 import { Header } from '@/components/layout/Header'
@@ -7,6 +7,7 @@ import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
 import { CookieConsent } from '@/components/ui/CookieConsent'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { shouldSkipPayloadDuringBuild } from '@/lib/runtime-flags'
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -40,6 +41,10 @@ const navItems = [
 ]
 
 async function getLayoutData() {
+  if (shouldSkipPayloadDuringBuild()) {
+    return { siteConfig: null, navigation: null, practiceAreas: [] }
+  }
+
   try {
     const payload = await getPayload({ config: configPromise })
     const [siteConfig, navigation, areasRes] = await Promise.all([

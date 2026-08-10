@@ -11,6 +11,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV SKIP_DB_DURING_BUILD=true
 ARG DATABASE_URL=postgres://postgres:postgres@localhost:5432/payload_build
 ARG PAYLOAD_SECRET=build_time_secret_replace_at_runtime
 ENV DATABASE_URL=$DATABASE_URL
