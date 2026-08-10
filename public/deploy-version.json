@@ -1,1 +1,1 @@
-{"marker":"nonblocking-db-startup-v6","note":"app starts before background database preparation"}
+{"marker":"fast-runner-image-v8","note":"removed recursive chown from Docker build"}
