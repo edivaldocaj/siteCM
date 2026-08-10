@@ -1,4 +1,4 @@
-﻿import { postgresAdapter } from '@payloadcms/db-postgres'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -85,7 +85,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
-    push: false,
+    push: process.env.PAYLOAD_DB_PUSH === 'true',
   }),
   sharp,
   plugins: [],

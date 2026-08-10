@@ -6,9 +6,14 @@ if [ "${RUN_PREFLIGHT_ON_START:-false}" = "true" ]; then
   npm run preflight:production
 fi
 
-if [ "${RUN_MIGRATIONS_ON_START:-false}" = "true" ] || [ "${BOOTSTRAP_NEW_DB_ON_START:-false}" = "true" ]; then
+if [ "${RUN_SCHEMA_PUSH_ON_START:-false}" = "true" ] || [ "${RUN_MIGRATIONS_ON_START:-false}" = "true" ] || [ "${BOOTSTRAP_NEW_DB_ON_START:-false}" = "true" ]; then
   echo "Waiting for database..."
   node scripts/wait-for-db.cjs
+fi
+
+if [ "${RUN_SCHEMA_PUSH_ON_START:-false}" = "true" ]; then
+  echo "Initializing Payload schema if database is empty..."
+  npm run schema:init
 fi
 
 if [ "${RUN_MIGRATIONS_ON_START:-false}" = "true" ]; then
