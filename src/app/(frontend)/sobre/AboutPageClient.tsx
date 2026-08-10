@@ -71,8 +71,8 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
           <div className="container-wide mx-auto ca-story__inner">
             {aboutHistory && (
               <div className="ca-story__copy">
-                <span className="ca-eyebrow">Trajetoria</span>
-                <h2>Nossa historia</h2>
+                <span className="ca-eyebrow">Trajetória</span>
+                <h2>Nossa história</h2>
                 <p>{aboutHistory}</p>
               </div>
             )}
@@ -96,7 +96,7 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
         <section className="ca-values">
           <div className="container-wide mx-auto">
             <div className="ca-section-heading">
-              <span className="ca-eyebrow">Principios</span>
+              <span className="ca-eyebrow">Princípios</span>
               <h2>Nossos valores</h2>
             </div>
             <div className="ca-values__grid">

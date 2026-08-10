@@ -526,34 +526,8 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   max-width: 760px;
 }
 
-.ca-hero__lockup {
-  width: clamp(220px, 28vw, 330px);
-  height: auto;
-  display: block;
-  margin-bottom: 40px;
-}
-
-.ca-hero__rule {
-  display: flex;
-  align-items: end;
-  gap: 6px;
-  height: 30px;
-  margin-bottom: 22px;
-}
-
-.ca-hero__rule span {
-  display: block;
-  width: 6px;
-  border-radius: 1px;
-  background: var(--ca-gradient-steel);
-}
-
-.ca-hero__rule span:nth-child(1) { height: 10px; opacity: 0.7; }
-.ca-hero__rule span:nth-child(2) { height: 18px; opacity: 0.85; }
-.ca-hero__rule span:nth-child(3) { height: 28px; }
-
 .ca-hero__eyebrow {
-  margin: 0 0 20px;
+  margin: 0 0 24px;
   color: var(--color-ca-steel-400);
   font-family: var(--font-data);
   font-size: 0.78rem;
@@ -861,8 +835,8 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   .ca-trust__grid,
   .ca-practice__grid { grid-template-columns: 1fr; }
   .ca-hero__signals div { min-height: auto; }
-  .ca-hero__mark { align-items: flex-start; padding-top: 140px; opacity: 0.06; }
-  .ca-hero__mark img { width: 86vw; }
+  .ca-hero__mark { align-items: center; padding-top: 110px; opacity: 0.055; }
+  .ca-hero__mark img { width: 72vw; }
   .ca-practice-card { min-height: 280px; }
 }
 
@@ -1377,10 +1351,16 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 
 .ca-page-hero__mark {
   position: absolute;
-  right: clamp(-110px, -6vw, -40px);
-  bottom: -90px;
-  opacity: 0.07;
+  right: clamp(24px, 5vw, 80px);
+  bottom: clamp(28px, 5vw, 72px);
+  opacity: 0.08;
   pointer-events: none;
+}
+
+.ca-page-hero__mark img {
+  display: block;
+  width: clamp(180px, 24vw, 320px);
+  height: auto;
 }
 
 .ca-page-hero__inner {

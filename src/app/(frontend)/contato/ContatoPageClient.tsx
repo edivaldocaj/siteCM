@@ -62,13 +62,13 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
         <div className="container-wide mx-auto ca-page-hero__inner">
           <span className="ca-eyebrow ca-eyebrow--dark">Fale conosco</span>
           <h1>Contato</h1>
-          <p>Entre em contato pelo formulario, WhatsApp ou pelos canais institucionais do escritorio.</p>
+          <p>Entre em contato pelo formulário, WhatsApp ou pelos canais institucionais do escritório.</p>
         </div>
       </section>
 
       <section className="ca-contact-page">
         <div className="container-wide mx-auto ca-contact-page__grid">
-          <aside className="ca-contact-page__info" aria-label="Informacoes de contato">
+          <aside className="ca-contact-page__info" aria-label="Informações de contato">
             <span className="ca-eyebrow">Canais</span>
             <h2>Atendimento objetivo desde o primeiro contato</h2>
 
@@ -76,7 +76,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
               <article>
                 <MapPin size={21} />
                 <div>
-                  <h3>Endereco</h3>
+                  <h3>Endereço</h3>
                   <p>{contactAddress}</p>
                 </div>
               </article>
@@ -97,8 +97,8 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
               <article>
                 <Clock size={21} />
                 <div>
-                  <h3>Horario</h3>
-                  <p>Segunda a sexta, 8h as 18h. Penal: atendimento emergencial.</p>
+                  <h3>Horário</h3>
+                  <p>Segunda a sexta, 8h às 18h. Penal: atendimento emergencial.</p>
                 </div>
               </article>
             </div>
@@ -119,7 +119,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
               <div className="ca-contact-page__success">
                 <CheckCircle size={54} />
                 <h2>Mensagem enviada</h2>
-                <p>Nossa equipe recebeu sua solicitacao e retornara pelos dados informados.</p>
+                <p>Nossa equipe recebeu sua solicitação e retornará pelos dados informados.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="ca-contact-page__form">

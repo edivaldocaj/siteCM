@@ -30,23 +30,6 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
 
       <div className="ca-hero__inner">
         <div className="ca-hero__content">
-          <div className="ca-hero__brand-lockup">
-            <Image
-              src="/brand/lockup-light.webp"
-              alt="Cavalcante Albuquerque"
-              width={330}
-              height={83}
-              className="ca-hero__lockup"
-              priority
-            />
-          </div>
-
-          <div className="ca-hero__rule" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </div>
-
           <p className="ca-hero__eyebrow">Advocacia e Consultoria - Natal/RN</p>
 
           <h1 id="home-hero-title" className="ca-hero__title">
