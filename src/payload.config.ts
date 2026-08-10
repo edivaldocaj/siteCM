@@ -40,6 +40,7 @@ export default buildConfig({
         Logo: '/components/admin/BrandLogo',
         Icon: '/components/admin/BrandIcon',
       },
+      afterNavLinks: ['/components/admin/AdminToolsLink'],
     },
     importMap: {
       baseDir: path.resolve(dirname),

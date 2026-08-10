@@ -1,4 +1,4 @@
 {
-    "marker":  "frontend-polish-assets-v24",
-    "note":  "polishes public Portuguese copy and avoids SVG image optimizer failures"
+  "marker": "admin-tools-link-v25",
+  "note": "adds Payload admin navigation link to admin-tools and keeps brand image fixes"
 }
