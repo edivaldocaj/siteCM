@@ -5,7 +5,7 @@ const intervalMs = 1000
 const databaseUrl = process.env.DATABASE_URL
 
 if (!databaseUrl) {
-  console.error('DATABASE_URL nao configurado; nao e possivel aguardar banco.')
+  console.error('DATABASE_URL não configurado; não é possível aguardar banco.')
   process.exit(1)
 }
 

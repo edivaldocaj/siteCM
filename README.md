@@ -14,7 +14,7 @@ npm run build
 ## Observacoes
 
 - Dados institucionais juridicamente sensiveis que ainda dependem de confirmacao devem permanecer como `__PENDENTE__` no CMS.
-- Nao rode migracoes destrutivas sem backup verificado.
+- Não rode migrações destrutivas sem backup verificado.
 - Use `overrideAccess: false` ao passar `user` para a Local API do Payload.
 
 ## Subir com banco novo
@@ -65,9 +65,9 @@ npm run build
 npm run start
 ```
 
-Dados juridicos/institucionais nao confirmados ficam como `__PENDENTE__` para revisao no painel.
+Dados jurídicos/institucionais não confirmados ficam como `__PENDENTE__` para revisao no painel.
 
-Em Docker/Easypanel, também é possível usar temporariamente `RUN_PREFLIGHT_ON_START=true`, `RUN_SCHEMA_PUSH_ON_START=true`, `BOOTSTRAP_NEW_DB_ON_START=true` e `SEED_DEMO_CONTENT_ON_START=true` na primeira subida. Mantenha `DB_STARTUP_STRICT=false` para evitar 502 se o preparo falhar. Depois do primeiro acesso ao `/admin`, volte `BOOTSTRAP_NEW_DB_ON_START`, `SEED_DEMO_CONTENT_ON_START` e `RUN_SCHEMA_PUSH_ON_START` para `false`.
+Em Docker/Easypanel, também é possível usar temporáriamente `RUN_PREFLIGHT_ON_START=true`, `RUN_SCHEMA_PUSH_ON_START=true`, `BOOTSTRAP_NEW_DB_ON_START=true` e `SEED_DEMO_CONTENT_ON_START=true` na primeira subida. Mantenha `DB_STARTUP_STRICT=false` para evitar 502 se o preparo falhar. Depois do primeiro acesso ao `/admin`, volte `BOOTSTRAP_NEW_DB_ON_START`, `SEED_DEMO_CONTENT_ON_START` e `RUN_SCHEMA_PUSH_ON_START` para `false`.
 
 ## Exportar banco atual sem perder dados
 

@@ -48,7 +48,7 @@ O bootstrap pode ser repetido. Ele atualiza dados iniciais por slug/e-mail e nao
 
 ## Opcao automatica no primeiro start Docker
 
-Se quiser que o container rode as etapas iniciais sozinho na primeira subida, configure temporariamente:
+Se quiser que o container rode as etapas iniciais sozinho na primeira subida, configure temporáriamente:
 
 ```bash
 RUN_PREFLIGHT_ON_START=true
@@ -60,7 +60,7 @@ ADMIN_EMAIL=seu-email@dominio.com
 ADMIN_PASSWORD=senha-forte
 ```
 
-Depois que o bootstrap concluir e voce conseguir acessar o /admin, volte pelo menos estas variaveis para false:
+Depois que o bootstrap concluir e você conseguir acessar o /admin, volte pelo menos estas variáveis para false:
 
 ```bash
 BOOTSTRAP_NEW_DB_ON_START=false
@@ -88,16 +88,16 @@ Resultado esperado para `/api/live`: HTTP 200 e `status: "ok"`. Resultado espera
 
 ## Primeira revisao no CMS
 
-No painel `/admin`, revisar e substituir todos os campos `__PENDENTE__` antes de considerar o site pronto para divulgacao:
+No painel `/admin`, revisar e substituir todos os campos `__PENDENTE__` antes de considerar o site pronto para divulgação:
 
 - Identidade Institucional: razao social, CNPJ, OAB/RN, titular, DPO e endereco.
 - Configuracoes Gerais do Site: contato, textos principais e endereco.
 - Pagina Inicial: equipe, historia e textos comerciais.
 - Areas de atuacao: conteudo completo, FAQ e SEO.
-- Politica de privacidade, termos de uso e politica de cookies.
+- Política de privacidade, termos de uso e política de cookies.
 
 ## Notas
 
 - O banco antigo pode ficar separado como backup historico.
-- Nao rode `bootstrap:new-db` com senha fraca ou temporaria em ambiente publico.
+- Não rode `bootstrap:new-db` com senha fraca ou temporária em ambiente público.
 - O endpoint `/api/news-feed` aceita `Authorization: Bearer $CRON_SECRET`.

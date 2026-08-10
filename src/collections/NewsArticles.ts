@@ -84,7 +84,7 @@ export const NewsArticles: CollectionConfig = {
         { label: 'Direito Penal', value: 'direito-penal' },
         { label: 'LGPD', value: 'lgpd' },
         { label: 'Legislação', value: 'legislacao' },
-        { label: 'Licitacoes', value: 'licitacoes' },
+        { label: 'Licitações', value: 'licitacoes' },
         { label: 'STF / STJ', value: 'tribunais' },
         { label: 'Geral', value: 'geral' },
       ],

@@ -242,12 +242,12 @@ async function seedPracticeAreas(payload: PayloadInstance) {
       caseTypes: ['Fraude bancária', 'Negativação indevida', 'Cobrança abusiva', 'Produto com defeito'],
     },
     {
-      title: 'Direito Imobiliario', slug: 'direito-imobiliario', icon: 'home', order: 4,
+      title: 'Direito Imobiliário', slug: 'direito-imobiliario', icon: 'home', order: 4,
       shortDescription: 'Compra e venda, locação, posse, propriedade, regularização e conflitos condominiais.',
       caseTypes: ['Contrato imobiliário', 'Locação', 'Usucapião', 'Condomínio'],
     },
     {
-      title: 'Direito Tributario', slug: 'direito-tributario', icon: 'receipt', order: 5,
+      title: 'Direito Tributário', slug: 'direito-tributario', icon: 'receipt', order: 5,
       shortDescription: 'Consultoria, defesa administrativa, execuções fiscais e planejamento tributário.',
       caseTypes: ['Execução fiscal', 'Defesa administrativa', 'Parcelamento', 'Planejamento'],
     },

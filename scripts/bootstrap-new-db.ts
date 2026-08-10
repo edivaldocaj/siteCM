@@ -5,7 +5,7 @@ const pending = '__PENDENTE__'
 
 function requiredEnv(name: string) {
   const value = process.env[name]
-  if (!value) throw new Error(`${name} nao configurado`)
+  if (!value) throw new Error(`${name} não configurado`)
   return value
 }
 
@@ -206,8 +206,8 @@ async function seedPracticeAreas(payload: any) {
     ['Direito Digital e LGPD', 'direito-digital', 'shield', 'Atuação em proteção de dados, privacidade, plataformas digitais e conflitos envolvendo tecnologia.'],
     ['Direito Civil', 'direito-civil', 'scale', 'Atuação em contratos, responsabilidade civil, obrigações e conflitos patrimoniais.'],
     ['Direito do Consumidor', 'direito-consumidor', 'shopping-bag', 'Atuação em relações de consumo, bancos, serviços, cobranças e indenizações.'],
-    ['Direito Imobiliario', 'direito-imobiliario', 'home', 'Atuação em contratos imobiliários, posse, propriedade, locação e regularização.'],
-    ['Direito Tributario', 'direito-tributario', 'receipt', 'Consultoria e contencioso tributário para pessoas físicas e empresas.'],
+    ['Direito Imobiliário', 'direito-imobiliario', 'home', 'Atuação em contratos imobiliários, posse, propriedade, locação e regularização.'],
+    ['Direito Tributário', 'direito-tributario', 'receipt', 'Consultoria e contencioso tributário para pessoas físicas e empresas.'],
     ['Licitações e Contratos Administrativos', 'licitacoes', 'file-text', 'Apoio jurídico em licitações, contratos públicos e relações com a administração.'],
     ['Direito Penal', 'direito-penal', 'gavel', 'Defesa técnica em demandas criminais e atendimento em situações urgentes.'],
   ] as const

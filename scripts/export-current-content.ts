@@ -101,7 +101,7 @@ async function main() {
   )
 
   console.log(`Export concluido: ${target}`)
-  console.log('Me envie a pasta compactada junto com full.dump/data-only.sql se voce tambem rodar export-current-db.ps1.')
+  console.log('Me envie a pasta compactada junto com full.dump/data-only.sql se você também rodar export-current-db.ps1.')
 }
 
 main().catch((error) => {

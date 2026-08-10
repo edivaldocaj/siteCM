@@ -19,7 +19,7 @@ function getInitials(name: string): string {
 }
 
 export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteConfig: any }) {
-  const aboutTitle = siteConfig?.aboutTitle || 'Sobre o Escritorio'
+  const aboutTitle = siteConfig?.aboutTitle || 'Sobre o Escritório'
   const aboutSubtitle = siteConfig?.aboutSubtitle || 'Advocacia com estratégia, técnica e presença institucional.'
   const aboutHistory = siteConfig?.aboutHistory || ''
 

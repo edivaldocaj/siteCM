@@ -16,7 +16,7 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
   const title = cmsData?.heroTitle || 'Advocacia com estratégia e solidez.'
   const subtitle = cmsData?.heroSubtitle || 'Atendimento jurídico em Natal/RN com análise técnica, comunicação direta e acompanhamento cuidadoso em cada etapa do caso.'
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'
-  const whatsappMessage = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || 'Ola! Gostaria de falar com um advogado.'
+  const whatsappMessage = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || 'Olá! Gostaria de falar com um advogado.'
 
   return (
     <section className="ca-hero" aria-labelledby="home-hero-title">

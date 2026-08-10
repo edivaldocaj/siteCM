@@ -95,7 +95,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
           </div>
 
           <a
-            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}?text=${encodeURIComponent('Ola! Gostaria de agendar uma consulta.')}`}
+            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}?text=${encodeURIComponent('Olá! Gostaria de agendar uma consulta.')}`}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-whatsapp"

@@ -332,7 +332,7 @@ p { margin-top: 0; }
 .ca-rich strong { font-weight: 600; }
 .ca-rich code { font-family: var(--font-data); font-size: 0.9em; }
 
-/* Compatibilidade temporaria enquanto as secoes saem do CSS antigo para classes ca-* */
+/* Compatibilidade temporária enquanto as seções saem do CSS antigo para classes ca-* */
 @theme {
   --color-brand-navy: var(--color-ca-navy-950);
   --color-brand-navy-light: var(--color-ca-navy-800);
