@@ -1,4 +1,4 @@
 {
-  "marker": "startup-resilience-v22",
-  "note": "keeps app online when database preparation fails and documents live healthcheck"
+  "marker": "legal-copy-polish-v23",
+  "note": "removes legacy contact from legal fallback and polishes CMS legal labels"
 }

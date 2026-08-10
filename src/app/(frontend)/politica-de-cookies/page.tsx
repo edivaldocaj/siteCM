@@ -8,12 +8,12 @@ const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquer
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Politica de Cookies',
-  description: 'Politica de cookies e tecnologias similares da Cavalcante Albuquerque.',
+  title: 'Política de Cookies',
+  description: 'Política de cookies e tecnologias similares da Cavalcante Albuquerque.',
   alternates: { canonical: `${siteUrl}/politica-de-cookies` },
   openGraph: {
-    title: 'Politica de Cookies',
-    description: 'Politica de cookies e tecnologias similares da Cavalcante Albuquerque.',
+    title: 'Política de Cookies',
+    description: 'Política de cookies e tecnologias similares da Cavalcante Albuquerque.',
     url: `${siteUrl}/politica-de-cookies`,
     images: [{ url: `${siteUrl}/brand/og-default.jpg`, width: 1200, height: 630 }],
   },
@@ -28,8 +28,8 @@ export default async function PoliticaDeCookiesPage() {
 
   return (
     <LegalDocumentPage
-      title="Politica de Cookies"
-      description="Informacoes sobre cookies, preferencias e tecnologias usadas para melhorar a experiencia no site."
+      title="Política de Cookies"
+      description="Informações sobre cookies, preferências e tecnologias usadas para melhorar a experiência no site."
       content={brandConfig?.cookiePolicy}
       updatedAt={brandConfig?.updatedAt}
     />

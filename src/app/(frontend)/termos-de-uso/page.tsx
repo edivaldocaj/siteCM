@@ -29,7 +29,7 @@ export default async function TermosDeUsoPage() {
   return (
     <LegalDocumentPage
       title="Termos de Uso"
-      description="Condicoes gerais de uso do site e dos canais digitais do escritorio."
+      description="Condições gerais de uso do site e dos canais digitais do escritório."
       content={brandConfig?.termsOfUse}
       updatedAt={brandConfig?.updatedAt}
     />

@@ -25,7 +25,7 @@ export function LegalDocumentPage({ title, description, content, updatedAt }: Le
           </p>
           {formattedDate && (
             <p style={{ color: 'var(--color-ca-steel-400)', fontSize: '14px', marginTop: '20px' }}>
-              Ultima atualizacao: {formattedDate}
+              Última atualização: {formattedDate}
             </p>
           )}
         </div>
@@ -46,7 +46,7 @@ export function LegalDocumentPage({ title, description, content, updatedAt }: Le
                 </p>
                 <p>
                   Para exercer direitos previstos na LGPD ou solicitar informações sobre tratamento de dados, entre em
-                  contato pelo e-mail cavalcantemelo.advs@gmail.com.
+                  contato pelo e-mail contato@cavalcantealbuquerque.com.br.
                 </p>
               </div>
             )}
