@@ -2482,3 +2482,16 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   .ca-news-strip__grid { grid-template-columns: 1fr; }
   .ca-testimonials__quote-icon { display: none; }
 }
+
+/* Rebrand refinement: keep the real lockup visible on mobile instead of HTML text fallback. */
+@media (max-width: 700px) {
+  .ca-header__lockup {
+    display: block;
+    width: min(176px, 52vw);
+    height: auto;
+  }
+
+  .ca-header__brand-text {
+    display: none;
+  }
+}

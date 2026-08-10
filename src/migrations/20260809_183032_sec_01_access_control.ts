@@ -20,11 +20,18 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
 
   await db.execute(sql`
     DO $$ BEGIN
-      ALTER TABLE "users_roles"
-        ADD CONSTRAINT "users_roles_parent_id_users_id_fk"
-        FOREIGN KEY ("parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
-    EXCEPTION
-      WHEN duplicate_object THEN null;
+      IF to_regclass('public.users') IS NOT NULL
+        AND to_regclass('public.users_roles') IS NOT NULL
+        AND NOT EXISTS (
+          SELECT 1
+          FROM pg_constraint
+          WHERE conname = 'users_roles_parent_id_users_id_fk'
+        )
+      THEN
+        ALTER TABLE "users_roles"
+          ADD CONSTRAINT "users_roles_parent_id_users_id_fk"
+          FOREIGN KEY ("parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+      END IF;
     END $$;
   `)
 
@@ -32,17 +39,43 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`CREATE INDEX IF NOT EXISTS "users_roles_parent_idx" ON "users_roles" USING btree ("parent_id");`)
 
   await db.execute(sql`
-    INSERT INTO "users_roles" ("order", "parent_id", "value")
-    SELECT 1, "id", COALESCE("role"::text, 'client')::"public"."enum_users_roles"
-    FROM "users"
-    WHERE NOT EXISTS (
-      SELECT 1 FROM "users_roles" WHERE "users_roles"."parent_id" = "users"."id"
-    );
+    DO $$ BEGIN
+      IF to_regclass('public.users') IS NOT NULL
+        AND to_regclass('public.users_roles') IS NOT NULL
+      THEN
+        IF EXISTS (
+          SELECT 1
+          FROM information_schema.columns
+          WHERE table_schema = 'public'
+            AND table_name = 'users'
+            AND column_name = 'role'
+        )
+        THEN
+          INSERT INTO "users_roles" ("order", "parent_id", "value")
+          SELECT 1, "id", COALESCE("role"::text, 'client')::"public"."enum_users_roles"
+          FROM "users"
+          WHERE NOT EXISTS (
+            SELECT 1 FROM "users_roles" WHERE "users_roles"."parent_id" = "users"."id"
+          );
+        ELSE
+          INSERT INTO "users_roles" ("order", "parent_id", "value")
+          SELECT 1, "id", 'client'::"public"."enum_users_roles"
+          FROM "users"
+          WHERE NOT EXISTS (
+            SELECT 1 FROM "users_roles" WHERE "users_roles"."parent_id" = "users"."id"
+          );
+        END IF;
+      END IF;
+    END $$;
   `)
 
   await db.execute(sql`
-    ALTER TABLE "testimonials"
-      ADD COLUMN IF NOT EXISTS "approved" boolean DEFAULT false;
+    DO $$ BEGIN
+      IF to_regclass('public.testimonials') IS NOT NULL THEN
+        ALTER TABLE "testimonials"
+          ADD COLUMN IF NOT EXISTS "approved" boolean DEFAULT false;
+      END IF;
+    END $$;
   `)
 }
 

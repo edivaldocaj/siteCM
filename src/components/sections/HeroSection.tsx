@@ -33,14 +33,10 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
               src="/brand/lockup-light.svg"
               alt="Cavalcante Albuquerque"
               width={330}
-              height={86}
+              height={83}
               className="ca-hero__lockup"
               priority
             />
-            <div className="ca-hero__brand-text" aria-hidden="true">
-              <strong>Cavalcante Albuquerque</strong>
-              <span>Advocacia e Consultoria</span>
-            </div>
           </div>
 
           <div className="ca-hero__rule" aria-hidden="true">
