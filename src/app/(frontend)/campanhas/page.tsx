@@ -10,12 +10,12 @@ export const dynamic = 'force-dynamic'
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquerque.com.br').replace(/\/$/, '')
 
 export const metadata: Metadata = {
-  title: 'Campanhas Juridicas',
-  description: 'Campanhas juridicas ativas da Cavalcante Albuquerque. Verifique se seu caso se encaixa.',
+  title: 'Campanhas Jurídicas',
+  description: 'Campanhas jurídicas ativas da Cavalcante Albuquerque. Verifique se seu caso se encaixa.',
   alternates: { canonical: `${siteUrl}/campanhas` },
   openGraph: {
-    title: 'Campanhas Juridicas',
-    description: 'Campanhas juridicas ativas da Cavalcante Albuquerque. Verifique se seu caso se encaixa.',
+    title: 'Campanhas Jurídicas',
+    description: 'Campanhas jurídicas ativas da Cavalcante Albuquerque. Verifique se seu caso se encaixa.',
     url: `${siteUrl}/campanhas`,
     images: [{ url: `${siteUrl}/brand/og-default.jpg`, width: 1200, height: 630 }],
   },
@@ -52,8 +52,8 @@ export default async function CampanhasPage() {
           <Image src="/brand/symbol-mono-light.svg" alt="" width={360} height={360} unoptimized />
         </div>
         <div className="container-wide mx-auto ca-page-hero__inner">
-          <span className="ca-eyebrow ca-eyebrow--dark">Acoes em andamento</span>
-          <h1>Campanhas Juridicas</h1>
+          <span className="ca-eyebrow ca-eyebrow--dark">Ações em andamento</span>
+          <h1>Campanhas Jurídicas</h1>
           <p>Acompanhamento de frentes individuais e coletivas com triagem objetiva para identificar se o seu caso se encaixa.</p>
         </div>
       </section>

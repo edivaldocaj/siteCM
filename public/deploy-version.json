@@ -1,4 +1,4 @@
 {
-  "marker": "seed-copy-polish-v26",
-  "note": "polishes seed/bootstrap copy for filled-site QA"
+  "marker": "transparent-brand-assets-v27",
+  "note": "uses transparent brand assets to avoid mismatched image backgrounds"
 }

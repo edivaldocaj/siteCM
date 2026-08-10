@@ -3,7 +3,7 @@ const path = require('path')
 const sharp = require('sharp')
 
 const root = process.cwd()
-const brandSrc = 'D:/siteCM-main/brand'
+const brandSrc = path.join(root, 'brand')
 const out = path.join(root, 'public', 'brand')
 const app = path.join(root, 'src', 'app')
 
@@ -82,6 +82,11 @@ async function main() {
   await sharp(p(brandSrc, 'logo mini.png')).resize(1024, 1024, { fit: 'cover' }).png().toFile(p(out, 'icon-round.png'))
 
   await sharp(p(brandSrc, 'marca.png')).resize(720, null).png().toFile(p(out, 'pattern-watermark.png'))
+  await sharp(p(brandSrc, 'marca dagua 1.png')).trim({ threshold: 8 }).resize(1400, null, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 88, effort: 5 }).toFile(p(out, 'watermark-transparent.webp'))
+  await sharp(p(brandSrc, 'Untitled design (7).png')).trim({ threshold: 8 }).resize(1600, null, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 88, effort: 5 }).toFile(p(out, 'brand-wide-transparent.webp'))
+  await sharp(p(brandSrc, 'Untitled design (8).png')).trim({ threshold: 8 }).resize(900, 900, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).webp({ quality: 88, effort: 5 }).toFile(p(out, 'brand-seal-transparent.webp'))
+  await sharp(p(brandSrc, 'Untitled design (9).png')).trim({ threshold: 8 }).resize(900, 900, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).webp({ quality: 88, effort: 5 }).toFile(p(out, 'brand-emblem-transparent.webp'))
+  await sharp(p(brandSrc, 'Untitled design (10).png')).trim({ threshold: 8 }).resize(900, 900, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).webp({ quality: 88, effort: 5 }).toFile(p(out, 'brand-symbol-transparent.webp'))
   await sharp(p(brandSrc, 'marca 1.png')).resize(1200, 630, { fit: 'cover' }).jpeg({ quality: 82 }).toFile(p(out, 'og-default.jpg'))
   await sharp(p(brandSrc, 'marca 2.png')).resize(1600, 900, { fit: 'cover' }).jpeg({ quality: 84 }).toFile(p(out, 'cover-contato.jpg'))
   await sharp(p(brandSrc, 'marca 2.png')).resize(1200, 630, { fit: 'cover' }).jpeg({ quality: 82 }).toFile(p(out, 'cover-contato-og.jpg'))

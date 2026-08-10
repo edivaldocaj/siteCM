@@ -34,7 +34,7 @@ export function FeaturedCampaigns({ cmsCampaigns = [], cmsData }: FeaturedCampai
     <section className="ca-campaigns" aria-labelledby="featured-campaigns-title">
       <div className="container-wide mx-auto">
         <div className="ca-section-heading">
-          <span className="ca-eyebrow">Acoes em andamento</span>
+          <span className="ca-eyebrow">Ações em andamento</span>
           <h2 id="featured-campaigns-title">{cmsData?.title || 'Campanhas juridicas'}</h2>
           <p>{cmsData?.subtitle || 'Acompanhe frentes de atendimento individual e coletivo abertas pelo escritorio.'}</p>
         </div>

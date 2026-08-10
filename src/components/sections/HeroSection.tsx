@@ -20,7 +20,9 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
 
   return (
     <section className="ca-hero" aria-labelledby="home-hero-title">
-      <div className="ca-hero__media" aria-hidden="true" />
+      <div className="ca-hero__media" aria-hidden="true">
+        <Image src="/brand/watermark-transparent.webp" alt="" width={898} height={278} priority />
+      </div>
       <div className="ca-hero__shade" aria-hidden="true" />
       <div className="ca-hero__mark" aria-hidden="true">
         <Image src="/brand/symbol-mono-light.svg" alt="" width={420} height={420} priority unoptimized />
@@ -75,11 +77,11 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
               <dd>Direto com advogado</dd>
             </div>
             <div>
-              <dt>Metodo</dt>
+              <dt>Método</dt>
               <dd>Análise técnica do caso</dd>
             </div>
             <div>
-              <dt>Urgencia</dt>
+              <dt>Urgência</dt>
               <dd>Plantão criminal 24h</dd>
             </div>
           </dl>

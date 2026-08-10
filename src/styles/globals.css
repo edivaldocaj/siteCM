@@ -480,17 +480,23 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 
 .ca-hero__media {
   z-index: -3;
-  background-image: url('/brand/cover-areas.jpg');
-  background-size: cover;
-  background-position: center;
-  opacity: 0.5;
-  filter: saturate(0.82) contrast(1.08);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: clamp(120px, 16vw, 220px) clamp(24px, 7vw, 120px) clamp(70px, 8vw, 120px);
+  opacity: 0.2;
+}
+
+.ca-hero__media img {
+  width: min(62vw, 920px);
+  height: auto;
+  object-fit: contain;
 }
 
 .ca-hero__shade {
   z-index: -2;
   background:
-    linear-gradient(90deg, rgba(1, 21, 54, 0.98) 0%, rgba(1, 21, 54, 0.88) 45%, rgba(1, 21, 54, 0.42) 100%),
+    linear-gradient(90deg, rgba(1, 21, 54, 0.99) 0%, rgba(1, 21, 54, 0.9) 48%, rgba(1, 21, 54, 0.68) 100%),
     linear-gradient(180deg, rgba(1, 21, 54, 0.42) 0%, rgba(1, 21, 54, 0.95) 100%);
 }
 
