@@ -1,1 +1,1 @@
-﻿{"marker":"migration-marker-two-step-v16","note":"marks migrations with separate select/insert and does not block app after schema sync"}
+﻿{"marker":"production-schema-push-v17","note":"runs schema push outside production mode and verifies required tables"}

@@ -94,12 +94,7 @@ async function main() {
         console.log('[db:startup] FORCE_PAYLOAD_MIGRATE=true; aplicando migrations do Payload...')
         await run('npm', ['run', 'migrate'])
       } else {
-        console.log('[db:startup] Schema atual sincronizado; registrando migrations como aplicadas para evitar replay sobre banco novo...')
-        try {
-          await run('npm', ['run', 'migrations:mark-applied'])
-        } catch (error) {
-          console.error('[db:startup] Falha ao registrar migrations como aplicadas; seguindo porque o schema ja foi sincronizado:', error)
-        }
+        console.log('[db:startup] Schema atual sincronizado; pulando replay de migrations historicas. Use FORCE_PAYLOAD_MIGRATE=true apenas para migrate real.')
       }
     }
 

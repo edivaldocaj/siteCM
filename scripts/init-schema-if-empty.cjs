@@ -43,7 +43,7 @@ async function main() {
   const result = spawnSync('npm', ['run', 'schema:push'], {
     stdio: 'inherit',
     shell: process.platform === 'win32',
-    env: { ...process.env, PAYLOAD_DB_PUSH: 'true' },
+    env: { ...process.env, NODE_ENV: 'development', PAYLOAD_DB_PUSH: 'true', PAYLOAD_FORCE_DRIZZLE_PUSH: 'true' },
   })
 
   if (result.status !== 0) {
