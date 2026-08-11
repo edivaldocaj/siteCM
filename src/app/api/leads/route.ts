@@ -4,6 +4,7 @@ import configPromise from '@payload-config'
 import { requireAdminRole } from '@/lib/admin-auth'
 import { getClientIp, checkRateLimit } from '@/lib/rate-limit'
 import { isLikelyBotSubmission, LEAD_CONSENT_TEXT } from '@/lib/public-form-security'
+import { getNotificationRecipients, sendResendEmail } from '@/lib/resend'
 
 /* ── Lead Score Calculator ── */
 function calculateScore(data: any): number {
@@ -124,28 +125,19 @@ export async function POST(req: NextRequest) {
     })
 
     // Send email notification to attorneys
-    if (process.env.RESEND_API_KEY) {
-      const qualAnswersHtml = qualificationAnswers?.length
-        ? qualificationAnswers
-            .map((qa: any) => `<p><strong>${qa.question}:</strong> ${qa.answer}</p>`)
-            .join('')
-        : ''
+    const qualAnswersHtml = qualificationAnswers?.length
+      ? qualificationAnswers
+          .map((qa: any) => `<p><strong>${qa.question}:</strong> ${qa.answer}</p>`)
+          .join('')
+      : ''
 
-      const scoreColor = score >= 60 ? '#25D366' : score >= 30 ? 'var(--color-ca-steel-500)' : 'var(--color-ca-steel-400)'
-      const scoreEmoji = score >= 60 ? '🔥' : score >= 30 ? '⭐' : '📋'
+    const scoreColor = score >= 60 ? '#25D366' : score >= 30 ? 'var(--color-ca-steel-500)' : 'var(--color-ca-steel-400)'
+    const scoreEmoji = score >= 60 ? '🔥' : score >= 30 ? '⭐' : '📋'
 
-      try {
-        await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            from: 'Site Cavalcante Albuquerque <onboarding@resend.dev>',
-            to: [process.env.CONTACT_EMAIL || 'contato@cavalcantealbuquerque.com.br'],
-            subject: `${scoreEmoji} Novo Lead (Score ${score}) — ${name}${campaignSlug ? ` [${campaignSlug}]` : ''}`,
-            html: `
+    await sendResendEmail({
+      to: getNotificationRecipients('contato@cavalcantealbuquerque.com.br'),
+      subject: `${scoreEmoji} Novo Lead (Score ${score}) — ${name}${campaignSlug ? ` [${campaignSlug}]` : ''}`,
+      html: `
               <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto;">
                 <div style="background: var(--color-ca-navy-950); padding: 24px; text-align: center; border-radius: 8px 8px 0 0;">
                   <h1 style="color: var(--color-ca-platinum-100); font-size: 22px; margin: 0;">Novo Lead Captado</h1>
@@ -186,13 +178,7 @@ export async function POST(req: NextRequest) {
                 </div>
               </div>
             `,
-          }),
-        })
-      } catch (emailError) {
-        console.error('[Leads API] Erro ao enviar e-mail:', emailError)
-        // Don't fail the request if email fails
-      }
-    }
+    })
 
     return NextResponse.json({
       success: true,

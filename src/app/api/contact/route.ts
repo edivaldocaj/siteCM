@@ -2,7 +2,8 @@
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { getClientIp, checkRateLimit } from '@/lib/rate-limit'
-import { isLikelyBotSubmission, LEAD_CONSENT_TEXT } from '@/lib/public-form-security'
+import { isLikelyBotSubmission } from '@/lib/public-form-security'
+import { getNotificationRecipients, sendResendEmail } from '@/lib/resend'
 
 export async function POST(req: NextRequest) {
   try {
@@ -54,19 +55,11 @@ export async function POST(req: NextRequest) {
       console.error('[Contact] Erro ao salvar lead no CMS:', leadError)
     }
 
-    // ── 2. Enviar e-mail via Resend ──
-    if (process.env.RESEND_API_KEY) {
-      const res = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: 'Site Cavalcante Albuquerque <onboarding@resend.dev>',
-          to: [process.env.CONTACT_EMAIL || 'contato@cavalcantealbuquerque.com.br'],
-          subject: `Novo Lead: ${subject} — ${name}`,
-          html: `
+    // ── 2. Notificar por e-mail sem bloquear o lead se o Resend estiver em modo teste ──
+    await sendResendEmail({
+      to: getNotificationRecipients('contato@cavalcantealbuquerque.com.br'),
+      subject: `Novo Lead: ${subject} — ${name}`,
+      html: `
             <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto;">
               <div style="background: var(--color-ca-navy-950); padding: 24px; text-align: center; border-radius: 8px 8px 0 0;">
                 <h1 style="color: var(--color-ca-platinum-100); font-size: 20px; margin: 0;">Novo Contato pelo Site</h1>
@@ -84,17 +77,7 @@ export async function POST(req: NextRequest) {
               </div>
             </div>
           `,
-        }),
-      })
-
-      if (!res.ok) {
-        console.error('Erro no Resend:', await res.text())
-        return NextResponse.json({ error: 'Falha ao enviar o e-mail.' }, { status: 500 })
-      }
-    } else {
-      console.error('Falta a variável RESEND_API_KEY')
-      return NextResponse.json({ error: 'Serviço de e-mail não configurado no servidor.' }, { status: 500 })
-    }
+    })
 
     return NextResponse.json({ success: true })
   } catch (error) {

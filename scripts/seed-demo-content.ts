@@ -75,6 +75,7 @@ async function upsertByTitle(payload: PayloadInstance, collection: string, title
 }
 
 async function seedMedia(payload: PayloadInstance) {
+  const uploadDir = path.resolve(process.cwd(), 'public/media')
   const assets = [
     ['Logo claro Cavalcante Albuquerque', 'public/brand/lockup-light.webp'],
     ['Logo escuro Cavalcante Albuquerque', 'public/brand/lockup-dark.webp'],
@@ -93,8 +94,20 @@ async function seedMedia(payload: PayloadInstance) {
   for (const [alt, relativePath] of assets) {
     const filePath = path.resolve(process.cwd(), relativePath)
     const existing = await findOne(payload, 'media', { alt: { equals: alt } })
+    const uploadFilenames = existing
+      ? [
+          existing.filename,
+          ...Object.values(existing.sizes || {})
+            .map((size: any) => size?.filename)
+            .filter(Boolean),
+        ].filter(Boolean)
+      : []
+    const hasMissingUpload =
+      existing &&
+      (uploadFilenames.length === 0 ||
+        uploadFilenames.some((filename) => !fs.existsSync(path.join(uploadDir, filename))))
 
-    if (existing) {
+    if (existing && !hasMissingUpload) {
       ids[alt] = existing.id
       console.log(`kept: media/${alt}`)
       continue
@@ -102,16 +115,30 @@ async function seedMedia(payload: PayloadInstance) {
 
     if (!fs.existsSync(filePath)) {
       console.log(`skipped: media/${alt} (${relativePath} não encontrado)`)
+      if (existing) ids[alt] = existing.id
       continue
     }
 
-    const created = await (payload as any).create({
-      collection: 'media',
-      data: { alt },
-      filePath,
-    })
-    ids[alt] = created.id
-    console.log(`created: media/${alt}`)
+    fs.mkdirSync(uploadDir, { recursive: true })
+
+    if (existing) {
+      const updated = await (payload as any).update({
+        collection: 'media',
+        id: existing.id,
+        data: { alt },
+        filePath,
+      })
+      ids[alt] = updated.id
+      console.log(`repaired: media/${alt}`)
+    } else {
+      const created = await (payload as any).create({
+        collection: 'media',
+        data: { alt },
+        filePath,
+      })
+      ids[alt] = created.id
+      console.log(`created: media/${alt}`)
+    }
   }
 
   return ids

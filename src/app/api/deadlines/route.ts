@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { requireAdminRole } from '@/lib/admin-auth'
 import { getBearerToken, getRequiredSecret, safeCompare } from '@/lib/secrets'
+import { sendResendEmail } from '@/lib/resend'
 
 const getAttorneyEmails = (): Record<string, string | undefined> => ({
   edivaldo: process.env.CONTACT_EMAIL,
@@ -127,17 +128,10 @@ export async function POST(req: NextRequest) {
         const typeLabel = deadlineTypeLabels[deadline.deadlineType] || deadline.deadlineType
 
         try {
-          await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              from: process.env.RESEND_FROM_EMAIL || 'Cavalcante Albuquerque <nao-responda@cavalcantealbuquerque.com.br>',
-              to: [toEmail],
-              subject: `${alertType} — Prazo: ${deadline.title}`,
-              html: `
+          const emailResult = await sendResendEmail({
+            to: toEmail,
+            subject: `${alertType} — Prazo: ${deadline.title}`,
+            html: `
                 <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
                   <div style="background: ${daysUntil <= 1 ? '#dc2626' : daysUntil <= 3 ? '#ea580c' : 'var(--color-ca-navy-950)'}; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
                     <h2 style="color: #fff; margin: 0;">${alertType}</h2>
@@ -155,8 +149,9 @@ export async function POST(req: NextRequest) {
                   </div>
                 </div>
               `,
-            }),
           })
+
+          if (!emailResult.ok) continue
 
           // Marcar alerta como enviado
           await (payload as any).update({

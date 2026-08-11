@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { getClientIp, checkRateLimit } from '@/lib/rate-limit'
 import { isLikelyBotSubmission, NPS_CONSENT_TEXT } from '@/lib/public-form-security'
+import { getNotificationRecipients, sendResendEmail } from '@/lib/resend'
 
 /* POST: Criar resposta NPS */
 export async function POST(req: NextRequest) {
@@ -74,19 +75,11 @@ export async function POST(req: NextRequest) {
     const promptTestimonial = score >= 9
 
     // Notificar escritório por email se score <= 6 (detrator)
-    if (score <= 6 && process.env.RESEND_API_KEY) {
-      try {
-        await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            from: 'Site Cavalcante Albuquerque <onboarding@resend.dev>',
-            to: [process.env.CONTACT_EMAIL || 'contato@cavalcantealbuquerque.com.br'],
-            subject: `⚠️ NPS Detrator (${score}/10) — ${client.name}`,
-            html: `
+    if (score <= 6) {
+      await sendResendEmail({
+        to: getNotificationRecipients('contato@cavalcantealbuquerque.com.br'),
+        subject: `⚠️ NPS Detrator (${score}/10) — ${client.name}`,
+        html: `
               <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
                 <div style="background: var(--color-ca-navy-950); padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
                   <h2 style="color: var(--color-ca-platinum-100); margin: 0;">Alerta NPS — Detrator</h2>
@@ -100,9 +93,7 @@ export async function POST(req: NextRequest) {
                 </div>
               </div>
             `,
-          }),
-        })
-      } catch { /* silent */ }
+      })
     }
 
     return NextResponse.json({
