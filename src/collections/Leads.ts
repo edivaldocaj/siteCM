@@ -16,6 +16,7 @@ export const Leads: CollectionConfig = {
     defaultColumns: ['name', 'phone', 'source', 'campaignSlug', 'status', 'score', 'assignedTo', 'createdAt'],
     description: 'Pipeline de leads — todos os contatos captados pelo site, formulários e campanhas.',
     listSearchableFields: ['name', 'phone', 'email', 'campaignSlug'],
+    group: 'Relacionamento',
   },
   fields: [
     /* ── DADOS DO LEAD ── */

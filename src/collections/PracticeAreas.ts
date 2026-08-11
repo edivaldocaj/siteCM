@@ -9,7 +9,12 @@ export const PracticeAreas: CollectionConfig = {
     update: adminOrEditor,
     delete: adminOnly,
   },
-  admin: { useAsTitle: 'title', defaultColumns: ['title', 'slug', 'order'] },
+  admin: {
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'slug', 'order'],
+    description: 'Áreas principais exibidas no site institucional.',
+    group: 'Conteúdo do Site',
+  },
   fields: [
     { name: 'title', type: 'text', required: true, label: 'Nome da Área' },
     { name: 'slug', type: 'text', required: true, unique: true },

@@ -13,6 +13,7 @@ export const NewsArticles: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'source', 'category', 'relevanceScore', 'publishedAt', 'status'],
     description: 'Notícias jurídicas — alimentadas automaticamente via API e curadas manualmente.',
+    group: 'Conteúdo do Site',
   },
   fields: [
     { name: 'title', type: 'text', required: true, label: 'Título' },
@@ -29,7 +30,7 @@ export const NewsArticles: CollectionConfig = {
       unique: true,
       index: true,
       admin: {
-        description: 'Usado pelas automacoes para evitar importar a mesma noticia mais de uma vez.',
+        description: 'Usado pelas automações para evitar importar a mesma notícia mais de uma vez.',
         position: 'sidebar',
         readOnly: true,
       },
@@ -37,11 +38,11 @@ export const NewsArticles: CollectionConfig = {
     {
       name: 'relevanceScore',
       type: 'number',
-      label: 'Score de relevancia',
+      label: 'Score de relevância',
       min: 0,
       max: 100,
       admin: {
-        description: 'Pontuacao calculada/curada para priorizar noticias relevantes ao escritorio.',
+        description: 'Pontuação calculada/curada para priorizar notícias relevantes ao escritório.',
         position: 'sidebar',
       },
     },
@@ -59,7 +60,7 @@ export const NewsArticles: CollectionConfig = {
       type: 'textarea',
       label: 'Notas editoriais internas',
       admin: {
-        description: 'Observacoes para revisao humana, vinculos com campanhas ou orientacao de pauta.',
+        description: 'Observações para revisão humana, vínculos com campanhas ou orientação de pauta.',
       },
     },
     {
@@ -67,7 +68,7 @@ export const NewsArticles: CollectionConfig = {
       type: 'date',
       label: 'Expira em',
       admin: {
-        description: 'Data usada por automacoes para arquivar ou limpar noticias pendentes antigas.',
+        description: 'Data usada por automações para arquivar ou limpar notícias pendentes antigas.',
         position: 'sidebar',
       },
     },

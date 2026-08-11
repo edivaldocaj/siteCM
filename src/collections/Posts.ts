@@ -9,7 +9,12 @@ export const Posts: CollectionConfig = {
     update: adminOrEditor,
     delete: adminOnly,
   },
-  admin: { useAsTitle: 'title', defaultColumns: ['title', 'category', 'status', 'publishedAt'] },
+  admin: {
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'category', 'status', 'publishedAt'],
+    description: 'Artigos publicados no blog institucional.',
+    group: 'Conteúdo do Site',
+  },
   fields: [
     { name: 'title', type: 'text', required: true, label: 'Título' },
     { name: 'slug', type: 'text', required: true, unique: true }, // Removido position: 'sidebar'
@@ -54,7 +59,7 @@ export const Posts: CollectionConfig = {
       type: 'checkbox',
       defaultValue: false,
       label: 'Autoria institucional',
-      admin: { description: 'Usado quando author legado for escritorio.' },
+      admin: { description: 'Usado quando author legado for escritório.' },
     },
     { name: 'tags', type: 'text', hasMany: true, label: 'Tags' },
     { name: 'readTime', type: 'number', label: 'Tempo de Leitura (min)' }, // Removido position

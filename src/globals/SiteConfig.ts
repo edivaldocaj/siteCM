@@ -4,6 +4,7 @@ import { adminOnly, anyone } from '../access'
 export const SiteConfig: GlobalConfig = {
   slug: 'site-config',
   label: 'Configurações Gerais do Site',
+  admin: { group: 'Configuração' },
   access: { read: anyone, update: adminOnly },
   fields: [
     {

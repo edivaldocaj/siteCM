@@ -4,6 +4,7 @@ import { adminOnly, anyone } from '../access'
 export const Navigation: GlobalConfig = {
   slug: 'navigation',
   label: 'Navegação',
+  admin: { group: 'Configuração' },
   access: { read: anyone, update: adminOnly },
   fields: [
     {

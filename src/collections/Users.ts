@@ -10,7 +10,7 @@ export const Users: CollectionConfig = {
     update: adminOrSelf,
     delete: adminOnly,
   },
-  admin: { useAsTitle: 'email' },
+  admin: { useAsTitle: 'email', group: 'Sistema' },
   fields: [
     { name: 'name', type: 'text', required: true },
     {

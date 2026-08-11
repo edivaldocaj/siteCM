@@ -9,7 +9,12 @@ export const Testimonials: CollectionConfig = {
     update: adminOrEditor,
     delete: adminOnly,
   },
-  admin: { useAsTitle: 'authorName', defaultColumns: ['authorName', 'caseType', 'rating', 'featured'] },
+  admin: {
+    useAsTitle: 'authorName',
+    defaultColumns: ['authorName', 'caseType', 'rating', 'featured'],
+    description: 'Depoimentos revisados antes de aparecerem no site.',
+    group: 'Conteúdo do Site',
+  },
   fields: [
     { name: 'authorName', type: 'text', required: true, label: 'Nome do Cliente' },
     { name: 'text', type: 'textarea', required: true, label: 'Depoimento' },

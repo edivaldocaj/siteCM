@@ -36,7 +36,7 @@ export function FeaturedCampaigns({ cmsCampaigns = [], cmsData }: FeaturedCampai
         <div className="ca-section-heading">
           <span className="ca-eyebrow">Ações em andamento</span>
           <h2 id="featured-campaigns-title">{cmsData?.title || 'Campanhas juridicas'}</h2>
-          <p>{cmsData?.subtitle || 'Acompanhe frentes de atendimento individual e coletivo abertas pelo escritorio.'}</p>
+          <p>{cmsData?.subtitle || 'Acompanhe frentes de atendimento individual e coletivo abertas pelo escritório.'}</p>
         </div>
 
         <div className="ca-campaigns__grid">

@@ -9,7 +9,7 @@ export const NpsResponses: CollectionConfig = {
     useAsTitle: 'clientName',
     defaultColumns: ['clientName', 'score', 'attorney', 'status', 'createdAt'],
     description: 'Pesquisas de satisfação e NPS dos clientes.',
-    group: 'Portal do Cliente',
+    group: 'Relacionamento',
   },
   access: {
     read: adminOrStaff,

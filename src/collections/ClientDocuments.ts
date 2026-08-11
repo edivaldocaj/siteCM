@@ -9,7 +9,7 @@ export const ClientDocuments: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'clientName', 'processNumber', 'documentType', 'uploadedBy', 'createdAt'],
     description: 'Documentos compartilhados entre escritório e clientes.',
-    group: 'Portal do Cliente',
+    group: 'Relacionamento',
   },
   access: {
     read: ownClientData,

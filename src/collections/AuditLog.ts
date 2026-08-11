@@ -14,7 +14,7 @@ export const AuditLog: CollectionConfig = {
   admin: {
     useAsTitle: 'action',
     defaultColumns: ['action', 'collectionSlug', 'documentId', 'user', 'createdAt'],
-    group: 'Operacao',
+    group: 'Operação',
   },
   fields: [
     { name: 'action', type: 'text', required: true, index: true },

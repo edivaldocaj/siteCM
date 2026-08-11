@@ -4,12 +4,13 @@ import { adminOnly, anyone } from '../access'
 export const Homepage: GlobalConfig = {
   slug: 'homepage',
   label: 'Página Inicial (Gestão)',
+  admin: { group: 'Conteúdo do Site' },
   access: { read: anyone, update: adminOnly },
   fields: [
     {
       name: 'aboutPartners',
       type: 'group',
-      label: 'Sessao: Equipe',
+      label: 'Seção: Equipe',
       fields: [
         { name: 'sectionTitle', type: 'text', defaultValue: 'Quem conduz o seu caso', label: 'Título da Sessão' },
         { name: 'sectionDescription', type: 'textarea', defaultValue: 'Profissionais comprometidos com a excelência, ética e resultados para nossos clientes.', label: 'Subtítulo' },

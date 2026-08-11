@@ -16,6 +16,7 @@ export const CampaignEvents: CollectionConfig = {
     defaultColumns: ['campaignSlug', 'eventType', 'createdAt'],
     description: 'Eventos de analytics das campanhas (visualizações, cliques, conversões).',
     hidden: false,
+    group: 'Relacionamento',
   },
   fields: [
     {

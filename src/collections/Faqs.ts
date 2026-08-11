@@ -13,7 +13,7 @@ export const Faqs: CollectionConfig = {
   admin: {
     useAsTitle: 'question',
     defaultColumns: ['question', 'area', 'order', 'active'],
-    group: 'Conteúdo',
+    group: 'Conteúdo do Site',
   },
   fields: [
     { name: 'question', type: 'text', required: true, label: 'Pergunta' },

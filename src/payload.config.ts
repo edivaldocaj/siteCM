@@ -40,6 +40,7 @@ export default buildConfig({
         Logo: '/components/admin/BrandLogo',
         Icon: '/components/admin/BrandIcon',
       },
+      beforeDashboard: ['/components/admin/AdminDashboardIntro'],
       afterNavLinks: ['/components/admin/AdminToolsLink'],
     },
     importMap: {

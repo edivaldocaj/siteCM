@@ -22,7 +22,7 @@ export const Media: CollectionConfig = {
       { name: 'story', width: 1080, height: 1920, position: 'centre' },
     ],
   },
-  admin: { useAsTitle: 'alt' },
+  admin: { useAsTitle: 'alt', group: 'Sistema' },
   fields: [
     { name: 'alt', type: 'text', required: true, label: 'Texto Alternativo' },
   ],

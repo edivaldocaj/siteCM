@@ -4,6 +4,7 @@ import { adminOnly, anyone } from '../access'
 export const BrandConfig: GlobalConfig = {
   slug: 'brand-config',
   label: 'Identidade Institucional',
+  admin: { group: 'Configuração' },
   access: { read: anyone, update: adminOnly },
   fields: [
     {

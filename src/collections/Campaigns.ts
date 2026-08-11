@@ -13,6 +13,7 @@ export const Campaigns: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'status', 'featuredOnHomepage'],
     description: 'Campanhas jurídicas — cada campanha gera uma landing page independente.',
+    group: 'Conteúdo do Site',
   },
   fields: [
     { name: 'title', type: 'text', required: true, label: 'Título da Campanha' },

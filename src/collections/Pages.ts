@@ -9,7 +9,7 @@ export const Pages: CollectionConfig = {
     update: adminOrEditor,
     delete: adminOnly,
   },
-  admin: { useAsTitle: 'title' },
+  admin: { useAsTitle: 'title', group: 'Conteúdo do Site' },
   fields: [
     { name: 'title', type: 'text', required: true, label: 'Título' },
     { name: 'slug', type: 'text', required: true, unique: true, admin: { position: 'sidebar' } },

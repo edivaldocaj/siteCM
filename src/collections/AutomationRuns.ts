@@ -14,7 +14,7 @@ export const AutomationRuns: CollectionConfig = {
   admin: {
     useAsTitle: 'task',
     defaultColumns: ['task', 'status', 'startedAt', 'finishedAt', 'itemsIn', 'itemsOut'],
-    group: 'Operacao',
+    group: 'Operação',
   },
   fields: [
     { name: 'task', type: 'text', required: true, index: true },

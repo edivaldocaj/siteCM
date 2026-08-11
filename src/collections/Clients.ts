@@ -13,6 +13,7 @@ export const Clients: CollectionConfig = {
     useAsTitle: 'name',
     defaultColumns: ['name', 'cpf', 'accessToken', 'active'],
     description: 'Clientes com acesso ao portal de acompanhamento processual.',
+    group: 'Relacionamento',
   },
   fields: [
     { name: 'name', type: 'text', required: true, label: 'Nome Completo' },
