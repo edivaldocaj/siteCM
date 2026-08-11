@@ -96,14 +96,17 @@ export function Header({
       <div className="ca-header__inner">
         <Link href="/" className="ca-header__brand" aria-label="Cavalcante Albuquerque">
           <Image
-            src={isLight ? '/brand/lockup-dark.webp' : '/brand/lockup-light.webp'}
-            alt="Cavalcante Albuquerque"
-            width={220}
-            height={55}
+            src="/brand/brand-symbol-transparent.webp"
+            alt=""
+            width={58}
+            height={58}
             priority
-            className="ca-header__lockup"
+            className="ca-header__symbol"
           />
-          <span className="ca-header__brand-text" aria-hidden="true">Cavalcante Albuquerque</span>
+          <span className="ca-header__brand-text" aria-hidden="true">
+            <strong>Cavalcante Albuquerque</strong>
+            <span>Advocacia e Consultoria</span>
+          </span>
         </Link>
 
         <nav className="ca-header__nav" aria-label="Navegação principal">

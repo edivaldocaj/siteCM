@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { Calendar, MessageCircle } from 'lucide-react'
+import { ArrowRight, MapPin, MessageCircle } from 'lucide-react'
 
 interface HeroSectionProps {
   cmsData?: {
@@ -13,8 +13,10 @@ interface HeroSectionProps {
 
 export function HeroSection({ cmsData }: HeroSectionProps) {
   const buttonText = cmsData?.heroButtonText || 'Fale com um advogado'
-  const title = cmsData?.heroTitle || 'Advocacia com estratégia e solidez.'
-  const subtitle = cmsData?.heroSubtitle || 'Atendimento jurídico em Natal/RN com análise técnica, comunicação direta e acompanhamento cuidadoso em cada etapa do caso.'
+  const title = cmsData?.heroTitle || 'Advocacia estratégica. Soluções que geram segurança e resultados.'
+  const subtitle =
+    cmsData?.heroSubtitle ||
+    'Atuação técnica e personalizada em Licitações e Contratos, Direito Digital, Direito Civil e Direito Penal.'
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'
   const whatsappMessage = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || 'Olá! Gostaria de falar com um advogado.'
 
@@ -25,7 +27,7 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
       </div>
       <div className="ca-hero__shade" aria-hidden="true" />
       <div className="ca-hero__mark" aria-hidden="true">
-        <Image src="/brand/symbol-mono-light.svg" alt="" width={420} height={420} priority unoptimized />
+        <Image src="/brand/brand-symbol-transparent.webp" alt="" width={520} height={520} priority />
       </div>
 
       <div className="ca-hero__inner">
@@ -38,6 +40,11 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
 
           <p className="ca-hero__subtitle">{subtitle}</p>
 
+          <p className="ca-hero__location">
+            <MapPin aria-hidden="true" />
+            Natal/RN
+          </p>
+
           <div className="ca-hero__actions">
             <a
               href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`}
@@ -48,26 +55,11 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
               <MessageCircle aria-hidden="true" />
               {buttonText}
             </a>
-            <a href="/contato" className="ca-btn ca-btn--invert">
-              <Calendar aria-hidden="true" />
-              Agendar consulta
+            <a href="/sobre" className="ca-btn ca-btn--outline-light">
+              Conheça o escritório
+              <ArrowRight aria-hidden="true" />
             </a>
           </div>
-
-          <dl className="ca-hero__signals" aria-label="Diferenciais do atendimento">
-            <div>
-              <dt>Atendimento</dt>
-              <dd>Direto com advogado</dd>
-            </div>
-            <div>
-              <dt>Método</dt>
-              <dd>Análise técnica do caso</dd>
-            </div>
-            <div>
-              <dt>Urgência</dt>
-              <dd>Plantão criminal 24h</dd>
-            </div>
-          </dl>
         </div>
       </div>
     </section>

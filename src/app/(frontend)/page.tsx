@@ -1,12 +1,9 @@
 import { HeroSection } from '@/components/sections/HeroSection'
 import { TrustBar } from '@/components/sections/TrustBar'
 import { PracticeAreasGrid } from '@/components/sections/PracticeAreasGrid'
-import { CriminalUrgency } from '@/components/sections/CriminalUrgency'
-import { TeamSection } from '@/components/sections/TeamSection'
+import { HomePremiumHighlights } from '@/components/sections/HomePremiumHighlights'
 import { FeaturedCampaigns } from '@/components/sections/FeaturedCampaigns'
 import { TestimonialsCarousel } from '@/components/sections/TestimonialsCarousel'
-import { NewsSection } from '@/components/sections/NewsSection'
-import { RecentPosts } from '@/components/sections/RecentPosts'
 import { ContactCTA } from '@/components/sections/ContactCTA'
 
 import { getPayload } from 'payload'
@@ -50,23 +47,14 @@ export default async function HomePage() {
   const sc = data.siteConfig
 
   return (
-    <>
+    <div className="ca-home-premium">
       <HeroSection cmsData={sc} />
+
+      <PracticeAreasGrid cmsAreas={data.practiceAreas} featuredOnly />
 
       <TrustBar cmsData={sc?.trustBarStats?.length ? { stats: sc.trustBarStats } : undefined} />
 
-      <PracticeAreasGrid cmsAreas={data.practiceAreas} />
-
-      <CriminalUrgency
-        cmsData={sc ? {
-          tag: sc.criminalTag,
-          title: sc.criminalTitle,
-          highlight: sc.criminalHighlight,
-          description: sc.criminalDescription,
-        } : undefined}
-      />
-
-      <TeamSection cmsData={data.homepage?.aboutPartners} cmsTeam={data.team} />
+      <HomePremiumHighlights homepage={data.homepage} posts={data.posts} news={data.news} campaigns={data.campaigns} />
 
       <FeaturedCampaigns
         cmsCampaigns={data.campaigns}
@@ -83,22 +71,6 @@ export default async function HomePage() {
         } : undefined}
       />
 
-      <NewsSection
-        cmsNews={data.news}
-        cmsData={sc ? {
-          title: sc.newsTitle,
-          subtitle: sc.newsSubtitle,
-        } : undefined}
-      />
-
-      <RecentPosts
-        cmsPosts={data.posts}
-        cmsData={sc ? {
-          title: sc.blogTitle,
-          subtitle: sc.blogSubtitle,
-        } : undefined}
-      />
-
       <ContactCTA
         cmsData={sc ? {
           title: sc.contactTitle,
@@ -108,6 +80,6 @@ export default async function HomePage() {
           address: sc.contactAddress,
         } : undefined}
       />
-    </>
+    </div>
   )
 }
