@@ -41,6 +41,12 @@ type MetricCard = {
   value: number | string
 }
 
+type SignalCard = {
+  detail: string
+  label: string
+  tone: 'attention' | 'danger' | 'neutral' | 'success'
+}
+
 async function count(payload: any, collection: string, where?: Record<string, unknown>) {
   try {
     const result = await payload.find({
@@ -145,6 +151,67 @@ function getJobStatus(job: any) {
   return 'pending'
 }
 
+function findLastRun(runs: any[], tasks: string[]) {
+  return runs.find((run) => typeof run?.task === 'string' && tasks.includes(run.task))
+}
+
+function formatAge(value: unknown) {
+  if (typeof value !== 'string') return 'sem registro'
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 'sem registro'
+
+  const minutes = Math.max(0, Math.round((Date.now() - date.getTime()) / 60000))
+  if (minutes < 60) return `ha ${minutes || 1}min`
+
+  const hours = Math.round(minutes / 60)
+  if (hours < 48) return `ha ${hours}h`
+
+  return `ha ${Math.round(hours / 24)}d`
+}
+
+function buildSignals({
+  autorunEnabled,
+  deadlinesEnabled,
+  failedJobs,
+  newsEnabled,
+  queuedJobs,
+  runs,
+}: {
+  autorunEnabled: boolean
+  deadlinesEnabled: boolean
+  failedJobs: number
+  newsEnabled: boolean
+  queuedJobs: number
+  runs: any[]
+}): SignalCard[] {
+  const newsRun = findLastRun(runs, ['news-feed', 'sync-news-feed'])
+  const deadlineRun = findLastRun(runs, ['deadline-alerts', 'send-deadline-alerts'])
+
+  return [
+    {
+      detail: autorunEnabled ? 'Agenda ativa nesta instancia' : 'Execucao manual disponivel',
+      label: 'Runner Payload',
+      tone: autorunEnabled ? 'success' : 'attention',
+    },
+    {
+      detail: failedJobs > 0 ? `${failedJobs} job(s) exigem revisao` : queuedJobs > 0 ? `${queuedJobs} job(s) aguardando fila` : 'Fila sem pendencias',
+      label: 'Fila nativa',
+      tone: failedJobs > 0 ? 'danger' : queuedJobs > 0 ? 'attention' : 'success',
+    },
+    {
+      detail: newsEnabled ? `Ultima execucao ${formatAge(newsRun?.finishedAt || newsRun?.startedAt)}` : 'Ingestao desligada no CMS',
+      label: 'Noticias',
+      tone: newsEnabled ? (newsRun?.status === 'error' ? 'danger' : newsRun ? 'success' : 'attention') : 'neutral',
+    },
+    {
+      detail: deadlinesEnabled ? `Ultima execucao ${formatAge(deadlineRun?.finishedAt || deadlineRun?.startedAt)}` : 'Alertas desligados no CMS',
+      label: 'Prazos',
+      tone: deadlinesEnabled ? (deadlineRun?.status === 'error' ? 'danger' : deadlineRun ? 'success' : 'attention') : 'neutral',
+    },
+  ]
+}
+
 async function getDashboardData() {
   try {
     const payload = await getPayload({ config: configPromise })
@@ -169,8 +236,8 @@ async function getDashboardData() {
           completedAt: { exists: false },
           hasError: { not_equals: true },
         }),
-        findLatest(payload, 'automation-runs', 4),
-        findLatest(payload, 'payload-jobs', 4),
+        findLatest(payload, 'automation-runs', 8),
+        findLatest(payload, 'payload-jobs', 6),
         payload.findGlobal({ slug: 'automation-config' }).catch(() => null),
       ])
 
@@ -207,18 +274,22 @@ async function getDashboardData() {
 
     return {
       automationConfig,
+      failedJobs,
       automationRuns,
       jobs,
       metrics,
       ok: true,
+      queuedJobs,
     }
   } catch {
     return {
       automationConfig: null,
+      failedJobs: 0,
       automationRuns: [],
       jobs: [],
       metrics: [],
       ok: false,
+      queuedJobs: 0,
     }
   }
 }
@@ -228,6 +299,14 @@ export default async function AdminDashboardIntro() {
   const newsEnabled = Boolean(data.automationConfig?.newsEnabled)
   const deadlinesEnabled = Boolean(data.automationConfig?.deadlineAlertsEnabled)
   const autorunEnabled = process.env.PAYLOAD_JOBS_AUTORUN === 'true'
+  const signals = buildSignals({
+    autorunEnabled,
+    deadlinesEnabled,
+    failedJobs: data.failedJobs,
+    newsEnabled,
+    queuedJobs: data.queuedJobs,
+    runs: data.automationRuns,
+  })
 
   return (
     <section className="ca-admin-dashboard" aria-labelledby="ca-admin-dashboard-title">
@@ -262,6 +341,18 @@ export default async function AdminDashboardIntro() {
             <strong>{metric.value}</strong>
             <p>{metric.detail}</p>
           </a>
+        ))}
+      </div>
+
+      <div className="ca-admin-dashboard__signals" aria-label="Sinais das automacoes">
+        {signals.map((signal) => (
+          <div key={signal.label} className={`ca-admin-dashboard__signal ca-admin-dashboard__signal--${signal.tone}`}>
+            <span />
+            <div>
+              <strong>{signal.label}</strong>
+              <p>{signal.detail}</p>
+            </div>
+          </div>
         ))}
       </div>
 

@@ -288,10 +288,12 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json().catch(() => ({}))
+    const action = typeof body.action === 'string' ? body.action : ''
     const task = typeof body.task === 'string' ? body.task : ''
     const runNow = body.runNow !== false
+    const runQueueOnly = action === 'run-queue'
 
-    if (!allowedTasks.has(task)) {
+    if (!runQueueOnly && !allowedTasks.has(task)) {
       return NextResponse.json({ error: 'Task invalida.' }, { status: 400 })
     }
 
@@ -306,6 +308,30 @@ export async function POST(req: NextRequest) {
 
     let job: unknown = null
     let queueError: string | null = null
+    let runError: string | null = null
+    let runResult: unknown = null
+
+    if (runQueueOnly) {
+      try {
+        runResult = await payload.jobs.run({
+          limit: 10,
+          queue: automationQueue,
+          sequential: true,
+        })
+      } catch (error) {
+        runError = getErrorMessage(error)
+      }
+
+      return NextResponse.json({
+        job,
+        queueProcessed: true,
+        queued: false,
+        runError,
+        runResult,
+        schemaRepair,
+        schemaRepairError,
+      })
+    }
 
     try {
       job = await payload.jobs.queue({
@@ -340,9 +366,6 @@ export async function POST(req: NextRequest) {
         queueError = `${queueError} | schema repair before queue: ${schemaRepairError}`
       }
     }
-
-    let runError: string | null = null
-    let runResult: unknown = null
 
     if (job && runNow) {
       try {
