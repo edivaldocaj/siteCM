@@ -17,6 +17,22 @@ const quickLinks = [
   { eyebrow: 'Institucional', title: 'Identidade', href: '/admin/globals/brand-config', text: 'Atualize marca, contatos, redes sociais e avisos juridicos.' },
 ]
 
+const taskLabels: Record<string, string> = {
+  'deadline-alerts': 'Alertas de prazos',
+  'news-feed': 'Ingestao de noticias',
+  'send-deadline-alerts': 'Alertas de prazos',
+  'sync-news-feed': 'Ingestao de noticias',
+}
+
+const statusLabels: Record<string, string> = {
+  error: 'falhou',
+  failed: 'falhou',
+  pending: 'pendente',
+  running: 'rodando',
+  success: 'ok',
+  succeeded: 'ok',
+}
+
 type MetricCard = {
   detail: string
   href: string
@@ -54,12 +70,79 @@ async function findLatest(payload: any, collection: string, limit = 5) {
 
 function formatDate(value: unknown) {
   if (!value || typeof value !== 'string') return 'sem data'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 'sem data'
+
   return new Intl.DateTimeFormat('pt-BR', {
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
     month: '2-digit',
-  }).format(new Date(value))
+  }).format(date)
+}
+
+function formatTask(value: unknown) {
+  if (typeof value !== 'string' || !value) return 'Automacao'
+  return taskLabels[value] || value
+}
+
+function normalizeStatus(value: unknown) {
+  if (typeof value !== 'string' || !value) return 'pending'
+  return value
+}
+
+function formatStatus(value: unknown) {
+  const status = normalizeStatus(value)
+  return statusLabels[status] || status
+}
+
+function formatDuration(startedAt: unknown, finishedAt: unknown) {
+  if (typeof startedAt !== 'string' || typeof finishedAt !== 'string') return null
+
+  const started = new Date(startedAt).getTime()
+  const finished = new Date(finishedAt).getTime()
+  if (!Number.isFinite(started) || !Number.isFinite(finished) || finished < started) return null
+
+  const seconds = Math.max(1, Math.round((finished - started) / 1000))
+  if (seconds < 60) return `${seconds}s`
+
+  const minutes = Math.floor(seconds / 60)
+  const rest = seconds % 60
+  return rest ? `${minutes}min ${rest}s` : `${minutes}min`
+}
+
+function truncate(value: unknown, max = 86) {
+  if (typeof value !== 'string' || !value) return ''
+  return value.length > max ? `${value.slice(0, max - 1)}...` : value
+}
+
+function buildRunDetail(run: any) {
+  const pieces = [
+    formatDate(run.startedAt),
+    `${Number(run.itemsIn || 0)} lidos`,
+    `${Number(run.itemsOut || 0)} gerados`,
+  ]
+  const duration = formatDuration(run.startedAt, run.finishedAt)
+  if (duration) pieces.push(duration)
+  if (run.errorMessage) pieces.push(truncate(run.errorMessage))
+  return pieces.filter(Boolean).join(' | ')
+}
+
+function buildJobDetail(job: any) {
+  const pieces = [
+    job.queue || 'default',
+    formatDate(job.createdAt),
+  ]
+  if (job.totalTried) pieces.push(`${Number(job.totalTried)} tentativa(s)`)
+  if (job.completedAt) pieces.push(`finalizado ${formatDate(job.completedAt)}`)
+  return pieces.filter(Boolean).join(' | ')
+}
+
+function getJobStatus(job: any) {
+  if (job.hasError) return 'failed'
+  if (job.completedAt) return 'succeeded'
+  if (job.processing) return 'running'
+  return 'pending'
 }
 
 async function getDashboardData() {
@@ -206,9 +289,9 @@ export default async function AdminDashboardIntro() {
               data.automationRuns.map((run: any) => (
                 <ActivityRow
                   key={run.id}
-                  detail={`${formatDate(run.startedAt)} | ${Number(run.itemsOut || 0)} item(ns)`}
-                  status={run.status || 'pending'}
-                  title={run.task || 'automacao'}
+                  detail={buildRunDetail(run)}
+                  status={normalizeStatus(run.status)}
+                  title={formatTask(run.task)}
                 />
               ))
             ) : (
@@ -227,9 +310,9 @@ export default async function AdminDashboardIntro() {
               data.jobs.map((job: any) => (
                 <ActivityRow
                   key={job.id}
-                  detail={`${job.queue || 'default'} | ${formatDate(job.createdAt)}`}
-                  status={job.hasError ? 'error' : job.completedAt ? 'success' : 'pending'}
-                  title={job.taskSlug || job.workflowSlug || 'job'}
+                  detail={buildJobDetail(job)}
+                  status={getJobStatus(job)}
+                  title={formatTask(job.taskSlug || job.workflowSlug)}
                 />
               ))
             ) : (
@@ -271,7 +354,7 @@ function ActivityRow({ detail, status, title }: { detail: string; status: string
         <strong>{title}</strong>
         <p>{detail}</p>
       </div>
-      <span className={`ca-admin-dashboard__badge ca-admin-dashboard__badge--${status}`}>{status}</span>
+      <span className={`ca-admin-dashboard__badge ca-admin-dashboard__badge--${status}`}>{formatStatus(status)}</span>
     </div>
   )
 }

@@ -20,6 +20,35 @@ const deadlineTypeLabels: Record<string, string> = {
   other: 'Outro',
 }
 
+async function createAutomationRun(payload: any, task: string) {
+  try {
+    return await payload.create({
+      collection: 'automation-runs',
+      data: {
+        task,
+        status: 'running',
+        startedAt: new Date().toISOString(),
+      },
+    })
+  } catch {
+    return null
+  }
+}
+
+async function finishAutomationRun(payload: any, runId: string | number | undefined, data: Record<string, unknown>) {
+  if (!runId) return
+  try {
+    await payload.update({
+      collection: 'automation-runs',
+      id: runId,
+      data: {
+        ...data,
+        finishedAt: new Date().toISOString(),
+      },
+    })
+  } catch {}
+}
+
 /* GET: Listar prazos próximos (protegido) */
 export async function GET(req: NextRequest) {
   const denied = await requireAdminRole(req, ['admin', 'staff'])
@@ -84,8 +113,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
 
+  let payload: any = null
+  let run: any = null
+
   try {
-    const payload = await getPayload({ config: configPromise })
+    payload = await getPayload({ config: configPromise })
+    run = await createAutomationRun(payload, 'deadline-alerts')
+
     const now = new Date()
     const alerts: any[] = []
 
@@ -167,8 +201,21 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    await finishAutomationRun(payload, run?.id, {
+      status: 'success',
+      itemsIn: deadlines.totalDocs,
+      itemsOut: alerts.length,
+      payload: { alertsSent: alerts.length, checked: deadlines.totalDocs },
+    })
+
     return NextResponse.json({ success: true, alertsSent: alerts.length, alerts })
   } catch (error) {
+    if (payload) {
+      await finishAutomationRun(payload, run?.id, {
+        status: 'error',
+        errorMessage: error instanceof Error ? error.message : 'Erro interno.',
+      })
+    }
     console.error('[Deadlines Alert] Error:', error)
     return NextResponse.json({ error: 'Erro interno.' }, { status: 500 })
   }
