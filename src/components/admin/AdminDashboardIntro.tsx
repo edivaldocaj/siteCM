@@ -59,8 +59,16 @@ type DashboardCounts = {
   activeTeam: number
   approvedTestimonials: number
   brandPending: number
+  campaignClicks30d: number
+  campaignConversions30d: number
+  campaignViews30d: number
   criticalDeadlines: number
   failedJobs: number
+  leadContacted: number
+  leadConverted: number
+  leadLost: number
+  leadProposal: number
+  leadQualified: number
   newLeads: number
   pendingNews: number
   practiceAreas: number
@@ -75,6 +83,14 @@ type ReadinessItem = {
   label: string
   score: number
   tone: 'attention' | 'danger' | 'success'
+}
+
+type GrowthItem = {
+  detail: string
+  href: string
+  label: string
+  tone: 'attention' | 'danger' | 'neutral' | 'success'
+  value: number | string
 }
 
 async function count(payload: any, collection: string, where?: Record<string, unknown>) {
@@ -383,12 +399,52 @@ function buildReadinessScore(items: ReadinessItem[]) {
   return clampScore(items.reduce((total, item) => total + item.score, 0) / items.length)
 }
 
+function buildGrowthItems(counts: DashboardCounts): GrowthItem[] {
+  const activePipeline = counts.newLeads + counts.leadContacted + counts.leadQualified + counts.leadProposal
+  const leadWins = counts.leadConverted
+  const leadLosses = counts.leadLost
+  const campaignActions = counts.campaignClicks30d + counts.campaignConversions30d
+  const conversionRate = counts.campaignViews30d > 0 ? Math.round((counts.campaignConversions30d / counts.campaignViews30d) * 100) : 0
+
+  return [
+    {
+      detail: `${counts.newLeads} novo(s), ${counts.leadQualified + counts.leadProposal} em qualificacao/proposta`,
+      href: '/admin/collections/leads',
+      label: 'Pipeline ativo',
+      tone: activePipeline > 0 ? 'attention' : 'neutral',
+      value: activePipeline,
+    },
+    {
+      detail: `${leadWins} convertido(s), ${leadLosses} perdido(s)`,
+      href: '/admin/collections/leads',
+      label: 'Resultado comercial',
+      tone: leadWins > 0 ? 'success' : leadLosses > leadWins ? 'attention' : 'neutral',
+      value: leadWins,
+    },
+    {
+      detail: `${counts.campaignViews30d} visualizacao(oes) nos ultimos 30 dias`,
+      href: '/admin/collections/campaign-events',
+      label: 'Alcance campanhas',
+      tone: counts.campaignViews30d > 0 ? 'success' : 'neutral',
+      value: counts.campaignViews30d,
+    },
+    {
+      detail: `${campaignActions} clique(s)/envio(s) registrados`,
+      href: '/admin/collections/campaign-events',
+      label: 'Conversao 30d',
+      tone: conversionRate >= 3 ? 'success' : counts.campaignViews30d > 0 ? 'attention' : 'neutral',
+      value: `${conversionRate}%`,
+    },
+  ]
+}
+
 async function getDashboardData() {
   try {
     const payload = await getPayload({ config: configPromise })
     const now = new Date()
     const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000)
     const weekAhead = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
+    const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
 
     const [
       activeCampaigns,
@@ -397,9 +453,17 @@ async function getDashboardData() {
       automationConfig,
       automationRuns,
       brandConfig,
+      campaignClicks30d,
+      campaignConversions30d,
+      campaignViews30d,
       criticalDeadlines,
       failedJobs,
       jobs,
+      leadContacted,
+      leadConverted,
+      leadLost,
+      leadProposal,
+      leadQualified,
       newLeads,
       pendingNews,
       practiceAreas,
@@ -413,12 +477,29 @@ async function getDashboardData() {
       payload.findGlobal({ slug: 'automation-config' }).catch(() => null),
       findLatest(payload, 'automation-runs', 8),
       payload.findGlobal({ slug: 'brand-config' }).catch(() => null),
+      count(payload, 'campaign-events', {
+        createdAt: { greater_than_equal: monthAgo.toISOString() },
+        eventType: { in: ['whatsapp_click', 'cta_click'] },
+      }),
+      count(payload, 'campaign-events', {
+        createdAt: { greater_than_equal: monthAgo.toISOString() },
+        eventType: { equals: 'form_submit' },
+      }),
+      count(payload, 'campaign-events', {
+        createdAt: { greater_than_equal: monthAgo.toISOString() },
+        eventType: { equals: 'page_view' },
+      }),
       count(payload, 'deadlines', {
         deadlineDate: { greater_than_equal: now.toISOString(), less_than_equal: tomorrow.toISOString() },
         status: { in: ['pending', 'in-progress'] },
       }),
       count(payload, 'payload-jobs', { hasError: { equals: true } }),
       findLatest(payload, 'payload-jobs', 6),
+      count(payload, 'leads', { status: { equals: 'contacted' } }),
+      count(payload, 'leads', { status: { equals: 'converted' } }),
+      count(payload, 'leads', { status: { equals: 'lost' } }),
+      count(payload, 'leads', { status: { equals: 'proposal' } }),
+      count(payload, 'leads', { status: { equals: 'qualified' } }),
       count(payload, 'leads', { status: { equals: 'new' } }),
       count(payload, 'news-articles', { status: { equals: 'pending' } }),
       count(payload, 'practice-areas'),
@@ -468,8 +549,16 @@ async function getDashboardData() {
       activeTeam,
       approvedTestimonials,
       brandPending: countPendingValues(brandConfig),
+      campaignClicks30d,
+      campaignConversions30d,
+      campaignViews30d,
       criticalDeadlines,
       failedJobs,
+      leadContacted,
+      leadConverted,
+      leadLost,
+      leadProposal,
+      leadQualified,
       newLeads,
       pendingNews,
       practiceAreas,
@@ -496,8 +585,16 @@ async function getDashboardData() {
         activeTeam: 0,
         approvedTestimonials: 0,
         brandPending: 0,
+        campaignClicks30d: 0,
+        campaignConversions30d: 0,
+        campaignViews30d: 0,
         criticalDeadlines: 0,
         failedJobs: 0,
+        leadContacted: 0,
+        leadConverted: 0,
+        leadLost: 0,
+        leadProposal: 0,
+        leadQualified: 0,
         newLeads: 0,
         pendingNews: 0,
         practiceAreas: 0,
@@ -526,6 +623,7 @@ export default async function AdminDashboardIntro() {
   const readiness = buildReadinessItems(data.counts)
   const readinessScore = buildReadinessScore(readiness)
   const readinessTone = getReadinessTone(readinessScore)
+  const growthItems = buildGrowthItems(data.counts)
   const topPriority = priorities[0]
   const signals = buildSignals({
     autorunEnabled,
@@ -622,6 +720,22 @@ export default async function AdminDashboardIntro() {
                 <p>{item.detail}</p>
               </div>
               <span>{item.score}%</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div className="ca-admin-dashboard__growth" aria-label="Crescimento e relacionamento">
+        <div className="ca-admin-dashboard__section-head">
+          <span className="ca-admin-eyebrow">Crescimento</span>
+          <strong>Funil e campanhas</strong>
+        </div>
+        <div className="ca-admin-dashboard__growth-grid">
+          {growthItems.map((item) => (
+            <a key={item.label} href={item.href} className={`ca-admin-dashboard__growth-item ca-admin-dashboard__growth-item--${item.tone}`}>
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+              <p>{item.detail}</p>
             </a>
           ))}
         </div>
