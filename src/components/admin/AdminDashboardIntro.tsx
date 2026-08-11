@@ -62,8 +62,10 @@ type DashboardCounts = {
   campaignClicks30d: number
   campaignConversions30d: number
   campaignViews30d: number
+  campaignsMissingAssets: number
   criticalDeadlines: number
   failedJobs: number
+  highRelevanceNews: number
   leadContacted: number
   leadConverted: number
   leadLost: number
@@ -71,7 +73,11 @@ type DashboardCounts = {
   leadQualified: number
   newLeads: number
   pendingNews: number
+  pagesMissingSEO: number
+  postsMissingImage: number
+  postsMissingSEO: number
   practiceAreas: number
+  practiceAreasMissingSEO: number
   publishedPosts: number
   queuedJobs: number
   upcomingDeadlines: number
@@ -100,6 +106,14 @@ type ComplianceItem = {
   tone: 'attention' | 'danger' | 'success'
 }
 
+type EditorialItem = {
+  detail: string
+  href: string
+  label: string
+  tone: 'attention' | 'danger' | 'success'
+  value: number | string
+}
+
 async function count(payload: any, collection: string, where?: Record<string, unknown>) {
   try {
     const result = await payload.find({
@@ -111,6 +125,16 @@ async function count(payload: any, collection: string, where?: Record<string, un
   } catch {
     return 0
   }
+}
+
+function missingAnyField(fields: string[]) {
+  return {
+    or: missingFieldClauses(fields),
+  }
+}
+
+function missingFieldClauses(fields: string[]) {
+  return fields.flatMap((field) => [{ [field]: { exists: false } }, { [field]: { equals: '' } }])
 }
 
 async function findLatest(payload: any, collection: string, limit = 5) {
@@ -460,6 +484,58 @@ function buildGrowthItems(counts: DashboardCounts): GrowthItem[] {
   ]
 }
 
+function buildEditorialItems(counts: DashboardCounts): EditorialItem[] {
+  return [
+    {
+      detail: counts.highRelevanceNews > 0 ? 'Materias boas para virar artigo ou campanha' : 'Sem pauta urgente aguardando curadoria',
+      href: '/admin/collections/news-articles',
+      label: 'Pautas quentes',
+      tone: counts.highRelevanceNews > 0 ? 'attention' : 'success',
+      value: counts.highRelevanceNews,
+    },
+    {
+      detail: counts.postsMissingSEO > 0 ? 'Artigos publicados sem titulo ou descricao SEO' : 'Artigos publicados com SEO essencial',
+      href: '/admin/collections/posts',
+      label: 'SEO blog',
+      tone: counts.postsMissingSEO > 3 ? 'danger' : counts.postsMissingSEO > 0 ? 'attention' : 'success',
+      value: counts.postsMissingSEO,
+    },
+    {
+      detail: counts.postsMissingImage > 0 ? 'Artigos sem imagem de destaque' : 'Artigos publicados com imagem principal',
+      href: '/admin/collections/posts',
+      label: 'Imagem editorial',
+      tone: counts.postsMissingImage > 0 ? 'attention' : 'success',
+      value: counts.postsMissingImage,
+    },
+    {
+      detail: counts.campaignsMissingAssets > 0 ? 'Campanhas ativas sem SEO ou OpenGraph' : 'Campanhas ativas prontas para compartilhamento',
+      href: '/admin/collections/campaigns',
+      label: 'Campanhas SEO',
+      tone: counts.campaignsMissingAssets > 2 ? 'danger' : counts.campaignsMissingAssets > 0 ? 'attention' : 'success',
+      value: counts.campaignsMissingAssets,
+    },
+    {
+      detail: counts.practiceAreasMissingSEO > 0 ? 'Areas de atuacao precisam de metadados' : 'Areas de foco bem preparadas',
+      href: '/admin/collections/practice-areas',
+      label: 'Areas foco',
+      tone: counts.practiceAreasMissingSEO > 0 ? 'attention' : 'success',
+      value: counts.practiceAreasMissingSEO,
+    },
+    {
+      detail: counts.pagesMissingSEO > 0 ? 'Paginas publicadas sem SEO completo' : 'Paginas publicadas com metadados',
+      href: '/admin/collections/pages',
+      label: 'Paginas',
+      tone: counts.pagesMissingSEO > 0 ? 'attention' : 'success',
+      value: counts.pagesMissingSEO,
+    },
+  ]
+}
+
+function buildEditorialScore(items: EditorialItem[]) {
+  if (items.length === 0) return 0
+  return clampScore((items.filter((item) => item.tone === 'success').length / items.length) * 100)
+}
+
 function buildComplianceItems(brandConfig: any): ComplianceItem[] {
   const privacyReady = hasRichTextContent(brandConfig?.privacyPolicy)
   const termsReady = hasRichTextContent(brandConfig?.termsOfUse)
@@ -520,8 +596,10 @@ async function getDashboardData() {
       campaignClicks30d,
       campaignConversions30d,
       campaignViews30d,
+      campaignsMissingAssets,
       criticalDeadlines,
       failedJobs,
+      highRelevanceNews,
       jobs,
       leadContacted,
       leadConverted,
@@ -529,8 +607,12 @@ async function getDashboardData() {
       leadProposal,
       leadQualified,
       newLeads,
+      pagesMissingSEO,
       pendingNews,
+      postsMissingImage,
+      postsMissingSEO,
       practiceAreas,
+      practiceAreasMissingSEO,
       publishedPosts,
       queuedJobs,
       upcomingDeadlines,
@@ -553,11 +635,21 @@ async function getDashboardData() {
         createdAt: { greater_than_equal: monthAgo.toISOString() },
         eventType: { equals: 'page_view' },
       }),
+      count(payload, 'campaigns', {
+        and: [
+          { status: { equals: 'active' } },
+          { or: [...missingFieldClauses(['metaTitle', 'metaDescription']), { ogImage: { exists: false } }] },
+        ],
+      }),
       count(payload, 'deadlines', {
         deadlineDate: { greater_than_equal: now.toISOString(), less_than_equal: tomorrow.toISOString() },
         status: { in: ['pending', 'in-progress'] },
       }),
       count(payload, 'payload-jobs', { hasError: { equals: true } }),
+      count(payload, 'news-articles', {
+        relevanceScore: { greater_than_equal: 70 },
+        status: { equals: 'pending' },
+      }),
       findLatest(payload, 'payload-jobs', 6),
       count(payload, 'leads', { status: { equals: 'contacted' } }),
       count(payload, 'leads', { status: { equals: 'converted' } }),
@@ -565,8 +657,19 @@ async function getDashboardData() {
       count(payload, 'leads', { status: { equals: 'proposal' } }),
       count(payload, 'leads', { status: { equals: 'qualified' } }),
       count(payload, 'leads', { status: { equals: 'new' } }),
+      count(payload, 'pages', {
+        and: [{ status: { equals: 'published' } }, missingAnyField(['seo.metaTitle', 'seo.metaDescription'])],
+      }),
       count(payload, 'news-articles', { status: { equals: 'pending' } }),
+      count(payload, 'posts', {
+        featuredImage: { exists: false },
+        status: { equals: 'published' },
+      }),
+      count(payload, 'posts', {
+        and: [{ status: { equals: 'published' } }, missingAnyField(['seo.metaTitle', 'seo.metaDescription'])],
+      }),
       count(payload, 'practice-areas'),
+      count(payload, 'practice-areas', missingAnyField(['seo.metaTitle', 'seo.metaDescription'])),
       count(payload, 'posts', { status: { equals: 'published' } }),
       count(payload, 'payload-jobs', {
         completedAt: { exists: false },
@@ -616,16 +719,22 @@ async function getDashboardData() {
       campaignClicks30d,
       campaignConversions30d,
       campaignViews30d,
+      campaignsMissingAssets,
       criticalDeadlines,
       failedJobs,
+      highRelevanceNews,
       leadContacted,
       leadConverted,
       leadLost,
       leadProposal,
       leadQualified,
       newLeads,
+      pagesMissingSEO,
       pendingNews,
+      postsMissingImage,
+      postsMissingSEO,
       practiceAreas,
+      practiceAreasMissingSEO,
       publishedPosts,
       queuedJobs,
       upcomingDeadlines,
@@ -654,16 +763,22 @@ async function getDashboardData() {
         campaignClicks30d: 0,
         campaignConversions30d: 0,
         campaignViews30d: 0,
+        campaignsMissingAssets: 0,
         criticalDeadlines: 0,
         failedJobs: 0,
+        highRelevanceNews: 0,
         leadContacted: 0,
         leadConverted: 0,
         leadLost: 0,
         leadProposal: 0,
         leadQualified: 0,
         newLeads: 0,
+        pagesMissingSEO: 0,
         pendingNews: 0,
+        postsMissingImage: 0,
+        postsMissingSEO: 0,
         practiceAreas: 0,
+        practiceAreasMissingSEO: 0,
         publishedPosts: 0,
         queuedJobs: 0,
         upcomingDeadlines: 0,
@@ -689,6 +804,9 @@ export default async function AdminDashboardIntro() {
   const readiness = buildReadinessItems(data.counts)
   const readinessScore = buildReadinessScore(readiness)
   const readinessTone = getReadinessTone(readinessScore)
+  const editorialItems = buildEditorialItems(data.counts)
+  const editorialScore = buildEditorialScore(editorialItems)
+  const editorialTone = getReadinessTone(editorialScore)
   const growthItems = buildGrowthItems(data.counts)
   const complianceItems = buildComplianceItems(data.brandConfig)
   const complianceScore = buildComplianceScore(complianceItems)
@@ -789,6 +907,23 @@ export default async function AdminDashboardIntro() {
                 <p>{item.detail}</p>
               </div>
               <span>{item.score}%</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div className="ca-admin-dashboard__editorial" aria-label="Inteligencia editorial">
+        <div className={`ca-admin-dashboard__editorial-score ca-admin-dashboard__editorial-score--${editorialTone}`}>
+          <span>Inteligencia editorial</span>
+          <strong>{editorialScore}%</strong>
+          <p>SEO, imagens, pautas relevantes e preparo para compartilhamento</p>
+        </div>
+        <div className="ca-admin-dashboard__editorial-list">
+          {editorialItems.map((item) => (
+            <a key={item.label} href={item.href} className={`ca-admin-dashboard__editorial-item ca-admin-dashboard__editorial-item--${item.tone}`}>
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+              <p>{item.detail}</p>
             </a>
           ))}
         </div>
