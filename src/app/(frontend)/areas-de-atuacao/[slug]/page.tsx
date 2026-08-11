@@ -95,12 +95,53 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
           {isPenal && <span className="ca-area-detail-hero__badge">Atendimento 24h</span>}
           <h1>{title}</h1>
           {headline && <p>{headline}</p>}
+          <div className="ca-page-hero__proof" aria-label="Como conduzimos casos nessa área">
+            <article>
+              <span>01</span>
+              <strong>Diagnóstico</strong>
+              <p>Leitura inicial dos fatos, documentos, prazos e urgência.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <strong>Estratégia</strong>
+              <p>Definição de caminho consultivo, administrativo ou judicial.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <strong>Acompanhamento</strong>
+              <p>Comunicação objetiva sobre riscos e próximos passos.</p>
+            </article>
+          </div>
         </div>
       </section>
 
       <section className="ca-area-detail">
         <div className="container-narrow mx-auto">
           {description && <p className="ca-area-detail__lead">{description}</p>}
+
+          <section className="ca-area-detail__block" aria-labelledby="area-method-title">
+            <div className="ca-section-heading">
+              <span className="ca-eyebrow">Método</span>
+              <h2 id="area-method-title">Como atuamos</h2>
+            </div>
+            <div className="ca-area-detail__method">
+              <article>
+                <span>1</span>
+                <h3>Organização do caso</h3>
+                <p>Coleta de documentos, fatos essenciais e pontos de atenção para evitar decisões precipitadas.</p>
+              </article>
+              <article>
+                <span>2</span>
+                <h3>Leitura técnica</h3>
+                <p>Análise jurídica com foco em prova, risco, prazo e alternativas proporcionais à demanda.</p>
+              </article>
+              <article>
+                <span>3</span>
+                <h3>Execução orientada</h3>
+                <p>Atuação com comunicação clara e registro dos próximos passos, seja em negociação, processo ou urgência.</p>
+              </article>
+            </div>
+          </section>
 
           {cases.length > 0 && (
             <section className="ca-area-detail__block" aria-labelledby="area-cases-title">
