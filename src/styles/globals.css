@@ -443,8 +443,13 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 .ca-footer { font-family: var(--font-body); }
 .ca-footer__inner { max-width: 80rem; margin: 0 auto; padding: 64px 24px; }
 .ca-footer__grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
-.ca-footer__brand-col { max-width: 340px; }
-.ca-footer__lockup { width: 240px; height: auto; display: block; margin-bottom: 20px; }
+.ca-footer__brand-col { max-width: 380px; }
+.ca-footer__brand-lockup { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 20px; color: var(--color-ca-platinum-100); text-decoration: none; }
+.ca-footer__symbol { width: 46px; height: 46px; display: block; object-fit: contain; flex: 0 0 auto; }
+.ca-footer__brand-text { display: grid; gap: 4px; font-family: var(--font-display); line-height: 1; text-transform: uppercase; }
+.ca-footer__brand-text strong { max-width: 250px; font-size: 0.92rem; font-weight: 600; letter-spacing: 0.18em; }
+.ca-footer__brand-text span { font-family: var(--font-body); font-size: 0.5rem; font-weight: 700; letter-spacing: 0.2em; color: color-mix(in srgb, currentColor 66%, transparent); }
+.ca-footer__brand-lockup:hover { color: var(--color-ca-steel-500); }
 .ca-footer__tagline { color: var(--color-ca-platinum-100); font-family: var(--font-display); font-size: 1.25rem; line-height: 1.25; margin-bottom: 12px; }
 .ca-footer__text { color: color-mix(in srgb, var(--color-ca-steel-400) 74%, transparent); font-size: 0.875rem; line-height: 1.7; }
 .ca-footer__title { color: var(--color-ca-platinum-100); font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.18em; margin: 0 0 20px; }
@@ -459,6 +464,12 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 .ca-footer__bottom p { color: color-mix(in srgb, var(--color-ca-steel-400) 48%, transparent); font-size: 0.75rem; margin: 0; }
 @media (min-width: 720px) { .ca-footer__grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1080px) { .ca-footer__grid { grid-template-columns: 1.4fr 1fr 1fr 1.2fr; } }
+@media (max-width: 420px) {
+  .ca-footer__brand-lockup { gap: 10px; }
+  .ca-footer__symbol { width: 40px; height: 40px; }
+  .ca-footer__brand-text strong { max-width: 205px; font-size: 0.74rem; letter-spacing: 0.16em; }
+  .ca-footer__brand-text span { font-size: 0.44rem; letter-spacing: 0.16em; }
+}
 /* Home redesign - BRAND-04 */
 .ca-hero {
   position: relative;
@@ -893,7 +904,7 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 .ca-criminal__watermark {
   position: absolute;
   inset: 0;
-  background-image: url('/brand/symbol-mono-light.svg');
+  background-image: url('/brand/brand-symbol-transparent.webp');
   background-position: right -80px center;
   background-repeat: no-repeat;
   background-size: min(46vw, 540px) auto;
@@ -1148,8 +1159,21 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   position: absolute;
   right: -60px;
   top: 40px;
-  opacity: 0.055;
   pointer-events: none;
+}
+
+.ca-contact__mark::before {
+  content: '';
+  display: block;
+  width: clamp(220px, 24vw, 320px);
+  aspect-ratio: 1;
+  background: rgba(226, 232, 240, 0.07);
+  -webkit-mask: url('/brand/brand-symbol-transparent.webp') center / contain no-repeat;
+  mask: url('/brand/brand-symbol-transparent.webp') center / contain no-repeat;
+}
+
+.ca-contact__mark img {
+  display: none;
 }
 
 .ca-contact__inner {
@@ -1353,14 +1377,21 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   position: absolute;
   right: clamp(24px, 5vw, 80px);
   bottom: clamp(28px, 5vw, 72px);
-  opacity: 0.08;
   pointer-events: none;
 }
 
-.ca-page-hero__mark img {
+.ca-page-hero__mark::before {
+  content: '';
   display: block;
   width: clamp(180px, 24vw, 320px);
-  height: auto;
+  aspect-ratio: 1;
+  background: rgba(226, 232, 240, 0.09);
+  -webkit-mask: url('/brand/brand-symbol-transparent.webp') center / contain no-repeat;
+  mask: url('/brand/brand-symbol-transparent.webp') center / contain no-repeat;
+}
+
+.ca-page-hero__mark img {
+  display: none;
 }
 
 .ca-page-hero__inner {
@@ -2350,7 +2381,7 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('/brand/symbol-mono-light.svg');
+  background-image: url('/brand/brand-symbol-transparent.webp');
   background-position: right -80px center;
   background-repeat: no-repeat;
   background-size: min(42vw, 520px) auto;

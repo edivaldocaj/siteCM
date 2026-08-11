@@ -49,7 +49,7 @@ export default async function CampanhasPage() {
     <>
       <section className="ca-page-hero ca-page-hero--campaigns">
         <div className="ca-page-hero__mark" aria-hidden="true">
-          <Image src="/brand/symbol-mono-light.svg" alt="" width={360} height={360} unoptimized />
+          <Image src="/brand/brand-symbol-transparent.webp" alt="" width={360} height={360} unoptimized />
         </div>
         <div className="container-wide mx-auto ca-page-hero__inner">
           <span className="ca-eyebrow ca-eyebrow--dark">Ações em andamento</span>

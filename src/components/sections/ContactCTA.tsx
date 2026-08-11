@@ -65,7 +65,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
   return (
     <section className="ca-contact" aria-labelledby="contact-title">
       <div className="ca-contact__mark" aria-hidden="true">
-        <Image src="/brand/symbol-mono-light.svg" alt="" width={260} height={260} unoptimized />
+        <Image src="/brand/brand-symbol-transparent.webp" alt="" width={260} height={260} unoptimized />
       </div>
 
       <div className="container-wide mx-auto ca-contact__inner">
@@ -75,7 +75,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
             {cmsData?.title || 'Conte-nos o seu caso.'}
             <span>{cmsData?.subtitle || 'Podemos ajudar.'}</span>
           </h2>
-          <p>Use o formulario para uma triagem inicial ou fale diretamente pelo WhatsApp em casos urgentes.</p>
+          <p>Use o formulário para uma triagem inicial ou fale diretamente pelo WhatsApp em casos urgentes.</p>
 
           <div className="ca-contact__details">
             <p>
@@ -110,7 +110,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
             <div className="ca-contact__success">
               <CheckCircle size={56} />
               <h3>Mensagem enviada</h3>
-              <p>Recebemos sua solicitacao e retornaremos pelos dados informados.</p>
+              <p>Recebemos sua solicitação e retornaremos pelos dados informados.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="ca-contact__form">
@@ -133,13 +133,13 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
                   <option value="" disabled>
                     Selecione o tipo de problema
                   </option>
-                  <option value="consumidor">Direito do Consumidor</option>
+                  <option value="licitacoes">Licitações e Contratos</option>
                   <option value="digital">Direito Digital / LGPD</option>
                   <option value="civil">Direito Civil</option>
+                  <option value="penal">Direito Penal urgente</option>
+                  <option value="consumidor">Direito do Consumidor</option>
                   <option value="imobiliario">Direito Imobiliário</option>
                   <option value="tributario">Direito Tributário</option>
-                  <option value="licitacoes">Licitações</option>
-                  <option value="penal">Direito Penal urgente</option>
                   <option value="outro">Outro assunto</option>
                 </select>
               </label>

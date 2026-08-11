@@ -57,7 +57,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
     <>
       <section className="ca-page-hero ca-page-hero--contact">
         <div className="ca-page-hero__mark" aria-hidden="true">
-          <Image src="/brand/symbol-mono-light.svg" alt="" width={360} height={360} />
+          <Image src="/brand/brand-symbol-transparent.webp" alt="" width={360} height={360} />
         </div>
         <div className="container-wide mx-auto ca-page-hero__inner">
           <span className="ca-eyebrow ca-eyebrow--dark">Fale conosco</span>
@@ -142,13 +142,13 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
                     <option value="" disabled>
                       Selecione
                     </option>
-                    <option value="consumidor">Direito do Consumidor</option>
+                    <option value="licitacoes">Licitações e Contratos</option>
                     <option value="digital">Direito Digital / LGPD</option>
                     <option value="civil">Direito Civil</option>
+                    <option value="penal">Direito Penal urgente</option>
+                    <option value="consumidor">Direito do Consumidor</option>
                     <option value="imobiliario">Direito Imobiliário</option>
                     <option value="tributario">Direito Tributário</option>
-                    <option value="licitacoes">Licitações</option>
-                    <option value="penal">Direito Penal urgente</option>
                     <option value="outro">Outro</option>
                   </select>
                 </label>

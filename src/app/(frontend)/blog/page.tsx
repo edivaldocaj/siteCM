@@ -57,7 +57,7 @@ export default async function BlogPage() {
     <>
       <section className="ca-page-hero ca-page-hero--blog">
         <div className="ca-page-hero__mark" aria-hidden="true">
-          <Image src="/brand/symbol-mono-light.svg" alt="" width={360} height={360} unoptimized />
+          <Image src="/brand/brand-symbol-transparent.webp" alt="" width={360} height={360} unoptimized />
         </div>
         <div className="container-wide mx-auto ca-page-hero__inner">
           <span className="ca-eyebrow ca-eyebrow--dark">Conteúdo e atualizações</span>
@@ -88,7 +88,7 @@ export default async function BlogPage() {
                 return (
                   <Link key={item.id || item.slug} href={href} target={target} rel={rel} className="ca-editorial-card">
                     <div className="ca-editorial-card__media">
-                      <Image src="/brand/symbol-mono-light.svg" alt="" width={86} height={86} unoptimized />
+                      <Image src="/brand/brand-symbol-transparent.webp" alt="" width={86} height={86} unoptimized />
                       {isNews && (
                         <span className="ca-editorial-card__external" title="Notícia externa">
                           <ArrowUpRight size={16} />

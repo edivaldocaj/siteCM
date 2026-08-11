@@ -20,6 +20,13 @@ const fallbackNavLinks: LinkItem[] = [
   { href: '/contato', label: 'Contato' },
 ]
 
+const fallbackAreaLinks: LinkItem[] = [
+  { href: '/areas-de-atuacao/licitacoes-e-contratos', label: 'Licitações e Contratos' },
+  { href: '/areas-de-atuacao/direito-digital', label: 'Direito Digital' },
+  { href: '/areas-de-atuacao/direito-civil', label: 'Direito Civil' },
+  { href: '/areas-de-atuacao/direito-penal', label: 'Direito Penal' },
+]
+
 function normalizePhoneHref(value?: string | null) {
   const digits = value?.replace(/\D/g, '')
   if (!digits) return 'tel:+5584991243985'
@@ -36,7 +43,7 @@ export function Footer({
   const email = siteConfig?.contactEmail || 'contato@cavalcantealbuquerque.com.br'
   const phone = siteConfig?.contactPhone || '(84) 99124-3985'
   const address = siteConfig?.contactAddress || 'Rua Francisco Maia Sobrinho, 1950\nLagoa Nova - Natal/RN, 59062-250'
-  const areaLinks = practiceAreas.length > 0 ? practiceAreas : [{ href: '/areas-de-atuacao', label: 'Áreas de atuação' }]
+  const areaLinks = practiceAreas.length > 0 ? practiceAreas : fallbackAreaLinks
   const cmsFooterColumns = footerColumns?.filter((column) => column.title && column.links?.length)
   const navigationColumn = cmsFooterColumns?.[0] || { title: 'Navegação', links: navItems }
   const legalColumnLinks = legalLinks?.length
@@ -52,7 +59,19 @@ export function Footer({
       <div className="ca-footer__inner">
         <div className="ca-footer__grid">
           <div className="ca-footer__brand-col">
-            <Image src="/brand/lockup-light.webp" alt="Cavalcante Albuquerque" width={240} height={60} className="ca-footer__lockup" />
+            <Link href="/" className="ca-footer__brand-lockup" aria-label="Cavalcante Albuquerque">
+              <Image
+                src="/brand/brand-symbol-transparent.webp"
+                alt=""
+                width={58}
+                height={58}
+                className="ca-footer__symbol"
+              />
+              <span className="ca-footer__brand-text" aria-hidden="true">
+                <strong>Cavalcante Albuquerque</strong>
+                <span>Advocacia e Consultoria</span>
+              </span>
+            </Link>
             <p className="ca-footer__tagline">Advocacia com estratégia e solidez.</p>
             <p className="ca-footer__text">
               Advocacia e consultoria em Natal/RN com atendimento técnico, direto e orientado ao contexto de cada caso.

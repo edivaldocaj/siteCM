@@ -48,7 +48,7 @@ export function RecentPosts({ cmsPosts = [], cmsData }: RecentPostsProps) {
                   {featuredImageUrl ? (
                     <Image src={featuredImageUrl} alt={post.title} fill sizes="(max-width: 900px) 100vw, 33vw" />
                   ) : (
-                    <Image src="/brand/symbol-mono-light.svg" alt="" width={88} height={88} unoptimized />
+                    <Image src="/brand/brand-symbol-transparent.webp" alt="" width={88} height={88} unoptimized />
                   )}
                 </Link>
 

@@ -48,7 +48,7 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
           <Image src="/brand/areas-presentation.webp" alt="" fill sizes="100vw" priority />
         </div>
         <div className="ca-page-hero__mark" aria-hidden="true">
-          <Image src="/brand/symbol-mono-light.svg" alt="" width={360} height={360} unoptimized />
+          <Image src="/brand/brand-symbol-transparent.webp" alt="" width={360} height={360} unoptimized />
         </div>
         <div className="container-wide mx-auto ca-page-hero__inner">
           <span className="ca-eyebrow ca-eyebrow--dark">Especialidades</span>

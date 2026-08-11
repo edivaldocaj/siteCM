@@ -85,7 +85,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
           <Image src="/brand/cover-areas.jpg" alt="" fill sizes="100vw" priority />
         </div>
         <div className="ca-page-hero__mark" aria-hidden="true">
-          <Image src="/brand/symbol-mono-light.svg" alt="" width={360} height={360} unoptimized />
+          <Image src="/brand/brand-symbol-transparent.webp" alt="" width={360} height={360} unoptimized />
         </div>
         <div className="container-narrow mx-auto ca-area-detail-hero__inner">
           <Link href="/areas-de-atuacao" className="ca-back-link">

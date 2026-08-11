@@ -89,7 +89,7 @@ export function CampaignVideoHero({ videoUrl, videoFileUrl, heroImageUrl }: Camp
               background: 'linear-gradient(135deg, var(--color-ca-navy-950), var(--color-ca-navy-800))',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <Image src="/brand/symbol-mono-light.svg" alt="" width={120} height={120} style={{ width: '120px', height: '120px', opacity: 0.12 }} unoptimized />
+              <Image src="/brand/brand-symbol-transparent.webp" alt="" width={120} height={120} style={{ width: '120px', height: '120px', opacity: 0.12 }} unoptimized />
             </div>
           )}
 
