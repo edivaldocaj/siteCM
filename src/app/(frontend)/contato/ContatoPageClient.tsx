@@ -63,6 +63,23 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
           <span className="ca-eyebrow ca-eyebrow--dark">Fale conosco</span>
           <h1>Contato</h1>
           <p>Entre em contato pelo formulário, WhatsApp ou pelos canais institucionais do escritório.</p>
+          <div className="ca-page-hero__proof" aria-label="Canais e tempo de resposta">
+            <article>
+              <span>01</span>
+              <strong>Triagem objetiva</strong>
+              <p>Informações essenciais para entender o contexto inicial.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <strong>WhatsApp direto</strong>
+              <p>Canal rápido para urgência e confirmação de atendimento.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <strong>Penal urgente</strong>
+              <p>Atendimento emergencial quando a situação exige resposta imediata.</p>
+            </article>
+          </div>
         </div>
       </section>
 
@@ -100,6 +117,21 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
                   <h3>Horário</h3>
                   <p>Segunda a sexta, 8h às 18h. Penal: atendimento emergencial.</p>
                 </div>
+              </article>
+            </div>
+
+            <div className="ca-contact-page__routes" aria-label="Como funciona o atendimento">
+              <article>
+                <span>1</span>
+                <p>Envie o contexto inicial e selecione a área mais próxima do caso.</p>
+              </article>
+              <article>
+                <span>2</span>
+                <p>A equipe confere urgência, documentos e melhor canal de retorno.</p>
+              </article>
+              <article>
+                <span>3</span>
+                <p>Você recebe orientação sobre os próximos passos e possibilidades.</p>
               </article>
             </div>
 
