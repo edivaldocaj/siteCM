@@ -48,7 +48,10 @@ export default function AdminAutomationActions() {
       }
 
       if (data.directFallback) {
-        setMessage('Automacao executada diretamente. A fila nativa ainda precisa da migration dos enums.')
+        const detail = data.queueError ? ` Detalhe da fila: ${data.queueError}` : ''
+        setMessage(
+          `Automacao executada diretamente. A fila nativa nao aceitou o job neste deploy; as migrations automaticas devem corrigir isso quando o deploy novo concluir.${detail}`,
+        )
         return
       }
 
