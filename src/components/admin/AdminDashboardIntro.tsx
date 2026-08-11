@@ -55,12 +55,26 @@ type PriorityItem = {
 }
 
 type DashboardCounts = {
+  activeCampaigns: number
+  activeTeam: number
+  approvedTestimonials: number
+  brandPending: number
   criticalDeadlines: number
   failedJobs: number
   newLeads: number
   pendingNews: number
+  practiceAreas: number
+  publishedPosts: number
   queuedJobs: number
   upcomingDeadlines: number
+}
+
+type ReadinessItem = {
+  detail: string
+  href: string
+  label: string
+  score: number
+  tone: 'attention' | 'danger' | 'success'
 }
 
 async function count(payload: any, collection: string, where?: Record<string, unknown>) {
@@ -136,6 +150,13 @@ function formatDuration(startedAt: unknown, finishedAt: unknown) {
 function truncate(value: unknown, max = 86) {
   if (typeof value !== 'string' || !value) return ''
   return value.length > max ? `${value.slice(0, max - 1)}...` : value
+}
+
+function countPendingValues(value: unknown): number {
+  if (typeof value === 'string') return value.includes('__PENDENTE__') ? 1 : 0
+  if (!value || typeof value !== 'object') return 0
+
+  return Object.values(value as Record<string, unknown>).reduce<number>((total, item) => total + countPendingValues(item), 0)
 }
 
 function buildRunDetail(run: any) {
@@ -305,6 +326,63 @@ function buildPriorities(counts: DashboardCounts): PriorityItem[] {
   return priorities.slice(0, 4)
 }
 
+function clampScore(value: number) {
+  return Math.max(0, Math.min(100, Math.round(value)))
+}
+
+function getReadinessTone(score: number): 'attention' | 'danger' | 'success' {
+  if (score < 60) return 'danger'
+  if (score < 85) return 'attention'
+  return 'success'
+}
+
+function buildReadinessItems(counts: DashboardCounts): ReadinessItem[] {
+  const brandScore = clampScore(100 - counts.brandPending * 8)
+  const editorialScore = clampScore(
+    Math.min(counts.publishedPosts / 6, 1) * 45 +
+      Math.min(counts.practiceAreas / 4, 1) * 35 +
+      Math.min(counts.activeCampaigns / 3, 1) * 20,
+  )
+  const trustScore = clampScore(Math.min(counts.approvedTestimonials / 5, 1) * 100)
+  const teamScore = clampScore(Math.min(counts.activeTeam / 2, 1) * 100)
+
+  return [
+    {
+      detail: counts.brandPending > 0 ? `${counts.brandPending} campo(s) institucional(is) pendente(s)` : 'Identidade institucional sem pendencias',
+      href: '/admin/globals/brand-config',
+      label: 'Marca',
+      score: brandScore,
+      tone: getReadinessTone(brandScore),
+    },
+    {
+      detail: `${counts.publishedPosts} artigo(s), ${counts.practiceAreas} area(s), ${counts.activeCampaigns} campanha(s) ativa(s)`,
+      href: '/admin/collections/posts',
+      label: 'Conteudo',
+      score: editorialScore,
+      tone: getReadinessTone(editorialScore),
+    },
+    {
+      detail: `${counts.approvedTestimonials} depoimento(s) aprovado(s)`,
+      href: '/admin/collections/testimonials',
+      label: 'Prova social',
+      score: trustScore,
+      tone: getReadinessTone(trustScore),
+    },
+    {
+      detail: `${counts.activeTeam} profissional(is) ativo(s) no site`,
+      href: '/admin/collections/team',
+      label: 'Equipe',
+      score: teamScore,
+      tone: getReadinessTone(teamScore),
+    },
+  ]
+}
+
+function buildReadinessScore(items: ReadinessItem[]) {
+  if (items.length === 0) return 0
+  return clampScore(items.reduce((total, item) => total + item.score, 0) / items.length)
+}
+
 async function getDashboardData() {
   try {
     const payload = await getPayload({ config: configPromise })
@@ -312,27 +390,48 @@ async function getDashboardData() {
     const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000)
     const weekAhead = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
 
-    const [newLeads, pendingNews, upcomingDeadlines, criticalDeadlines, failedJobs, queuedJobs, automationRuns, jobs, automationConfig] =
-      await Promise.all([
-        count(payload, 'leads', { status: { equals: 'new' } }),
-        count(payload, 'news-articles', { status: { equals: 'pending' } }),
-        count(payload, 'deadlines', {
-          deadlineDate: { greater_than_equal: now.toISOString(), less_than_equal: weekAhead.toISOString() },
-          status: { in: ['pending', 'in-progress'] },
-        }),
-        count(payload, 'deadlines', {
-          deadlineDate: { greater_than_equal: now.toISOString(), less_than_equal: tomorrow.toISOString() },
-          status: { in: ['pending', 'in-progress'] },
-        }),
-        count(payload, 'payload-jobs', { hasError: { equals: true } }),
-        count(payload, 'payload-jobs', {
-          completedAt: { exists: false },
-          hasError: { not_equals: true },
-        }),
-        findLatest(payload, 'automation-runs', 8),
-        findLatest(payload, 'payload-jobs', 6),
-        payload.findGlobal({ slug: 'automation-config' }).catch(() => null),
-      ])
+    const [
+      activeCampaigns,
+      activeTeam,
+      approvedTestimonials,
+      automationConfig,
+      automationRuns,
+      brandConfig,
+      criticalDeadlines,
+      failedJobs,
+      jobs,
+      newLeads,
+      pendingNews,
+      practiceAreas,
+      publishedPosts,
+      queuedJobs,
+      upcomingDeadlines,
+    ] = await Promise.all([
+      count(payload, 'campaigns', { status: { equals: 'active' } }),
+      count(payload, 'team', { active: { equals: true }, showOnSite: { equals: true } }),
+      count(payload, 'testimonials', { approved: { equals: true } }),
+      payload.findGlobal({ slug: 'automation-config' }).catch(() => null),
+      findLatest(payload, 'automation-runs', 8),
+      payload.findGlobal({ slug: 'brand-config' }).catch(() => null),
+      count(payload, 'deadlines', {
+        deadlineDate: { greater_than_equal: now.toISOString(), less_than_equal: tomorrow.toISOString() },
+        status: { in: ['pending', 'in-progress'] },
+      }),
+      count(payload, 'payload-jobs', { hasError: { equals: true } }),
+      findLatest(payload, 'payload-jobs', 6),
+      count(payload, 'leads', { status: { equals: 'new' } }),
+      count(payload, 'news-articles', { status: { equals: 'pending' } }),
+      count(payload, 'practice-areas'),
+      count(payload, 'posts', { status: { equals: 'published' } }),
+      count(payload, 'payload-jobs', {
+        completedAt: { exists: false },
+        hasError: { not_equals: true },
+      }),
+      count(payload, 'deadlines', {
+        deadlineDate: { greater_than_equal: now.toISOString(), less_than_equal: weekAhead.toISOString() },
+        status: { in: ['pending', 'in-progress'] },
+      }),
+    ])
 
     const metrics: MetricCard[] = [
       {
@@ -365,10 +464,16 @@ async function getDashboardData() {
       },
     ]
     const counts: DashboardCounts = {
+      activeCampaigns,
+      activeTeam,
+      approvedTestimonials,
+      brandPending: countPendingValues(brandConfig),
       criticalDeadlines,
       failedJobs,
       newLeads,
       pendingNews,
+      practiceAreas,
+      publishedPosts,
       queuedJobs,
       upcomingDeadlines,
     }
@@ -387,10 +492,16 @@ async function getDashboardData() {
     return {
       automationConfig: null,
       counts: {
+        activeCampaigns: 0,
+        activeTeam: 0,
+        approvedTestimonials: 0,
+        brandPending: 0,
         criticalDeadlines: 0,
         failedJobs: 0,
         newLeads: 0,
         pendingNews: 0,
+        practiceAreas: 0,
+        publishedPosts: 0,
         queuedJobs: 0,
         upcomingDeadlines: 0,
       },
@@ -412,6 +523,9 @@ export default async function AdminDashboardIntro() {
   const healthScore = buildHealthScore(data.counts)
   const healthTone = getHealthTone(healthScore)
   const priorities = buildPriorities(data.counts)
+  const readiness = buildReadinessItems(data.counts)
+  const readinessScore = buildReadinessScore(readiness)
+  const readinessTone = getReadinessTone(readinessScore)
   const topPriority = priorities[0]
   const signals = buildSignals({
     autorunEnabled,
@@ -489,6 +603,25 @@ export default async function AdminDashboardIntro() {
                 <strong>{priority.label}</strong>
                 <p>{priority.detail}</p>
               </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div className="ca-admin-dashboard__readiness" aria-label="Prontidao publica">
+        <div className={`ca-admin-dashboard__readiness-score ca-admin-dashboard__readiness-score--${readinessTone}`}>
+          <span>Prontidao publica</span>
+          <strong>{readinessScore}%</strong>
+          <p>Marca, conteudo, prova social e equipe</p>
+        </div>
+        <div className="ca-admin-dashboard__readiness-list">
+          {readiness.map((item) => (
+            <a key={item.label} href={item.href} className={`ca-admin-dashboard__readiness-item ca-admin-dashboard__readiness-item--${item.tone}`}>
+              <div>
+                <strong>{item.label}</strong>
+                <p>{item.detail}</p>
+              </div>
+              <span>{item.score}%</span>
             </a>
           ))}
         </div>
