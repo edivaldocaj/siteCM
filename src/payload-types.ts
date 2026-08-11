@@ -195,11 +195,16 @@ export interface User {
   collection: 'users';
 }
 /**
+ * Biblioteca de imagens, documentos e vídeos usados no site e no CMS.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
   id: number;
+  /**
+   * Descreva a imagem de forma objetiva. Ex: Sala de atendimento do escritório.
+   */
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -264,18 +269,21 @@ export interface Media {
   };
 }
 /**
+ * Profissionais exibidos no site e usados como autores/responsáveis no CMS.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "team".
  */
 export interface Team {
   id: number;
   name: string;
+  /**
+   * Usado em cards e assinaturas compactas.
+   */
   shortName?: string | null;
   slug: string;
   role: string;
   oab?: string | null;
-  email?: string | null;
-  whatsapp?: string | null;
   bio?: {
     root: {
       type: string;
@@ -291,10 +299,15 @@ export interface Team {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Foto profissional em boa luz, preferencialmente vertical ou quadrada.
+   */
   photo?: (number | null) | Media;
-  practiceAreas?: (number | PracticeArea)[] | null;
+  email?: string | null;
+  whatsapp?: string | null;
   linkedin?: string | null;
   lattes?: string | null;
+  practiceAreas?: (number | PracticeArea)[] | null;
   order?: number | null;
   active?: boolean | null;
   showOnSite?: boolean | null;
@@ -314,22 +327,14 @@ export interface Team {
 export interface PracticeArea {
   id: number;
   title: string;
+  /**
+   * Usado em /areas-de-atuacao/slug-da-area.
+   */
   slug: string;
+  /**
+   * Resumo usado em cards e listagens.
+   */
   shortDescription?: string | null;
-  icon?:
-    | (
-        | 'shield'
-        | 'scale'
-        | 'shopping-bag'
-        | 'home'
-        | 'receipt'
-        | 'file-text'
-        | 'gavel'
-        | 'laptop'
-        | 'building'
-        | 'briefcase'
-      )
-    | null;
   heroHeadline?: string | null;
   content?: {
     root: {
@@ -359,9 +364,26 @@ export interface PracticeArea {
         id?: string | null;
       }[]
     | null;
+  icon?:
+    | (
+        | 'file-text'
+        | 'laptop'
+        | 'scale'
+        | 'gavel'
+        | 'shield'
+        | 'shopping-bag'
+        | 'home'
+        | 'receipt'
+        | 'building'
+        | 'briefcase'
+      )
+    | null;
+  /**
+   * Mantido para conteúdo antigo. Prefira o campo Responsável (Equipe).
+   */
   attorney?: ('edivaldo' | 'gabrielly' | 'both') | null;
   /**
-   * Campo temporário para migração. Mantém attorney legado.
+   * Advogado ou profissional responsável cadastrado em Equipe.
    */
   responsibleRef?: (number | null) | Team;
   byFirm?: boolean | null;
@@ -415,8 +437,17 @@ export interface Page {
 export interface Post {
   id: number;
   title: string;
+  /**
+   * Usado em /blog/slug-do-artigo. Use letras minúsculas, números e hífens.
+   */
   slug: string;
+  /**
+   * Texto curto usado em cards, listagens e topo do artigo.
+   */
   excerpt: string;
+  /**
+   * Imagem horizontal para card e compartilhamento editorial.
+   */
   featuredImage?: (number | null) | Media;
   content: {
     root: {
@@ -434,24 +465,30 @@ export interface Post {
     [k: string]: unknown;
   };
   category:
+    | 'licitacoes'
     | 'direito-digital'
     | 'direito-civil'
+    | 'direito-penal'
+    | 'lgpd'
     | 'direito-consumidor'
     | 'direito-imobiliario'
     | 'direito-tributario'
-    | 'licitacoes'
-    | 'direito-penal'
-    | 'lgpd'
     | 'geral';
+  /**
+   * Mantido para conteúdo antigo. Prefira o campo Autor (Equipe).
+   */
   author?: ('edivaldo' | 'gabrielly' | 'escritorio') | null;
   /**
-   * Campo temporário para migração. Mantém author legado até validação do backfill.
+   * Autor cadastrado na collection Equipe.
    */
   authorRef?: (number | null) | Team;
   /**
-   * Usado quando author legado for escritório.
+   * Marque quando o texto for assinado pelo escritório.
    */
   byFirm?: boolean | null;
+  /**
+   * Palavras-chave internas para organização editorial.
+   */
   tags?: string[] | null;
   readTime?: number | null;
   publishedAt?: string | null;
@@ -468,7 +505,7 @@ export interface Post {
   createdAt: string;
 }
 /**
- * Campanhas jurídicas — cada campanha gera uma landing page independente.
+ * Campanhas jurídicas com landing page, formulário, prova social e peças de divulgação.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "campaigns".
@@ -476,11 +513,23 @@ export interface Post {
 export interface Campaign {
   id: number;
   title: string;
+  /**
+   * Usado em /campanhas/slug-da-campanha. Use letras minúsculas, números e hífens.
+   */
   slug: string;
-  category: 'consumidor' | 'digital' | 'criminal' | 'imobiliario' | 'tributario';
+  category: 'licitacoes' | 'digital' | 'civil' | 'penal' | 'consumidor' | 'criminal' | 'imobiliario' | 'tributario';
   status: 'draft' | 'active' | 'paused' | 'ended';
-  heroImage?: (number | null) | Media;
+  featuredOnHomepage?: boolean | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  /**
+   * Frase curta logo abaixo do título. Evite promessas de resultado.
+   */
   subtitle?: string | null;
+  /**
+   * Imagem horizontal de apoio. O site usa fallback institucional quando vazio.
+   */
+  heroImage?: (number | null) | Media;
   problemDescription?: {
     root: {
       type: string;
@@ -526,6 +575,9 @@ export interface Campaign {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Use depoimentos anonimizados, iniciais ou recortes institucionais.
+   */
   socialProof?:
     | {
         text: string;
@@ -534,6 +586,9 @@ export interface Campaign {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Perguntas exibidas no final da landing page.
+   */
   faq?:
     | {
         question: string;
@@ -541,12 +596,19 @@ export interface Campaign {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Mensagem inicial enviada quando o visitante clica no CTA da campanha.
+   */
   whatsappMessage?: string | null;
-  showForm?: boolean | null;
+  /**
+   * Use com cuidado. Ex: Atendimento prioritário para casos com prazo em curso.
+   */
   urgencyText?: string | null;
-  featuredOnHomepage?: boolean | null;
-  startDate?: string | null;
-  endDate?: string | null;
+  showForm?: boolean | null;
+  /**
+   * Descrição interna do público para tráfego pago, segmentação ou pauta comercial.
+   */
+  targetAudience?: string | null;
   /**
    * Imagem quadrada para posts de feed no Instagram/Facebook.
    */
@@ -560,26 +622,28 @@ export interface Campaign {
    */
   videoUrl?: string | null;
   /**
-   * Upload de vídeo curto (até 60s) — MP4 recomendado.
+   * Upload de vídeo curto até 60s. MP4 recomendado.
    */
   videoFile?: (number | null) | Media;
   /**
-   * Texto pré-escrito para copiar e colar nos posts. Máx ~2200 caracteres (limite do Instagram).
+   * Texto pré-escrito para copiar e colar nos posts. Máx. aproximado: 2200 caracteres.
    */
   socialCaption?: string | null;
   /**
-   * Ex: #direitodoconsumidor, #lgpd, #advocaciadigital
+   * Ex: #direitodigital, #licitacoes, #direitopenal
    */
   socialHashtags?: string[] | null;
   colorAccent?: ('gold' | 'red' | 'blue' | 'green') | null;
   /**
-   * Descrição do público-alvo para segmentação de anúncios.
+   * Título curto para Google e redes sociais.
    */
-  targetAudience?: string | null;
   metaTitle?: string | null;
+  /**
+   * Resumo objetivo da campanha, idealmente até 160 caracteres.
+   */
   metaDescription?: string | null;
   /**
-   * Imagem de preview quando o link for compartilhado no WhatsApp/Telegram/Facebook.
+   * Imagem de preview quando o link for compartilhado no WhatsApp, Telegram ou Facebook.
    */
   ogImage?: (number | null) | Media;
   updatedAt: string;
@@ -594,6 +658,9 @@ export interface Campaign {
 export interface Testimonial {
   id: number;
   authorName: string;
+  /**
+   * Evite dados sensíveis, números de processo ou promessas de resultado.
+   */
   text: string;
   caseType?: string | null;
   rating?: number | null;
@@ -1282,13 +1349,13 @@ export interface TeamSelect<T extends boolean = true> {
   slug?: T;
   role?: T;
   oab?: T;
-  email?: T;
-  whatsapp?: T;
   bio?: T;
   photo?: T;
-  practiceAreas?: T;
+  email?: T;
+  whatsapp?: T;
   linkedin?: T;
   lattes?: T;
+  practiceAreas?: T;
   order?: T;
   active?: T;
   showOnSite?: T;
@@ -1352,8 +1419,11 @@ export interface CampaignsSelect<T extends boolean = true> {
   slug?: T;
   category?: T;
   status?: T;
-  heroImage?: T;
+  featuredOnHomepage?: T;
+  startDate?: T;
+  endDate?: T;
   subtitle?: T;
+  heroImage?: T;
   problemDescription?: T;
   rightsExplanation?: T;
   benefits?: T;
@@ -1373,11 +1443,9 @@ export interface CampaignsSelect<T extends boolean = true> {
         id?: T;
       };
   whatsappMessage?: T;
-  showForm?: T;
   urgencyText?: T;
-  featuredOnHomepage?: T;
-  startDate?: T;
-  endDate?: T;
+  showForm?: T;
+  targetAudience?: T;
   coverImage?: T;
   storyImage?: T;
   videoUrl?: T;
@@ -1385,7 +1453,6 @@ export interface CampaignsSelect<T extends boolean = true> {
   socialCaption?: T;
   socialHashtags?: T;
   colorAccent?: T;
-  targetAudience?: T;
   metaTitle?: T;
   metaDescription?: T;
   ogImage?: T;
@@ -1414,7 +1481,6 @@ export interface PracticeAreasSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   shortDescription?: T;
-  icon?: T;
   heroHeadline?: T;
   content?: T;
   caseTypes?:
@@ -1430,6 +1496,7 @@ export interface PracticeAreasSelect<T extends boolean = true> {
         answer?: T;
         id?: T;
       };
+  icon?: T;
   attorney?: T;
   responsibleRef?: T;
   byFirm?: T;
@@ -1908,6 +1975,9 @@ export interface BrandConfig {
  */
 export interface Navigation {
   id: number;
+  /**
+   * Mantenha poucos itens para preservar leitura e responsividade no mobile.
+   */
   headerLinks?:
     | {
         label: string;
@@ -1916,6 +1986,14 @@ export interface Navigation {
         id?: string | null;
       }[]
     | null;
+  ctaLabel?: string | null;
+  /**
+   * Ex: /contato ou link direto para WhatsApp.
+   */
+  ctaHref?: string | null;
+  /**
+   * Use grupos curtos, como Escritório, Conteúdo, Atendimento e Jurídico.
+   */
   footerColumns?:
     | {
         title: string;
@@ -1934,8 +2012,6 @@ export interface Navigation {
         id?: string | null;
       }[]
     | null;
-  ctaLabel?: string | null;
-  ctaHref?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2128,6 +2204,8 @@ export interface NavigationSelect<T extends boolean = true> {
         highlight?: T;
         id?: T;
       };
+  ctaLabel?: T;
+  ctaHref?: T;
   footerColumns?:
     | T
     | {
@@ -2148,8 +2226,6 @@ export interface NavigationSelect<T extends boolean = true> {
         href?: T;
         id?: T;
       };
-  ctaLabel?: T;
-  ctaHref?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

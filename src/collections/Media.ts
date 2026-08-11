@@ -22,9 +22,23 @@ export const Media: CollectionConfig = {
       { name: 'story', width: 1080, height: 1920, position: 'centre' },
     ],
   },
-  admin: { useAsTitle: 'alt', group: 'Sistema' },
+  admin: {
+    useAsTitle: 'alt',
+    defaultColumns: ['alt', 'filename', 'mimeType', 'filesize', 'createdAt'],
+    description: 'Biblioteca de imagens, documentos e vídeos usados no site e no CMS.',
+    group: 'Sistema',
+    listSearchableFields: ['alt', 'filename', 'mimeType'],
+  },
   fields: [
-    { name: 'alt', type: 'text', required: true, label: 'Texto Alternativo' },
+    {
+      name: 'alt',
+      type: 'text',
+      required: true,
+      label: 'Texto Alternativo',
+      admin: {
+        description: 'Descreva a imagem de forma objetiva. Ex: Sala de atendimento do escritório.',
+      },
+    },
   ],
 }
 
