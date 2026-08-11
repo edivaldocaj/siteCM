@@ -26,16 +26,30 @@ export default function AdminAutomationActions() {
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
-      const data = await response.json()
+      const text = await response.text()
+      let data: { error?: string; queued?: boolean; runError?: string } = {}
+
+      if (text) {
+        try {
+          data = JSON.parse(text)
+        } catch {
+          data = { error: text.slice(0, 240) }
+        }
+      }
 
       if (!response.ok) {
         setError(data.error || 'Nao foi possivel executar o job.')
         return
       }
 
-      setMessage('Job enfileirado e executado pela fila nativa do Payload.')
+      if (data.runError) {
+        setMessage(`Job enfileirado. Execucao imediata pendente: ${data.runError}`)
+        return
+      }
+
+      setMessage(data.queued ? 'Job enfileirado e executado pela fila nativa do Payload.' : 'Solicitacao concluida.')
     } catch {
-      setError('Falha de conexao ao executar o job.')
+      setError('Nao foi possivel chamar /api/automation-jobs. Verifique se o deploy atual ja inclui essa rota.')
     } finally {
       setActiveTask(null)
     }

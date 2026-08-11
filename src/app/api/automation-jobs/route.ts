@@ -1,17 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
-import { requireAdminRole } from '@/lib/admin-auth'
+import { getUserRoles } from '@/lib/admin-auth'
 import { automationQueue } from '@/jobs/automationTasks'
 
 const allowedTasks = new Set(['sync-news-feed', 'send-deadline-alerts'])
 
+function unauthorized(message = 'Nao autenticado.') {
+  return NextResponse.json({ error: message }, { status: message === 'Acesso negado.' ? 403 : 401 })
+}
+
+async function getAuthorizedPayload(req: NextRequest) {
+  const payload = await getPayload({ config: configPromise })
+  const { user } = await payload.auth({ headers: req.headers })
+
+  if (!user) return { denied: unauthorized(), payload: null }
+
+  const roles = getUserRoles(user as any)
+  if (!roles.some((role) => ['admin', 'editor', 'staff'].includes(role))) {
+    return { denied: unauthorized('Acesso negado.'), payload: null }
+  }
+
+  return { denied: null, payload }
+}
+
 export async function GET(req: NextRequest) {
-  const denied = await requireAdminRole(req, ['admin', 'editor', 'staff'])
+  const { denied, payload } = await getAuthorizedPayload(req)
   if (denied) return denied
 
   try {
-    const payload = await getPayload({ config: configPromise })
     const [queued, failed, latest] = await Promise.all([
       (payload as any).find({
         collection: 'payload-jobs',
@@ -53,7 +70,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const denied = await requireAdminRole(req, ['admin', 'editor', 'staff'])
+  const { denied, payload } = await getAuthorizedPayload(req)
   if (denied) return denied
 
   try {
@@ -65,7 +82,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Task invalida.' }, { status: 400 })
     }
 
-    const payload = await getPayload({ config: configPromise })
     const job = await payload.jobs.queue({
       input: {},
       meta: {
@@ -76,17 +92,25 @@ export async function POST(req: NextRequest) {
       task: task as any,
     } as any)
 
-    const runResult = runNow
-      ? await payload.jobs.run({
+    let runError: string | null = null
+    let runResult: unknown = null
+
+    if (runNow) {
+      try {
+        runResult = await payload.jobs.run({
           limit: 5,
           queue: automationQueue,
           sequential: true,
         })
-      : null
+      } catch (error) {
+        runError = error instanceof Error ? error.message : 'Job enfileirado, mas a execucao imediata falhou.'
+      }
+    }
 
     return NextResponse.json({
       job,
       queued: true,
+      runError,
       runResult,
     })
   } catch (error) {
