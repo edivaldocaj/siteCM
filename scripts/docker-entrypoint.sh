@@ -23,4 +23,4 @@ if [ "${SKIP_MIGRATIONS_ON_START:-false}" != "true" ] || [ "${RUN_SCHEMA_PUSH_ON
   fi
 fi
 
-exec npm run start
+exec npm run start:next

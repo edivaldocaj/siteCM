@@ -7,6 +7,12 @@ const runMigrations = process.env.SKIP_MIGRATIONS_ON_START !== 'true'
 const runBootstrap = process.env.BOOTSTRAP_NEW_DB_ON_START === 'true'
 const runDemoSeed = process.env.SEED_DEMO_CONTENT_ON_START === 'true'
 
+const payloadJobsTaskSlugColumns = [
+  { table: 'payload_jobs', column: 'task_slug' },
+  { table: 'payload_jobs_log', column: 'task_slug' },
+  { table: 'payload_jobs_log', column: 'parent_task_slug' },
+]
+
 function run(command, args, options = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
@@ -43,6 +49,34 @@ async function ensurePayloadMigrationsTable() {
     await client.query('CREATE INDEX IF NOT EXISTS "payload_migrations_created_at_idx" ON "payload_migrations" USING btree ("created_at");')
     await client.query('CREATE INDEX IF NOT EXISTS "payload_migrations_updated_at_idx" ON "payload_migrations" USING btree ("updated_at");')
     console.log('[db:startup] Tabela payload_migrations pronta.')
+  } finally {
+    await client.end()
+  }
+}
+
+async function repairPayloadJobsTaskSlugColumns() {
+  if (!process.env.DATABASE_URL) return
+
+  const client = new Client({ connectionString: process.env.DATABASE_URL })
+  await client.connect()
+
+  try {
+    for (const { table, column } of payloadJobsTaskSlugColumns) {
+      const result = await client.query(
+        `select data_type
+         from information_schema.columns
+         where table_schema = 'public'
+           and table_name = $1
+           and column_name = $2`,
+        [table, column],
+      )
+
+      const dataType = result.rows[0]?.data_type
+      if (!dataType || dataType === 'character varying') continue
+
+      await client.query(`ALTER TABLE "${table}" ALTER COLUMN "${column}" TYPE varchar USING "${column}"::text`)
+      console.log(`[db:startup] ${table}.${column} convertido de ${dataType} para varchar.`)
+    }
   } finally {
     await client.end()
   }
@@ -91,6 +125,7 @@ async function main() {
 
     if (runMigrations) {
       await ensurePayloadMigrationsTable()
+      await repairPayloadJobsTaskSlugColumns()
       console.log('[db:startup] Aplicando migrations do Payload...')
       await run('npm', ['run', 'migrate'])
     }

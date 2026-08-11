@@ -36,7 +36,7 @@ npm run start
 
 ## Primeira inicializacao com banco novo
 
-O container Docker roda `npm run migrate` automaticamente antes do `next start`, usando lock do Postgres para evitar duas instancias migrando ao mesmo tempo.
+O container Docker e o comando `npm run start` rodam `npm run migrate` automaticamente antes do `next start`, usando lock do Postgres para evitar duas instancias migrando ao mesmo tempo.
 
 Se precisar rodar manualmente, abra um terminal do app no Easypanel e use:
 
