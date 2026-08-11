@@ -50,7 +50,7 @@ export default function AdminAutomationActions() {
       if (data.directFallback) {
         const detail = data.queueError ? ` Detalhe da fila: ${data.queueError}` : ''
         setMessage(
-          `Automacao executada diretamente. A fila nativa nao aceitou o job neste deploy; as migrations automaticas devem corrigir isso quando o deploy novo concluir.${detail}`,
+          `Automacao executada diretamente. A fila nativa recusou o job mesmo apos o reparo automatico do schema.${detail}`,
         )
         return
       }
