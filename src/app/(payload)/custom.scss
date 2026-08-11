@@ -526,6 +526,121 @@ html[data-theme='light'] {
   border-top-color: #dc2626;
 }
 
+.ca-admin-dashboard__compliance {
+  display: grid;
+  grid-template-columns: minmax(210px, 280px) minmax(0, 1fr);
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.ca-admin-dashboard__compliance-score,
+.ca-admin-dashboard__compliance-list {
+  border: 1px solid var(--ca-admin-line);
+  border-radius: 8px;
+  background: rgba(255, 253, 249, 0.82);
+  box-shadow: 0 14px 34px rgba(7, 29, 58, 0.05);
+}
+
+.ca-admin-dashboard__compliance-score {
+  min-height: 170px;
+  padding: 18px;
+}
+
+.ca-admin-dashboard__compliance-score span {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--theme-elevation-600);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ca-admin-dashboard__compliance-score strong {
+  display: block;
+  color: var(--ca-admin-navy);
+  font-size: 46px;
+  line-height: 1;
+}
+
+.ca-admin-dashboard__compliance-score p {
+  margin: 12px 0 0;
+  color: var(--theme-elevation-600);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.ca-admin-dashboard__compliance-score--success {
+  border-top: 3px solid #16a34a;
+}
+
+.ca-admin-dashboard__compliance-score--attention {
+  border-top: 3px solid #ca8a04;
+}
+
+.ca-admin-dashboard__compliance-score--danger {
+  border-top: 3px solid #dc2626;
+}
+
+.ca-admin-dashboard__compliance-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  overflow: hidden;
+}
+
+.ca-admin-dashboard__compliance-item {
+  display: flex;
+  gap: 10px;
+  min-height: 84px;
+  padding: 16px;
+  border-right: 1px solid rgba(7, 29, 58, 0.08);
+  border-bottom: 1px solid rgba(7, 29, 58, 0.08);
+  color: var(--theme-text);
+  text-decoration: none;
+}
+
+.ca-admin-dashboard__compliance-item:nth-child(2n) {
+  border-right: 0;
+}
+
+.ca-admin-dashboard__compliance-item:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.ca-admin-dashboard__compliance-item > span {
+  width: 9px;
+  height: 9px;
+  margin-top: 5px;
+  border-radius: 999px;
+  background: #16a34a;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1);
+  flex: 0 0 auto;
+}
+
+.ca-admin-dashboard__compliance-item strong {
+  display: block;
+  color: var(--ca-admin-navy);
+  font-size: 13px;
+}
+
+.ca-admin-dashboard__compliance-item p {
+  margin: 5px 0 0;
+  color: var(--theme-elevation-600);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.ca-admin-dashboard__compliance-item--attention > span {
+  background: #ca8a04;
+  box-shadow: 0 0 0 4px rgba(202, 138, 4, 0.1);
+}
+
+.ca-admin-dashboard__compliance-item--danger > span {
+  background: #dc2626;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
 .ca-admin-dashboard__metric {
   display: block;
   min-height: 132px;
@@ -791,6 +906,7 @@ html[data-theme='light'] {
   }
 
   .ca-admin-dashboard__grid,
+  .ca-admin-dashboard__compliance,
   .ca-admin-dashboard__growth-grid,
   .ca-admin-dashboard__metrics,
   .ca-admin-dashboard__priority-list,
@@ -802,6 +918,21 @@ html[data-theme='light'] {
 
   .ca-admin-dashboard__readiness-list {
     grid-template-columns: 1fr;
+  }
+
+  .ca-admin-dashboard__compliance-list {
+    grid-template-columns: 1fr;
+  }
+
+  .ca-admin-dashboard__compliance-item,
+  .ca-admin-dashboard__compliance-item:nth-child(2n),
+  .ca-admin-dashboard__compliance-item:nth-last-child(-n + 2) {
+    border-right: 0;
+    border-bottom: 1px solid rgba(7, 29, 58, 0.08);
+  }
+
+  .ca-admin-dashboard__compliance-item:last-child {
+    border-bottom: 0;
   }
 
   .ca-admin-dashboard__readiness-item,
@@ -831,6 +962,7 @@ html[data-theme='light'] {
   }
 
   .ca-admin-dashboard__grid,
+  .ca-admin-dashboard__compliance,
   .ca-admin-dashboard__growth-grid,
   .ca-admin-dashboard__metrics,
   .ca-admin-dashboard__priority-list,

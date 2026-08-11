@@ -93,6 +93,13 @@ type GrowthItem = {
   value: number | string
 }
 
+type ComplianceItem = {
+  detail: string
+  href: string
+  label: string
+  tone: 'attention' | 'danger' | 'success'
+}
+
 async function count(payload: any, collection: string, where?: Record<string, unknown>) {
   try {
     const result = await payload.find({
@@ -173,6 +180,21 @@ function countPendingValues(value: unknown): number {
   if (!value || typeof value !== 'object') return 0
 
   return Object.values(value as Record<string, unknown>).reduce<number>((total, item) => total + countPendingValues(item), 0)
+}
+
+function isFilledString(value: unknown) {
+  return typeof value === 'string' && value.trim().length > 0 && !value.includes('__PENDENTE__')
+}
+
+function hasRichTextContent(value: unknown): boolean {
+  if (!value || typeof value !== 'object') return false
+
+  if ('text' in value && isFilledString((value as { text?: unknown }).text)) return true
+
+  return Object.values(value as Record<string, unknown>).some((item) => {
+    if (Array.isArray(item)) return item.some(hasRichTextContent)
+    return hasRichTextContent(item)
+  })
 }
 
 function buildRunDetail(run: any) {
@@ -438,6 +460,48 @@ function buildGrowthItems(counts: DashboardCounts): GrowthItem[] {
   ]
 }
 
+function buildComplianceItems(brandConfig: any): ComplianceItem[] {
+  const privacyReady = hasRichTextContent(brandConfig?.privacyPolicy)
+  const termsReady = hasRichTextContent(brandConfig?.termsOfUse)
+  const cookiesReady = hasRichTextContent(brandConfig?.cookiePolicy)
+  const dpoReady = isFilledString(brandConfig?.dpoName) && isFilledString(brandConfig?.dpoEmail)
+  const oabReady = isFilledString(brandConfig?.oabDisclaimer)
+  const resendFrom = process.env.RESEND_FROM_EMAIL || ''
+  const emailReady = Boolean(process.env.RESEND_API_KEY && isFilledString(resendFrom) && !resendFrom.includes('@resend.dev'))
+
+  return [
+    {
+      detail: privacyReady && termsReady && cookiesReady ? 'Politicas publicas preenchidas' : 'Revise privacidade, termos e cookies',
+      href: '/admin/globals/brand-config',
+      label: 'Documentos legais',
+      tone: privacyReady && termsReady && cookiesReady ? 'success' : 'danger',
+    },
+    {
+      detail: dpoReady ? 'Encarregado e e-mail informados' : 'Nome/e-mail do encarregado pendentes',
+      href: '/admin/globals/brand-config',
+      label: 'LGPD / DPO',
+      tone: dpoReady ? 'success' : 'attention',
+    },
+    {
+      detail: oabReady ? 'Aviso etico configurado' : 'Aviso OAB precisa ser revisado',
+      href: '/admin/globals/brand-config',
+      label: 'Aviso OAB',
+      tone: oabReady ? 'success' : 'attention',
+    },
+    {
+      detail: emailReady ? 'Remetente transacional configurado' : 'Verifique Resend e dominio remetente',
+      href: '/admin/globals/automation-config',
+      label: 'E-mail operacional',
+      tone: emailReady ? 'success' : 'attention',
+    },
+  ]
+}
+
+function buildComplianceScore(items: ComplianceItem[]) {
+  if (items.length === 0) return 0
+  return clampScore((items.filter((item) => item.tone === 'success').length / items.length) * 100)
+}
+
 async function getDashboardData() {
   try {
     const payload = await getPayload({ config: configPromise })
@@ -569,6 +633,7 @@ async function getDashboardData() {
 
     return {
       automationConfig,
+      brandConfig,
       counts,
       failedJobs,
       automationRuns,
@@ -580,6 +645,7 @@ async function getDashboardData() {
   } catch {
     return {
       automationConfig: null,
+      brandConfig: null,
       counts: {
         activeCampaigns: 0,
         activeTeam: 0,
@@ -624,6 +690,9 @@ export default async function AdminDashboardIntro() {
   const readinessScore = buildReadinessScore(readiness)
   const readinessTone = getReadinessTone(readinessScore)
   const growthItems = buildGrowthItems(data.counts)
+  const complianceItems = buildComplianceItems(data.brandConfig)
+  const complianceScore = buildComplianceScore(complianceItems)
+  const complianceTone = getReadinessTone(complianceScore)
   const topPriority = priorities[0]
   const signals = buildSignals({
     autorunEnabled,
@@ -736,6 +805,25 @@ export default async function AdminDashboardIntro() {
               <span>{item.label}</span>
               <strong>{item.value}</strong>
               <p>{item.detail}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div className="ca-admin-dashboard__compliance" aria-label="Governanca juridica">
+        <div className={`ca-admin-dashboard__compliance-score ca-admin-dashboard__compliance-score--${complianceTone}`}>
+          <span>Governanca juridica</span>
+          <strong>{complianceScore}%</strong>
+          <p>LGPD, OAB, documentos legais e e-mail transacional</p>
+        </div>
+        <div className="ca-admin-dashboard__compliance-list">
+          {complianceItems.map((item) => (
+            <a key={item.label} href={item.href} className={`ca-admin-dashboard__compliance-item ca-admin-dashboard__compliance-item--${item.tone}`}>
+              <span />
+              <div>
+                <strong>{item.label}</strong>
+                <p>{item.detail}</p>
+              </div>
             </a>
           ))}
         </div>
