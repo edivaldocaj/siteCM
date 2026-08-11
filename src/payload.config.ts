@@ -28,9 +28,19 @@ import { AutomationConfig } from './globals/AutomationConfig'
 import { Faqs } from './collections/Faqs'
 import { AutomationRuns } from './collections/AutomationRuns'
 import { AuditLog } from './collections/AuditLog'
+import { automationQueue, automationTasks } from './jobs/automationTasks'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const hasJobAccess = ({ req }: { req: { headers: Headers; user?: unknown } }) => {
+  const secret = process.env.PAYLOAD_JOBS_ACCESS_SECRET || process.env.CRON_SECRET
+  const bearer = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '')
+  if (secret && bearer === secret) return true
+
+  const roles = (req.user as { roles?: string[] } | undefined)?.roles
+  return Array.isArray(roles) && roles.includes('admin')
+}
 
 export default buildConfig({
   admin: {
@@ -89,6 +99,26 @@ export default buildConfig({
     },
     push: process.env.PAYLOAD_DB_PUSH === 'true',
   }),
+  jobs: {
+    access: {
+      cancel: hasJobAccess,
+      queue: hasJobAccess,
+      run: hasJobAccess,
+    },
+    addParentToTaskLog: true,
+    autoRun:
+      process.env.PAYLOAD_JOBS_AUTORUN === 'true'
+        ? [
+            {
+              cron: process.env.PAYLOAD_JOBS_RUN_CRON || '* * * * *',
+              limit: Number(process.env.PAYLOAD_JOBS_RUN_LIMIT || 10),
+              queue: automationQueue,
+            },
+          ]
+        : undefined,
+    deleteJobOnComplete: false,
+    tasks: automationTasks,
+  },
   sharp,
   plugins: [],
 })

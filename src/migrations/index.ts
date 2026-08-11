@@ -5,6 +5,7 @@ import * as migration_20260809_191500_cms_01_brand_config from './20260809_19150
 import * as migration_20260809_192000_cms_02_navigation from './20260809_192000_cms_02_navigation'
 import * as migration_20260809_192500_cms_03_automation_and_logs from './20260809_192500_cms_03_automation_and_logs'
 import * as migration_20260809_200500_auto_01_news_article_workflow from './20260809_200500_auto_01_news_article_workflow'
+import * as migration_20260811_142611_native_payload_jobs from './20260811_142611_native_payload_jobs'
 
 export const migrations = [
   {
@@ -36,5 +37,15 @@ export const migrations = [
     up: migration_20260809_192500_cms_03_automation_and_logs.up,
     down: migration_20260809_192500_cms_03_automation_and_logs.down,
     name: '20260809_192500_cms_03_automation_and_logs',
+  },
+  {
+    up: migration_20260809_200500_auto_01_news_article_workflow.up,
+    down: migration_20260809_200500_auto_01_news_article_workflow.down,
+    name: '20260809_200500_auto_01_news_article_workflow',
+  },
+  {
+    up: migration_20260811_142611_native_payload_jobs.up,
+    down: migration_20260811_142611_native_payload_jobs.down,
+    name: '20260811_142611_native_payload_jobs',
   },
 ]
