@@ -7,6 +7,7 @@ import * as migration_20260809_192500_cms_03_automation_and_logs from './2026080
 import * as migration_20260809_200500_auto_01_news_article_workflow from './20260809_200500_auto_01_news_article_workflow'
 import * as migration_20260811_142611_native_payload_jobs from './20260811_142611_native_payload_jobs'
 import * as migration_20260811_213000_fix_payload_jobs_task_enums from './20260811_213000_fix_payload_jobs_task_enums'
+import * as migration_20260811_214500_payload_jobs_task_slug_varchar from './20260811_214500_payload_jobs_task_slug_varchar'
 
 export const migrations = [
   {
@@ -53,5 +54,10 @@ export const migrations = [
     up: migration_20260811_213000_fix_payload_jobs_task_enums.up,
     down: migration_20260811_213000_fix_payload_jobs_task_enums.down,
     name: '20260811_213000_fix_payload_jobs_task_enums',
+  },
+  {
+    up: migration_20260811_214500_payload_jobs_task_slug_varchar.up,
+    down: migration_20260811_214500_payload_jobs_task_slug_varchar.down,
+    name: '20260811_214500_payload_jobs_task_slug_varchar',
   },
 ]

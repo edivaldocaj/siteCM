@@ -42,6 +42,6 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
 
 export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
-    -- PostgreSQL does not support dropping enum values safely.
+    -- No-op: restoring enum-backed task slugs can break existing queued jobs.
   `)
 }

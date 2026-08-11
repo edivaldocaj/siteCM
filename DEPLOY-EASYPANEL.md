@@ -36,7 +36,9 @@ npm run start
 
 ## Primeira inicializacao com banco novo
 
-Depois do primeiro build/deploy, abra um terminal do app no Easypanel e rode:
+O container Docker roda `npm run migrate` automaticamente antes do `next start`, usando lock do Postgres para evitar duas instancias migrando ao mesmo tempo.
+
+Se precisar rodar manualmente, abra um terminal do app no Easypanel e use:
 
 ```bash
 npm run preflight:production
@@ -52,7 +54,6 @@ Se quiser que o container rode as etapas iniciais sozinho na primeira subida, co
 
 ```bash
 RUN_PREFLIGHT_ON_START=true
-RUN_MIGRATIONS_ON_START=true
 BOOTSTRAP_NEW_DB_ON_START=true
 DB_WAIT_SECONDS=60
 DB_STARTUP_STRICT=false
@@ -64,12 +65,17 @@ Depois que o bootstrap concluir e você conseguir acessar o /admin, volte pelo m
 
 ```bash
 BOOTSTRAP_NEW_DB_ON_START=false
-RUN_MIGRATIONS_ON_START=false
+```
+
+As migrations continuam ativas por padrao em todo deploy. Para desabilitar temporariamente, use:
+
+```bash
+SKIP_MIGRATIONS_ON_START=true
 ```
 
 O container aguarda o Postgres por ate `DB_WAIT_SECONDS` quando migrations ou bootstrap estiverem ativos.
 
-Manter tarefas automáticas de banco em todo start pode ser aceitável no começo, mas para produção estável prefira rodar preparo de banco de forma controlada antes do reload. `DB_STARTUP_STRICT=false` evita 502 por falha de bootstrap, mantendo o app no ar para diagnóstico.
+Neste projeto, migrations ficam automaticas por padrao no deploy. O bootstrap e o seed demonstrativo continuam opcionais, para evitar reprocessar conteudo administrativo sem necessidade. `DB_STARTUP_STRICT=false` evita 502 por falha de bootstrap, mantendo o app no ar para diagnostico.
 
 ## Smoke test
 

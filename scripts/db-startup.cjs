@@ -3,10 +3,9 @@ const { Client } = require('pg')
 
 const lockKey = 82417031
 const runSchemaPush = process.env.RUN_SCHEMA_PUSH_ON_START === 'true'
-const runMigrations = process.env.RUN_MIGRATIONS_ON_START === 'true'
+const runMigrations = process.env.SKIP_MIGRATIONS_ON_START !== 'true'
 const runBootstrap = process.env.BOOTSTRAP_NEW_DB_ON_START === 'true'
 const runDemoSeed = process.env.SEED_DEMO_CONTENT_ON_START === 'true'
-const forcePayloadMigrate = process.env.FORCE_PAYLOAD_MIGRATE === 'true'
 
 function run(command, args, options = {}) {
   return new Promise((resolve, reject) => {
@@ -85,18 +84,15 @@ async function main() {
   await run('node', ['scripts/wait-for-db.cjs'])
 
   await withDatabaseLock(async () => {
-    console.log('[db:startup] Inicializando schema quando necessario...')
-    await run('npm', ['run', 'schema:init'])
+    if (runSchemaPush || runBootstrap || runDemoSeed) {
+      console.log('[db:startup] Inicializando schema quando necessario...')
+      await run('npm', ['run', 'schema:init'])
+    }
 
     if (runMigrations) {
       await ensurePayloadMigrationsTable()
-
-      if (forcePayloadMigrate) {
-        console.log('[db:startup] FORCE_PAYLOAD_MIGRATE=true; aplicando migrations do Payload...')
-        await run('npm', ['run', 'migrate'])
-      } else {
-        console.log('[db:startup] Schema atual sincronizado; pulando replay de migrations historicas. Use FORCE_PAYLOAD_MIGRATE=true apenas para migrate real.')
-      }
+      console.log('[db:startup] Aplicando migrations do Payload...')
+      await run('npm', ['run', 'migrate'])
     }
 
     if (runBootstrap) {

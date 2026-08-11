@@ -8,7 +8,6 @@ const requiredTables = [
   'nps_responses',
   'posts',
   'practice_areas',
-  'payload_migrations',
 ]
 
 async function main() {
