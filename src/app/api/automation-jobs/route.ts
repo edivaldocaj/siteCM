@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
-import { sql } from '@payloadcms/db-postgres'
 import configPromise from '@payload-config'
 import { getUserRoles } from '@/lib/admin-auth'
 import { automationQueue } from '@/jobs/automationTasks'
 
 const allowedTasks = new Set(['sync-news-feed', 'send-deadline-alerts'])
-let enumRepairPromise: Promise<void> | null = null
+const taskEndpointMap: Record<string, string> = {
+  'send-deadline-alerts': '/api/deadlines',
+  'sync-news-feed': '/api/news-feed',
+}
 
 function unauthorized(message = 'Nao autenticado.') {
   return NextResponse.json({ error: message }, { status: message === 'Acesso negado.' ? 403 : 401 })
@@ -26,22 +28,54 @@ async function getAuthorizedPayload(req: NextRequest) {
   return { denied: null, payload }
 }
 
-async function ensurePayloadJobTaskEnums(payload: NonNullable<Awaited<ReturnType<typeof getAuthorizedPayload>>['payload']>) {
-  enumRepairPromise =
-    enumRepairPromise ||
-    (async () => {
-      const db = (payload as any).db?.drizzle
-      if (!db?.execute) return
+function getBaseURL(req: NextRequest) {
+  return (
+    process.env.PAYLOAD_JOBS_BASE_URL ||
+    process.env.INTERNAL_APP_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    req.nextUrl.origin
+  )
+}
 
-      await db.execute(sql`ALTER TYPE "public"."enum_payload_jobs_task_slug" ADD VALUE IF NOT EXISTS 'sync-news-feed'`)
-      await db.execute(sql`ALTER TYPE "public"."enum_payload_jobs_task_slug" ADD VALUE IF NOT EXISTS 'send-deadline-alerts'`)
-      await db.execute(sql`ALTER TYPE "public"."enum_payload_jobs_log_task_slug" ADD VALUE IF NOT EXISTS 'sync-news-feed'`)
-      await db.execute(sql`ALTER TYPE "public"."enum_payload_jobs_log_task_slug" ADD VALUE IF NOT EXISTS 'send-deadline-alerts'`)
-      await db.execute(sql`ALTER TYPE "public"."enum_payload_jobs_log_parent_task_slug" ADD VALUE IF NOT EXISTS 'sync-news-feed'`)
-      await db.execute(sql`ALTER TYPE "public"."enum_payload_jobs_log_parent_task_slug" ADD VALUE IF NOT EXISTS 'send-deadline-alerts'`)
-    })()
+async function runTaskDirectly(task: string, req: NextRequest) {
+  const secret = process.env.CRON_SECRET
+  if (!secret) {
+    throw new Error('CRON_SECRET nao configurado para fallback direto da automacao.')
+  }
 
-  await enumRepairPromise
+  const endpoint = taskEndpointMap[task]
+  if (!endpoint) {
+    throw new Error('Task sem endpoint de fallback configurado.')
+  }
+
+  const response = await fetch(new URL(endpoint, getBaseURL(req)), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${secret}`,
+    },
+    signal: AbortSignal.timeout(120000),
+  })
+
+  const text = await response.text()
+  let body: unknown = text
+
+  if (text) {
+    try {
+      body = JSON.parse(text)
+    } catch {
+      body = text
+    }
+  }
+
+  if (!response.ok) {
+    const message =
+      typeof body === 'object' && body && 'error' in body
+        ? String((body as { error?: unknown }).error)
+        : text || `Falha HTTP ${response.status}`
+    throw new Error(message)
+  }
+
+  return body
 }
 
 export async function GET(req: NextRequest) {
@@ -102,22 +136,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Task invalida.' }, { status: 400 })
     }
 
-    await ensurePayloadJobTaskEnums(payload)
+    let job: unknown = null
+    let queueError: string | null = null
 
-    const job = await payload.jobs.queue({
-      input: {},
-      meta: {
-        queuedBy: 'payload-dashboard',
-        source: 'manual',
-      },
-      queue: automationQueue,
-      task: task as any,
-    } as any)
+    try {
+      job = await payload.jobs.queue({
+        input: {},
+        meta: {
+          queuedBy: 'payload-dashboard',
+          source: 'manual',
+        },
+        queue: automationQueue,
+        task: task as any,
+      } as any)
+    } catch (error) {
+      queueError = error instanceof Error ? error.message : 'Nao foi possivel enfileirar o job nativo.'
+    }
 
     let runError: string | null = null
     let runResult: unknown = null
 
-    if (runNow) {
+    if (job && runNow) {
       try {
         runResult = await payload.jobs.run({
           limit: 5,
@@ -129,9 +168,19 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    if (!job && runNow) {
+      try {
+        runResult = await runTaskDirectly(task, req)
+      } catch (error) {
+        runError = error instanceof Error ? error.message : 'Fallback direto da automacao falhou.'
+      }
+    }
+
     return NextResponse.json({
+      directFallback: !job && Boolean(runResult),
       job,
-      queued: true,
+      queueError,
+      queued: Boolean(job),
       runError,
       runResult,
     })

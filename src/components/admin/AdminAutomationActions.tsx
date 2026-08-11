@@ -27,7 +27,7 @@ export default function AdminAutomationActions() {
         method: 'POST',
       })
       const text = await response.text()
-      let data: { error?: string; queued?: boolean; runError?: string } = {}
+      let data: { directFallback?: boolean; error?: string; queueError?: string; queued?: boolean; runError?: string } = {}
 
       if (text) {
         try {
@@ -44,6 +44,16 @@ export default function AdminAutomationActions() {
 
       if (data.runError) {
         setMessage(`Job enfileirado. Execucao imediata pendente: ${data.runError}`)
+        return
+      }
+
+      if (data.directFallback) {
+        setMessage('Automacao executada diretamente. A fila nativa ainda precisa da migration dos enums.')
+        return
+      }
+
+      if (data.queueError) {
+        setError(`Fila nativa indisponivel: ${data.queueError}`)
         return
       }
 
