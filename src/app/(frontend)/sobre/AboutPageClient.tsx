@@ -12,6 +12,42 @@ const valueIconMap: Record<string, LucideIcon> = {
   heart: Heart,
 }
 
+const defaultTimeline = [
+  {
+    year: 'Atuação',
+    title: 'Estratégia antes do volume',
+    description: 'Cada caso é analisado por risco, prova, urgência e viabilidade antes da definição do caminho jurídico.',
+  },
+  {
+    year: 'Método',
+    title: 'Comunicação clara',
+    description: 'O cliente recebe orientação objetiva sobre próximos passos, documentos necessários e possíveis cenários.',
+  },
+  {
+    year: 'Natal/RN',
+    title: 'Presença institucional',
+    description: 'Atendimento em Natal/RN com suporte remoto quando a rotina do caso permite mais agilidade.',
+  },
+]
+
+const defaultValues = [
+  {
+    icon: 'scale',
+    title: 'Critério técnico',
+    description: 'Atuação sustentada por análise jurídica, leitura do contexto e decisões documentadas.',
+  },
+  {
+    icon: 'shield',
+    title: 'Discrição',
+    description: 'Tratamento cuidadoso de informações sensíveis, especialmente em casos empresariais, digitais e penais.',
+  },
+  {
+    icon: 'users',
+    title: 'Proximidade',
+    description: 'Contato direto e acompanhamento compatível com a urgência e a complexidade de cada demanda.',
+  },
+]
+
 function getInitials(name: string): string {
   const clean = name.replace(/^(Dr\.|Dra\.|Prof\.)\s*/i, '').trim()
   const parts = clean.split(/\s+/)
@@ -21,7 +57,9 @@ function getInitials(name: string): string {
 export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteConfig: any }) {
   const aboutTitle = siteConfig?.aboutTitle || 'Sobre o Escritório'
   const aboutSubtitle = siteConfig?.aboutSubtitle || 'Advocacia com estratégia, técnica e presença institucional.'
-  const aboutHistory = siteConfig?.aboutHistory || ''
+  const aboutHistory =
+    siteConfig?.aboutHistory ||
+    'O Cavalcante Albuquerque atua com foco em demandas que exigem leitura estratégica, organização documental e resposta técnica. O escritório combina atuação consultiva e contenciosa para orientar decisões em Licitações e Contratos, Direito Digital, Direito Civil e Direito Penal.'
 
   const timeline = siteConfig?.aboutTimeline?.length
     ? siteConfig.aboutTimeline.map((item: any) => ({
@@ -29,7 +67,7 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
         title: item.title,
         description: item.description,
       }))
-    : []
+    : defaultTimeline
 
   const values = siteConfig?.aboutValues?.length
     ? siteConfig.aboutValues.map((item: any) => ({
@@ -37,7 +75,7 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
         title: item.title,
         description: item.description,
       }))
-    : []
+    : defaultValues
 
   const partners = homepage?.aboutPartners?.partnersList?.length
     ? homepage.aboutPartners.partnersList.map((partner: any) => ({
@@ -63,6 +101,23 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
           <span className="ca-eyebrow ca-eyebrow--dark">Quem somos</span>
           <h1>{aboutTitle}</h1>
           <p>{aboutSubtitle}</p>
+          <div className="ca-page-hero__proof" aria-label="Diferenciais do escritório">
+            <article>
+              <span>01</span>
+              <strong>Estratégia jurídica</strong>
+              <p>Diagnóstico do caso antes da ação.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <strong>Atuação técnica</strong>
+              <p>Base documental, precedentes e risco.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <strong>Natal/RN</strong>
+              <p>Presença local e atendimento remoto.</p>
+            </article>
+          </div>
         </div>
       </section>
 
