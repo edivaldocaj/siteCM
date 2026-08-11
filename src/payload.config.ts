@@ -38,8 +38,13 @@ const hasJobAccess = ({ req }: { req: { headers: Headers; user?: unknown } }) =>
   const bearer = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '')
   if (secret && bearer === secret) return true
 
-  const roles = (req.user as { roles?: string[] } | undefined)?.roles
-  return Array.isArray(roles) && roles.includes('admin')
+  const user = req.user as { role?: unknown; roles?: unknown } | undefined
+  const roles = [
+    ...(Array.isArray(user?.roles) ? user.roles : []),
+    ...(typeof user?.role === 'string' ? [user.role] : []),
+  ]
+
+  return roles.includes('admin')
 }
 
 export default buildConfig({
@@ -51,7 +56,6 @@ export default buildConfig({
         Icon: '/components/admin/BrandIcon',
       },
       beforeDashboard: ['/components/admin/AdminDashboardIntro'],
-      afterNavLinks: ['/components/admin/AdminToolsLink'],
     },
     importMap: {
       baseDir: path.resolve(dirname),
@@ -117,6 +121,20 @@ export default buildConfig({
           ]
         : undefined,
     deleteJobOnComplete: false,
+    jobsCollectionOverrides: ({ defaultJobsCollection }) => ({
+      ...defaultJobsCollection,
+      admin: {
+        ...defaultJobsCollection.admin,
+        defaultColumns: ['taskSlug', 'queue', 'processing', 'hasError', 'completedAt', 'createdAt'],
+        group: 'Operação',
+        hidden: false,
+        useAsTitle: 'taskSlug',
+      },
+      labels: {
+        plural: 'Jobs Payload',
+        singular: 'Job Payload',
+      },
+    }),
     tasks: automationTasks,
   },
   sharp,
