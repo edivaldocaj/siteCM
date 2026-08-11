@@ -2935,3 +2935,40 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
     letter-spacing: 0.18em;
   }
 }
+
+/* Keep floating actions from covering the cookie notice, especially on mobile. */
+.ca-whatsapp-float {
+  bottom: 1.5rem;
+  right: 1.5rem;
+}
+
+html[data-ca-cookie-banner='visible'] .ca-whatsapp-float {
+  bottom: 7.25rem;
+}
+
+@media (max-width: 640px) {
+  .ca-whatsapp-float {
+    width: 56px;
+    height: 56px;
+    right: 18px;
+    bottom: 18px;
+  }
+
+  .ca-whatsapp-float svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  html[data-ca-cookie-banner='visible'] .ca-whatsapp-float {
+    bottom: 172px;
+  }
+
+  .ca-cookie-consent {
+    padding: 12px;
+  }
+
+  .ca-cookie-consent__panel {
+    padding: 18px;
+    gap: 14px;
+  }
+}
