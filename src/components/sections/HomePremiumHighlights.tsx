@@ -37,7 +37,7 @@ export function HomePremiumHighlights({ homepage, posts = [], news = [], campaig
 
   return (
     <section className="ca-premium-highlights" aria-label="Sobre o escritório e conteúdos">
-      <div className="ca-premium-highlights__inner">
+      <div className={`ca-premium-highlights__inner ${highlight ? '' : 'ca-premium-highlights__inner--single'}`}>
         <article className="ca-premium-highlights__about">
           <div className="ca-premium-highlights__copy">
             <span className="ca-eyebrow">Sobre o escritório</span>

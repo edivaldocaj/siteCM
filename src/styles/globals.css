@@ -2684,6 +2684,14 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   align-items: stretch;
 }
 
+.ca-premium-highlights__inner--single {
+  grid-template-columns: 1fr;
+}
+
+.ca-premium-highlights__inner--single .ca-premium-highlights__about {
+  grid-template-columns: minmax(0, 0.72fr) minmax(360px, 1fr);
+}
+
 .ca-premium-highlights__about {
   display: grid;
   grid-template-columns: minmax(0, 0.86fr) minmax(260px, 0.82fr);
