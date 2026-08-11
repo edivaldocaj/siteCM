@@ -47,6 +47,22 @@ type SignalCard = {
   tone: 'attention' | 'danger' | 'neutral' | 'success'
 }
 
+type PriorityItem = {
+  detail: string
+  href: string
+  label: string
+  tone: 'attention' | 'danger' | 'neutral' | 'success'
+}
+
+type DashboardCounts = {
+  criticalDeadlines: number
+  failedJobs: number
+  newLeads: number
+  pendingNews: number
+  queuedJobs: number
+  upcomingDeadlines: number
+}
+
 async function count(payload: any, collection: string, where?: Record<string, unknown>) {
   try {
     const result = await payload.find({
@@ -212,6 +228,83 @@ function buildSignals({
   ]
 }
 
+function getHealthTone(score: number): 'attention' | 'danger' | 'success' {
+  if (score < 70) return 'danger'
+  if (score < 90) return 'attention'
+  return 'success'
+}
+
+function buildHealthScore(counts: DashboardCounts) {
+  const penalty =
+    Math.min(counts.criticalDeadlines * 18, 36) +
+    Math.min(counts.failedJobs * 16, 32) +
+    Math.min(counts.newLeads * 5, 20) +
+    Math.min(counts.pendingNews * 3, 12) +
+    Math.min(counts.queuedJobs * 4, 12)
+
+  return Math.max(0, 100 - penalty)
+}
+
+function buildPriorities(counts: DashboardCounts): PriorityItem[] {
+  const priorities: PriorityItem[] = []
+
+  if (counts.criticalDeadlines > 0) {
+    priorities.push({
+      detail: `${counts.criticalDeadlines} prazo(s) nas proximas 24h`,
+      href: '/admin/collections/deadlines',
+      label: 'Revisar prazos criticos',
+      tone: 'danger',
+    })
+  }
+
+  if (counts.failedJobs > 0) {
+    priorities.push({
+      detail: `${counts.failedJobs} job(s) com erro na fila nativa`,
+      href: '/admin/collections/payload-jobs',
+      label: 'Corrigir automacoes com falha',
+      tone: 'danger',
+    })
+  }
+
+  if (counts.newLeads > 0) {
+    priorities.push({
+      detail: `${counts.newLeads} lead(s) aguardando primeiro atendimento`,
+      href: '/admin/collections/leads',
+      label: 'Atender novos leads',
+      tone: 'attention',
+    })
+  }
+
+  if (counts.pendingNews > 0) {
+    priorities.push({
+      detail: `${counts.pendingNews} noticia(s) aguardando curadoria editorial`,
+      href: '/admin/collections/news-articles',
+      label: 'Curar noticias importadas',
+      tone: 'attention',
+    })
+  }
+
+  if (counts.queuedJobs > 0) {
+    priorities.push({
+      detail: `${counts.queuedJobs} job(s) pendente(s) ou em processamento`,
+      href: '/admin/collections/payload-jobs',
+      label: 'Processar fila Payload',
+      tone: 'neutral',
+    })
+  }
+
+  if (priorities.length === 0) {
+    priorities.push({
+      detail: 'Sem pendencias criticas no momento',
+      href: '/admin/collections/leads',
+      label: 'Operacao em dia',
+      tone: 'success',
+    })
+  }
+
+  return priorities.slice(0, 4)
+}
+
 async function getDashboardData() {
   try {
     const payload = await getPayload({ config: configPromise })
@@ -271,9 +364,18 @@ async function getDashboardData() {
         value: failedJobs,
       },
     ]
+    const counts: DashboardCounts = {
+      criticalDeadlines,
+      failedJobs,
+      newLeads,
+      pendingNews,
+      queuedJobs,
+      upcomingDeadlines,
+    }
 
     return {
       automationConfig,
+      counts,
       failedJobs,
       automationRuns,
       jobs,
@@ -284,6 +386,14 @@ async function getDashboardData() {
   } catch {
     return {
       automationConfig: null,
+      counts: {
+        criticalDeadlines: 0,
+        failedJobs: 0,
+        newLeads: 0,
+        pendingNews: 0,
+        queuedJobs: 0,
+        upcomingDeadlines: 0,
+      },
       failedJobs: 0,
       automationRuns: [],
       jobs: [],
@@ -299,6 +409,10 @@ export default async function AdminDashboardIntro() {
   const newsEnabled = Boolean(data.automationConfig?.newsEnabled)
   const deadlinesEnabled = Boolean(data.automationConfig?.deadlineAlertsEnabled)
   const autorunEnabled = process.env.PAYLOAD_JOBS_AUTORUN === 'true'
+  const healthScore = buildHealthScore(data.counts)
+  const healthTone = getHealthTone(healthScore)
+  const priorities = buildPriorities(data.counts)
+  const topPriority = priorities[0]
   const signals = buildSignals({
     autorunEnabled,
     deadlinesEnabled,
@@ -318,6 +432,12 @@ export default async function AdminDashboardIntro() {
             Central de gestao do site, campanhas, leads, prazos e automacoes nativas do Payload.
             Comece pelos indicadores criticos ou pelos atalhos principais.
           </p>
+        </div>
+        <div className={`ca-admin-dashboard__brief ca-admin-dashboard__brief--${healthTone}`} aria-label="Resumo operacional">
+          <span>Saude operacional</span>
+          <strong>{healthScore}%</strong>
+          <p>{topPriority.label}</p>
+          <a href={topPriority.href}>{topPriority.detail}</a>
         </div>
         <div className="ca-admin-dashboard__actions" aria-label="Acoes rapidas">
           {primaryActions.map((action) => (
@@ -354,6 +474,24 @@ export default async function AdminDashboardIntro() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="ca-admin-dashboard__priorities" aria-label="Prioridades recomendadas">
+        <div className="ca-admin-dashboard__section-head">
+          <span className="ca-admin-eyebrow">Brief operacional</span>
+          <strong>Prioridades recomendadas</strong>
+        </div>
+        <div className="ca-admin-dashboard__priority-list">
+          {priorities.map((priority) => (
+            <a key={priority.label} href={priority.href} className={`ca-admin-dashboard__priority ca-admin-dashboard__priority--${priority.tone}`}>
+              <span />
+              <div>
+                <strong>{priority.label}</strong>
+                <p>{priority.detail}</p>
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
 
       <div className="ca-admin-dashboard__ops">
