@@ -306,6 +306,8 @@ export interface Team {
   createdAt: string;
 }
 /**
+ * Áreas principais exibidas no site institucional.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "practice-areas".
  */
@@ -405,6 +407,8 @@ export interface Page {
   createdAt: string;
 }
 /**
+ * Artigos publicados no blog institucional.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
@@ -445,7 +449,7 @@ export interface Post {
    */
   authorRef?: (number | null) | Team;
   /**
-   * Usado quando author legado for escritorio.
+   * Usado quando author legado for escritório.
    */
   byFirm?: boolean | null;
   tags?: string[] | null;
@@ -582,6 +586,8 @@ export interface Campaign {
   createdAt: string;
 }
 /**
+ * Depoimentos revisados antes de aparecerem no site.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "testimonials".
  */
@@ -626,11 +632,11 @@ export interface NewsArticle {
   source?: string | null;
   imageUrl?: string | null;
   /**
-   * Usado pelas automacoes para evitar importar a mesma noticia mais de uma vez.
+   * Usado pelas automações para evitar importar a mesma notícia mais de uma vez.
    */
   sourceHash?: string | null;
   /**
-   * Pontuacao calculada/curada para priorizar noticias relevantes ao escritorio.
+   * Pontuação calculada/curada para priorizar notícias relevantes ao escritório.
    */
   relevanceScore?: number | null;
   /**
@@ -638,11 +644,11 @@ export interface NewsArticle {
    */
   aiSummary?: string | null;
   /**
-   * Observacoes para revisao humana, vinculos com campanhas ou orientacao de pauta.
+   * Observações para revisão humana, vínculos com campanhas ou orientação de pauta.
    */
   editorialNotes?: string | null;
   /**
-   * Data usada por automacoes para arquivar ou limpar noticias pendentes antigas.
+   * Data usada por automações para arquivar ou limpar notícias pendentes antigas.
    */
   expiresAt?: string | null;
   category?:
