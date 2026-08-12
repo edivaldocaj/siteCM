@@ -109,15 +109,16 @@ export default async function CampanhasPage() {
           <div className="ca-section-heading ca-section-heading--split">
             <div>
               <span className="ca-eyebrow">{campaigns.length > 0 ? 'Campanhas ativas' : 'Frentes de triagem'}</span>
-              <h2>{campaigns.length > 0 ? 'Verifique se seu caso se encaixa' : 'Atendimentos prioritários enquanto campanhas são revisadas'}</h2>
+              <h2>{campaigns.length > 0 ? 'Verifique se seu caso se encaixa' : 'Atendimentos prioritários por área'}</h2>
             </div>
-            <p>{campaigns.length > 0 ? 'Cada campanha organiza uma hipótese de atendimento com perguntas objetivas e próximos passos.' : 'Quando o CMS publicar campanhas ativas, esta página passa a exibir as páginas específicas automaticamente.'}</p>
+            <p>{campaigns.length > 0 ? 'Cada campanha organiza uma hipótese de atendimento com perguntas objetivas e próximos passos.' : 'Enquanto campanhas específicas não estão publicadas, estes canais direcionam a triagem para os temas centrais do escritório.'}</p>
           </div>
 
           <div className="ca-campaigns-page__grid">
             {campaignItems.map((campaign: any) => (
                 <Link key={campaign.slug} href={campaign.href || `/campanhas/${campaign.slug}`} className="ca-campaigns-page__card">
                   <span className="ca-campaigns-page__category">{categoryLabels[campaign.category] || campaign.category || 'Campanha'}</span>
+                  {campaign.href && <span className="ca-campaigns-page__status">Triagem direta</span>}
                   <h2>{campaign.title}</h2>
                   {campaign.subtitle && <p>{campaign.subtitle}</p>}
                   <span className="ca-inline-link">

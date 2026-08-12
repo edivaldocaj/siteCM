@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Menu, Phone, X } from 'lucide-react'
 
 type NavItem = { href: string; label: string; highlight?: boolean | null }
@@ -40,11 +41,13 @@ export function Header({
   const [scrolled, setScrolled] = useState(variant === 'solid-light')
   const panelRef = useRef<HTMLDivElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const pathname = usePathname()
   const isLight = variant === 'solid-light'
   const solid = isLight || scrolled
   const whatsApp = normalizeWhatsApp(whatsappNumber || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER)
   const resolvedCtaHref = ctaHref || `https://wa.me/${whatsApp}`
   const resolvedCtaLabel = ctaLabel || 'Fale com um advogado'
+  const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname?.startsWith(href))
 
   useEffect(() => {
     if (isLight) return
@@ -111,7 +114,12 @@ export function Header({
 
         <nav className="ca-header__nav" aria-label="Navegação principal">
           {items.map((link) => (
-            <Link key={link.href} href={link.href} className={`ca-header__link ${link.highlight ? 'ca-header__link--highlight' : ''}`}>
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+              className={`ca-header__link ${isActive(link.href) ? 'ca-header__link--active' : ''} ${link.highlight ? 'ca-header__link--highlight' : ''}`}
+            >
               {link.label}
             </Link>
           ))}
@@ -138,7 +146,13 @@ export function Header({
       <div id="mobile-navigation" ref={panelRef} className={`ca-header__mobile ${isOpen ? 'ca-header__mobile--open' : ''}`}>
         <nav aria-label="Navegação mobile">
           {items.map((link) => (
-            <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="ca-header__mobile-link">
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+              onClick={() => setIsOpen(false)}
+              className={`ca-header__mobile-link ${isActive(link.href) ? 'ca-header__mobile-link--active' : ''}`}
+            >
               {link.label}
             </Link>
           ))}

@@ -15,6 +15,7 @@ export function WhatsAppButton() {
       aria-label="Fale pelo WhatsApp"
     >
       <MessageCircle className="w-7 h-7" />
+      <span>WhatsApp</span>
     </a>
   )
 }
