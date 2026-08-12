@@ -3,6 +3,10 @@ import { adminOnly, adminOrStaff, anyone, fieldAdminOrStaff } from '../access'
 
 export const Leads: CollectionConfig = {
   slug: 'leads',
+  labels: {
+    singular: 'Lead',
+    plural: 'Leads',
+  },
   endpoints: false,
   graphQL: false,
   access: {
@@ -13,7 +17,7 @@ export const Leads: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'phone', 'source', 'campaignSlug', 'status', 'score', 'assignedTo', 'createdAt'],
+    defaultColumns: ['name', 'phone', 'source', 'status', 'urgency', 'score', 'assignedToRef', 'nextFollowUp'],
     description: 'Pipeline de leads — todos os contatos captados pelo site, formulários e campanhas.',
     listSearchableFields: ['name', 'phone', 'email', 'campaignSlug'],
     group: 'Relacionamento',

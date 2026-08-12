@@ -3,6 +3,10 @@ import { adminOnly, adminOrEditor, publishedOnly } from '../access'
 
 export const NewsArticles: CollectionConfig = {
   slug: 'news-articles',
+  labels: {
+    singular: 'Notícia',
+    plural: 'Notícias',
+  },
   access: {
     read: publishedOnly,
     create: adminOrEditor,
@@ -11,9 +15,10 @@ export const NewsArticles: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'source', 'category', 'relevanceScore', 'publishedAt', 'status'],
+    defaultColumns: ['title', 'source', 'category', 'relevanceScore', 'status', 'publishedAt'],
     description: 'Notícias jurídicas — alimentadas automaticamente via API e curadas manualmente.',
     group: 'Conteúdo do Site',
+    listSearchableFields: ['title', 'excerpt', 'source', 'sourceUrl'],
   },
   fields: [
     { name: 'title', type: 'text', required: true, label: 'Título' },

@@ -18,7 +18,7 @@ export const Faqs: CollectionConfig = {
   fields: [
     { name: 'question', type: 'text', required: true, label: 'Pergunta' },
     { name: 'answer', type: 'richText', required: true, label: 'Resposta' },
-    { name: 'area', type: 'relationship', relationTo: 'practice-areas', label: 'Area relacionada' },
+    { name: 'area', type: 'relationship', relationTo: 'practice-areas', label: 'Área relacionada' },
     { name: 'order', type: 'number', defaultValue: 0, admin: { position: 'sidebar' } },
     { name: 'active', type: 'checkbox', defaultValue: true, index: true, admin: { position: 'sidebar' } },
   ],

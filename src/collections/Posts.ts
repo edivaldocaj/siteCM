@@ -3,6 +3,10 @@ import { adminOnly, adminOrEditor, publishedOnly } from '../access'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
+  labels: {
+    singular: 'Artigo',
+    plural: 'Artigos',
+  },
   access: {
     read: publishedOnly,
     create: adminOrEditor,
@@ -11,7 +15,7 @@ export const Posts: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'status', 'publishedAt'],
+    defaultColumns: ['title', 'category', 'status', 'authorRef', 'publishedAt'],
     description: 'Artigos publicados no blog institucional.',
     group: 'Conteúdo do Site',
     listSearchableFields: ['title', 'excerpt', 'tags'],

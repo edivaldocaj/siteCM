@@ -3,6 +3,10 @@ import { adminOnly, adminOrStaff, fieldAdminOnly } from '../access'
 
 export const Clients: CollectionConfig = {
   slug: 'clients',
+  labels: {
+    singular: 'Cliente',
+    plural: 'Clientes',
+  },
   access: {
     read: adminOrStaff,
     create: adminOrStaff,

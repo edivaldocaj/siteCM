@@ -3,11 +3,16 @@ import { adminOnly, adminOrStaff } from '../access'
 
 export const Deadlines: CollectionConfig = {
   slug: 'deadlines',
+  labels: {
+    singular: 'Prazo',
+    plural: 'Prazos',
+  },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'clientName', 'processNumber', 'deadlineDate', 'deadlineType', 'status', 'attorney'],
+    defaultColumns: ['title', 'clientName', 'processNumber', 'deadlineDate', 'priority', 'status', 'attorneyRef'],
     description: 'Prazos processuais com alertas escalonados (7d, 3d, 1d).',
     group: 'Escritório',
+    listSearchableFields: ['title', 'clientName', 'processNumber'],
   },
   access: {
     read: adminOrStaff,

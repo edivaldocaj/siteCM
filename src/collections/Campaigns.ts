@@ -3,6 +3,10 @@ import { activeCampaignOnly, adminOnly, adminOrEditor } from '../access'
 
 export const Campaigns: CollectionConfig = {
   slug: 'campaigns',
+  labels: {
+    singular: 'Campanha',
+    plural: 'Campanhas',
+  },
   access: {
     read: activeCampaignOnly,
     create: adminOrEditor,
@@ -11,7 +15,7 @@ export const Campaigns: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'status', 'featuredOnHomepage'],
+    defaultColumns: ['title', 'category', 'status', 'featuredOnHomepage', 'startDate'],
     description: 'Campanhas jurídicas com landing page, formulário, prova social e peças de divulgação.',
     group: 'Conteúdo do Site',
     listSearchableFields: ['title', 'slug', 'subtitle'],

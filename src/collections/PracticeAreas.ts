@@ -3,6 +3,10 @@ import { adminOnly, adminOrEditor, anyone } from '../access'
 
 export const PracticeAreas: CollectionConfig = {
   slug: 'practice-areas',
+  labels: {
+    singular: 'Área de atuação',
+    plural: 'Áreas de atuação',
+  },
   access: {
     read: anyone,
     create: adminOrEditor,
@@ -11,7 +15,7 @@ export const PracticeAreas: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', 'order'],
+    defaultColumns: ['title', 'slug', 'responsibleRef', 'order'],
     description: 'Áreas principais exibidas no site institucional.',
     group: 'Conteúdo do Site',
     listSearchableFields: ['title', 'shortDescription'],

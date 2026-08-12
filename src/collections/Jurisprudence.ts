@@ -3,6 +3,10 @@ import { adminOnly, adminOrEditor, authenticated } from '../access'
 
 export const Jurisprudence: CollectionConfig = {
   slug: 'jurisprudence',
+  labels: {
+    singular: 'Jurisprudência',
+    plural: 'Jurisprudências',
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'court', 'category', 'caseNumber', 'decisionDate'],
