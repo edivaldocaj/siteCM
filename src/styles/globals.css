@@ -1826,7 +1826,8 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 
 .ca-areas-list__card {
   position: relative;
-  min-height: 326px;
+  aspect-ratio: 1 / 1;
+  min-height: 0;
   padding: 28px;
   display: flex;
   flex-direction: column;
@@ -1886,7 +1887,7 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 .ca-areas-list__icon {
   width: 42px;
   height: 42px;
-  margin: 42px 0 26px;
+  margin: clamp(28px, 3.2vw, 42px) 0 24px;
   color: var(--color-ca-steel-500);
 }
 
@@ -3514,6 +3515,17 @@ html[data-ca-cookie-banner='visible'] .ca-whatsapp-float {
 .ca-page-hero--contact .ca-page-hero__inner,
 .ca-page-hero--campaigns .ca-page-hero__inner {
   max-width: var(--ca-container-wide);
+}
+
+.ca-page-hero--areas .ca-page-hero__mark {
+  right: clamp(-20px, 2vw, 32px);
+  bottom: clamp(18px, 4vw, 54px);
+  opacity: 0.62;
+}
+
+.ca-page-hero--areas .ca-page-hero__mark::before {
+  width: clamp(160px, 20vw, 280px);
+  background: rgba(226, 232, 240, 0.065);
 }
 
 .ca-values__card,
