@@ -80,9 +80,6 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
   return (
     <>
       <section className="ca-page-hero ca-page-hero--areas">
-        <div className="ca-page-hero__image" aria-hidden="true">
-          <Image src="/brand/areas-presentation.webp" alt="" fill sizes="100vw" priority />
-        </div>
         <div className="ca-page-hero__mark" aria-hidden="true">
           <Image src="/brand/brand-symbol-transparent.webp" alt="" width={360} height={360} unoptimized />
         </div>

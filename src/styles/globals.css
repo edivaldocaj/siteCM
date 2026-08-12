@@ -1509,25 +1509,30 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 
 .ca-story__timeline {
   display: grid;
-  gap: 12px;
+  gap: 0;
+  border-left: 1px solid color-mix(in srgb, var(--color-ca-steel-500) 34%, transparent);
+  padding-left: 34px;
 }
 
 .ca-story__timeline article {
   position: relative;
-  padding: 26px;
-  background: #fff;
-  border: 1px solid var(--color-ca-line);
-  box-shadow: 0 18px 48px rgba(1, 21, 54, 0.05);
+  padding: 0 0 28px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-ca-line);
+  box-shadow: none;
 }
 
 .ca-story__timeline article::before {
   content: '';
   position: absolute;
-  left: -1px;
-  top: 24px;
-  bottom: 24px;
-  width: 3px;
-  background: var(--ca-gradient-steel);
+  left: -39px;
+  top: 5px;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--color-ca-steel-500);
+  box-shadow: 0 0 0 8px var(--color-ca-bone);
 }
 
 .ca-story__timeline span {
@@ -1540,7 +1545,7 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 }
 
 .ca-story__timeline h3 {
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   color: var(--color-ca-navy-950);
   font-family: var(--font-display);
   font-size: 1.35rem;
@@ -1668,39 +1673,33 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   line-height: 1.6;
 }
 
-.ca-contact-page__routes {
-  display: grid;
-  gap: 10px;
-  margin: -12px 0 30px;
-}
-
-.ca-contact-page__routes article {
-  display: grid;
-  grid-template-columns: 38px minmax(0, 1fr);
+.ca-contact-page__flow {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 14px;
-  align-items: start;
-  padding: 18px;
+  margin: 28px 0 30px;
+  padding: 18px 20px;
   background: #fff;
   border: 1px solid var(--color-ca-line);
+  box-shadow: 0 14px 40px rgba(1, 21, 54, 0.04);
+  color: color-mix(in srgb, var(--color-ca-navy-950) 66%, transparent);
+  font-size: 0.9rem;
 }
 
-.ca-contact-page__routes span {
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  background: var(--color-ca-navy-950);
-  color: var(--color-ca-platinum-100);
-  font-family: var(--font-data);
-  font-size: 0.78rem;
+.ca-contact-page__flow strong {
+  color: var(--color-ca-navy-950);
   font-weight: 800;
 }
 
-.ca-contact-page__routes p {
+.ca-contact-page__flow p {
   margin: 0;
-  color: color-mix(in srgb, var(--color-ca-navy-950) 64%, transparent);
-  font-size: 0.92rem;
-  line-height: 1.58;
+}
+
+.ca-contact-page__flow span {
+  width: 28px;
+  height: 1px;
+  background: var(--color-ca-steel-500);
 }
 
 .ca-contact-page__form-panel {
@@ -1821,18 +1820,19 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 .ca-areas-list__grid {
   margin-top: 42px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
 }
 
 .ca-areas-list__card {
   position: relative;
-  min-height: 340px;
+  min-height: 326px;
   padding: 28px;
   display: flex;
   flex-direction: column;
   background: #fff;
   border: 1px solid var(--color-ca-line);
+  border-top-color: color-mix(in srgb, var(--color-ca-steel-500) 46%, var(--color-ca-line));
   color: var(--color-ca-navy-950);
   text-decoration: none;
   transition: transform 0.24s ease, background 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
@@ -1841,19 +1841,30 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 .ca-areas-list__card:hover,
 .ca-areas-list__card:focus-visible {
   transform: translateY(-3px);
-  background: color-mix(in srgb, #fff 88%, var(--color-ca-steel-500));
+  background: #fff;
   border-color: color-mix(in srgb, var(--color-ca-steel-500) 42%, var(--color-ca-line));
   box-shadow: 0 22px 54px rgba(1, 21, 54, 0.08);
 }
 
 .ca-areas-list__card--urgent {
-  background: var(--color-ca-navy-950);
-  border-color: color-mix(in srgb, var(--color-ca-steel-500) 22%, var(--color-ca-navy-950));
+  background:
+    radial-gradient(circle at 84% 12%, rgba(126, 34, 48, 0.32), transparent 34%),
+    linear-gradient(145deg, #061a39, var(--color-ca-navy-950));
+  border-color: color-mix(in srgb, var(--color-ca-steel-500) 32%, var(--color-ca-navy-950));
+  border-top-color: var(--color-ca-steel-500);
   color: var(--color-ca-platinum-100);
 }
 
+.ca-areas-list__card--urgent:hover,
+.ca-areas-list__card--urgent:focus-visible {
+  background:
+    radial-gradient(circle at 84% 12%, rgba(126, 34, 48, 0.38), transparent 34%),
+    linear-gradient(145deg, #082044, var(--color-ca-navy-950));
+  border-color: color-mix(in srgb, var(--color-ca-steel-500) 50%, var(--color-ca-navy-950));
+}
+
 .ca-areas-list__index {
-  color: color-mix(in srgb, currentColor 34%, transparent);
+  color: var(--color-ca-steel-500);
   font-family: var(--font-data);
   font-size: 0.78rem;
   letter-spacing: 0.14em;
@@ -1863,7 +1874,7 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   position: absolute;
   top: 24px;
   right: 24px;
-  padding: 5px 9px;
+  padding: 7px 10px;
   background: var(--color-ca-urgent);
   color: #fff;
   font-size: 0.68rem;
@@ -1892,6 +1903,15 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   color: color-mix(in srgb, currentColor 64%, transparent);
   font-size: 0.95rem;
   line-height: 1.65;
+}
+
+.ca-areas-list__card--urgent p,
+.ca-areas-list__card--urgent small {
+  color: color-mix(in srgb, var(--color-ca-platinum-100) 72%, transparent);
+}
+
+.ca-areas-list__card--urgent h2 {
+  color: var(--color-ca-platinum-100);
 }
 
 .ca-areas-list__card small {
@@ -3496,26 +3516,22 @@ html[data-ca-cookie-banner='visible'] .ca-whatsapp-float {
   max-width: var(--ca-container-wide);
 }
 
-.ca-story__timeline article,
 .ca-values__card,
 .ca-areas-list__card,
 .ca-editorial-card,
 .ca-campaigns-page__card,
 .ca-contact-page__items article,
-.ca-contact-page__routes article,
 .ca-area-detail__method article,
 .ca-area-detail__cases article,
 .ca-area-detail__faq article {
   position: relative;
 }
 
-.ca-story__timeline article,
 .ca-values__card,
 .ca-areas-list__card,
 .ca-editorial-card,
 .ca-campaigns-page__card,
 .ca-contact-page__items article,
-.ca-contact-page__routes article,
 .ca-area-detail__method article,
 .ca-area-detail__cases article,
 .ca-area-detail__faq article {
@@ -3569,9 +3585,7 @@ html[data-ca-cookie-banner='visible'] .ca-whatsapp-float {
   max-width: 620px;
 }
 
-.ca-story__timeline article:hover,
 .ca-contact-page__items article:hover,
-.ca-contact-page__routes article:hover,
 .ca-area-detail__method article:hover,
 .ca-area-detail__cases article:hover,
 .ca-area-detail__faq article:hover {
@@ -3748,8 +3762,7 @@ html[data-ca-cookie-banner='visible'] .ca-whatsapp-float {
     padding-left: 18px;
   }
 
-  .ca-contact-page__items article,
-  .ca-contact-page__routes article {
+  .ca-contact-page__items article {
     padding: 18px;
   }
 

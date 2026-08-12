@@ -72,6 +72,14 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
             <span className="ca-eyebrow">Canais</span>
             <h2>Atendimento objetivo desde o primeiro contato</h2>
 
+            <div className="ca-contact-page__flow" aria-label="Como funciona o atendimento">
+              <strong>Envie o caso</strong>
+              <span aria-hidden="true" />
+              <p>Triagem inicial</p>
+              <span aria-hidden="true" />
+              <p>Retorno adequado</p>
+            </div>
+
             <div className="ca-contact-page__items">
               <article>
                 <MapPin size={21} />
@@ -100,21 +108,6 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
                   <h3>Horário</h3>
                   <p>Segunda a sexta, 8h às 18h. Penal: atendimento emergencial.</p>
                 </div>
-              </article>
-            </div>
-
-            <div className="ca-contact-page__routes" aria-label="Como funciona o atendimento">
-              <article>
-                <span>1</span>
-                <p>Envie o contexto inicial e selecione a área mais próxima do caso.</p>
-              </article>
-              <article>
-                <span>2</span>
-                <p>A equipe confere urgência, documentos e melhor canal de retorno.</p>
-              </article>
-              <article>
-                <span>3</span>
-                <p>Você recebe orientação sobre os próximos passos e possibilidades.</p>
               </article>
             </div>
 
