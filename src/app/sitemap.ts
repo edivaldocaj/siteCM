@@ -5,7 +5,7 @@ import { shouldSkipPayloadDuringBuild } from '@/lib/runtime-flags'
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquerque.com.br').replace(/\/$/, '')
 
-const staticRoutes = ['/', '/sobre', '/areas-de-atuacao', '/campanhas', '/blog', '/contato', '/calculadora', '/privacidade', '/termos-de-uso', '/politica-de-cookies']
+const staticRoutes = ['/', '/sobre', '/areas-de-atuacao', '/campanhas', '/blog', '/contato', '/privacidade', '/termos-de-uso', '/politica-de-cookies']
 
 function entry(path: string, lastModified?: string | Date): MetadataRoute.Sitemap[number] {
   return {
