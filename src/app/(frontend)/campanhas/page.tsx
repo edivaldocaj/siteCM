@@ -84,23 +84,6 @@ export default async function CampanhasPage() {
           <span className="ca-eyebrow ca-eyebrow--dark">Ações em andamento</span>
           <h1>Campanhas Jurídicas</h1>
           <p>Acompanhamento de frentes individuais e coletivas com triagem objetiva para identificar se o seu caso se encaixa.</p>
-          <div className="ca-page-hero__proof" aria-label="Modelo de triagem das campanhas">
-            <article>
-              <span>01</span>
-              <strong>Enquadramento</strong>
-              <p>Verificação inicial do tipo de caso e documentos.</p>
-            </article>
-            <article>
-              <span>02</span>
-              <strong>Risco e prazo</strong>
-              <p>Leitura da urgência, prova disponível e medidas cabíveis.</p>
-            </article>
-            <article>
-              <span>03</span>
-              <strong>Próximo passo</strong>
-              <p>Direcionamento para consulta, análise ou atuação emergencial.</p>
-            </article>
-          </div>
         </div>
       </section>
 

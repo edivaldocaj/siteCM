@@ -90,23 +90,6 @@ export function AreasPageClient({ areas, siteConfig }: { areas: any[]; siteConfi
           <span className="ca-eyebrow ca-eyebrow--dark">Especialidades</span>
           <h1>{practiceTitle}</h1>
           <p>{practiceSubtitle}</p>
-          <div className="ca-page-hero__proof" aria-label="Focos de atuação">
-            <article>
-              <span>01</span>
-              <strong>Licitações</strong>
-              <p>Editais, recursos e contratos administrativos.</p>
-            </article>
-            <article>
-              <span>02</span>
-              <strong>Digital</strong>
-              <p>LGPD, plataformas e incidentes de dados.</p>
-            </article>
-            <article>
-              <span>03</span>
-              <strong>Penal 24h</strong>
-              <p>Resposta técnica em situações urgentes.</p>
-            </article>
-          </div>
         </div>
       </section>
 

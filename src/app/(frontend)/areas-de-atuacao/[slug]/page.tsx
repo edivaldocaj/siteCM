@@ -95,23 +95,6 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
           {isPenal && <span className="ca-area-detail-hero__badge">Atendimento 24h</span>}
           <h1>{title}</h1>
           {headline && <p>{headline}</p>}
-          <div className="ca-page-hero__proof" aria-label="Como conduzimos casos nessa área">
-            <article>
-              <span>01</span>
-              <strong>Diagnóstico</strong>
-              <p>Leitura inicial dos fatos, documentos, prazos e urgência.</p>
-            </article>
-            <article>
-              <span>02</span>
-              <strong>Estratégia</strong>
-              <p>Definição de caminho consultivo, administrativo ou judicial.</p>
-            </article>
-            <article>
-              <span>03</span>
-              <strong>Acompanhamento</strong>
-              <p>Comunicação objetiva sobre riscos e próximos passos.</p>
-            </article>
-          </div>
         </div>
       </section>
 

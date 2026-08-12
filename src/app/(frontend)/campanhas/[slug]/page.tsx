@@ -136,24 +136,6 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
 
           {campaign.subtitle && <p>{campaign.subtitle}</p>}
 
-          <div className="ca-page-hero__proof" aria-label="Etapas da campanha">
-            <article>
-              <span>01</span>
-              <strong>Triagem</strong>
-              <p>Confirmação de aderência do caso à campanha.</p>
-            </article>
-            <article>
-              <span>02</span>
-              <strong>Documentos</strong>
-              <p>Organização das provas e informações essenciais.</p>
-            </article>
-            <article>
-              <span>03</span>
-              <strong>Atuação</strong>
-              <p>Definição do caminho jurídico adequado.</p>
-            </article>
-          </div>
-
           {/* Video Hero */}
           {hasVideo && (
             <CampaignVideoHero

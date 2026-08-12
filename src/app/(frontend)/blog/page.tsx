@@ -92,23 +92,6 @@ export default async function BlogPage() {
           <span className="ca-eyebrow ca-eyebrow--dark">Conteúdo e atualizações</span>
           <h1>Blog e Notícias</h1>
           <p>Artigos, guias e atualizações jurídicas para acompanhar decisões, riscos e direitos relevantes.</p>
-          <div className="ca-page-hero__proof" aria-label="Linhas editoriais">
-            <article>
-              <span>01</span>
-              <strong>Análise prática</strong>
-              <p>Conteúdo voltado para decisões e riscos reais.</p>
-            </article>
-            <article>
-              <span>02</span>
-              <strong>Atualização jurídica</strong>
-              <p>Temas relevantes em civil, digital, penal e contratos.</p>
-            </article>
-            <article>
-              <span>03</span>
-              <strong>Leitura objetiva</strong>
-              <p>Guias claros para orientar próximos passos.</p>
-            </article>
-          </div>
         </div>
       </section>
 

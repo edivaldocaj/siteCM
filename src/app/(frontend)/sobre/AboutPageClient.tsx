@@ -101,23 +101,6 @@ export function AboutPageClient({ homepage, siteConfig }: { homepage: any; siteC
           <span className="ca-eyebrow ca-eyebrow--dark">Quem somos</span>
           <h1>{aboutTitle}</h1>
           <p>{aboutSubtitle}</p>
-          <div className="ca-page-hero__proof" aria-label="Diferenciais do escritório">
-            <article>
-              <span>01</span>
-              <strong>Estratégia jurídica</strong>
-              <p>Diagnóstico do caso antes da ação.</p>
-            </article>
-            <article>
-              <span>02</span>
-              <strong>Atuação técnica</strong>
-              <p>Base documental, precedentes e risco.</p>
-            </article>
-            <article>
-              <span>03</span>
-              <strong>Natal/RN</strong>
-              <p>Presença local e atendimento remoto.</p>
-            </article>
-          </div>
         </div>
       </section>
 
