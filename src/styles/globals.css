@@ -1808,7 +1808,7 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 .ca-areas-list__grid {
   margin-top: 42px;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
