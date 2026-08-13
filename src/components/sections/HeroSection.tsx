@@ -22,9 +22,6 @@ export function HeroSection({ cmsData }: HeroSectionProps) {
 
   return (
     <section className="ca-hero" aria-labelledby="home-hero-title">
-      <div className="ca-hero__media" aria-hidden="true">
-        <Image src="/brand/watermark-transparent.webp" alt="" width={898} height={278} priority />
-      </div>
       <div className="ca-hero__shade" aria-hidden="true" />
       <div className="ca-hero__mark" aria-hidden="true">
         <Image src="/brand/brand-symbol-transparent.webp" alt="" width={520} height={520} priority />

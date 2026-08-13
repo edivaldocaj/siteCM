@@ -518,11 +518,12 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   display: flex;
   align-items: center;
   overflow: hidden;
-  background: var(--color-ca-navy-950);
+  background:
+    radial-gradient(circle at 78% 44%, rgba(221, 231, 239, 0.34), transparent 26%),
+    linear-gradient(135deg, #061a34 0%, #092442 46%, #102f51 100%);
   isolation: isolate;
 }
 
-.ca-hero__media,
 .ca-hero__shade,
 .ca-hero__mark {
   position: absolute;
@@ -530,26 +531,11 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   pointer-events: none;
 }
 
-.ca-hero__media {
-  z-index: -3;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding: clamp(120px, 16vw, 220px) clamp(24px, 7vw, 120px) clamp(70px, 8vw, 120px);
-  opacity: 0.2;
-}
-
-.ca-hero__media img {
-  width: min(62vw, 920px);
-  height: auto;
-  object-fit: contain;
-}
-
 .ca-hero__shade {
   z-index: -2;
   background:
-    linear-gradient(90deg, rgba(1, 21, 54, 0.99) 0%, rgba(1, 21, 54, 0.9) 48%, rgba(1, 21, 54, 0.68) 100%),
-    linear-gradient(180deg, rgba(1, 21, 54, 0.42) 0%, rgba(1, 21, 54, 0.95) 100%);
+    linear-gradient(90deg, rgba(1, 16, 38, 0.92) 0%, rgba(4, 27, 55, 0.72) 52%, rgba(6, 26, 52, 0.28) 100%),
+    linear-gradient(180deg, rgba(2, 17, 42, 0.04) 0%, rgba(2, 18, 43, 0.7) 100%);
 }
 
 .ca-hero__mark {
@@ -558,13 +544,14 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   justify-content: flex-end;
   align-items: center;
   padding-right: clamp(0px, 6vw, 96px);
-  opacity: 0.11;
-  mix-blend-mode: screen;
+  opacity: 0.82;
+  mix-blend-mode: normal;
 }
 
 .ca-hero__mark img {
-  width: min(44vw, 520px);
+  width: min(33vw, 410px);
   height: auto;
+  filter: drop-shadow(0 30px 56px rgba(0, 0, 0, 0.3));
 }
 
 .ca-hero__inner {
@@ -2979,32 +2966,28 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 .ca-home-premium .ca-hero {
   min-height: min(820px, 92svh);
   border-bottom: 1px solid color-mix(in srgb, var(--color-ca-steel-500) 26%, transparent);
-}
-
-.ca-home-premium .ca-hero__media {
-  opacity: 0.08;
-  padding: clamp(110px, 14vw, 190px) clamp(24px, 7vw, 120px) 36px;
+  background:
+    radial-gradient(circle at 78% 43%, rgba(221, 231, 239, 0.36), transparent 25%),
+    linear-gradient(135deg, #061a34 0%, #092442 46%, #102f51 100%);
 }
 
 .ca-home-premium .ca-hero__shade {
   background:
-    radial-gradient(circle at 18% 22%, rgba(31, 66, 117, 0.24), transparent 32%),
-    linear-gradient(90deg, rgba(1, 21, 54, 0.99) 0%, rgba(1, 21, 54, 0.94) 54%, rgba(1, 21, 54, 0.76) 100%),
-    linear-gradient(180deg, rgba(1, 21, 54, 0.2) 0%, rgba(1, 21, 54, 0.98) 100%);
+    linear-gradient(90deg, rgba(1, 16, 38, 0.94) 0%, rgba(4, 27, 55, 0.74) 52%, rgba(6, 26, 52, 0.28) 100%),
+    linear-gradient(180deg, rgba(2, 17, 42, 0.04) 0%, rgba(2, 18, 43, 0.7) 100%);
 }
 
 .ca-home-premium .ca-hero__mark {
-  opacity: 0.86;
+  opacity: 0.84;
   mix-blend-mode: normal;
   justify-content: flex-end;
   align-items: center;
-  padding-right: clamp(32px, 11vw, 180px);
-  padding-top: clamp(70px, 8vw, 120px);
+  padding: clamp(70px, 8vw, 120px) clamp(44px, 11vw, 180px) 0 0;
 }
 
 .ca-home-premium .ca-hero__mark img {
-  width: min(25vw, 330px);
-  filter: drop-shadow(0 28px 56px rgba(0, 0, 0, 0.24));
+  width: min(27vw, 350px);
+  filter: drop-shadow(0 30px 56px rgba(0, 0, 0, 0.3));
 }
 
 .ca-home-premium .ca-hero__inner {
@@ -3269,12 +3252,13 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 
 @media (max-width: 1180px) {
   .ca-home-premium .ca-hero__mark {
-    opacity: 0.3;
-    padding-right: 24px;
+    opacity: 0.82;
+    padding-right: clamp(28px, 5vw, 52px);
+    padding-top: 96px;
   }
 
   .ca-home-premium .ca-hero__mark img {
-    width: min(36vw, 300px);
+    width: min(30vw, 300px);
   }
 
   .ca-premium-highlights__inner,
@@ -3290,6 +3274,9 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 @media (max-width: 720px) {
   .ca-home-premium .ca-hero {
     min-height: auto;
+    background:
+      radial-gradient(circle at 74% 43%, rgba(221, 231, 239, 0.36), transparent 36%),
+      linear-gradient(135deg, #061a34 0%, #092442 48%, #102f51 100%);
   }
 
   .ca-home-premium .ca-hero__inner {
@@ -3303,12 +3290,12 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 
   .ca-home-premium .ca-hero__mark {
     align-items: flex-end;
-    opacity: 0.22;
-    padding: 0 20px 132px 0;
+    opacity: 0.7;
+    padding: 0 18px 170px 0;
   }
 
   .ca-home-premium .ca-hero__mark img {
-    width: 44vw;
+    width: min(48vw, 190px);
   }
 
   .ca-home-premium .ca-practice__grid,
