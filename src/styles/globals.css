@@ -725,12 +725,13 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 .ca-practice::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background-image: url('/brand/pattern-watermark.png');
-  background-size: 760px auto;
-  background-position: right -180px top 40px;
-  background-repeat: no-repeat;
-  opacity: 0.05;
+  right: clamp(24px, 7vw, 108px);
+  top: clamp(24px, 5vw, 72px);
+  width: clamp(210px, 26vw, 360px);
+  aspect-ratio: 1;
+  background: color-mix(in srgb, var(--color-ca-navy-950) 5.5%, transparent);
+  -webkit-mask: url('/brand/brand-symbol-transparent.webp') center / contain no-repeat;
+  mask: url('/brand/brand-symbol-transparent.webp') center / contain no-repeat;
   pointer-events: none;
 }
 
@@ -3065,8 +3066,10 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 }
 
 .ca-home-premium .ca-practice::before {
-  opacity: 0.025;
-  background-position: right -240px top -20px;
+  right: clamp(18px, 5vw, 82px);
+  top: clamp(18px, 4vw, 48px);
+  width: clamp(190px, 23vw, 320px);
+  background: color-mix(in srgb, var(--color-ca-navy-950) 3.8%, transparent);
 }
 
 .ca-home-premium .ca-practice__heading {
@@ -3505,14 +3508,13 @@ html[data-ca-cookie-banner='visible'] .ca-whatsapp-float {
 }
 
 .ca-page-hero--areas .ca-page-hero__mark {
-  right: clamp(-20px, 2vw, 32px);
-  bottom: clamp(18px, 4vw, 54px);
-  opacity: 0.62;
+  right: clamp(24px, 5vw, 80px);
+  bottom: clamp(28px, 5vw, 72px);
 }
 
 .ca-page-hero--areas .ca-page-hero__mark::before {
-  width: clamp(160px, 20vw, 280px);
-  background: rgba(226, 232, 240, 0.065);
+  width: clamp(180px, 24vw, 320px);
+  background: rgba(226, 232, 240, 0.09);
 }
 
 .ca-values__card,
