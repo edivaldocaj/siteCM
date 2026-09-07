@@ -15,14 +15,19 @@ const payloadJobsTaskSlugColumns = [
 
 function run(command, args, options = {}) {
   return new Promise((resolve, reject) => {
+    const input = options.input
     const child = spawn(command, args, {
-      stdio: 'inherit',
+      stdio: input ? ['pipe', 'inherit', 'inherit'] : 'inherit',
       shell: process.platform === 'win32',
       env: process.env,
       ...options,
     })
 
     child.on('error', reject)
+    if (input) {
+      child.stdin.write(input)
+      child.stdin.end()
+    }
     child.on('exit', (code) => {
       if (code === 0) resolve()
       else reject(new Error(`${command} ${args.join(' ')} exited with ${code}`))
@@ -192,7 +197,10 @@ async function main() {
       await ensurePayloadMigrationsTable()
       await repairPayloadJobsTaskSlugColumns()
       console.log('[db:startup] Aplicando migrations do Payload...')
-      await run('npm', ['run', 'migrate'])
+      // A database previously managed with Payload's development push stores
+      // a synthetic batch -1 row and asks for confirmation before migrations.
+      // Production startup must answer that prompt deterministically.
+      await run('npm', ['run', 'migrate'], { input: 'y\n' })
     }
 
     if (runBootstrap) {
