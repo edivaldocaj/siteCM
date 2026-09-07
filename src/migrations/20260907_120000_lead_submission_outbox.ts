@@ -2,14 +2,14 @@ import { sql, type MigrateDownArgs, type MigrateUpArgs } from '@payloadcms/db-po
 
 export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-    CREATE TYPE "public"."enum_lead_submissions_escritorio" AS ENUM('CA');
-    CREATE TYPE "public"."enum_lead_submissions_origem" AS ENUM('landing', 'contato');
-    CREATE TYPE "public"."enum_lead_submissions_status" AS ENUM('pendente', 'entregue', 'rejeitada', 'falha');
-    CREATE TABLE "lead_submissions_respostas" (
+    DO $$ BEGIN CREATE TYPE "public"."enum_lead_submissions_escritorio" AS ENUM('CA'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+    DO $$ BEGIN CREATE TYPE "public"."enum_lead_submissions_origem" AS ENUM('landing', 'contato'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+    DO $$ BEGIN CREATE TYPE "public"."enum_lead_submissions_status" AS ENUM('pendente', 'entregue', 'rejeitada', 'falha'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+    CREATE TABLE IF NOT EXISTS "lead_submissions_respostas" (
       "_order" integer NOT NULL, "_parent_id" integer NOT NULL,
       "id" varchar PRIMARY KEY NOT NULL, "pergunta" varchar NOT NULL, "resposta" varchar NOT NULL
     );
-    CREATE TABLE "lead_submissions" (
+    CREATE TABLE IF NOT EXISTS "lead_submissions" (
       "id" serial PRIMARY KEY NOT NULL,
       "idempotencia" varchar NOT NULL, "enviado_em" timestamp(3) with time zone NOT NULL,
       "escritorio" "enum_lead_submissions_escritorio" NOT NULL, "telefone" varchar NOT NULL,
@@ -23,15 +23,15 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
       "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
     );
-    ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "lead_submissions_id" integer;
-    ALTER TABLE "lead_submissions_respostas" ADD CONSTRAINT "lead_submissions_respostas_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."lead_submissions"("id") ON DELETE cascade ON UPDATE no action;
-    ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_lead_submissions_fk" FOREIGN KEY ("lead_submissions_id") REFERENCES "public"."lead_submissions"("id") ON DELETE cascade ON UPDATE no action;
-    CREATE INDEX "lead_submissions_respostas_order_idx" ON "lead_submissions_respostas" USING btree ("_order");
-    CREATE INDEX "lead_submissions_respostas_parent_id_idx" ON "lead_submissions_respostas" USING btree ("_parent_id");
-    CREATE UNIQUE INDEX "lead_submissions_idempotencia_idx" ON "lead_submissions" USING btree ("idempotencia");
-    CREATE INDEX "lead_submissions_updated_at_idx" ON "lead_submissions" USING btree ("updated_at");
-    CREATE INDEX "lead_submissions_created_at_idx" ON "lead_submissions" USING btree ("created_at");
-    CREATE INDEX "payload_locked_documents_rels_lead_submissions_id_idx" ON "payload_locked_documents_rels" USING btree ("lead_submissions_id");
+    ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "lead_submissions_id" integer;
+    DO $$ BEGIN ALTER TABLE "lead_submissions_respostas" ADD CONSTRAINT "lead_submissions_respostas_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."lead_submissions"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+    DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_lead_submissions_fk" FOREIGN KEY ("lead_submissions_id") REFERENCES "public"."lead_submissions"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+    CREATE INDEX IF NOT EXISTS "lead_submissions_respostas_order_idx" ON "lead_submissions_respostas" USING btree ("_order");
+    CREATE INDEX IF NOT EXISTS "lead_submissions_respostas_parent_id_idx" ON "lead_submissions_respostas" USING btree ("_parent_id");
+    CREATE UNIQUE INDEX IF NOT EXISTS "lead_submissions_idempotencia_idx" ON "lead_submissions" USING btree ("idempotencia");
+    CREATE INDEX IF NOT EXISTS "lead_submissions_updated_at_idx" ON "lead_submissions" USING btree ("updated_at");
+    CREATE INDEX IF NOT EXISTS "lead_submissions_created_at_idx" ON "lead_submissions" USING btree ("created_at");
+    CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_lead_submissions_id_idx" ON "payload_locked_documents_rels" USING btree ("lead_submissions_id");
   `)
 }
 
