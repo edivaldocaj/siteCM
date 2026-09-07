@@ -20,6 +20,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [formStartedAt] = useState(() => Date.now())
+  const [idempotencia] = useState(() => crypto.randomUUID())
 
   const contactAddress = cmsData?.address || 'Rua Francisco Maia Sobrinho, 1950 - Lagoa Nova, Natal/RN'
   const contactPhone = cmsData?.phone || '(84) 99124-3985'
@@ -45,6 +46,7 @@ export function ContactCTA({ cmsData }: ContactCTAProps) {
           formStartedAt,
           consentAccepted: data.get('consentAccepted') === 'on',
           consentText: LEAD_CONSENT_TEXT,
+          idempotencia,
         }),
       })
 

@@ -86,6 +86,7 @@ export interface Config {
     faqs: Faq;
     'automation-runs': AutomationRun;
     'audit-log': AuditLog;
+    'lead-submissions': LeadSubmission;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -113,6 +114,7 @@ export interface Config {
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     'automation-runs': AutomationRunsSelect<false> | AutomationRunsSelect<true>;
     'audit-log': AuditLogSelect<false> | AuditLogSelect<true>;
+    'lead-submissions': LeadSubmissionsSelect<false> | LeadSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -1102,6 +1104,48 @@ export interface AuditLog {
   createdAt: string;
 }
 /**
+ * Caixa de saida dos formularios enviados ao n8n e ao EspoCRM.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-submissions".
+ */
+export interface LeadSubmission {
+  id: number;
+  idempotencia: string;
+  enviadoEm: string;
+  escritorio: 'CA';
+  telefone: string;
+  nome: string;
+  email?: string | null;
+  campanha?: string | null;
+  origem: 'landing' | 'contato';
+  utm?: {
+    source?: string | null;
+    medium?: string | null;
+    campaign?: string | null;
+    content?: string | null;
+    term?: string | null;
+  };
+  referrer?: string | null;
+  respostas?:
+    | {
+        pergunta: string;
+        resposta: string;
+        id?: string | null;
+      }[]
+    | null;
+  consentAceito: boolean;
+  consentVersao: string;
+  consentEm: string;
+  consentIp?: string | null;
+  status: 'pendente' | 'entregue' | 'rejeitada' | 'falha';
+  tentativas?: number | null;
+  ultimoErro?: string | null;
+  leadIdCrm?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -1305,6 +1349,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'audit-log';
         value: number | AuditLog;
+      } | null)
+    | ({
+        relationTo: 'lead-submissions';
+        value: number | LeadSubmission;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1864,6 +1912,47 @@ export interface AuditLogSelect<T extends boolean = true> {
   before?: T;
   after?: T;
   metadata?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-submissions_select".
+ */
+export interface LeadSubmissionsSelect<T extends boolean = true> {
+  idempotencia?: T;
+  enviadoEm?: T;
+  escritorio?: T;
+  telefone?: T;
+  nome?: T;
+  email?: T;
+  campanha?: T;
+  origem?: T;
+  utm?:
+    | T
+    | {
+        source?: T;
+        medium?: T;
+        campaign?: T;
+        content?: T;
+        term?: T;
+      };
+  referrer?: T;
+  respostas?:
+    | T
+    | {
+        pergunta?: T;
+        resposta?: T;
+        id?: T;
+      };
+  consentAceito?: T;
+  consentVersao?: T;
+  consentEm?: T;
+  consentIp?: T;
+  status?: T;
+  tentativas?: T;
+  ultimoErro?: T;
+  leadIdCrm?: T;
   updatedAt?: T;
   createdAt?: T;
 }

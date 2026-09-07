@@ -11,6 +11,7 @@ import { CampaignVideoHero } from '@/components/campaigns/CampaignVideoHero'
 import { CampaignUrgencyBar } from '@/components/campaigns/CampaignUrgencyBar'
 import { CampaignLeadForm } from '@/components/campaigns/CampaignLeadForm'
 import { CampaignTracker } from '@/components/campaigns/CampaignTracker'
+import './campaign-refinement.css'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,7 +24,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const payload = await getPayload({ config: configPromise })
     const { docs } = await (payload as any).find({
       collection: 'campaigns',
-      where: { slug: { equals: slug } },
+      overrideAccess: false,
+      where: { and: [{ slug: { equals: slug } }, { status: { equals: 'active' } }] },
     })
     const c = docs[0]
     if (!c) return {}
@@ -81,7 +83,8 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
 
   const { docs } = await (payload as any).find({
     collection: 'campaigns',
-    where: { slug: { equals: slug } },
+    overrideAccess: false,
+    where: { and: [{ slug: { equals: slug } }, { status: { equals: 'active' } }] },
   })
 
   const campaign = docs[0]
@@ -135,6 +138,13 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           <h1>{campaign.title}</h1>
 
           {campaign.subtitle && <p>{campaign.subtitle}</p>}
+          <div className="campaign-contact-actions">
+            <a href={whatsappUrl} className="campaign-contact-primary" target="_blank" rel="noopener noreferrer">
+              <MessageCircle size={20} aria-hidden="true" /> Conversar com a equipe
+            </a>
+            {campaign.showForm !== false && <a href="#atendimento" className="campaign-contact-secondary">Solicitar atendimento</a>}
+          </div>
+          <p className="campaign-discretion">Atendimento reservado. Análise individual por profissional da advocacia.</p>
 
           {/* Video Hero */}
           {hasVideo && (
@@ -286,7 +296,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
 
         {/* ── Formulário de Captação de Lead ── */}
         {campaign.showForm !== false && (
-          <div style={{ marginTop: '32px' }}>
+          <div id="atendimento" style={{ marginTop: '32px', scrollMarginTop: '100px' }}>
             <CampaignLeadForm
               campaignSlug={slug}
               campaignTitle={campaign.title}
@@ -300,10 +310,10 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
         {/* ── CTA Final ── */}
         <div className="ca-campaign-detail__final-cta" style={{ borderBottomColor: accent.border }}>
           <h3>
-            {campaign.urgencyText || 'Tome uma atitude pelo seu direito hoje.'}
+            Vamos conversar sobre sua necessidade jurídica?
           </h3>
           <p>
-            Oferecemos uma análise profissional, confidencial e sem compromisso.
+            Informe apenas o necessário para o primeiro contato. A equipe orientará os próximos passos.
           </p>
           <a
             href={whatsappUrl}
@@ -312,7 +322,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
             className="ca-campaign-detail__final-link"
           >
             <MessageCircle size={20} />
-            Conversar com Advogado
+            Conversar com a equipe
           </a>
         </div>
       </section>

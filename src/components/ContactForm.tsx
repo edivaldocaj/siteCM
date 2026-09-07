@@ -9,6 +9,7 @@ export function ContactForm() {
   const [error, setError] = useState('')
   const [consentAccepted, setConsentAccepted] = useState(false)
   const [formStartedAt] = useState(() => Date.now())
+  const [idempotencia] = useState(() => crypto.randomUUID())
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -25,6 +26,7 @@ export function ContactForm() {
       formStartedAt,
       consentAccepted,
       consentText: LEAD_CONSENT_TEXT,
+      idempotencia,
     }
 
     try {

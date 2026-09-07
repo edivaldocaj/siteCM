@@ -3,8 +3,8 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { requireAdminRole } from '@/lib/admin-auth'
 import { getClientIp, checkRateLimit } from '@/lib/rate-limit'
-import { isLikelyBotSubmission, LEAD_CONSENT_TEXT } from '@/lib/public-form-security'
-import { getNotificationRecipients, sendResendEmail } from '@/lib/resend'
+import { isLikelyBotSubmission } from '@/lib/public-form-security'
+import { submitLead } from '@/lib/integration/submitLead'
 
 /* ── Lead Score Calculator ── */
 function calculateScore(data: any): number {
@@ -71,7 +71,6 @@ export async function POST(req: NextRequest) {
       utmContent,
       referrerUrl,
       consentAccepted,
-      consentText,
     } = body
 
     // Validation
@@ -87,102 +86,23 @@ export async function POST(req: NextRequest) {
     }
 
     const score = calculateScore(body)
-
-    const payload = await getPayload({ config: configPromise })
-
-    // Create lead in Payload CMS
-    const lead = await (payload as any).create({
-      collection: 'leads',
-      data: {
-        name,
-        phone,
-        email: email || undefined,
-        source: source || 'campaign-form',
-        campaignSlug: campaignSlug || undefined,
-        caseDescription: caseDescription || undefined,
-        estimatedValue: estimatedValue ? Number(estimatedValue) : undefined,
-        urgency: urgency || 'medium',
-        qualificationAnswers: qualificationAnswers || [],
-        utmSource: utmSource || undefined,
-        utmMedium: utmMedium || undefined,
-        utmCampaign: utmCampaign || undefined,
-        utmContent: utmContent || undefined,
-        referrerUrl: referrerUrl || undefined,
-        consentText: consentText || LEAD_CONSENT_TEXT,
-        consentedAt: new Date().toISOString(),
-        ip: clientIp,
-        userAgent: req.headers.get('user-agent') || undefined,
-        status: 'new',
-        score,
-        notes: [
-          {
-            text: `Lead captado via ${source || 'campaign-form'}${campaignSlug ? ` — Campanha: ${campaignSlug}` : ''}. Score: ${score}/100.`,
-            author: 'system',
-            date: new Date().toISOString(),
-          },
-        ],
-      },
-    })
-
-    // Send email notification to attorneys
-    const qualAnswersHtml = qualificationAnswers?.length
-      ? qualificationAnswers
-          .map((qa: any) => `<p><strong>${qa.question}:</strong> ${qa.answer}</p>`)
-          .join('')
-      : ''
-
-    const scoreColor = score >= 60 ? '#25D366' : score >= 30 ? 'var(--color-ca-steel-500)' : 'var(--color-ca-steel-400)'
-    const scoreEmoji = score >= 60 ? '🔥' : score >= 30 ? '⭐' : '📋'
-
-    await sendResendEmail({
-      to: getNotificationRecipients('contato@cavalcantealbuquerque.com.br'),
-      subject: `${scoreEmoji} Novo Lead (Score ${score}) — ${name}${campaignSlug ? ` [${campaignSlug}]` : ''}`,
-      html: `
-              <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto;">
-                <div style="background: var(--color-ca-navy-950); padding: 24px; text-align: center; border-radius: 8px 8px 0 0;">
-                  <h1 style="color: var(--color-ca-platinum-100); font-size: 22px; margin: 0;">Novo Lead Captado</h1>
-                  <p style="color: var(--color-ca-steel-400); font-size: 14px; margin-top: 4px;">cavalcantealbuquerque.com.br</p>
-                </div>
-                
-                <div style="background: #ffffff; padding: 24px; border: 1px solid #e5e5e5;">
-                  <!-- Score Badge -->
-                  <div style="text-align: center; margin-bottom: 24px;">
-                    <span style="display: inline-block; background: ${scoreColor}; color: #fff; font-size: 28px; font-weight: bold; width: 64px; height: 64px; line-height: 64px; border-radius: 50%;">
-                      ${score}
-                    </span>
-                    <p style="color: #666; font-size: 12px; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.1em;">Score de Qualificação</p>
-                  </div>
-
-                  <!-- Lead info -->
-                  <table style="width: 100%; border-collapse: collapse;">
-                    <tr><td style="padding: 8px; color: #999; font-size: 13px; width: 120px;">Nome</td><td style="padding: 8px; font-weight: 600;">${name}</td></tr>
-                    <tr><td style="padding: 8px; color: #999; font-size: 13px;">Telefone</td><td style="padding: 8px;"><a href="https://wa.me/55${phone.replace(/\D/g, '')}" style="color: #25D366; font-weight: 600;">${phone}</a></td></tr>
-                    ${email ? `<tr><td style="padding: 8px; color: #999; font-size: 13px;">E-mail</td><td style="padding: 8px;">${email}</td></tr>` : ''}
-                    ${campaignSlug ? `<tr><td style="padding: 8px; color: #999; font-size: 13px;">Campanha</td><td style="padding: 8px; color: var(--color-ca-steel-500); font-weight: 600;">${campaignSlug}</td></tr>` : ''}
-                    <tr><td style="padding: 8px; color: #999; font-size: 13px;">Urgência</td><td style="padding: 8px;">${urgencyLabels[urgency] || urgency || 'Média'}</td></tr>
-                    ${estimatedValue ? `<tr><td style="padding: 8px; color: #999; font-size: 13px;">Valor Estimado</td><td style="padding: 8px; font-weight: 600;">R$ ${Number(estimatedValue).toLocaleString('pt-BR')}</td></tr>` : ''}
-                  </table>
-
-                  ${caseDescription ? `<div style="margin-top: 16px; padding: 16px; background: #f8f8f8; border-radius: 6px;"><p style="color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Descrição do Caso</p><p style="color: #333; font-size: 14px; line-height: 1.6;">${caseDescription}</p></div>` : ''}
-
-                  ${qualAnswersHtml ? `<div style="margin-top: 16px; padding: 16px; background: color-mix(in srgb, var(--color-ca-steel-500) 6%, transparent); border-radius: 6px; border-left: 3px solid var(--color-ca-steel-500);"><p style="color: var(--color-ca-steel-500); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Respostas de Qualificação</p>${qualAnswersHtml}</div>` : ''}
-
-                  ${utmSource ? `<div style="margin-top: 16px; padding: 12px; background: #f8f8f8; border-radius: 6px;"><p style="color: #999; font-size: 11px; margin-bottom: 4px;">Origem: ${utmSource}${utmMedium ? ` / ${utmMedium}` : ''}${utmCampaign ? ` / ${utmCampaign}` : ''}</p></div>` : ''}
-                </div>
-
-                <div style="background: var(--color-ca-navy-950); padding: 16px; text-align: center; border-radius: 0 0 8px 8px;">
-                  <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cavalcantealbuquerque.com.br'}/admin/collections/leads/${lead.id}" 
-                     style="color: var(--color-ca-steel-500); text-decoration: none; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em;">
-                    Ver no CMS →
-                  </a>
-                </div>
-              </div>
-            `,
+    const responses = [
+      ...(caseDescription ? [{ pergunta: 'Descrição do caso', resposta: String(caseDescription) }] : []),
+      ...(qualificationAnswers || []).map((qa: any) => ({ pergunta: String(qa.question), resposta: String(qa.answer) })),
+      ...(urgency ? [{ pergunta: 'Urgência', resposta: String(urgencyLabels[urgency] || urgency) }] : []),
+      ...(estimatedValue ? [{ pergunta: 'Valor estimado', resposta: String(estimatedValue) }] : []),
+    ]
+    const delivery = await submitLead({
+      idempotencia: typeof body.idempotencia === 'string' ? body.idempotencia : undefined,
+      nome: String(name), telefone: String(phone), email, campanha: campaignSlug || utmCampaign || 'ORGANICO',
+      origem: 'landing', consentIp: clientIp, respostas: responses,
+      utm: { source: utmSource, medium: utmMedium, campaign: utmCampaign, content: utmContent }, referrer: referrerUrl,
     })
 
     return NextResponse.json({
       success: true,
-      leadId: lead.id,
+      leadId: delivery.leadId,
+      idempotencia: delivery.idempotencia,
       score,
     })
   } catch (error) {

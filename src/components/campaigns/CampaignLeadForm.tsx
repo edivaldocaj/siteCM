@@ -63,6 +63,7 @@ export function CampaignLeadForm({
   const [score, setScore] = useState(0)
   const [consentAccepted, setConsentAccepted] = useState(false)
   const [formStartedAt] = useState(() => Date.now())
+  const [idempotencia] = useState(() => crypto.randomUUID())
 
   // Form data
   const [name, setName] = useState('')
@@ -160,6 +161,7 @@ export function CampaignLeadForm({
           formStartedAt,
           consentAccepted,
           consentText: LEAD_CONSENT_TEXT,
+          idempotencia,
           ...utmParams,
         }),
       })

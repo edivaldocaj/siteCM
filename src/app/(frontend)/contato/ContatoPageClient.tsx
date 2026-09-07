@@ -10,6 +10,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
   const [formStartedAt] = useState(() => Date.now())
+  const [idempotencia] = useState(() => crypto.randomUUID())
 
   const contactEmail = siteConfig?.contactEmail || 'contato@cavalcantealbuquerque.com.br'
   const contactPhone = siteConfig?.contactPhone || '(84) 99124-3985'
@@ -36,6 +37,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
           formStartedAt,
           consentAccepted: formData.get('consentAccepted') === 'on',
           consentText: LEAD_CONSENT_TEXT,
+          idempotencia,
         }),
       })
 

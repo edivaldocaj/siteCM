@@ -28,6 +28,7 @@ import { AutomationConfig } from './globals/AutomationConfig'
 import { Faqs } from './collections/Faqs'
 import { AutomationRuns } from './collections/AutomationRuns'
 import { AuditLog } from './collections/AuditLog'
+import { LeadSubmissions } from './collections/LeadSubmissions'
 import { automationQueue, automationTasks } from './jobs/automationTasks'
 
 const filename = fileURLToPath(import.meta.url)
@@ -84,6 +85,7 @@ export default buildConfig({
     Faqs,
     AutomationRuns,
     AuditLog,
+    LeadSubmissions,
   ],
   globals: [
     Homepage,
