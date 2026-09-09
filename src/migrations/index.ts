@@ -9,6 +9,7 @@ import * as migration_20260811_142611_native_payload_jobs from './20260811_14261
 import * as migration_20260811_213000_fix_payload_jobs_task_enums from './20260811_213000_fix_payload_jobs_task_enums'
 import * as migration_20260811_214500_payload_jobs_task_slug_varchar from './20260811_214500_payload_jobs_task_slug_varchar'
 import * as migration_20260907_120000_lead_submission_outbox from './20260907_120000_lead_submission_outbox'
+import * as migration_20260908_180000_campaign_category_values from './20260908_180000_campaign_category_values'
 
 export const migrations = [
   {
@@ -65,5 +66,10 @@ export const migrations = [
     up: migration_20260907_120000_lead_submission_outbox.up,
     down: migration_20260907_120000_lead_submission_outbox.down,
     name: '20260907_120000_lead_submission_outbox',
+  },
+  {
+    up: migration_20260908_180000_campaign_category_values.up,
+    down: migration_20260908_180000_campaign_category_values.down,
+    name: '20260908_180000_campaign_category_values',
   },
 ]
