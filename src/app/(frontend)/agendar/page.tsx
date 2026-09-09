@@ -25,7 +25,7 @@ export default function AgendarPage() {
             <span className="ca-eyebrow">Como funciona</span>
             <h2>Um pedido claro, sem promessa de disponibilidade</h2>
             <p>O pedido inicia a triagem do atendimento. Horário, formato e profissional responsável são confirmados em contato posterior.</p>
-            <Link href="/contato" className="btn-primary">
+            <Link href="/contato#formulario-agendamento" className="btn-primary">
               Enviar pedido de horário <ArrowRight size={16} />
             </Link>
           </div>

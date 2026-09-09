@@ -136,7 +136,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
                 <p>Nossa equipe recebeu sua solicitação e retornará pelos dados informados.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="ca-contact-page__form">
+              <form id="formulario-agendamento" onSubmit={handleSubmit} className="ca-contact-page__form">
                 <h2>Envie sua mensagem</h2>
                 <input type="text" name="website" tabIndex={-1} autoComplete="off" className="ca-honeypot" />
 
