@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { CheckCircle, Clock, Mail, MapPin, Phone, Send } from 'lucide-react'
 import { LEAD_CONSENT_TEXT } from '@/lib/public-form-security'
 
@@ -122,6 +123,9 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
               <Phone size={18} />
               Falar pelo WhatsApp
             </a>
+            <Link href="/agendar" className="btn-primary">
+              Solicitar um horário
+            </Link>
           </aside>
 
           <div className="ca-contact-page__form-panel">

@@ -94,7 +94,12 @@ export default async function CampanhasPage() {
               <span className="ca-eyebrow">{campaigns.length > 0 ? 'Campanhas ativas' : 'Frentes de triagem'}</span>
               <h2>{campaigns.length > 0 ? 'Verifique se seu caso se encaixa' : 'Atendimentos prioritários por área'}</h2>
             </div>
-            <p>{campaigns.length > 0 ? 'Cada campanha organiza uma hipótese de atendimento com perguntas objetivas e próximos passos.' : 'Enquanto campanhas específicas não estão publicadas, estes canais direcionam a triagem para os temas centrais do escritório.'}</p>
+            <div>
+              <p>{campaigns.length > 0 ? 'Cada campanha organiza uma hipótese de atendimento com perguntas objetivas e próximos passos.' : 'Enquanto campanhas específicas não estão publicadas, estes canais direcionam a triagem para os temas centrais do escritório.'}</p>
+              <Link href="/agendar" className="ca-inline-link">
+                Solicitar um horário <ArrowRight size={15} />
+              </Link>
+            </div>
           </div>
 
           <div className="ca-campaigns-page__grid">
