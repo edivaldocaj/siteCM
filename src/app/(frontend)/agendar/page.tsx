@@ -7,7 +7,16 @@ export const metadata: Metadata = {
   description: 'Envie sua preferência de horário para atendimento com o Cavalcante Albuquerque Advocacia e Consultoria.',
 }
 
-export default function AgendarPage() {
+async function horariosLivres() {
+  try {
+    const response = await fetch('https://n8n.cavalcantealbuquerque.com.br/webhook/disponibilidade-ca', { next: { revalidate: 300 } })
+    const data = await response.json()
+    return Array.isArray(data.horarios) ? data.horarios.slice(0, 9) : []
+  } catch { return [] }
+}
+
+export default async function AgendarPage() {
+  const horarios = await horariosLivres()
   return (
     <>
       <section className="ca-page-hero ca-page-hero--contact">
@@ -15,6 +24,19 @@ export default function AgendarPage() {
           <span className="ca-eyebrow ca-eyebrow--dark">Atendimento</span>
           <h1>Solicite um horário</h1>
           <p>Conte brevemente o assunto e a sua preferência de dia ou período. A equipe confirma o atendimento somente após verificar a disponibilidade.</p>
+        </div>
+      </section>
+
+      <section className="ca-story">
+        <div className="container-wide mx-auto ca-story__inner">
+          <div className="ca-story__copy">
+            <span className="ca-eyebrow">Disponibilidade inicial</span>
+            <h2>Horários livres para solicitação</h2>
+            <p>Escolha uma preferência no formulário. A equipe confirma qualquer atendimento antes da reserva.</p>
+          </div>
+          <div className="ca-story__timeline" aria-label="Horários livres">
+            {horarios.map((horario: { inicio: string }) => <article key={horario.inicio}><strong>{new Intl.DateTimeFormat('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' }).format(new Date(horario.inicio))}</strong><p>Disponibilidade sujeita à confirmação humana.</p></article>)}
+          </div>
         </div>
       </section>
 
