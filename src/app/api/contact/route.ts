@@ -11,7 +11,10 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json()
-    if (isLikelyBotSubmission(body)) {
+    // A person que escolhe um horário chega ao formulário já com a
+    // preferência preenchida. Não rejeitamos esse envio legítimo pelo
+    // tempo de abertura; o honeypot e o limite por IP continuam ativos.
+    if (isLikelyBotSubmission(body, 0)) {
       return NextResponse.json({ error: 'Envio inválido.' }, { status: 400 })
     }
 
