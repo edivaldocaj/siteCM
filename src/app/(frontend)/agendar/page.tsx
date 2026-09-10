@@ -35,7 +35,7 @@ export default async function AgendarPage() {
             <p>Escolha uma preferência no formulário. A equipe confirma qualquer atendimento antes da reserva.</p>
           </div>
           <div className="ca-story__timeline" aria-label="Horários livres">
-            {horarios.map((horario: { inicio: string }) => <article key={horario.inicio}><strong>{new Intl.DateTimeFormat('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' }).format(new Date(horario.inicio))}</strong><p>Disponibilidade sujeita à confirmação humana.</p></article>)}
+            {horarios.map((horario: { inicio: string }) => <article key={horario.inicio}><strong>{new Intl.DateTimeFormat('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' }).format(new Date(horario.inicio))}</strong><p>Disponibilidade sujeita à confirmação humana.</p><Link href={`/contato?horario=${encodeURIComponent(horario.inicio)}#formulario-agendamento`}>Escolher este horário</Link></article>)}
           </div>
         </div>
       </section>

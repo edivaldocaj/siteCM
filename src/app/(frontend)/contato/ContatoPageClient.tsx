@@ -3,10 +3,12 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { CheckCircle, Clock, Mail, MapPin, Phone, Send } from 'lucide-react'
 import { LEAD_CONSENT_TEXT } from '@/lib/public-form-security'
 
 export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
+  const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
@@ -16,6 +18,10 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
   const contactEmail = siteConfig?.contactEmail || 'contato@cavalcantealbuquerque.com.br'
   const contactPhone = siteConfig?.contactPhone || '(84) 99124-3985'
   const contactAddress = siteConfig?.contactAddress || 'Rua Francisco Maia Sobrinho, 1950\nLagoa Nova - Natal/RN'
+  const horarioParam = searchParams.get('horario')
+  const horarioPreferido = horarioParam && !Number.isNaN(new Date(horarioParam).getTime())
+    ? new Intl.DateTimeFormat('pt-BR', { dateStyle: 'full', timeStyle: 'short', timeZone: 'America/Sao_Paulo' }).format(new Date(horarioParam))
+    : null
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -169,7 +175,7 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
 
                 <label>
                   <span>Mensagem</span>
-                  <textarea name="message" rows={5} placeholder="Descreva brevemente seu caso" />
+                  <textarea name="message" rows={5} placeholder="Descreva brevemente seu caso" defaultValue={horarioPreferido ? `Preferência de horário: ${horarioPreferido}.\n\n` : ''} />
                 </label>
 
                 <label className="ca-contact-page__consent">
