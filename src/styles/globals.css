@@ -3775,3 +3775,9 @@ html[data-ca-cookie-banner='visible'] .ca-whatsapp-float {
     margin-top: -32px;
   }
 }
+.ca-calendar { display: grid; gap: 1rem; }
+.ca-calendar__day { border: 1px solid var(--ca-line, #d9d2c5); border-radius: 1rem; padding: 1rem; background: #fff; }
+.ca-calendar__day h3 { margin: 0 0 .75rem; text-transform: capitalize; }
+.ca-calendar__slots { display: flex; flex-wrap: wrap; gap: .6rem; }
+.ca-calendar__slot { display: inline-flex; align-items: center; gap: .65rem; border: 1px solid currentColor; border-radius: 999px; padding: .65rem .9rem; text-decoration: none; }
+.ca-calendar__slot span { font-size: .8rem; }

@@ -11,12 +11,20 @@ async function horariosLivres() {
   try {
     const response = await fetch('https://n8n.cavalcantealbuquerque.com.br/webhook/disponibilidade-ca', { next: { revalidate: 300 } })
     const data = await response.json()
-    return Array.isArray(data.horarios) ? data.horarios.slice(0, 9) : []
+    const horarios = Array.isArray(data) ? data : data?.horarios
+    return Array.isArray(horarios) ? horarios.slice(0, 9) : []
   } catch { return [] }
 }
 
 export default async function AgendarPage() {
   const horarios = await horariosLivres()
+  const dias = horarios.reduce<Record<string, { label: string; horarios: { inicio: string }[] }>>((acc, horario: { inicio: string }) => {
+    const date = new Date(horario.inicio)
+    const key = date.toISOString().slice(0, 10)
+    acc[key] ??= { label: new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', timeZone: 'America/Sao_Paulo' }).format(date), horarios: [] }
+    acc[key].horarios.push(horario)
+    return acc
+  }, {})
   return (
     <>
       <section className="ca-page-hero ca-page-hero--contact">
@@ -34,8 +42,9 @@ export default async function AgendarPage() {
             <h2>Horários livres para solicitação</h2>
             <p>Escolha uma preferência no formulário. A equipe confirma qualquer atendimento antes da reserva.</p>
           </div>
-          <div className="ca-story__timeline" aria-label="Horários livres">
-            {horarios.map((horario: { inicio: string }) => <article key={horario.inicio}><strong>{new Intl.DateTimeFormat('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' }).format(new Date(horario.inicio))}</strong><p>Disponibilidade sujeita à confirmação humana.</p><Link href={`/contato?horario=${encodeURIComponent(horario.inicio)}#formulario-agendamento`}>Escolher este horário</Link></article>)}
+          <div className="ca-calendar" aria-label="Calendário de horários livres">
+            {Object.values(dias).map((dia) => <section className="ca-calendar__day" key={dia.label}><h3>{dia.label}</h3><div className="ca-calendar__slots">{dia.horarios.map((horario) => <Link className="ca-calendar__slot" key={horario.inicio} href={`/contato?horario=${encodeURIComponent(horario.inicio)}#formulario-agendamento`}><strong>{new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' }).format(new Date(horario.inicio))}</strong><span>Escolher</span></Link>)}</div></section>)}
+            {!horarios.length && <p>Não há horários livres para exibir neste momento. Envie sua preferência para a equipe consultar a agenda.</p>}
           </div>
         </div>
       </section>
