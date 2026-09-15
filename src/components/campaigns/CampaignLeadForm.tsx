@@ -289,7 +289,7 @@ export function CampaignLeadForm({
             margin: 0,
           }}
         >
-          Análise Gratuita do Seu Caso
+          Solicitar atendimento
         </h3>
       </div>
       <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)', fontSize: '14px', marginBottom: '24px' }}>
@@ -631,7 +631,7 @@ export function CampaignLeadForm({
             ) : (
               <>
                 <Send style={{ width: '16px', height: '16px' }} />
-                Solicitar Análise Gratuita
+                Enviar solicitação
               </>
             )}
           </button>

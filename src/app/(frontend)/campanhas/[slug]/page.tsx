@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     if (!c) return {}
 
     const ogImageUrl = c.ogImage?.url || c.coverImage?.url || c.heroImage?.url || `${siteUrl}/brand/og-default.jpg`
-    const title = c.metaTitle || c.title
+    const title = (c.metaTitle || c.title).replace(/\s*\|\s*Cavalcante Albuquerque\s*$/i, '')
     const description = c.metaDescription || c.subtitle || ''
         const canonical = `${siteUrl}/campanhas/${slug}`
 
