@@ -197,6 +197,49 @@ async function ensureLeadSubmissionsSchema() {
   }
 }
 
+// Replaces the initial visual placeholder with an informational article. This
+// runs idempotently at startup because legacy databases were created through
+// Payload's development schema push and do not consume migration files.
+async function ensurePublishedEditorialContent() {
+  if (!process.env.DATABASE_URL) return
+
+  const paragraphs = [
+    'Uma primeira conversa jurídica costuma ser mais proveitosa quando os fatos e os documentos principais estão organizados. Isso não significa que seja necessário ter tudo em mãos: a finalidade é permitir uma compreensão inicial mais clara do caso.',
+    'Comece reunindo documentos de identificação e os registros diretamente ligados à situação: contratos, propostas, comprovantes, notificações, decisões, boletins de ocorrência, recibos ou conversas relevantes.',
+    'Em seguida, monte uma linha do tempo simples. Anote o que aconteceu, em quais datas, quem participou e quais providências já foram tomadas. Prazos legais ou contratuais merecem atenção especial.',
+    'Quando houver mensagens, e-mails, arquivos digitais ou publicações, preserve os materiais no formato original sempre que possível. Capturas de tela devem mostrar data, contexto e identificação da conversa ou página.',
+    'Também ajuda listar dúvidas e objetivos práticos: por exemplo, compreender uma cobrança, responder a uma notificação, avaliar um contrato ou buscar orientação diante de um conflito. A primeira conversa serve para definir os próximos passos adequados.',
+    'Cada situação exige análise individual de fatos, documentos e prazos. Este conteúdo é informativo e não substitui orientação jurídica personalizada.',
+  ]
+
+  const content = {
+    root: {
+      type: 'root', format: '', indent: 0, version: 1, direction: 'ltr',
+      children: paragraphs.map((text) => ({
+        type: 'paragraph', format: '', indent: 0, version: 1, direction: 'ltr', textFormat: 0, textStyle: '',
+        children: [{ type: 'text', text, version: 1 }],
+      })),
+    },
+  }
+
+  const client = new Client({ connectionString: process.env.DATABASE_URL })
+  await client.connect()
+  try {
+    const result = await client.query(
+      `UPDATE "posts"
+       SET "excerpt" = $1, "content" = $2::jsonb, "read_time" = 5, "updated_at" = now()
+       WHERE "slug" = 'organizar-documentos-atendimento-juridico'`,
+      [
+        'Documentos, fatos e datas que ajudam a tornar a primeira conversa jurídica mais clara e objetiva.',
+        JSON.stringify(content),
+      ],
+    )
+    if (result.rowCount > 0) console.log('[db:startup] Artigo editorial de documentos atualizado.')
+  } finally {
+    await client.end()
+  }
+}
+
 async function withDatabaseLock(fn) {
   if (!process.env.DATABASE_URL) {
     console.error('[db:startup] DATABASE_URL ausente; pulando preparo do banco.')
@@ -242,6 +285,7 @@ async function main() {
       await ensurePayloadMigrationsTable()
       await repairPayloadJobsTaskSlugColumns()
       await ensureLeadSubmissionsSchema()
+      await ensurePublishedEditorialContent()
       console.log('[db:startup] Aplicando migrations do Payload...')
       // A database previously managed with Payload's development push stores
       // a synthetic batch -1 row and asks for confirmation before migrations.
