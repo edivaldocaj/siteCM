@@ -100,6 +100,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
   const campaign = docs[0]
   if (!campaign) return notFound()
 
+  const shareMessage = campaign.whatsappMessage || `Olá! Gostaria de falar sobre: ${campaign.title}`
   const campaignReference = campaign.campaignCode ? `&c=${encodeURIComponent(campaign.campaignCode)}` : ''
   const whatsappUrl = `/ir/whatsapp?o=campaign${campaignReference}`
 
@@ -302,7 +303,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           title={campaign.title}
           subtitle={campaign.subtitle || ''}
           shareUrl={shareUrl}
-          whatsappMessage={message}
+          whatsappMessage={shareMessage}
           accentColor={accent.border}
         />
 
