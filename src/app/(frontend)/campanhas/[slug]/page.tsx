@@ -36,7 +36,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         const canonical = `${siteUrl}/campanhas/${slug}`
 
     return {
-      title: `${title} | Cavalcante Albuquerque`,
+      // The frontend layout adds the office name through its metadata template.
+      // Supplying the short title here avoids repeating the brand in the tab title.
+      title,
       description,
       alternates: { canonical },
       openGraph: {
