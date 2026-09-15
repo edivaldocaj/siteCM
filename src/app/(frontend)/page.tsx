@@ -5,11 +5,16 @@ import { HomePremiumHighlights } from '@/components/sections/HomePremiumHighligh
 import { FeaturedCampaigns } from '@/components/sections/FeaturedCampaigns'
 import { TestimonialsCarousel } from '@/components/sections/TestimonialsCarousel'
 import { ContactCTA } from '@/components/sections/ContactCTA'
+import type { Metadata } from 'next'
 
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+}
 
 async function getHomeData() {
   try {

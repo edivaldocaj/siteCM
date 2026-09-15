@@ -5,6 +5,7 @@ import { ArrowRight, CalendarDays } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Solicitar horário',
   description: 'Envie sua preferência de horário para atendimento com o Cavalcante Albuquerque Advocacia e Consultoria.',
+  alternates: { canonical: '/agendar' },
 }
 
 async function horariosLivres() {
