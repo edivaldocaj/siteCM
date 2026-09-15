@@ -34,6 +34,10 @@ function getHighlight(posts: HighlightRecord[] = [], news: HighlightRecord[] = [
 export function HomePremiumHighlights({ homepage, posts = [], news = [], campaigns = [] }: HomePremiumHighlightsProps) {
   const highlight = getHighlight(posts, news, campaigns)
   const about = homepage?.aboutPartners
+  const featuredImageUrl = highlight?.item.featuredImage?.url
+  const featuredImageSrc = featuredImageUrl && !featuredImageUrl.includes('og-default')
+    ? featuredImageUrl
+    : '/brand/areas-presentation.webp'
 
   return (
     <section className="ca-premium-highlights" aria-label="Sobre o escritório e conteúdos">
@@ -61,19 +65,7 @@ export function HomePremiumHighlights({ homepage, posts = [], news = [], campaig
             <span className="ca-eyebrow">Conteúdos e atualizações</span>
             <div className="ca-premium-highlights__feature">
               <div className="ca-premium-highlights__feature-image">
-                {highlight.item.featuredImage?.url ? (
-                  <Image
-                    src={highlight.item.featuredImage.url}
-                    alt={highlight.item.title || ''}
-                    fill
-                    sizes="(max-width: 900px) 100vw, 28vw"
-                    onError={(event) => {
-                      event.currentTarget.src = '/brand/areas-presentation.webp'
-                    }}
-                  />
-                ) : (
-                  <Image src="/brand/areas-presentation.webp" alt="" fill sizes="(max-width: 900px) 100vw, 28vw" />
-                )}
+                <Image src={featuredImageSrc} alt={highlight.item.title || ''} fill sizes="(max-width: 900px) 100vw, 28vw" />
               </div>
               <div>
                 <p className="ca-premium-highlights__label">{highlight.label}</p>
