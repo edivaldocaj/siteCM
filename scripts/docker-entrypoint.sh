@@ -3,6 +3,8 @@ set -eu
 
 echo 'Deploy marker: startup-resilience-v23'
 
+node scripts/restore-cms-media.cjs
+
 if [ "${RUN_PREFLIGHT_ON_START:-false}" = "true" ]; then
   echo "Running production preflight..."
   npm run preflight:production || echo "Preflight failed; continuing so the app can expose diagnostics."

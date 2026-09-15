@@ -34,10 +34,7 @@ function getHighlight(posts: HighlightRecord[] = [], news: HighlightRecord[] = [
 export function HomePremiumHighlights({ homepage, posts = [], news = [], campaigns = [] }: HomePremiumHighlightsProps) {
   const highlight = getHighlight(posts, news, campaigns)
   const about = homepage?.aboutPartners
-  // O CMS ainda contém referências de mídia legadas que podem não existir no
-  // ambiente público. Mantemos este destaque com o asset local validado até a
-  // normalização completa do acervo editorial.
-  const featuredImageSrc = '/brand/areas-presentation.webp'
+  const featuredImageSrc = highlight?.item.featuredImage?.url || '/brand/areas-presentation.webp'
 
   return (
     <section className="ca-premium-highlights" aria-label="Sobre o escritório e conteúdos">
