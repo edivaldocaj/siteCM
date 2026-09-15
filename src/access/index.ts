@@ -8,9 +8,12 @@ const getRoles = (user: AccessArgs['req']['user']): string[] => {
 
   const roleCarrier = user as RoleCarrier
   const roles = Array.isArray(roleCarrier.roles) ? roleCarrier.roles.filter((role): role is string => typeof role === 'string') : []
-  const legacyRole = typeof roleCarrier.role === 'string' ? [roleCarrier.role] : []
+  if (roles.length > 0) return roles
 
-  return [...roles, ...legacyRole]
+  // The legacy field is a compatibility fallback only. Combining it with the
+  // current roles could unintentionally elevate a user whose old value was
+  // `editor` but whose current role is `client`.
+  return typeof roleCarrier.role === 'string' ? [roleCarrier.role] : []
 }
 
 export const anyone: Access = () => true

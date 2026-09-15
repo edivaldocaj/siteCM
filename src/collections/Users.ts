@@ -26,8 +26,8 @@ export const Users: CollectionConfig = {
     {
       name: 'role',
       type: 'select',
-      options: ['admin', 'editor'],
-      defaultValue: 'editor',
+      options: ['admin', 'editor', 'client'],
+      defaultValue: 'client',
       admin: { description: 'Campo legado. Use roles para novas permissões.' },
       access: { update: fieldAdminOnly },
     },
