@@ -574,16 +574,27 @@ async function seedPosts(payload: PayloadInstance, teamId: string | number, medi
       title,
       excerpt,
       featuredImage: index % 2 === 0 ? media['Sala de atendimento'] : media['Porta do escritório'],
-      content: richText(
-        excerpt,
-        'Este artigo demonstrativo valida o layout do blog e pode ser usado como base editorial inicial.',
-        'A orientação jurídica depende da análise concreta dos documentos, fatos e prazos envolvidos.',
-      ),
+      content: slug === 'organizar-documentos-atendimento-juridico'
+        ? richText(
+            'Uma primeira conversa jurídica costuma ser mais proveitosa quando os fatos e os documentos principais estão organizados. Isso não significa que seja necessário ter tudo em mãos: a finalidade é permitir uma compreensão inicial mais clara do caso.',
+            'Comece reunindo documentos de identificação e os registros diretamente ligados à situação: contratos, propostas, comprovantes, notificações, decisões, boletins de ocorrência, recibos ou conversas relevantes.',
+            'Em seguida, monte uma linha do tempo simples. Anote o que aconteceu, em quais datas, quem participou e quais providências já foram tomadas. Prazos legais ou contratuais merecem atenção especial.',
+            'Quando houver mensagens, e-mails, arquivos digitais ou publicações, preserve os materiais no formato original sempre que possível. Capturas de tela devem mostrar data, contexto e identificação da conversa ou página.',
+            'Também ajuda listar dúvidas e objetivos práticos: por exemplo, compreender uma cobrança, responder a uma notificação, avaliar um contrato ou buscar orientação diante de um conflito. A primeira conversa serve para definir os próximos passos adequados.',
+            'Cada situação exige análise individual de fatos, documentos e prazos. Este conteúdo é informativo e não substitui orientação jurídica personalizada.',
+          )
+        : richText(
+            excerpt,
+            'Conteúdo editorial em preparação.',
+            'A orientação jurídica depende da análise concreta dos documentos, fatos e prazos envolvidos.',
+          ),
       category,
       author: 'edivaldo',
       authorRef: teamId,
       byFirm: false,
-      tags: ['demo', category, linkedCampaign || 'institucional'],
+      tags: slug === 'organizar-documentos-atendimento-juridico'
+        ? ['orientacao-inicial', 'documentos', 'atendimento-juridico']
+        : ['editorial-em-preparacao', category, linkedCampaign || 'institucional'],
       readTime: 4 + index,
       publishedAt: daysAgo(index + 1, 8),
       status: 'published',
