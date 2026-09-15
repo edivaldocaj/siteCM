@@ -77,6 +77,14 @@ const categoryLabels: Record<string, string> = {
   tributario: 'Tributário',
 }
 
+/**
+ * Registros de demonstração podem existir no CMS durante a configuração, mas
+ * não devem ser tratados como relato de cliente em uma página pública.
+ */
+function isDemoSocialProof(proof: { author?: string | null }) {
+  return /^(cliente\s*)?demo$/i.test((proof.author || '').trim())
+}
+
 export default async function CampaignPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const payload = await getPayload({ config: configPromise })
@@ -95,6 +103,9 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
   const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
 
   const accent = accentColors[campaign.colorAccent || 'gold'] || accentColors.gold
+  const socialProof = (campaign.socialProof || []).filter(
+    (proof: { author?: string | null }) => !isDemoSocialProof(proof),
+  )
 
   // Resolve media URLs
   const heroImageUrl = campaign.heroImage?.url || null
@@ -221,13 +232,13 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
         )}
 
         {/* Prova Social */}
-        {campaign.socialProof && campaign.socialProof.length > 0 && (
+        {socialProof.length > 0 && (
           <div style={{ marginBottom: '32px' }}>
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', color: 'var(--color-ca-navy-950)', marginBottom: '24px' }}>
               O que nossos clientes dizem
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {campaign.socialProof.map((proof: any, i: number) => (
+              {socialProof.map((proof: any, i: number) => (
                 <div key={i} style={{
                   background: '#ffffff', padding: '32px', borderRadius: '4px',
                   borderLeft: `3px solid ${accent.border}`,
