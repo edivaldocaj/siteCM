@@ -3,13 +3,11 @@ import configPromise from '@payload-config'
 import AdminAutomationActions from './AdminAutomationActions'
 
 const primaryActions = [
-  { label: 'Novo lead', href: '/admin/collections/leads/create' },
   { label: 'Nova campanha', href: '/admin/collections/campaigns/create' },
   { label: 'Novo artigo', href: '/admin/collections/posts/create' },
 ]
 
 const quickLinks = [
-  { eyebrow: 'Relacionamento', title: 'Leads', href: '/admin/collections/leads', text: 'Acompanhe contatos captados pelo site e campanhas.' },
   { eyebrow: 'Marketing', title: 'Campanhas', href: '/admin/collections/campaigns', text: 'Edite landing pages, provas sociais, FAQs e CTAs.' },
   { eyebrow: 'Editorial', title: 'Blog', href: '/admin/collections/posts', text: 'Publique artigos e vincule conteudos as campanhas.' },
   { eyebrow: 'Automacoes', title: 'Jobs nativos', href: '/admin/collections/payload-jobs', text: 'Veja fila, tentativas, erros e execucoes programadas pelo Payload.' },
@@ -59,19 +57,10 @@ type DashboardCounts = {
   activeTeam: number
   approvedTestimonials: number
   brandPending: number
-  campaignClicks30d: number
-  campaignConversions30d: number
-  campaignViews30d: number
   campaignsMissingAssets: number
   criticalDeadlines: number
   failedJobs: number
   highRelevanceNews: number
-  leadContacted: number
-  leadConverted: number
-  leadLost: number
-  leadProposal: number
-  leadQualified: number
-  newLeads: number
   pendingNews: number
   pagesMissingSEO: number
   postsMissingImage: number
@@ -321,7 +310,6 @@ function buildHealthScore(counts: DashboardCounts) {
   const penalty =
     Math.min(counts.criticalDeadlines * 18, 36) +
     Math.min(counts.failedJobs * 16, 32) +
-    Math.min(counts.newLeads * 5, 20) +
     Math.min(counts.pendingNews * 3, 12) +
     Math.min(counts.queuedJobs * 4, 12)
 
@@ -349,15 +337,6 @@ function buildPriorities(counts: DashboardCounts): PriorityItem[] {
     })
   }
 
-  if (counts.newLeads > 0) {
-    priorities.push({
-      detail: `${counts.newLeads} lead(s) aguardando primeiro atendimento`,
-      href: '/admin/collections/leads',
-      label: 'Atender novos leads',
-      tone: 'attention',
-    })
-  }
-
   if (counts.pendingNews > 0) {
     priorities.push({
       detail: `${counts.pendingNews} noticia(s) aguardando curadoria editorial`,
@@ -379,7 +358,7 @@ function buildPriorities(counts: DashboardCounts): PriorityItem[] {
   if (priorities.length === 0) {
     priorities.push({
       detail: 'Sem pendencias criticas no momento',
-      href: '/admin/collections/leads',
+      href: '/admin/collections/campaigns',
       label: 'Operacao em dia',
       tone: 'success',
     })
@@ -443,45 +422,6 @@ function buildReadinessItems(counts: DashboardCounts): ReadinessItem[] {
 function buildReadinessScore(items: ReadinessItem[]) {
   if (items.length === 0) return 0
   return clampScore(items.reduce((total, item) => total + item.score, 0) / items.length)
-}
-
-function buildGrowthItems(counts: DashboardCounts): GrowthItem[] {
-  const activePipeline = counts.newLeads + counts.leadContacted + counts.leadQualified + counts.leadProposal
-  const leadWins = counts.leadConverted
-  const leadLosses = counts.leadLost
-  const campaignActions = counts.campaignClicks30d + counts.campaignConversions30d
-  const conversionRate = counts.campaignViews30d > 0 ? Math.round((counts.campaignConversions30d / counts.campaignViews30d) * 100) : 0
-
-  return [
-    {
-      detail: `${counts.newLeads} novo(s), ${counts.leadQualified + counts.leadProposal} em qualificacao/proposta`,
-      href: '/admin/collections/leads',
-      label: 'Pipeline ativo',
-      tone: activePipeline > 0 ? 'attention' : 'neutral',
-      value: activePipeline,
-    },
-    {
-      detail: `${leadWins} convertido(s), ${leadLosses} perdido(s)`,
-      href: '/admin/collections/leads',
-      label: 'Resultado comercial',
-      tone: leadWins > 0 ? 'success' : leadLosses > leadWins ? 'attention' : 'neutral',
-      value: leadWins,
-    },
-    {
-      detail: `${counts.campaignViews30d} visualizacao(oes) nos ultimos 30 dias`,
-      href: '/admin/collections/campaign-events',
-      label: 'Alcance campanhas',
-      tone: counts.campaignViews30d > 0 ? 'success' : 'neutral',
-      value: counts.campaignViews30d,
-    },
-    {
-      detail: `${campaignActions} clique(s)/envio(s) registrados`,
-      href: '/admin/collections/campaign-events',
-      label: 'Conversao 30d',
-      tone: conversionRate >= 3 ? 'success' : counts.campaignViews30d > 0 ? 'attention' : 'neutral',
-      value: `${conversionRate}%`,
-    },
-  ]
 }
 
 function buildEditorialItems(counts: DashboardCounts): EditorialItem[] {
@@ -593,20 +533,11 @@ async function getDashboardData() {
       automationConfig,
       automationRuns,
       brandConfig,
-      campaignClicks30d,
-      campaignConversions30d,
-      campaignViews30d,
       campaignsMissingAssets,
       criticalDeadlines,
       failedJobs,
       highRelevanceNews,
       jobs,
-      leadContacted,
-      leadConverted,
-      leadLost,
-      leadProposal,
-      leadQualified,
-      newLeads,
       pagesMissingSEO,
       pendingNews,
       postsMissingImage,
@@ -623,18 +554,6 @@ async function getDashboardData() {
       payload.findGlobal({ slug: 'automation-config' }).catch(() => null),
       findLatest(payload, 'automation-runs', 8),
       payload.findGlobal({ slug: 'brand-config' }).catch(() => null),
-      count(payload, 'campaign-events', {
-        createdAt: { greater_than_equal: monthAgo.toISOString() },
-        eventType: { in: ['whatsapp_click', 'cta_click'] },
-      }),
-      count(payload, 'campaign-events', {
-        createdAt: { greater_than_equal: monthAgo.toISOString() },
-        eventType: { equals: 'form_submit' },
-      }),
-      count(payload, 'campaign-events', {
-        createdAt: { greater_than_equal: monthAgo.toISOString() },
-        eventType: { equals: 'page_view' },
-      }),
       count(payload, 'campaigns', {
         and: [
           { status: { equals: 'active' } },
@@ -651,12 +570,6 @@ async function getDashboardData() {
         status: { equals: 'pending' },
       }),
       findLatest(payload, 'payload-jobs', 6),
-      count(payload, 'leads', { status: { equals: 'contacted' } }),
-      count(payload, 'leads', { status: { equals: 'converted' } }),
-      count(payload, 'leads', { status: { equals: 'lost' } }),
-      count(payload, 'leads', { status: { equals: 'proposal' } }),
-      count(payload, 'leads', { status: { equals: 'qualified' } }),
-      count(payload, 'leads', { status: { equals: 'new' } }),
       count(payload, 'pages', {
         and: [{ status: { equals: 'published' } }, missingAnyField(['seo.metaTitle', 'seo.metaDescription'])],
       }),
@@ -683,11 +596,11 @@ async function getDashboardData() {
 
     const metrics: MetricCard[] = [
       {
-        detail: 'Leads aguardando primeiro atendimento',
-        href: '/admin/collections/leads',
-        label: 'Novos leads',
-        tone: newLeads > 0 ? 'attention' : 'success',
-        value: newLeads,
+        detail: 'Campanhas ativas sem SEO ou imagem de compartilhamento',
+        href: '/admin/collections/campaigns',
+        label: 'Pendências de campanha',
+        tone: campaignsMissingAssets > 0 ? 'attention' : 'success',
+        value: campaignsMissingAssets,
       },
       {
         detail: 'Noticias importadas aguardando curadoria',
@@ -716,19 +629,10 @@ async function getDashboardData() {
       activeTeam,
       approvedTestimonials,
       brandPending: countPendingValues(brandConfig),
-      campaignClicks30d,
-      campaignConversions30d,
-      campaignViews30d,
       campaignsMissingAssets,
       criticalDeadlines,
       failedJobs,
       highRelevanceNews,
-      leadContacted,
-      leadConverted,
-      leadLost,
-      leadProposal,
-      leadQualified,
-      newLeads,
       pagesMissingSEO,
       pendingNews,
       postsMissingImage,
@@ -760,19 +664,10 @@ async function getDashboardData() {
         activeTeam: 0,
         approvedTestimonials: 0,
         brandPending: 0,
-        campaignClicks30d: 0,
-        campaignConversions30d: 0,
-        campaignViews30d: 0,
         campaignsMissingAssets: 0,
         criticalDeadlines: 0,
         failedJobs: 0,
         highRelevanceNews: 0,
-        leadContacted: 0,
-        leadConverted: 0,
-        leadLost: 0,
-        leadProposal: 0,
-        leadQualified: 0,
-        newLeads: 0,
         pagesMissingSEO: 0,
         pendingNews: 0,
         postsMissingImage: 0,
@@ -807,7 +702,6 @@ export default async function AdminDashboardIntro() {
   const editorialItems = buildEditorialItems(data.counts)
   const editorialScore = buildEditorialScore(editorialItems)
   const editorialTone = getReadinessTone(editorialScore)
-  const growthItems = buildGrowthItems(data.counts)
   const complianceItems = buildComplianceItems(data.brandConfig)
   const complianceScore = buildComplianceScore(complianceItems)
   const complianceTone = getReadinessTone(complianceScore)
@@ -828,7 +722,7 @@ export default async function AdminDashboardIntro() {
           <span className="ca-admin-eyebrow">Painel editorial</span>
           <h1 id="ca-admin-dashboard-title">Cavalcante Albuquerque CMS</h1>
           <p>
-            Central de gestao do site, campanhas, leads, prazos e automacoes nativas do Payload.
+            Central de gestao do site, campanhas, conteudo, prazos e automacoes nativas do Payload.
             Comece pelos indicadores criticos ou pelos atalhos principais.
           </p>
         </div>
@@ -921,22 +815,6 @@ export default async function AdminDashboardIntro() {
         <div className="ca-admin-dashboard__editorial-list">
           {editorialItems.map((item) => (
             <a key={item.label} href={item.href} className={`ca-admin-dashboard__editorial-item ca-admin-dashboard__editorial-item--${item.tone}`}>
-              <span>{item.label}</span>
-              <strong>{item.value}</strong>
-              <p>{item.detail}</p>
-            </a>
-          ))}
-        </div>
-      </div>
-
-      <div className="ca-admin-dashboard__growth" aria-label="Crescimento e relacionamento">
-        <div className="ca-admin-dashboard__section-head">
-          <span className="ca-admin-eyebrow">Crescimento</span>
-          <strong>Funil e campanhas</strong>
-        </div>
-        <div className="ca-admin-dashboard__growth-grid">
-          {growthItems.map((item) => (
-            <a key={item.label} href={item.href} className={`ca-admin-dashboard__growth-item ca-admin-dashboard__growth-item--${item.tone}`}>
               <span>{item.label}</span>
               <strong>{item.value}</strong>
               <p>{item.detail}</p>

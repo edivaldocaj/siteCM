@@ -187,7 +187,7 @@ export interface User {
   /**
    * Campo legado. Use roles para novas permissões.
    */
-  role?: ('admin' | 'editor') | null;
+  role?: ('admin' | 'editor' | 'client') | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -843,10 +843,6 @@ export interface Lead {
   estimatedValue?: number | null;
   urgency?: ('low' | 'medium' | 'high' | 'urgent') | null;
   status: 'new' | 'contacted' | 'qualified' | 'proposal' | 'converted' | 'lost';
-  /**
-   * Calculado automaticamente. Quanto maior, mais qualificado.
-   */
-  score?: number | null;
   assignedTo?: ('edivaldo' | 'gabrielly') | null;
   /**
    * Campo temporário para migração. Mantém assignedTo legado.
@@ -1757,7 +1753,6 @@ export interface LeadsSelect<T extends boolean = true> {
   estimatedValue?: T;
   urgency?: T;
   status?: T;
-  score?: T;
   assignedTo?: T;
   assignedToRef?: T;
   byFirm?: T;
