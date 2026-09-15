@@ -60,7 +60,7 @@ export function CampaignTracker({ campaignSlug }: CampaignTrackerProps) {
     // Intercept WhatsApp clicks
     function onWhatsAppClick(e: MouseEvent) {
       const target = e.target as HTMLElement
-      const link = target.closest('a[href*="wa.me"]')
+      const link = target.closest('a[href*="wa.me"], a[href^="/ir/whatsapp"]')
       if (link) {
         trackEvent(campaignSlug, 'whatsapp_click')
       }

@@ -100,9 +100,8 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
   const campaign = docs[0]
   if (!campaign) return notFound()
 
-  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'
-  const message = campaign.whatsappMessage || `Olá! Gostaria de falar sobre: ${campaign.title}`
-  const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
+  const campaignReference = campaign.campaignCode ? `&c=${encodeURIComponent(campaign.campaignCode)}` : ''
+  const whatsappUrl = `/ir/whatsapp?o=campaign${campaignReference}`
 
   const accent = accentColors[campaign.colorAccent || 'gold'] || accentColors.gold
   const socialProof = (campaign.socialProof || []).filter(
