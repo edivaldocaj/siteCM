@@ -13,7 +13,7 @@ interface CampaignVideoHeroProps {
 function getEmbedUrl(url: string): string | null {
   // YouTube
   const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/)
-  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0&modestbranding=1`
+  if (ytMatch) return `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=1&rel=0&modestbranding=1`
 
   // Vimeo
   const vimeoMatch = url.match(/(?:vimeo\.com\/)(\d+)/)
@@ -22,10 +22,17 @@ function getEmbedUrl(url: string): string | null {
   return null
 }
 
+function getYouTubeId(url?: string | null): string | null {
+  if (!url) return null
+  const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
+  return match?.[1] || null
+}
+
 export function CampaignVideoHero({ videoUrl, videoFileUrl, heroImageUrl }: CampaignVideoHeroProps) {
   const [playing, setPlaying] = useState(false)
+  const [thumbnailFailed, setThumbnailFailed] = useState(false)
 
-  // Vídeo upload direto → autoplay muted
+  // Vídeo enviado pelo CMS: reprodução sob demanda, sem autoplay.
   if (videoFileUrl) {
     return (
       <div style={{
@@ -37,10 +44,8 @@ export function CampaignVideoHero({ videoUrl, videoFileUrl, heroImageUrl }: Camp
         boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
       }}>
         <video
-          autoPlay
-          muted
-          loop
           playsInline
+          controls
           poster={heroImageUrl || undefined}
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         >
@@ -61,6 +66,12 @@ export function CampaignVideoHero({ videoUrl, videoFileUrl, heroImageUrl }: Camp
   // Embed YouTube/Vimeo
   if (videoUrl) {
     const embedSrc = getEmbedUrl(videoUrl)
+    const youtubeId = getYouTubeId(videoUrl)
+    const thumbnailSrc = !thumbnailFailed && youtubeId
+      ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+      : !thumbnailFailed && heroImageUrl
+        ? heroImageUrl
+        : '/brand/hero-presentation-light.webp'
 
     if (!playing) {
       return (
@@ -77,10 +88,11 @@ export function CampaignVideoHero({ videoUrl, videoFileUrl, heroImageUrl }: Camp
           }}
         >
           {/* Thumbnail */}
-          {heroImageUrl ? (
+          {heroImageUrl || youtubeId ? (
             <img
-              src={heroImageUrl}
+              src={thumbnailSrc}
               alt="Video thumbnail"
+              onError={() => setThumbnailFailed(true)}
               style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7 }}
             />
           ) : (

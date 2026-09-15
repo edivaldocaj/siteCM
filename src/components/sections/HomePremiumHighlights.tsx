@@ -62,7 +62,15 @@ export function HomePremiumHighlights({ homepage, posts = [], news = [], campaig
             <div className="ca-premium-highlights__feature">
               <div className="ca-premium-highlights__feature-image">
                 {highlight.item.featuredImage?.url ? (
-                  <Image src={highlight.item.featuredImage.url} alt={highlight.item.title || ''} fill sizes="(max-width: 900px) 100vw, 28vw" />
+                  <Image
+                    src={highlight.item.featuredImage.url}
+                    alt={highlight.item.title || ''}
+                    fill
+                    sizes="(max-width: 900px) 100vw, 28vw"
+                    onError={(event) => {
+                      event.currentTarget.src = '/brand/areas-presentation.webp'
+                    }}
+                  />
                 ) : (
                   <Image src="/brand/areas-presentation.webp" alt="" fill sizes="(max-width: 900px) 100vw, 28vw" />
                 )}

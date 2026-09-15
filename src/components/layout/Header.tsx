@@ -45,7 +45,7 @@ export function Header({
   const isLight = variant === 'solid-light'
   const solid = isLight || scrolled
   const whatsApp = normalizeWhatsApp(whatsappNumber || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER)
-  const resolvedCtaHref = ctaHref || `https://wa.me/${whatsApp}`
+  const resolvedCtaHref = ctaHref || '/ir/whatsapp?o=header'
   const resolvedCtaLabel = ctaLabel || 'Fale com um advogado'
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname?.startsWith(href))
 
@@ -99,17 +99,13 @@ export function Header({
       <div className="ca-header__inner">
         <Link href="/" className="ca-header__brand" aria-label="Cavalcante Albuquerque">
           <Image
-            src="/brand/brand-symbol-transparent.webp"
-            alt=""
-            width={58}
-            height={58}
+            src={isLight ? '/brand/lockup-dark.webp' : '/brand/lockup-light.webp'}
+            alt="Cavalcante Albuquerque — Advocacia e Consultoria"
+            width={260}
+            height={65}
             priority
-            className="ca-header__symbol"
+            className="ca-header__lockup"
           />
-          <span className="ca-header__brand-text" aria-hidden="true">
-            <strong>Cavalcante Albuquerque</strong>
-            <span>Advocacia e Consultoria</span>
-          </span>
         </Link>
 
         <nav className="ca-header__nav" aria-label="Navegação principal">

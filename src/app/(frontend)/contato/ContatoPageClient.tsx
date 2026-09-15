@@ -120,18 +120,20 @@ export function ContatoPageClient({ siteConfig }: { siteConfig: any }) {
               </article>
             </div>
 
-            <a
-              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5584991243985'}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-whatsapp"
-            >
-              <Phone size={18} />
-              Falar pelo WhatsApp
-            </a>
-            <Link href="/agendar" className="btn-primary">
-              Solicitar um horário
-            </Link>
+            <div className="ca-contact-page__actions">
+              <a
+                href="/ir/whatsapp?o=contato-info"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-whatsapp"
+              >
+                <Phone size={18} />
+                Falar pelo WhatsApp
+              </a>
+              <Link href="/agendar" className="btn-primary">
+                Solicitar um horário
+              </Link>
+            </div>
           </aside>
 
           <div className="ca-contact-page__form-panel">

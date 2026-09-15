@@ -1661,6 +1661,20 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
   line-height: 1.6;
 }
 
+.ca-contact-page__actions {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.ca-contact-page__actions .btn-primary,
+.ca-contact-page__actions .btn-whatsapp {
+  min-height: 52px;
+  white-space: nowrap;
+}
+
 .ca-contact-page__flow {
   display: inline-flex;
   align-items: center;
@@ -3341,8 +3355,8 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
 }
 
 .ca-header__lockup {
-  width: 48px;
-  height: 48px;
+  width: 260px;
+  height: auto;
   object-fit: contain;
 }
 
@@ -3397,10 +3411,8 @@ select option { background-color: var(--color-ca-navy-800); color: var(--color-c
     gap: 9px;
   }
 
-  .ca-header__lockup,
-  .ca-header__symbol {
-    width: 42px;
-    height: 42px;
+  .ca-header__lockup {
+    width: 210px;
   }
 
   .ca-header__brand-text strong {
