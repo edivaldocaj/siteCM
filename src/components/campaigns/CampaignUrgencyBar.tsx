@@ -10,23 +10,19 @@ export function CampaignUrgencyBar({ text, accentColor = 'var(--color-ca-steel-5
     <div
       className="campaign-urgency-bar"
       style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
+        // The notice belongs to the campaign flow. Keeping it in normal
+        // document flow prevents it from covering the global navigation.
+        position: 'relative',
         background: accentColor,
-        padding: '10px 24px',
+        padding: '10px 20px',
         textAlign: 'center',
-        overflow: 'hidden',
       }}
     >
       <div className="urgency-scroll" style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '48px',
-        animation: 'urgencyPulse 3s ease-in-out infinite',
+        gap: '12px',
       }}>
         <span style={{
           color: 'var(--color-ca-navy-950)',
@@ -35,18 +31,12 @@ export function CampaignUrgencyBar({ text, accentColor = 'var(--color-ca-steel-5
           fontWeight: 700,
           textTransform: 'uppercase',
           letterSpacing: '0.12em',
-          whiteSpace: 'nowrap',
+          lineHeight: 1.35,
         }}>
           ⚠ {text}
         </span>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes urgencyPulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.7; }
-        }
-      `}} />
     </div>
   )
 }
