@@ -88,7 +88,12 @@ export function CampaignLeadForm({
     }
   }, [])
 
-  const questions = qualificationQuestions[category] || defaultQuestions
+  // The site is the first contact, not a rigid legal questionnaire. Detailed
+  // qualification is requested later by the assisted conversation with the
+  // history already supplied by the visitor.
+  const questions: Array<{ question: string; type: 'select' | 'text' | 'number'; options?: string[] }> = [
+    { question: 'Conte brevemente o que está acontecendo ou qual é sua dúvida.', type: 'text' },
+  ]
   const totalSteps = 2 + questions.length // dados pessoais + N perguntas + caso/envio
   const progress = ((step + 1) / totalSteps) * 100
 
@@ -288,7 +293,7 @@ export function CampaignLeadForm({
         </h3>
       </div>
       <p style={{ color: 'color-mix(in srgb, var(--color-ca-navy-950) 50%, transparent)', fontSize: '14px', marginBottom: '24px' }}>
-        Responda algumas perguntas para que possamos avaliar sua situação.
+        Conte apenas o essencial para iniciarmos a conversa.
       </p>
 
       {/* Progress bar */}
