@@ -17,7 +17,7 @@ export const Leads: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'phone', 'source', 'status', 'urgency', 'score', 'assignedToRef', 'nextFollowUp'],
+    defaultColumns: ['name', 'phone', 'source', 'status', 'urgency', 'assignedToRef', 'nextFollowUp'],
     description: 'Pipeline de leads — todos os contatos captados pelo site, formulários e campanhas.',
     listSearchableFields: ['name', 'phone', 'email', 'campaignSlug'],
     group: 'Relacionamento',
@@ -153,18 +153,6 @@ export const Leads: CollectionConfig = {
               admin: { position: 'sidebar' },
             },
             {
-              name: 'score',
-              type: 'number',
-              label: 'Score (0-100)',
-              min: 0,
-              max: 100,
-              defaultValue: 0,
-              admin: {
-                position: 'sidebar',
-                description: 'Calculado automaticamente. Quanto maior, mais qualificado.',
-              },
-            },
-            {
               name: 'assignedTo',
               type: 'select',
               label: 'Advogado Responsável',
@@ -275,47 +263,6 @@ export const Leads: CollectionConfig = {
       ],
     },
   ],
-  hooks: {
-    beforeChange: [
-      ({ data }) => {
-        // Auto-calculate lead score
-        if (data) {
-          let score = 0
-
-          // Phone provided (+10)
-          if (data.phone) score += 10
-          // Email provided (+10)
-          if (data.email) score += 10
-          // CPF provided (+5)
-          if (data.cpf) score += 5
-          // Case description (+10)
-          if (data.caseDescription) score += 10
-          // Qualification answers (+5 each, max 20)
-          if (data.qualificationAnswers?.length) {
-            score += Math.min(data.qualificationAnswers.length * 5, 20)
-          }
-          // Estimated value
-          if (data.estimatedValue) {
-            if (data.estimatedValue >= 50000) score += 20
-            else if (data.estimatedValue >= 20000) score += 15
-            else if (data.estimatedValue >= 5000) score += 10
-            else score += 5
-          }
-          // Urgency
-          if (data.urgency === 'urgent') score += 20
-          else if (data.urgency === 'high') score += 15
-          else if (data.urgency === 'medium') score += 10
-          else score += 5
-
-          // From campaign (+5)
-          if (data.campaignSlug) score += 5
-
-          data.score = Math.min(score, 100)
-        }
-        return data
-      },
-    ],
-  },
 }
 
 

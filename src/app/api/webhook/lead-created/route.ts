@@ -42,7 +42,6 @@ export async function POST(req: NextRequest) {
               email: lead.email,
               campaignSlug: lead.campaignSlug,
               source: lead.source,
-              score: lead.score,
               urgency: lead.urgency,
               status: lead.status,
               caseDescription: lead.caseDescription,
