@@ -6,35 +6,6 @@ import { getClientIp, checkRateLimit } from '@/lib/rate-limit'
 import { isLikelyBotSubmission } from '@/lib/public-form-security'
 import { submitLead } from '@/lib/integration/submitLead'
 
-/* ── Lead Score Calculator ── */
-function calculateScore(data: any): number {
-  let score = 0
-
-  if (data.phone) score += 10
-  if (data.email) score += 10
-  if (data.caseDescription) score += 10
-
-  if (data.qualificationAnswers?.length) {
-    score += Math.min(data.qualificationAnswers.length * 5, 20)
-  }
-
-  if (data.estimatedValue) {
-    if (data.estimatedValue >= 50000) score += 20
-    else if (data.estimatedValue >= 20000) score += 15
-    else if (data.estimatedValue >= 5000) score += 10
-    else score += 5
-  }
-
-  if (data.urgency === 'urgent') score += 20
-  else if (data.urgency === 'high') score += 15
-  else if (data.urgency === 'medium') score += 10
-  else score += 5
-
-  if (data.campaignSlug) score += 5
-
-  return Math.min(score, 100)
-}
-
 /* ── Urgency label for email ── */
 const urgencyLabels: Record<string, string> = {
   low: '🟢 Baixa',
@@ -85,7 +56,25 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const score = calculateScore(body)
+    // Resolve campaign attribution on the server. Unknown slugs remain
+    // unattributed instead of becoming a fabricated commercial campaign.
+    let campaignCode: string | null = null
+    if (typeof campaignSlug === 'string' && campaignSlug.trim()) {
+      const payload = await getPayload({ config: configPromise })
+      const campaignResult = await (payload as any).find({
+        collection: 'campaigns',
+        overrideAccess: true,
+        limit: 1,
+        where: {
+          and: [
+            { slug: { equals: campaignSlug.trim() } },
+            { status: { equals: 'active' } },
+          ],
+        },
+      })
+      const resolved = campaignResult.docs?.[0]?.campaignCode
+      campaignCode = typeof resolved === 'string' && resolved.trim() ? resolved.trim().toUpperCase() : null
+    }
     const responses = [
       ...(caseDescription ? [{ pergunta: 'Descrição do caso', resposta: String(caseDescription) }] : []),
       ...(qualificationAnswers || []).map((qa: any) => ({ pergunta: String(qa.question), resposta: String(qa.answer) })),
@@ -94,7 +83,7 @@ export async function POST(req: NextRequest) {
     ]
     const delivery = await submitLead({
       idempotencia: typeof body.idempotencia === 'string' ? body.idempotencia : undefined,
-      nome: String(name), telefone: String(phone), email, campanha: campaignSlug || utmCampaign || 'ORGANICO',
+      nome: String(name), telefone: String(phone), email, campanha: campaignCode,
       origem: 'landing', consentIp: clientIp, respostas: responses,
       utm: { source: utmSource, medium: utmMedium, campaign: utmCampaign, content: utmContent }, referrer: referrerUrl,
     })
@@ -103,7 +92,6 @@ export async function POST(req: NextRequest) {
       success: true,
       leadId: delivery.leadId,
       idempotencia: delivery.idempotencia,
-      score,
     })
   } catch (error) {
     console.error('[Leads API] Error:', error)
