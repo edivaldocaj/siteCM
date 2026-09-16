@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload'
-
-const adminOnly = ({ req }: { req: { user?: unknown } }) => Boolean(req.user)
+import { adminOnly } from '../access'
 
 export const LeadSubmissions: CollectionConfig = {
   slug: 'lead-submissions',
