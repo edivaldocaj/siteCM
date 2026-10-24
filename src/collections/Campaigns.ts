@@ -40,6 +40,15 @@ export const Campaigns: CollectionConfig = {
               },
             },
             {
+              name: 'campaignCode',
+              type: 'text',
+              label: 'Código da campanha no CRM',
+              access: { read: () => false },
+              admin: {
+                description: 'Referência interna validada no EspoCRM; nunca é aceita do navegador.',
+              },
+            },
+            {
               name: 'category',
               type: 'select',
               required: true,

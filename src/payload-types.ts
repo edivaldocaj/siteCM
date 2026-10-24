@@ -530,6 +530,10 @@ export interface Campaign {
    * Usado em /campanhas/slug-da-campanha. Use letras minúsculas, números e hífens.
    */
   slug: string;
+  /**
+   * Referência interna validada no EspoCRM; nunca é aceita do navegador.
+   */
+  campaignCode?: string | null;
   category: 'licitacoes' | 'digital' | 'civil' | 'penal' | 'consumidor' | 'criminal' | 'imobiliario' | 'tributario';
   status: 'draft' | 'active' | 'paused' | 'ended';
   featuredOnHomepage?: boolean | null;
@@ -1577,6 +1581,7 @@ export interface PostsSelect<T extends boolean = true> {
 export interface CampaignsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  campaignCode?: T;
   category?: T;
   status?: T;
   featuredOnHomepage?: T;

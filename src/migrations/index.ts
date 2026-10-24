@@ -1,3 +1,5 @@
+import * as migration_20261024_110000_backfill_campaign_crm_codes from './20261024_110000_backfill_campaign_crm_codes'
+import * as migration_20260914_180000_add_campaign_crm_code from './20260914_180000_add_campaign_crm_code'
 import * as migration_20260809_183032_sec_01_access_control from './20260809_183032_sec_01_access_control'
 import * as migration_20260809_185100_sec_04_public_form_consent from './20260809_185100_sec_04_public_form_consent'
 import * as migration_20260809_190400_team_refs from './20260809_190400_team_refs'
@@ -77,5 +79,15 @@ export const migrations = [
     up: migration_20260915_030000_artigo_documentos_real.up,
     down: migration_20260915_030000_artigo_documentos_real.down,
     name: '20260915_030000_artigo_documentos_real',
+  },
+  {
+    up: migration_20260914_180000_add_campaign_crm_code.up,
+    down: migration_20260914_180000_add_campaign_crm_code.down,
+    name: '20260914_180000_add_campaign_crm_code',
+  },
+  {
+    up: migration_20261024_110000_backfill_campaign_crm_codes.up,
+    down: migration_20261024_110000_backfill_campaign_crm_codes.down,
+    name: '20261024_110000_backfill_campaign_crm_codes',
   },
 ]
